@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lägg till ord - Snabba Lexin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <a href="index.html" class="back-button" aria-label="Tillbaka / رجوع">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </a>
+                <button id="themeToggle" class="theme-toggle" aria-label="Växla tema / تبديل المظهر">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+            <h1>Lägg till ord</h1>
+            <p class="subtitle">إضافة كلمة جديدة</p>
+        </header>
+
+        <main>
+            <form id="addWordForm" class="add-form">
+                <div class="form-group">
+                    <label for="swe">Svenska / السويدية *</label>
+                    <input type="text" id="swe" required placeholder="T.ex. Bok">
+                </div>
+
+                <div class="form-group">
+                    <label for="arb">Arabiska / العربية *</label>
+                    <input type="text" id="arb" required placeholder="مثلاً: كتاب" dir="rtl">
+                </div>
+
+                <div class="form-group">
+                    <label for="type">Ordklass / نوع الكلمة</label>
+                    <select id="type">
+                        <option value="">Välj ordklass / اختر نوع الكلمة</option>
+                        <optgroup label="Grammatik / قواعد">
+                            <option value="Substantiv">Substantiv (Ism)</option>
+                            <option value="Verb">Verb (Fi'l)</option>
+                            <option value="Adjektiv">Adjektiv (Sifa)</option>
+                            <option value="Adverb">Adverb (Zarf)</option>
+                            <option value="Preposition">Preposition (Harf jarr)</option>
+                            <option value="Pronomen">Pronomen (Damir)</option>
+                            <option value="Konjunktion">Konjunktion (Harf atf)</option>
+                            <option value="Interjektion">Interjektion</option>
+                            <option value="Räkning">Räkneord</option>
+                            <option value="Förkortning">Förkortning</option>
+                            <option value="Förled">Förled</option>
+                            <option value="Efterled">Efterled</option>
+                        </optgroup>
+                        <optgroup label="Ämnesområden / مجالات">
+                            <option value="Medicin">Medicin</option>
+                            <option value="Juridik">Juridik</option>
+                            <option value="Bygg">Bygg</option>
+                            <option value="Samhälle">Samhälle</option>
+                            <option value="Militär">Militär</option>
+                            <option value="Religion">Religion</option>
+                            <option value="Tandvård">Tandvård</option>
+                            <option value="HBTQ">HBTQ</option>
+                            <option value="Ekobrott">Ekobrott</option>
+                            <option value="Teknik">Teknik</option>
+                            <option value="Utbildning">Utbildning</option>
+                            <option value="Arbetsmarknad">Arbetsmarknad</option>
+                        </optgroup>
+                        <option value="Annat">Annat / أخرى</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sweDef">Definition (Svenska)</label>
+                    <textarea id="sweDef" rows="2"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="arbDef">Definition (Arabiska)</label>
+                    <textarea id="arbDef" rows="2" dir="rtl"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="exSwe">Exempel (Svenska)</label>
+                    <input type="text" id="exSwe">
+                </div>
+
+                <div class="form-group">
+                    <label for="exArb">Exempel (Arabiska)</label>
+                    <input type="text" id="exArb" dir="rtl">
+                </div>
+
+                <button type="submit" class="submit-btn">Spara / حفظ</button>
+            </form>
+        </main>
+    </div>
+
+    <script src="add.js"></script>
+</body>
+
+</html>

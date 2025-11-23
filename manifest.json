@@ -1,0 +1,17 @@
+{
+  "name": "Snabba Lexin",
+  "short_name": "SnabbaLexin",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f4f6",
+  "theme_color": "#6366f1",
+  "description": "Svensk-Arabiskt Lexikon / القاموس السويدي العربي",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

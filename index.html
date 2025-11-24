@@ -15,140 +15,154 @@
     <meta name="theme-color" content="#6366f1">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="apple-touch-icon" href="icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SnabbaLexin">
 </head>
 
 <body>
     <div class="container">
         <header>
-            <div class="header-top">
-                <div class="header-left-controls">
-                    <a href="add.html" class="add-button" aria-label="Lägg till ord / إضافة كلمة">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                    </a>
-                    <button id="favoritesToggle" class="favorites-toggle" aria-label="Visa favoriter / عرض المفضلة">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                            </path>
-                        </svg>
-                    </button>
-                    <input type="file" id="importFile" accept=".json" style="display: none;">
-                </div>
-
-                <div class="header-right-controls">
-
-                    <button id="themeToggle" class="theme-toggle" aria-label="Växla tema / تبديل المظهر">
-                        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                        </svg>
-                        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <h1>Snabba Lexin</h1>
-            <p class="subtitle">Svensk-Arabiskt Lexikon / القاموس السويدي العربي</p>
-            <div class="search-container">
-                <div class="search-wrapper">
-                    <input type="text" id="searchInput"
-                        placeholder="Sök ord (svenska eller arabiska)... / ابحث عن كلمة..." autocomplete="off">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </div>
-                <div class="sort-wrapper">
-                    <select id="searchMode" aria-label="Sökläge / نوع البحث">
-                        <option value="general">Sök överallt / بحث عام</option>
-                        <option value="start">Börjar med / يبدأ بـ</option>
-                        <option value="end">Slutar med / ينتهي بـ</option>
-                        <option value="exact">Med diakritiska / بالحركات</option>
-                    </select>
-                    <select id="typeSelect" aria-label="Filtrera på ordklass / تصفية حسب نوع الكلمة">
-                        <option value="all">Alla typer / كل الأنواع</option>
-                    </select>
-                    <select id="sortSelect" aria-label="Sortera resultat / ترتيب النتائج">
-                        <option value="relevance">Relevans / الأفضل</option>
-                        <option value="alpha_asc">Första bokstaven (A-Ö) / الحرف الأول</option>
-                        <option value="alpha_desc">Första bokstaven (Ö-A) / الحرف الأول (معكوس)</option>
-                        <option value="last_char">Sista bokstaven / الحرف الأخير</option>
-                    </select>
-                </div>
-            </div>
-            <div id="stats" class="stats">Laddar ordbok... / جاري تحميل القاموس...</div>
-
-            <div id="customWordsActions" class="custom-words-actions">
-                <button id="exportCustom" class="action-btn export-custom-btn"
-                    aria-label="Exportera egna ord / تصدير كلماتي">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    <span>Exportera / تصدير</span>
-                </button>
-                <button id="importCustom" class="action-btn import-custom-btn"
-                    aria-label="Importera egna ord / استيراد كلماتي">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <span>Importera / استيراد</span>
-                </button>
-                <input type="file" id="importCustomFile" accept=".json" style="display: none;">
+            <div class="header-center">
+                <!-- Header controls moved to main-actions below -->
+                <h3>Svensk-Arabiskt Lexikon
+                    <br>
+                    القاموس السويدي العربي
+                </h3>
             </div>
 
-            <div id="favoritesActions" class="favorites-actions-inline">
-                <button id="exportFavorites" class="action-btn export-btn"
-                    aria-label="Exportera favoriter / تصدير المفضلة">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                </button>
-                <button id="importFavorites" class="action-btn import-btn"
-                    aria-label="Importera favoriter / استيراد المفضلة">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                </button>
-            </div>
-        </header>
+    </div>
+    <div class="main-actions">
+        <button id="favoritesToggle" class="favorites-toggle" aria-label="Visa favoriter / عرض المفضلة">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+            </svg>
+        </button>
+        <a href="add.html" class="add-button" aria-label="Lägg till ord / إضافة كلمة">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </a>
+        <button id="exportCustom" class="action-btn export-custom-btn" aria-label="Exportera egna ord / تصدير كلماتي">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </button>
+        <button id="importCustom" class="action-btn import-custom-btn" aria-label="Importera egna ord / استيراد كلماتي">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+        </button>
+        <button id="installApp" class="action-btn" aria-label="Installera app / تثبيت التطبيق" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </button>
+        <button id="themeToggle" class="theme-toggle" aria-label="Växla tema / تبديل المظهر">
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+        <button id="mobileViewToggle" class="theme-toggle" aria-label="Mobilvy / عرض الجوال">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+        </button>
+        <input type="file" id="importCustomFile" accept=".json" style="display: none;">
+        <input type="file" id="importFile" accept=".json" style="display: none;">
+    </div>
 
-        <main id="resultsArea">
-            <!-- Results will appear here -->
-            <div class="placeholder-message">
-                Börja skriva för att söka / ابدأ الكتابة للبحث
-            </div>
-        </main>
+
+
+    <div id="favoritesActions" class="favorites-actions-inline">
+        <button id="exportFavorites" class="action-btn export-btn" aria-label="Exportera favoriter / تصدير المفضلة">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+        </button>
+        <button id="importFavorites" class="action-btn import-btn" aria-label="Importera favoriter / استيراد المفضلة">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+        </button>
+    </div>
+    <!-- <h3>Snabba Lexin</h3> -->
+    <!-- <p class="subtitle">Svensk-Arabiskt Lexikon / القاموس السويدي العربي</p> -->
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Sök ord (svenska eller arabiska)... / ابحث عن كلمة..."
+                autocomplete="off">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+        </div>
+        <div class="sort-wrapper">
+            <select id="searchMode" aria-label="Sökläge / نوع البحث">
+                <option value="general">Sök överallt / بحث عام</option>
+                <option value="start">Börjar med / يبدأ بـ</option>
+                <option value="end">Slutar med / ينتهي بـ</option>
+                <option value="exact">Med diakritiska / بالحركات</option>
+            </select>
+            <select id="sortSelect" aria-label="Sortera resultat / ترتيب النتائج">
+                <option value="relevance">Relevans / الأفضل</option>
+                <option value="alpha_asc">Första bokstaven (A-Ö) / الحرف الأول</option>
+                <option value="alpha_desc">Första bokstaven (Ö-A) / الحرف الأول (معكوس)</option>
+                <option value="last_char">Sista bokstaven / الحرف الأخير</option>
+            </select>
+
+            <select id="typeSelect" aria-label="Filtrera på ordklass / تصفية حسب نوع الكلمة">
+                <option value="all">Alla typer / كل الأنواع</option>
+            </select>
+        </div>
+    </div>
+    <div id="stats" class="stats">Laddar ordbok... / جاري تحميل القاموس...</div>
+    <br>
+
+    </header>
+
+    <main id="resultsArea">
+        <!-- Results will appear here -->
+        <div class="placeholder-message">
+            Börja skriva för att söka / ابدأ الكتابة للبحث
+        </div>
+    </main>
     </div>
 
     <script src="data.js"></script>
@@ -166,6 +180,19 @@
             });
         }
     </script>
+    <div id="iosInstallPrompt" class="ios-prompt" style="display: none;">
+        <div class="ios-prompt-content">
+            <p>För att installera appen: Tryck på <img
+                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDdlZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgM3YxMm0wIDBsLTQtNG00IDRsNCA0TTQgMjBoMTYiLz48L3N2Zz4="
+                    alt="Share" style="width: 20px; vertical-align: middle;"> och välj <strong>"Lägg till på
+                    hemskärmen"</strong></p>
+            <p dir="rtl">لتثبيت التطبيق: اضغط على <img
+                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDdlZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgM3YxMm0wIDBsLTQtNG00IDRsNCA0TTQgMjBoMTYiLz48L3N2Zz4="
+                    alt="Share" style="width: 20px; vertical-align: middle;"> واختر <strong>"إضافة إلى الشاشة
+                    الرئيسية"</strong></p>
+            <button id="closeIosPrompt">OK</button>
+        </div>
+    </div>
 </body>
 
 </html>

@@ -48,6 +48,22 @@ async function init() {
         localStorage.setItem('theme', newTheme);
     });
 
+    // Mobile View Toggle
+    const mobileViewToggle = document.getElementById('mobileViewToggle');
+    if (mobileViewToggle) {
+        mobileViewToggle.addEventListener('click', () => {
+            document.body.classList.toggle('iphone-view');
+            // Optional: Save state
+            const isMobileView = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isMobileView);
+        });
+
+        // Restore state
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.body.classList.add('iphone-view');
+        }
+    }
+
     // Favorites Logic
     const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     favorites = new Set(savedFavorites);
@@ -278,6 +294,53 @@ async function init() {
         window.addEventListener('scroll', debounce(() => {
             sessionStorage.setItem('scrollPosition', window.scrollY);
         }, 100));
+
+        // PWA Install Logic
+        let deferredPrompt;
+        const installBtn = document.getElementById('installApp');
+        const iosPrompt = document.getElementById('iosInstallPrompt');
+        const closeIosPrompt = document.getElementById('closeIosPrompt');
+
+        // Android/Desktop Install Prompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.style.display = 'flex';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                installBtn.style.display = 'none';
+            }
+        });
+
+        // iOS Install Prompt
+        // Detects if device is on iOS
+        const isIos = () => {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            return /iphone|ipad|ipod/.test(userAgent);
+        }
+        // Detects if device is in standalone mode
+        const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
+
+        // Checks if should display install popup notification:
+        if (isIos() && !isInStandaloneMode()) {
+            // Show prompt after a delay
+            setTimeout(() => {
+                iosPrompt.style.display = 'block';
+                // Small delay to allow display:block to apply before adding class for animation
+                setTimeout(() => iosPrompt.classList.add('visible'), 10);
+            }, 2000);
+        }
+
+        closeIosPrompt.addEventListener('click', () => {
+            iosPrompt.classList.remove('visible');
+            setTimeout(() => iosPrompt.style.display = 'none', 400);
+        });
 
     } catch (error) {
         console.error(error);

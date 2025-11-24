@@ -45,6 +45,34 @@ body {
     background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
 }
 
+/* iPhone View Simulation */
+body.iphone-view {
+    max-width: 393px;
+    margin: 2rem auto;
+    border: 12px solid #333;
+    border-radius: 50px;
+    min-height: calc(100vh - 4rem);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body.iphone-view::before {
+    /* Notch / Dynamic Island Simulation */
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 35px;
+    background-color: #000;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
 .container {
     max-width: 800px;
     margin: 0 auto;
@@ -58,19 +86,15 @@ header {
     position: relative;
 }
 
-.header-top {
-    position: absolute;
-    top: 0;
-    left: 0;
+.header-center {
+    position: relative;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     padding: 1rem;
     padding-top: max(1rem, env(safe-area-inset-top));
     /* Safe area for Notch/Dynamic Island */
     z-index: 10;
-    pointer-events: none;
-    /* Let clicks pass through empty space */
 }
 
 .header-left-controls {
@@ -83,7 +107,8 @@ header {
 
 .header-right-controls {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    /* Changed to row for consistency */
     gap: 0.5rem;
     align-items: center;
     pointer-events: auto;
@@ -91,18 +116,20 @@ header {
 }
 
 .theme-toggle {
-    background: none;
-    border: none;
+    background-color: var(--surface);
+    border: 2px solid transparent;
     cursor: pointer;
     color: var(--text-main);
-    padding: 0.5rem;
+    padding: 0;
     border-radius: 50%;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: auto;
-    /* Removed absolute positioning */
+    width: 45px;
+    height: 45px;
+    box-shadow: var(--shadow);
 }
 
 .favorites-actions-inline {
@@ -219,18 +246,34 @@ header {
     color: var(--text-main);
 }
 
-.export-btn:hover {
-    background-color: rgba(59, 130, 246, 0.1);
+.export-btn {
     color: #3b82f6;
     /* Blue */
-    transform: scale(1.1);
+    border-color: rgba(59, 130, 246, 0.2);
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.import-btn {
+    color: #10b981;
+    /* Green */
+    border-color: rgba(16, 185, 129, 0.2);
+    background-color: rgba(16, 185, 129, 0.05);
+}
+
+.export-btn:hover {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
 }
 
 .import-btn:hover {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-    /* Green */
-    transform: scale(1.1);
+    background-color: #10b981;
+    color: white;
+    border-color: #10b981;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
 [data-theme="dark"] .export-btn:hover {
@@ -242,21 +285,20 @@ header {
 }
 
 .export-custom-btn,
-.import-custom-btn {
-    border-radius: 50px;
-    /* Pill shape */
+.import-custom-btn,
+.export-btn,
+.import-btn {
+    border-radius: 50%;
+    /* Circular */
     background-color: var(--surface);
     border: 2px solid transparent;
     color: var(--text-main);
-    width: auto;
-    /* Allow width to grow */
+    width: 45px;
     height: 45px;
-    padding: 0 1.5rem;
-    /* Horizontal padding */
-    gap: 0.5rem;
-    /* Space between icon and text */
-    font-weight: 600;
-    font-size: 0.9rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: var(--shadow);
 }
 
@@ -310,12 +352,26 @@ header {
     color: white;
 }
 
-.custom-words-actions {
+.main-actions {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    /* Always visible */
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.main-actions>button,
+.main-actions>a {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0;
+}
+
+.main-actions svg {
+    width: 20px;
+    height: 20px;
 }
 
 /* Favorite Button on Card */
@@ -424,17 +480,14 @@ h1 {
 #searchInput {
     width: 100%;
     padding: 1rem 3.5rem 1rem 1.5rem;
-    /* Padding for right icon */
     font-size: 1.2rem;
-    border: 2px solid var(--primary);
-    /* Purple border */
+    border: 2px solid rgba(99, 102, 241, 0.3);
     border-radius: 50px;
-    /* Fully rounded */
-    background-color: var(--surface);
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
     color: var(--text-main);
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.15);
-    /* Subtle purple shadow */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
 #searchInput:focus {
@@ -442,14 +495,21 @@ h1 {
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
 }
 
+[data-theme="dark"] #searchInput {
+    background-color: rgba(31, 41, 55, 0.9);
+    border-color: rgba(129, 140, 248, 0.3);
+}
+
 .sort-wrapper {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     width: 100%;
 }
 
 #sortSelect,
-#searchMode {
+#searchMode,
+#typeSelect {
     flex: 1;
     /* Make dropdowns share available width */
     padding: 1rem 1.5rem;
@@ -472,36 +532,49 @@ h1 {
 }
 
 #sortSelect:focus,
-#searchMode:focus {
+#searchMode:focus,
+#typeSelect:focus {
     outline: none;
     border-color: var(--primary);
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
 }
 
 #sortSelect:hover,
-#searchMode:hover {
+#searchMode:hover,
+#typeSelect:hover {
     border-color: var(--primary);
 }
 
 /* Mobile Tweaks */
-@media (max-width: 600px) {
+/* Mobile Tweaks (Consolidated & Polished) */
+@media (max-width: 800px) {
     body {
         padding: 1rem;
-        padding-bottom: env(safe-area-inset-bottom);
-        /* Safe area for PWA */
+        padding-bottom: calc(2rem + env(safe-area-inset-bottom));
     }
 
     h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .header-center {
+        padding: 1rem;
+        padding-top: max(1rem, env(safe-area-inset-top));
     }
 
     .search-container {
         flex-direction: column;
+        gap: 0.75rem;
     }
 
     .sort-wrapper {
-        flex-direction: column;
-        gap: 0.5rem;
+        flex-direction: column !important;
+        gap: 0.75rem;
     }
 
     .search-wrapper,
@@ -510,17 +583,33 @@ h1 {
     #searchMode,
     #typeSelect {
         width: 100%;
-        min-height: 48px;
-        /* Touch target size */
+        min-height: 50px;
+        /* Larger touch target */
     }
 
     #searchInput {
-        padding: 1rem 3rem 1rem 1rem;
-        /* Adjust padding */
+        padding: 1rem 3rem 1rem 1.25rem;
+        font-size: 1.1rem;
     }
 
-    .header-top {
-        padding: 0.5rem;
+    /* Card Polish on Mobile */
+    .card {
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .word-swe {
+        font-size: 1.4rem;
+    }
+
+    .word-arb {
+        font-size: 1.5rem;
+    }
+
+    .word-type {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
     }
 }
 
@@ -630,13 +719,12 @@ h1 {
 
 .card {
     background: var(--surface);
-    border-radius: var(--radius);
+    border-radius: 1.5rem;
     padding: 2rem;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
     position: relative;
-    border: 1px solid transparent;
-    /* Performance Optimization */
+    border: 1px solid rgba(0, 0, 0, 0.02);
     content-visibility: auto;
     contain: layout paint style;
 }
@@ -851,24 +939,7 @@ h1 {
     margin-top: 2rem;
 }
 
-/* Mobile Tweaks */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 2.2rem;
-    }
 
-    .card {
-        padding: 1.2rem;
-    }
-
-    .word-swe {
-        font-size: 1.3rem;
-    }
-
-    .word-arb {
-        font-size: 1.2rem;
-    }
-}
 
 .back-button {
     display: inline-block;
@@ -972,4 +1043,64 @@ h1 {
 
 .add-button {
     animation: pulse-glow 2s infinite;
+}
+/* PWA Install Button */
+#installApp {
+    display: none; /* Hidden by default, shown via JS */
+}
+
+/* iOS Install Prompt */
+.ios-prompt {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1.5rem 1rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-theme="dark"] .ios-prompt {
+    background: rgba(31, 41, 55, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ios-prompt.visible {
+    transform: translateY(0);
+}
+
+.ios-prompt-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.ios-prompt p {
+    margin: 0.5rem 0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.ios-prompt img {
+    display: inline-block;
+    margin: 0 4px;
+}
+
+#closeIosPrompt {
+    margin-top: 1rem;
+    padding: 0.5rem 2rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
 }

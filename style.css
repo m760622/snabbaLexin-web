@@ -116,9 +116,15 @@ header {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+
+    /* Gradient Flow Setup */
+    background-size: 200% auto;
+
     /* Shadow for Light Mode (Dark shadow) */
     filter: drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.5)) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
-    animation: float 6s ease-in-out infinite;
+
+    /* Float + Gradient Flow */
+    animation: float 6s ease-in-out infinite, gradient-flow 3s linear infinite;
 }
 
 /* Dark Mode Shadow (Lighter shadow/glow for contrast) */

@@ -244,6 +244,20 @@ async function init() {
         // Detects if device is in standalone mode
         const isInStandaloneMode = () => ('standalone' in window.navigator) && (window.navigator.standalone);
 
+        // Check for Toast Notification
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+
+        if (status === 'saved') {
+            showToast('Ordet har sparats! / تم حفظ الكلمة!');
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (status === 'deleted') {
+            showToast('Ordet har tagits bort / تم حذف الكلمة');
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         // Checks if should display install popup notification:
         if (isIos() && !isInStandaloneMode()) {
             // Show prompt after a delay
@@ -485,15 +499,6 @@ function createCard(item, index = 0) {
                     <h2 class="word-swe" dir="ltr">${swe}</h2>
                 </div>
                 ${arb ? `<p class="word-arb" dir="rtl">${arb}</p>` : ''}
-                ${arbDef || sweDef ? `
-                    <div class="definitions">
-                        ${sweDef ? `<div class="def-row"><div class="def-swe" dir="ltr">${sweDef}</div></div>` : ''}
-                        ${arbDef ? `<div class="def-row"><div class="def-arb" dir="rtl">${arbDef}</div></div>` : ''}
-                    </div>
-                ` : ''}
-                ${forms ? `<div class="forms" dir="ltr"><strong>Former:</strong> ${forms}</div>` : ''}
-                ${examplesHtml}
-                ${idiomsHtml}
             </div>
         </a>
     `;
@@ -514,3 +519,15 @@ function debounce(func, wait) {
 
 // Start
 init();
+
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.textContent = message;
+        toast.classList.add('visible');
+
+        setTimeout(() => {
+            toast.classList.remove('visible');
+        }, 2000);
+    }
+}

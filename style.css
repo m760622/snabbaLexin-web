@@ -105,10 +105,166 @@ header {
     position: relative;
 }
 
+.main-title-text {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin: 0;
+    line-height: 1.5;
+    /* Gradient: Red, Blue, Yellow, Green */
+    background: linear-gradient(to right, #EF4444 0%, #3B82F6 33%, #EAB308 66%, #10B981 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    /* Shadow for Light Mode (Dark shadow) */
+    filter: drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.5)) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Dark Mode Shadow (Lighter shadow/glow for contrast) */
+[data-theme="dark"] .main-title-text {
+    filter: drop-shadow(1px 1px 0px rgba(255, 255, 255, 0.3)) drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.subtitle-delay {
+    animation-delay: 1s;
+    /* Staggered animation like in details view */
+    margin-top: -0.5rem;
+    /* Pull closer to the first line */
+}
+
+.main-title-text:hover {
+    animation-play-state: paused;
+    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.6));
+}
+
+/* Fun Animation for Details Page */
+.details-anim {
+    background-size: 200% auto;
+    animation: gradient-flow 3s linear infinite, fun-bounce 2s ease-in-out infinite;
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes fun-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(-5px) rotate(-2deg);
+    }
+
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(-3px) rotate(2deg);
+    }
+}
+
+/* Opposite Animation for Subtitle */
+.subtitle-anim {
+    /* Match Title Gradient Style */
+    background: linear-gradient(to right, #EF4444 0%, #3B82F6 33%, #EAB308 66%, #10B981 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-size: 200% auto;
+    font-weight: 700;
+
+    /* Reverse Gradient Flow + Exact Counter Bounce */
+    animation: reverse-gradient-flow 3s linear infinite, counter-bounce 2s ease-in-out infinite;
+    animation-delay: 0s !important;
+
+    display: inline-block;
+}
+
+@keyframes reverse-gradient-flow {
+    0% {
+        background-position: 100% 50%;
+    }
+
+    50% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes counter-bounce {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    25% {
+        transform: translateY(5px) rotate(2deg);
+    }
+
+    /* Exact inverse of -5px, -2deg */
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    75% {
+        transform: translateY(3px) rotate(-2deg);
+    }
+
+    /* Exact inverse of -3px, 2deg */
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    5% {
+        transform: scale(1.1);
+    }
+
+    10% {
+        transform: scale(1);
+    }
+
+    15% {
+        transform: scale(1.1);
+    }
+
+    20% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 .header-center {
     position: relative;
     width: 100%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     padding: 1rem;
     padding-top: max(1rem, env(safe-area-inset-top));
@@ -1071,4 +1227,137 @@ h1 {
     font-weight: 600;
     cursor: pointer;
     font-size: 0.9rem;
+}
+
+/* Share Button */
+.share-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 1rem;
+    top: 1.5rem;
+}
+
+.share-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+[data-theme="dark"] .share-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom Actions (Details Page) */
+.custom-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--surface);
+    border-radius: 1rem;
+    border: 1px solid var(--border-subtle);
+}
+
+.local-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--primary);
+    font-weight: 600;
+    background: rgba(99, 102, 241, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.edit-btn,
+.delete-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    flex: 1;
+    justify-content: center;
+    max-width: 200px;
+}
+
+.edit-btn {
+    background: var(--surface-raised);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+}
+
+.edit-btn:hover {
+    background: var(--border);
+}
+
+.delete-btn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+@media (max-width: 600px) {
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .edit-btn,
+    .delete-btn {
+        max-width: none;
+    }
+}
+
+/* Toast Notification */
+.toast-notification {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background-color: #10B981;
+    /* Success Green */
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    font-weight: 600;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    pointer-events: none;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.toast-notification.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
 }

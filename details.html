@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <div id="toast" class="toast-notification"></div>
     <div class="container">
         <header>
             <div class="header-top">
@@ -39,10 +40,54 @@
                 </button>
             </div>
             <a href="index.html" style="text-decoration: none;">
-                <h1>Snabba Lexin</h1>
+                <!-- <h1>Snabba Lexin</h1> -->
+                <h4 class="main-title-text details-anim">Svensk-Arabiskt Lexikon</h4>
+                <h4 class="main-title-text subtitle-delay details-anim">القاموس العربي السويدي </h4>
+
+
             </a>
-            <p class="subtitle">Detaljerad vy / عرض تفصيلي</p>
+            <p class="subtitle subtitle-anim">Detaljerad vy / عرض تفصيلي</p>
+            <button id="shareBtn" class="share-btn" aria-label="Dela / مشاركة" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            </button>
         </header>
+
+        <div id="customActions" class="custom-actions" style="display: none;">
+            <div class="local-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                    <polyline points="7 3 7 8 15 8"></polyline>
+                </svg>
+                Sparad lokalt / محفوظ محلياً
+            </div>
+            <div class="action-buttons">
+                <button id="editBtn" class="edit-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Redigera / تعديل
+                </button>
+                <button id="deleteBtn" class="delete-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Ta bort / حذف
+                </button>
+            </div>
+        </div>
 
         <main id="detailsArea">
             <div class="placeholder-message">Laddar... / جاري التحميل...</div>

@@ -1532,3 +1532,33 @@ h1 {
         transform: translateX(5px);
     }
 }
+
+/* Mobile Responsiveness (iPhone 16 Pro & others) */
+@media (max-width: 450px) {
+    .game-card {
+        padding: 1.5rem;
+        max-width: 95%;
+        margin: 0 auto;
+    }
+
+    .game-sentence {
+        font-size: 1.2rem;
+    }
+
+    .game-hint {
+        font-size: 1rem;
+    }
+
+    .game-options {
+        gap: 0.75rem;
+    }
+
+    .option-btn {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .missing-word-slot {
+        width: 60px;
+    }
+}

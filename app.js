@@ -279,26 +279,35 @@ async function init() {
     }
 }
 
-// Build Search Index Helper
-function buildSearchIndex() {
+// Build Search Index Helper (Async & Chunked)
+async function buildSearchIndex() {
     searchIndex = new Array(dictionaryData.length);
-    for (let i = 0; i < dictionaryData.length; i++) {
-        const item = dictionaryData[i];
-        if (!item) continue; // Skip invalid items
+    const chunkSize = 1000; // Process 1000 items per tick
 
-        // Join all searchable fields with a space and NORMALIZE
-        searchIndex[i] = normalizeArabic(
-            (item[COL_SWE] || '') + ' ' +
-            (item[COL_ARB] || '') + ' ' +
-            (item[COL_FORMS] || '') + ' ' +
-            (item[COL_SWE_DEF] || '') + ' ' +
-            (item[COL_ARB_DEF] || '') + ' ' +
-            (item[COL_EX_SWE] || '') + ' ' +
-            (item[COL_EX_ARB] || '') + ' ' +
-            (item[COL_IDIOM_SWE] || '') + ' ' +
-            (item[COL_IDIOM_ARB] || '')
-        );
+    for (let i = 0; i < dictionaryData.length; i += chunkSize) {
+        // Yield to main thread every chunk
+        await new Promise(resolve => setTimeout(resolve, 0));
+
+        const end = Math.min(i + chunkSize, dictionaryData.length);
+        for (let j = i; j < end; j++) {
+            const item = dictionaryData[j];
+            if (!item) continue;
+
+            // Join all searchable fields with a space and NORMALIZE
+            searchIndex[j] = normalizeArabic(
+                (item[COL_SWE] || '') + ' ' +
+                (item[COL_ARB] || '') + ' ' +
+                (item[COL_FORMS] || '') + ' ' +
+                (item[COL_SWE_DEF] || '') + ' ' +
+                (item[COL_ARB_DEF] || '') + ' ' +
+                (item[COL_EX_SWE] || '') + ' ' +
+                (item[COL_EX_ARB] || '') + ' ' +
+                (item[COL_IDIOM_SWE] || '') + ' ' +
+                (item[COL_IDIOM_ARB] || '')
+            );
+        }
     }
+    console.log('Search index built completely.');
 }
 
 // Search Handler
@@ -336,9 +345,32 @@ function handleSearch(e) {
         results = dictionaryData.slice(); // Shallow copy
     } else if (searchMode === 'general') {
         // General: Use pre-computed normalized index (Fastest)
+        // Fallback to raw search if index is not ready yet
         for (let i = 0; i < dictionaryData.length; i++) {
-            if (searchIndex[i] && searchIndex[i].includes(query)) {
-                results.push(dictionaryData[i]);
+            const item = dictionaryData[i];
+            if (!item) continue;
+
+            // Use index if available, otherwise compute on the fly (slower but works)
+            if (searchIndex[i]) {
+                if (searchIndex[i].includes(query)) {
+                    results.push(item);
+                }
+            } else {
+                // Fallback for items not yet indexed
+                const content = normalizeArabic(
+                    (item[COL_SWE] || '') + ' ' +
+                    (item[COL_ARB] || '') + ' ' +
+                    (item[COL_FORMS] || '') + ' ' +
+                    (item[COL_SWE_DEF] || '') + ' ' +
+                    (item[COL_ARB_DEF] || '') + ' ' +
+                    (item[COL_EX_SWE] || '') + ' ' +
+                    (item[COL_EX_ARB] || '') + ' ' +
+                    (item[COL_IDIOM_SWE] || '') + ' ' +
+                    (item[COL_IDIOM_ARB] || '')
+                );
+                if (content.includes(query)) {
+                    results.push(item);
+                }
             }
         }
     } else if (searchMode === 'exact') {

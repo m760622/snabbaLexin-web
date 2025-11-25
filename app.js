@@ -5,8 +5,6 @@ let searchIndex = []; // Pre-computed search strings
 let currentResults = []; // Store all matching results
 let renderedCount = 0; // Track how many are currently shown
 const BATCH_SIZE = 50; // Number of items to load per batch
-let favorites = new Set(); // Store favorite IDs
-let showFavoritesOnly = false; // Filter state
 
 // DOM Elements
 const searchInput = document.getElementById('searchInput');
@@ -14,7 +12,6 @@ const sortSelect = document.getElementById('sortSelect');
 const resultsArea = document.getElementById('resultsArea');
 const statsElement = document.getElementById('stats');
 const themeToggle = document.getElementById('themeToggle');
-const favoritesToggle = document.getElementById('favoritesToggle');
 const typeSelect = document.getElementById('typeSelect');
 
 // Column Indices
@@ -63,86 +60,6 @@ async function init() {
             document.body.classList.add('iphone-view');
         }
     }
-
-    // Favorites Logic
-    const savedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    favorites = new Set(savedFavorites);
-
-    favoritesToggle.addEventListener('click', () => {
-        showFavoritesOnly = !showFavoritesOnly;
-        favoritesToggle.classList.toggle('active', showFavoritesOnly);
-
-        // Toggle visibility of export/import buttons
-        const favoritesActions = document.getElementById('favoritesActions');
-        const customWordsActions = document.getElementById('customWordsActions');
-
-        if (showFavoritesOnly) {
-            favoritesActions.classList.add('visible');
-            customWordsActions.style.display = 'none'; // Hide custom words actions
-        } else {
-            favoritesActions.classList.remove('visible');
-            customWordsActions.style.display = 'flex'; // Show custom words actions
-        }
-
-        handleSearch({ target: searchInput });
-    });
-
-    // Export Favorites
-    document.getElementById('exportFavorites').addEventListener('click', () => {
-        if (favorites.size === 0) {
-            alert('Inga favoriter att exportera / لا توجد مفضلة للتصدير');
-            return;
-        }
-        const dataStr = JSON.stringify([...favorites]);
-        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-
-        const exportFileDefaultName = 'lexin_favorites.json';
-
-        const linkElement = document.createElement('a');
-        linkElement.setAttribute('href', dataUri);
-        linkElement.setAttribute('download', exportFileDefaultName);
-        linkElement.click();
-    });
-
-    // Import Favorites
-    const importFile = document.getElementById('importFile');
-    document.getElementById('importFavorites').addEventListener('click', () => {
-        importFile.click();
-    });
-
-    importFile.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            try {
-                const importedFavorites = JSON.parse(e.target.result);
-                if (!Array.isArray(importedFavorites)) throw new Error('Invalid format');
-
-                let addedCount = 0;
-                importedFavorites.forEach(id => {
-                    if (!favorites.has(id)) {
-                        favorites.add(id);
-                        addedCount++;
-                    }
-                });
-
-                localStorage.setItem('favorites', JSON.stringify([...favorites]));
-                alert(`Importerade ${addedCount} nya favoriter / تم استيراد ${addedCount} مفضلة جديدة`);
-
-                // Refresh view if showing favorites
-                if (showFavoritesOnly) {
-                    handleSearch({ target: searchInput });
-                }
-            } catch (error) {
-                console.error(error);
-                alert('Fel vid import av fil / خطأ في استيراد الملف');
-            }
-            importFile.value = ''; // Reset input
-        };
-        reader.readAsText(file);
-    });
 
     try {
         // ... (Loading logic remains the same)
@@ -379,21 +296,6 @@ function handleSearch(e) {
 
     sessionStorage.setItem('searchQuery', e.target.value);
 
-    // If showing favorites only
-    if (showFavoritesOnly) {
-        // For now, keeping simple filter on top of favorites
-        let results = dictionaryData.filter(item => favorites.has(item[COL_ID]));
-
-        // Filter by Type if selected
-        const selectedType = typeSelect.value;
-        if (selectedType !== 'all') {
-            results = results.filter(item => item[COL_TYPE] === selectedType);
-        }
-
-        updateResults(results, sortMethod);
-        return;
-    }
-
     const selectedType = typeSelect.value;
 
     // Check if we should proceed with search
@@ -528,31 +430,7 @@ function renderNextBatch() {
     renderedCount += nextBatch.length;
 }
 
-// Toggle Favorite
-window.toggleFavorite = function (id, btn) {
-    // Prevent navigation
-    event.preventDefault();
-    event.stopPropagation();
 
-    if (favorites.has(id)) {
-        favorites.delete(id);
-        btn.classList.remove('active');
-    } else {
-        favorites.add(id);
-        btn.classList.add('active');
-
-        // Animation effect
-        btn.style.transform = 'scale(1.4)';
-        setTimeout(() => btn.style.transform = 'scale(1)', 200);
-    }
-
-    localStorage.setItem('favorites', JSON.stringify([...favorites]));
-
-    // If in favorites view and removing, refresh list
-    if (showFavoritesOnly && !favorites.has(id)) {
-        handleSearch({ target: searchInput });
-    }
-};
 
 // Create Card HTML
 function createCard(item, index = 0) {
@@ -562,12 +440,11 @@ function createCard(item, index = 0) {
     const type = item[COL_TYPE] ? item[COL_TYPE].replace('.', '') : '';
     const sweDef = item[COL_SWE_DEF] || '';
     const arbDef = item[COL_ARB_DEF] || '';
+    const forms = item[COL_FORMS] || '';
     const exSwe = item[COL_EX_SWE] || '';
     const exArb = item[COL_EX_ARB] || '';
     const idiomSwe = item[COL_IDIOM_SWE] || '';
     const idiomArb = item[COL_IDIOM_ARB] || '';
-
-    const isFav = favorites.has(id);
 
     // Examples
     let examplesHtml = '';
@@ -576,8 +453,8 @@ function createCard(item, index = 0) {
             <div class="examples">
                 <span class="ex-label">Exempel / أمثلة</span>
                 <div class="ex-item">
-                    ${exSwe ? `<div class="ex-swe">${exSwe}</div>` : ''}
-                    ${exArb ? `<div class="ex-arb">${exArb}</div>` : ''}
+                    ${exSwe ? `<div class="ex-swe" dir="ltr">${exSwe}</div>` : ''}
+                    ${exArb ? `<div class="ex-arb" dir="rtl">${exArb}</div>` : ''}
                 </div>
             </div>
         `;
@@ -590,8 +467,8 @@ function createCard(item, index = 0) {
             <div class="examples" style="margin-top: 0.5rem;">
                 <span class="ex-label">Uttryck / تعبير</span>
                 <div class="ex-item">
-                    ${idiomSwe ? `<div class="ex-swe">${idiomSwe}</div>` : ''}
-                    ${idiomArb ? `<div class="ex-arb">${idiomArb}</div>` : ''}
+                    ${idiomSwe ? `<div class="ex-swe" dir="ltr">${idiomSwe}</div>` : ''}
+                    ${idiomArb ? `<div class="ex-arb" dir="rtl">${idiomArb}</div>` : ''}
                 </div>
             </div>
         `;
@@ -600,28 +477,21 @@ function createCard(item, index = 0) {
     return `
         <a href="details.html?id=${id}" class="card-link">
             <div class="card">
-                <div class="result-number">#${index + 1}</div>
-                <button class="favorite-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this)" aria-label="Spara som favorit">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                </button>
+                <div class="card-header-info">
+                    <span class="result-number">#${index + 1}</span>
+                    ${type ? `<span class="word-type">${type}</span>` : ''}
+                </div>
                 <div class="card-header">
-                    <div class="word-swe">${swe}</div>
-                    ${type ? `<div class="word-type">${type}</div>` : ''}
+                    <h2 class="word-swe" dir="ltr">${swe}</h2>
                 </div>
-
-                ${arb ? `<div class="word-arb">${arb}</div>` : ''}
-
-                <div class="definitions">
-                    ${sweDef || arbDef ? `
-                        <div class="def-row">
-                            ${sweDef ? `<div class="def-swe">${sweDef}</div>` : ''}
-                            ${arbDef ? `<div class="def-arb">${arbDef}</div>` : ''}
-                        </div>
-                    ` : ''}
-                </div>
-
+                ${arb ? `<p class="word-arb" dir="rtl">${arb}</p>` : ''}
+                ${arbDef || sweDef ? `
+                    <div class="definitions">
+                        ${sweDef ? `<div class="def-row"><div class="def-swe" dir="ltr">${sweDef}</div></div>` : ''}
+                        ${arbDef ? `<div class="def-row"><div class="def-arb" dir="rtl">${arbDef}</div></div>` : ''}
+                    </div>
+                ` : ''}
+                ${forms ? `<div class="forms" dir="ltr"><strong>Former:</strong> ${forms}</div>` : ''}
                 ${examplesHtml}
                 ${idiomsHtml}
             </div>

@@ -3,9 +3,7 @@
 // dictionaryData is global from data.js
 
 // DOM Elements
-// DOM Elements
 const detailsArea = document.getElementById('detailsArea');
-const themeToggle = document.getElementById('themeToggle');
 const shareBtn = document.getElementById('shareBtn');
 const customActions = document.getElementById('customActions');
 const editBtn = document.getElementById('editBtn');
@@ -26,16 +24,8 @@ const COL_IDIOM_ARB = 10;
 
 // Initialize
 async function init() {
-    // Theme Logic
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
-    themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-    });
+    // Theme is now managed globally from index.html via localStorage
+    // No need for local theme toggle
 
     // Load Data
     try {

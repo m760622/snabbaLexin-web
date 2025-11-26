@@ -42,6 +42,48 @@ let wordleCurrentGuess = '';
 let wordleGameOver = false;
 let wordleStreak = 0;
 
+// Grammar Game State
+let grammarTarget = [];
+let grammarCurrent = [];
+let grammarScore = 0;
+let currentGrammarRule = null;
+
+// ========================================
+//  GRAMMAR GAME LOGIC
+// ========================================
+
+// Initialize Grammar Rules (generated on demand or loaded from static DB)
+let grammarRules = [];
+let grammarInitialized = false;
+
+// Generate rules for all categories
+function initializeGrammarRules() {
+    // Check if grammarDatabase is loaded
+    if (typeof grammarDatabase !== 'undefined' && grammarDatabase) {
+        console.log('📚 Loading grammar rules from Static Database...');
+        grammarRules = [];
+
+        for (const [category, sentences] of Object.entries(grammarDatabase)) {
+            sentences.forEach(sent => {
+                grammarRules.push({
+                    category: category,
+                    ...sent
+                });
+            });
+        }
+
+        grammarInitialized = true;
+        console.log(`✅ Loaded ${grammarRules.length} grammar rules from Static Database`);
+    } else {
+        console.error('❌ grammarDatabase not found! Grammar game will not work.');
+    }
+}
+
+// Start initialization (will retry until data is ready)
+initializeGrammarRules();
+
+
+
 // Toast Notification
 function showToast(message) {
     const toast = document.getElementById('toast');
@@ -62,6 +104,13 @@ window.startGame = function (gameType) {
     const pronunciationGame = document.getElementById('pronunciationGame');
     const spellingGame = document.getElementById('spellingGame');
     const wordWheelGame = document.getElementById('wordWheelGame');
+    const sentenceGame = document.getElementById('sentenceGame');
+    const rainGame = document.getElementById('rainGame');
+    const wordleGame = document.getElementById('wordleGame');
+    const grammarGame = document.getElementById('grammarGame');
+
+    // Hide all active game containers
+    document.querySelectorAll('.active-game-container').forEach(el => el.style.display = 'none');
 
     // Hide Menu
     gameMenu.style.display = 'none';
@@ -71,42 +120,34 @@ window.startGame = function (gameType) {
 
     if (gameType === 'missing-word') {
         missingWordGame.style.display = 'block';
-        flashcardsGame.style.display = 'none';
-        pronunciationGame.style.display = 'none';
-        spellingGame.style.display = 'none';
-        wordWheelGame.style.display = 'none';
         startRound();
     } else if (gameType === 'flashcards') {
-        missingWordGame.style.display = 'none';
         flashcardsGame.style.display = 'block';
-        pronunciationGame.style.display = 'none';
-        spellingGame.style.display = 'none';
-        wordWheelGame.style.display = 'none';
         initFlashcards();
     } else if (gameType === 'pronunciation') {
-        missingWordGame.style.display = 'none';
-        flashcardsGame.style.display = 'none';
         pronunciationGame.style.display = 'block';
-        spellingGame.style.display = 'none';
-        wordWheelGame.style.display = 'none';
         startPronunciationGame();
     } else if (gameType === 'spelling') {
-        missingWordGame.style.display = 'none';
-        flashcardsGame.style.display = 'none';
-        pronunciationGame.style.display = 'none';
         spellingGame.style.display = 'block';
-        wordWheelGame.style.display = 'none';
         startSpellingGame();
     } else if (gameType === 'word-wheel') {
-        missingWordGame.style.display = 'none';
-        flashcardsGame.style.display = 'none';
-        pronunciationGame.style.display = 'none';
-        spellingGame.style.display = 'none';
         wordWheelGame.style.display = 'block';
         // Reset Wheel State
         wheelLevel = 3;
         wheelWordsSolved = 0;
         startWordWheelGame();
+    } else if (gameType === 'sentence-builder') {
+        sentenceGame.style.display = 'block';
+        startSentenceGame();
+    } else if (gameType === 'word-rain') {
+        rainGame.style.display = 'block';
+        initRainGame();
+    } else if (gameType === 'wordle') {
+        wordleGame.style.display = 'block';
+        startWordleGame();
+    } else if (gameType === 'grammar') {
+        grammarGame.style.display = 'block';
+        startGrammarGame();
     }
 }
 
@@ -122,53 +163,12 @@ window.showGameMenu = function () {
     document.getElementById('sentenceGame').style.display = 'none';
     document.getElementById('rainGame').style.display = 'none';
     document.getElementById('wordleGame').style.display = 'none';
+    document.getElementById('grammarGame').style.display = 'none';
 
     // Refresh scores
     loadScores();
 }
 
-// Update startGame to handle new games
-const originalStartGame = window.startGame;
-window.startGame = function (gameType) {
-    const sentenceGame = document.getElementById('sentenceGame');
-    const rainGame = document.getElementById('rainGame');
-    const wordleGame = document.getElementById('wordleGame');
-
-    // Hide all first (helper)
-    document.querySelectorAll('.active-game-container').forEach(el => el.style.display = 'none');
-    document.getElementById('gameMenu').style.display = 'none';
-    resetGameScore();
-
-    if (gameType === 'sentence-builder') {
-        sentenceGame.style.display = 'block';
-        startSentenceGame();
-    } else if (gameType === 'word-rain') {
-        rainGame.style.display = 'block';
-        initRainGame();
-    } else if (gameType === 'wordle') {
-        wordleGame.style.display = 'block';
-        startWordleGame();
-    } else {
-        // Fallback to original logic for existing games
-        // We need to manually show the correct one since we hid all above
-        if (gameType === 'missing-word') document.getElementById('missingWordGame').style.display = 'block';
-        if (gameType === 'flashcards') document.getElementById('flashcardsGame').style.display = 'block';
-        if (gameType === 'pronunciation') document.getElementById('pronunciationGame').style.display = 'block';
-        if (gameType === 'spelling') document.getElementById('spellingGame').style.display = 'block';
-        if (gameType === 'word-wheel') document.getElementById('wordWheelGame').style.display = 'block';
-
-        // Call specific start functions
-        if (gameType === 'missing-word') startRound();
-        if (gameType === 'flashcards') initFlashcards();
-        if (gameType === 'pronunciation') startPronunciationGame();
-        if (gameType === 'spelling') startSpellingGame();
-        if (gameType === 'word-wheel') {
-            // wheelLevel = 3; // Removed hardcoded reset
-            wheelWordsSolved = 0;
-            startWordWheelGame();
-        }
-    }
-}
 
 function resetGameScore() {
     gameScore = 0;
@@ -297,7 +297,14 @@ function initFlashcards() {
     if (filterType !== 'all_dict') {
         candidates = dictionaryData.filter(item => {
             const type = (item[COL_TYPE] || '').toLowerCase();
-            return type.includes(filterType);
+            const word = (item[COL_SWE] || '');
+            return type.includes(filterType) && word.length <= 10;
+        });
+    } else {
+        // Even for 'all_dict', apply length limit
+        candidates = dictionaryData.filter(item => {
+            const word = (item[COL_SWE] || '');
+            return word.length <= 10;
         });
     }
 
@@ -318,8 +325,9 @@ function initFlashcards() {
         }
     }
 
-    // Wire up Show Answer button (REMOVED from Flashcards)
-    // document.getElementById('flashcardShowAnswerBtn').onclick = ...
+    // Wire up buttons
+    document.getElementById('fcCorrectBtn').onclick = () => handleFlashcardResult(true);
+    document.getElementById('fcWrongBtn').onclick = () => handleFlashcardResult(false);
 
     flashcardsQueue.sort(() => Math.random() - 0.5);
     currentFlashcardIndex = 0;
@@ -960,6 +968,148 @@ window.showSentenceAnswer = function () {
     if (showAnswerBtn) showAnswerBtn.disabled = true;
 }
 
+// --- GRAMMAR GAME ---
+function startGrammarGame() {
+    const hintEl = document.getElementById('grammarHint');
+    const dropZone = document.getElementById('grammarDropZone');
+    const wordBank = document.getElementById('grammarWordBank');
+    const feedbackEl = document.getElementById('grammarFeedback');
+    const explanationEl = document.getElementById('grammarExplanation');
+    const nextBtn = document.getElementById('nextGrammarBtn');
+    const checkBtn = document.getElementById('checkGrammarBtn');
+    const showAnswerBtn = document.getElementById('grammarShowAnswerBtn');
+
+    // Reset
+    dropZone.innerHTML = '';
+    wordBank.innerHTML = '';
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'game-feedback';
+    explanationEl.style.display = 'none';
+    nextBtn.style.display = 'none';
+    checkBtn.style.display = 'inline-block';
+    checkBtn.disabled = false;
+    if (showAnswerBtn) {
+        showAnswerBtn.style.display = 'inline-block';
+        showAnswerBtn.disabled = false;
+    }
+    grammarCurrent = [];
+
+    // Get selected category
+    const categoryFilter = document.getElementById('grammarCategoryFilter').value;
+
+    // Filter rules by category
+    let filteredRules = grammarRules;
+    if (categoryFilter !== 'all') {
+        filteredRules = grammarRules.filter(rule => rule.category === categoryFilter);
+    }
+
+    if (filteredRules.length === 0) {
+        hintEl.textContent = 'Inga regler hittades för denna kategori / لم يتم العثور على قواعد';
+        return;
+    }
+
+    // Pick random rule
+    currentGrammarRule = filteredRules[Math.floor(Math.random() * filteredRules.length)];
+
+    // Set target
+    grammarTarget = currentGrammarRule.correct;
+
+    // Set hint
+    hintEl.textContent = currentGrammarRule.hint;
+
+    // Shuffle words for bank
+    const shuffled = [...currentGrammarRule.words].sort(() => Math.random() - 0.5);
+
+    shuffled.forEach((word, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'sentence-word';
+        btn.textContent = word;
+        btn.dataset.word = word;
+        btn.dataset.id = index;
+
+        btn.onclick = () => {
+            if (btn.parentElement === wordBank) {
+                dropZone.appendChild(btn);
+                grammarCurrent.push(word);
+            } else {
+                wordBank.appendChild(btn);
+                const idx = grammarCurrent.indexOf(word);
+                if (idx > -1) grammarCurrent.splice(idx, 1);
+            }
+        };
+        wordBank.appendChild(btn);
+    });
+
+    // Bind check button
+    checkBtn.onclick = () => {
+        const currentStr = Array.from(dropZone.children).map(c => c.textContent).join(' ');
+        const targetStr = grammarTarget.join(' ');
+
+        const explanationEl = document.getElementById('grammarExplanation');
+
+        if (currentStr === targetStr) {
+            feedbackEl.textContent = "Helt rätt! 🌟 / صحيح تماماً!";
+            feedbackEl.className = 'game-feedback success';
+            grammarScore += 20;
+            document.getElementById('grammarScore').textContent = grammarScore;
+            saveScore('grammar', grammarScore);
+            triggerConfetti();
+
+            // Show explanation
+            explanationEl.innerHTML = `<strong>✓ Korrekt!</strong><br>${currentGrammarRule.explanation}<br><span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>`;
+            explanationEl.style.display = 'block';
+            explanationEl.style.background = 'rgba(16, 185, 129, 0.1)';
+            explanationEl.style.borderLeft = '4px solid #10b981';
+
+            nextBtn.style.display = 'block';
+            checkBtn.style.display = 'none';
+        } else {
+            feedbackEl.textContent = "Inte riktigt... Försök igen! / ليس تماماً...";
+            feedbackEl.className = 'game-feedback error';
+        }
+    };
+
+    nextBtn.onclick = startGrammarGame;
+}
+
+window.showGrammarAnswer = function () {
+    const dropZone = document.getElementById('grammarDropZone');
+    const wordBank = document.getElementById('grammarWordBank');
+    const feedbackEl = document.getElementById('grammarFeedback');
+    const explanationEl = document.getElementById('grammarExplanation');
+    const nextBtn = document.getElementById('nextGrammarBtn');
+    const checkBtn = document.getElementById('checkGrammarBtn');
+    const showAnswerBtn = document.getElementById('grammarShowAnswerBtn');
+
+    if (!currentGrammarRule) return;
+
+    // Fill drop zone with correct order
+    dropZone.innerHTML = '';
+    grammarTarget.forEach(word => {
+        const el = document.createElement('div');
+        el.className = 'sentence-word';
+        el.textContent = word;
+        dropZone.appendChild(el);
+    });
+
+    // Disable word bank
+    const bankWords = wordBank.querySelectorAll('.sentence-word');
+    bankWords.forEach(w => w.classList.add('used'));
+
+    feedbackEl.textContent = "Här är rätt svar! / إليك الإجابة الصحيحة!";
+    feedbackEl.className = 'game-feedback';
+
+    // Show explanation
+    explanationEl.innerHTML = `<strong>ℹ️ Förklaring:</strong><br>${currentGrammarRule.explanation}<br><span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>`;
+    explanationEl.style.display = 'block';
+    explanationEl.style.background = 'rgba(99, 102, 241, 0.1)';
+    explanationEl.style.borderLeft = '4px solid #6366f1';
+
+    nextBtn.style.display = 'inline-block';
+    checkBtn.disabled = true;
+    if (showAnswerBtn) showAnswerBtn.disabled = true;
+}
+
 // --- WORD RAIN GAME ---
 function initRainGame() {
     const canvas = document.getElementById('rainCanvas');
@@ -993,9 +1143,27 @@ function startRainGame() {
 function spawnRainWord() {
     if (!rainActive) return;
 
-    const item = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
-    if (!item || !item[COL_SWE]) {
-        spawnRainWord();
+    if (typeof dictionaryData === 'undefined' || !dictionaryData || dictionaryData.length === 0) {
+        console.error("Dictionary data not loaded");
+        rainActive = false;
+        return;
+    }
+
+    let item = null;
+    let attempts = 0;
+
+    // Try to find a valid word with a limit on attempts
+    while (!item && attempts < 50) {
+        const candidate = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
+        if (candidate && candidate[COL_SWE]) {
+            item = candidate;
+        }
+        attempts++;
+    }
+
+    if (!item) {
+        // If we still don't have a word, just wait and try again later without recursion stack buildup
+        setTimeout(spawnRainWord, 500);
         return;
     }
 
@@ -1116,202 +1284,8 @@ function loseLife() {
 }
 
 // --- WORDLE GAME ---
-const WORDLE_ROWS = 6;
-const WORDLE_COLS = 5;
+// (Moved to bottom of file to avoid duplication)
 
-function startWordleGame() {
-    const grid = document.getElementById('wordleGrid');
-    const keyboard = document.getElementById('wordleKeyboard');
-    const msg = document.getElementById('wordleMessage');
-    const nextBtn = document.getElementById('nextWordleBtn');
-
-    grid.innerHTML = '';
-    keyboard.innerHTML = '';
-    msg.textContent = '';
-    nextBtn.style.display = 'none';
-
-    wordleGuesses = [];
-    wordleCurrentGuess = '';
-    wordleGameOver = false;
-
-    // Get Filter
-    const filterType = document.getElementById('wordleTypeFilter').value;
-
-    // Find 5 letter word
-    let candidate = null;
-    let attempts = 0;
-    while (!candidate && attempts < 1000) {
-        const item = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
-        const w = item[COL_SWE] ? item[COL_SWE].toLowerCase() : '';
-        const type = (item[COL_TYPE] || '').toLowerCase();
-
-        let typeMatch = true;
-        if (filterType !== 'all') {
-            typeMatch = type.includes(filterType);
-        }
-
-        if (typeMatch && w.length === 5 && !w.includes(' ') && /^[a-zåäö]+$/.test(w)) {
-            candidate = w;
-        }
-        attempts++;
-    }
-
-    if (!candidate) {
-        // Fallback if no word found (rare but possible with strict filters)
-        if (filterType !== 'all') {
-            showToast("Hittade inget ord av denna typ... Byter till Alla.");
-            document.getElementById('wordleTypeFilter').value = 'all';
-            startWordleGame();
-            return;
-        }
-    }
-
-    wordleTarget = candidate;
-    console.log("Target:", wordleTarget); // Debug
-
-    // Build Grid
-    for (let i = 0; i < WORDLE_ROWS * WORDLE_COLS; i++) {
-        const tile = document.createElement('div');
-        tile.className = 'wordle-tile';
-        tile.id = `tile-${i}`;
-        grid.appendChild(tile);
-    }
-
-    // Build Keyboard
-    const rows = [
-        'qwertyuiopå',
-        'asdfghjklöä',
-        'zxcvbnm'
-    ];
-
-    rows.forEach(rowStr => {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'keyboard-row';
-
-        rowStr.split('').forEach(char => {
-            const btn = document.createElement('button');
-            btn.className = 'key-btn';
-            btn.textContent = char;
-            btn.onclick = () => handleWordleInput(char);
-            rowDiv.appendChild(btn);
-        });
-
-        if (rowStr === 'zxcvbnm') {
-            // Add Enter and Backspace
-            const enter = document.createElement('button');
-            enter.className = 'key-btn wide';
-            enter.textContent = 'ENTER';
-            enter.onclick = submitWordleGuess;
-            rowDiv.appendChild(enter);
-
-            const back = document.createElement('button');
-            back.className = 'key-btn wide';
-            back.textContent = '⌫';
-            back.onclick = () => handleWordleInput('Backspace');
-            rowDiv.prepend(back); // Actually backspace usually right, but let's put it left for variety or fix later
-        }
-
-        keyboard.appendChild(rowDiv);
-    });
-}
-
-function handleWordleInput(key) {
-    if (wordleGameOver) return;
-
-    if (key === 'Backspace') {
-        wordleCurrentGuess = wordleCurrentGuess.slice(0, -1);
-    } else if (wordleCurrentGuess.length < 5 && /^[a-zåäö]$/.test(key)) {
-        wordleCurrentGuess += key;
-    }
-    updateWordleGrid();
-}
-
-function updateWordleGrid() {
-    const rowStart = wordleGuesses.length * 5;
-    for (let i = 0; i < 5; i++) {
-        const tile = document.getElementById(`tile-${rowStart + i}`);
-        tile.textContent = wordleCurrentGuess[i] || '';
-        if (wordleCurrentGuess[i]) tile.classList.add('filled');
-        else tile.classList.remove('filled');
-    }
-}
-
-function submitWordleGuess() {
-    if (wordleGameOver) return;
-    if (wordleCurrentGuess.length !== 5) {
-        showToast("För kort! / قصير جداً");
-        return;
-    }
-
-    // Check word validity (optional, skipping for now to allow guessing)
-
-    const rowStart = wordleGuesses.length * 5;
-    const guess = wordleCurrentGuess;
-    const target = wordleTarget;
-
-    // Color Logic
-    const targetCounts = {};
-    for (let c of target) targetCounts[c] = (targetCounts[c] || 0) + 1;
-
-    const result = Array(5).fill('absent');
-
-    // First pass: Correct
-    for (let i = 0; i < 5; i++) {
-        if (guess[i] === target[i]) {
-            result[i] = 'correct';
-            targetCounts[guess[i]]--;
-        }
-    }
-
-    // Second pass: Present
-    for (let i = 0; i < 5; i++) {
-        if (result[i] !== 'correct' && targetCounts[guess[i]] > 0) {
-            result[i] = 'present';
-            targetCounts[guess[i]]--;
-        }
-    }
-
-    // Apply styles with delay
-    for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-            const tile = document.getElementById(`tile-${rowStart + i}`);
-            tile.classList.add(result[i]);
-
-            // Update Keyboard
-            const keyBtn = Array.from(document.querySelectorAll('.key-btn')).find(b => b.textContent === guess[i]);
-            if (keyBtn) {
-                if (result[i] === 'correct') keyBtn.className = 'key-btn correct';
-                else if (result[i] === 'present' && !keyBtn.classList.contains('correct')) keyBtn.className = 'key-btn present';
-                else if (result[i] === 'absent' && !keyBtn.classList.contains('correct') && !keyBtn.classList.contains('present')) keyBtn.className = 'key-btn absent';
-            }
-        }, i * 200);
-    }
-
-    wordleGuesses.push(guess);
-    wordleCurrentGuess = '';
-
-    if (guess === target) {
-        wordleGameOver = true;
-        setTimeout(() => {
-            document.getElementById('wordleMessage').textContent = "Grattis! 🏆 / مبروك!";
-            triggerConfetti();
-            document.getElementById('nextWordleBtn').style.display = 'block';
-            wordleStreak++;
-            document.getElementById('wordleStreak').textContent = wordleStreak;
-            saveScore('wordle', wordleStreak);
-        }, 1500);
-    } else if (wordleGuesses.length >= 6) {
-        wordleGameOver = true;
-        setTimeout(() => {
-            document.getElementById('wordleMessage').textContent = `Rätt ord var: ${target.toUpperCase()}`;
-            document.getElementById('nextWordleBtn').style.display = 'block';
-            wordleStreak = 0;
-            document.getElementById('wordleStreak').textContent = wordleStreak;
-        }, 1500);
-    }
-}
-
-document.getElementById('nextWordleBtn').addEventListener('click', startWordleGame);
 
 // --- SCORE & SETTINGS LOGIC ---
 
@@ -1325,6 +1299,7 @@ function loadScores() {
     document.getElementById('score-sentence').textContent = scores['sentence'] || 0;
     document.getElementById('score-rain').textContent = scores['rain'] || 0;
     document.getElementById('score-wordle').textContent = scores['wordle'] || 0;
+    document.getElementById('score-grammar').textContent = scores['grammar'] || 0;
 }
 
 function saveScore(game, score) {
@@ -1427,3 +1402,227 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// --- WORDLE GAME ---
+function startWordleGame() {
+    const grid = document.getElementById('wordleGrid');
+    const keyboard = document.getElementById('wordleKeyboard');
+    const messageEl = document.getElementById('wordleMessage');
+    const nextBtn = document.getElementById('nextWordleBtn');
+    const typeFilter = document.getElementById('wordleTypeFilter').value;
+
+    // Reset State
+    wordleGuesses = [];
+    wordleCurrentGuess = '';
+    wordleGameOver = false;
+    messageEl.textContent = '';
+    nextBtn.style.display = 'none';
+    grid.innerHTML = '';
+    keyboard.innerHTML = '';
+
+    // Select Target Word (5 letters)
+    let candidate = null;
+    let attempts = 0;
+    while (!candidate && attempts < 500) {
+        const item = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
+        if (item && item[COL_SWE] && item[COL_SWE].length === 5 && !item[COL_SWE].includes(' ') && !item[COL_SWE].includes('-')) {
+            // Filter by type if selected
+            if (typeFilter !== 'all') {
+                if (item[COL_TYPE] && item[COL_TYPE].toLowerCase().includes(typeFilter)) {
+                    candidate = item;
+                }
+            } else {
+                candidate = item;
+            }
+        }
+        attempts++;
+    }
+
+    if (!candidate) {
+        messageEl.textContent = "Kunde inte hitta ett ord. Försök igen.";
+        return;
+    }
+
+    wordleTarget = candidate[COL_SWE].toUpperCase();
+    console.log("Wordle Target:", wordleTarget); // Debug
+
+    // Create Grid (6 rows, 5 cols) - FIXED: use wordle-tile not wordle-cell
+    for (let i = 0; i < 30; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'wordle-tile';
+        grid.appendChild(cell);
+    }
+
+    // Create Keyboard
+    const keys = [
+        'QWERTYUIOPÅ',
+        'ASDFGHJKLÖÄ',
+        'ZXCVBNM'
+    ];
+
+    keys.forEach(row => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'keyboard-row';
+
+        row.split('').forEach(key => {
+            const keyBtn = document.createElement('button');
+            keyBtn.className = 'key-btn';
+            keyBtn.textContent = key;
+            keyBtn.onclick = () => handleWordleInput(key);
+            keyBtn.dataset.key = key;
+            rowEl.appendChild(keyBtn);
+        });
+
+        if (row === 'ZXCVBNM') {
+            // Add Enter and Backspace
+            const enterBtn = document.createElement('button');
+            enterBtn.className = 'key-btn wide';
+            enterBtn.textContent = 'ENTER';
+            enterBtn.onclick = submitWordleGuess;
+            rowEl.appendChild(enterBtn);
+
+            const backBtn = document.createElement('button');
+            backBtn.className = 'key-btn wide';
+            backBtn.textContent = '⌫';
+            backBtn.onclick = () => handleWordleInput('BACKSPACE');
+            rowEl.prepend(backBtn);
+        }
+
+        keyboard.appendChild(rowEl);
+    });
+
+    // Keyboard Listeners (Physical)
+    document.onkeydown = (e) => {
+        if (document.getElementById('wordleGame').style.display === 'none') return;
+
+        const key = e.key.toUpperCase();
+        if (key === 'ENTER') submitWordleGuess();
+        else if (key === 'BACKSPACE') handleWordleInput('BACKSPACE');
+        else if (/^[A-ZÅÄÖ]$/.test(key)) handleWordleInput(key);
+    };
+}
+
+function handleWordleInput(key) {
+    if (wordleGameOver) return;
+
+    if (key === 'BACKSPACE') {
+        wordleCurrentGuess = wordleCurrentGuess.slice(0, -1);
+    } else if (wordleCurrentGuess.length < 5) {
+        wordleCurrentGuess += key;
+    }
+    updateWordleGrid();
+}
+
+function updateWordleGrid() {
+    const grid = document.getElementById('wordleGrid');
+    const currentRow = wordleGuesses.length;
+    const startIdx = currentRow * 5;
+
+    // Clear current row
+    for (let i = 0; i < 5; i++) {
+        const cell = grid.children[startIdx + i];
+        cell.textContent = '';
+        cell.classList.remove('typing');
+    }
+
+    // Fill current guess
+    for (let i = 0; i < wordleCurrentGuess.length; i++) {
+        const cell = grid.children[startIdx + i];
+        cell.textContent = wordleCurrentGuess[i];
+        cell.classList.add('typing');
+    }
+}
+
+function submitWordleGuess() {
+    if (wordleGameOver) return;
+    if (wordleCurrentGuess.length !== 5) {
+        showToast("Ordet måste ha 5 bokstäver");
+        return;
+    }
+
+    // Check if word exists (optional, but good for UX)
+    // For now, we allow any 5-letter combo to keep it simple, or check dictionary
+    /*
+    const exists = dictionaryData.some(d => d[COL_SWE].toUpperCase() === wordleCurrentGuess);
+    if (!exists) {
+        showToast("Finns inte i ordlistan");
+        return;
+    }
+    */
+
+    const guess = wordleCurrentGuess;
+    wordleGuesses.push(guess);
+
+    // Color the grid
+    const rowStart = (wordleGuesses.length - 1) * 5;
+    const grid = document.getElementById('wordleGrid');
+    const targetChars = wordleTarget.split('');
+
+    // First pass: Correct (Green)
+    const guessChars = guess.split('');
+    const states = Array(5).fill('absent'); // absent, present, correct
+
+    guessChars.forEach((char, i) => {
+        if (char === targetChars[i]) {
+            states[i] = 'correct';
+            targetChars[i] = null; // Mark as used
+            guessChars[i] = null;
+        }
+    });
+
+    // Second pass: Present (Yellow)
+    guessChars.forEach((char, i) => {
+        if (char && targetChars.includes(char)) {
+            states[i] = 'present';
+            const targetIdx = targetChars.indexOf(char);
+            targetChars[targetIdx] = null;
+        }
+    });
+
+    // Apply styles with animation delay
+    states.forEach((state, i) => {
+        const cell = grid.children[rowStart + i];
+        setTimeout(() => {
+            cell.classList.add(state);
+            // Update Keyboard
+            const keyBtn = document.querySelector(`.key-btn[data-key="${guess[i]}"]`);
+            if (keyBtn) {
+                // Only upgrade status (absent -> present -> correct)
+                const currentClass = keyBtn.classList.contains('correct') ? 'correct' :
+                    keyBtn.classList.contains('present') ? 'present' : 'absent';
+
+                if (state === 'correct') keyBtn.className = `key-btn correct`;
+                else if (state === 'present' && currentClass !== 'correct') keyBtn.className = `key-btn present`;
+                else if (state === 'absent' && currentClass === 'absent') keyBtn.className = `key-btn absent`;
+                else if (state === 'absent' && !keyBtn.classList.contains('correct') && !keyBtn.classList.contains('present')) keyBtn.classList.add('absent');
+            }
+        }, i * 100);
+    });
+
+    // Check Win/Loss
+    if (guess === wordleTarget) {
+        wordleGameOver = true;
+        setTimeout(() => {
+            document.getElementById('wordleMessage').textContent = "Grattis! Du klarade det! 🎉";
+            wordleStreak++;
+            document.getElementById('wordleStreak').textContent = wordleStreak;
+            triggerConfetti();
+            document.getElementById('nextWordleBtn').style.display = 'block';
+        }, 2000);
+    } else if (wordleGuesses.length >= 6) {
+        wordleGameOver = true;
+        setTimeout(() => {
+            document.getElementById('wordleMessage').innerHTML = `Tyvärr! Rätt ord var: <strong>${wordleTarget}</strong>`;
+            wordleStreak = 0;
+            document.getElementById('wordleStreak').textContent = wordleStreak;
+            document.getElementById('nextWordleBtn').style.display = 'block';
+        }, 2000);
+    }
+
+    wordleCurrentGuess = '';
+}
+
+// Set up Wordle Next button event listener (outside submitWordleGuess to avoid multiple bindings)
+if (document.getElementById('nextWordleBtn')) {
+    document.getElementById('nextWordleBtn').onclick = startWordleGame;
+}

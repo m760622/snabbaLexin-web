@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snabba Lexin - Spel / ألعاب</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="games.css">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+</head>
+
+<body>
+    <div id="toast" class="toast-notification"></div>
+
+    <div class="games-container">
+        <header class="games-header">
+            <a href="index.html" class="back-btn" aria-label="Tillbaka / رجوع">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+            <h1>Spelzon / منطقة الألعاب</h1>
+            <button id="darkModeToggle" class="theme-toggle-btn" aria-label="Mörkt läge / الوضع الليلي">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="moon-icon">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="sun-icon" style="display: none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Game Menu -->
+        <div id="gameMenu" class="game-menu-container">
+            <div class="game-cards-grid">
+                <div class="game-card-item" onclick="startGame('missing-word')">
+                    <div class="game-icon-large">🧩</div>
+                    <h3>Gissa Ordet</h3>
+                    <p>تحدي الكلمة المفقودة</p>
+                    <div class="high-score">Bästa: <span id="score-missing-word">0</span></div>
+                </div>
+                <div class="game-card-item" onclick="startGame('flashcards')">
+                    <div class="game-icon-large">🃏</div>
+                    <h3>Minneskort</h3>
+                    <p>بطاقات الذاكرة</p>
+                    <div class="high-score">Klarade: <span id="score-flashcards">0</span></div>
+                </div>
+                <div class="game-card-item" onclick="startGame('pronunciation')">
+                    <div class="game-icon-large">🎙️</div>
+                    <h3>Uttalscoach</h3>
+                    <p>مدرب النطق</p>
+                    <div class="high-score">Bästa: <span id="score-pronunciation">0</span></div>
+                </div>
+                <div class="game-card-item" onclick="startGame('spelling')">
+                    <div class="game-icon-large">✍️</div>
+                    <h3>Skriv Ordet</h3>
+                    <p>اكتب الكلمة</p>
+                    <div class="high-score">Bästa: <span id="score-spelling">0</span></div>
+                </div>
+                <div class="game-card-item" onclick="startGame('word-wheel')">
+                    <div class="game-icon-large">🎡</div>
+                    <h3>Ord Hjulet</h3>
+                    <p>عجلة الكلمات</p>
+                    <div class="high-score">Bästa: <span id="score-word-wheel">0</span></div>
+                </div>
+                <div class="game-card-item" onclick="startGame('sentence-builder')">
+                    <div class="game-icon-large">🧩</div>
+                    <h3>Bygg Meningen</h3>
+                    <p>بناء الجملة</p>
+                    <div class="high-score">Bästa: <span id="score-sentence">0</span></div>
+                </div>
+                <div class="game-card-item" onclick="startGame('word-rain')">
+                    <div class="game-icon-large">🌧️</div>
+                    <h3>Ord-Regn</h3>
+                    <p>مطر الكلمات</p>
+                    <div class="high-score">Bästa: <span id="score-rain">0</span></div>
+                </div>
+                <div class="game-card-item" onclick="startGame('wordle')">
+                    <div class="game-icon-large">🟩</div>
+                    <h3>Svenska Wordle</h3>
+                    <p>ووردل السويدية</p>
+                    <div class="high-score">Bästa: <span id="score-wordle">0</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Missing Word Game Container -->
+        <div id="missingWordGame" class="active-game-container" style="display: none;">
+            <div class="game-header-inner">
+                <button class="game-back-btn" onclick="showGameMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <h3>Gissa ordet! / خمن الكلمة</h3>
+                <div class="score-badge">Score: <span id="gameScore">0</span></div>
+            </div>
+
+            <div class="game-question-area">
+                <p class="game-sentence" id="gameSentence">Laddar...</p>
+                <p class="game-hint" id="gameHint">...</p>
+            </div>
+
+            <div class="game-options" id="gameOptions">
+                <!-- Options will be injected here -->
+            </div>
+
+            <div class="game-feedback" id="gameFeedback"></div>
+
+            <button id="nextQuestionBtn" class="next-btn" style="display: none;">Nästa / التالي ➜</button>
+        </div>
+
+        <!-- Flashcards Game Container -->
+        <div id="flashcardsGame" class="active-game-container" style="display: none;">
+            <div class="game-header-inner">
+                <button class="game-back-btn" onclick="showGameMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <h3>Minneskort / بطاقات الذاكرة</h3>
+                <div class="game-controls-header">
+                    <select id="flashcardTypeFilter" class="game-filter-select" onchange="initFlashcards()">
+                        <option value="all_dict">📚 Alla (Ordbok) / الكل</option>
+                        <option value="substantiv">Substantiv / اسم</option>
+                        <option value="verb">Verb / فعل</option>
+                        <option value="adjektiv">Adjektiv / صفة</option>
+                        <option value="adverb">Adverb / ظرف</option>
+                        <option value="preposition">Preposition / حرف جر</option>
+                        <option value="pronomen">Pronomen / ضمير</option>
+                        <option value="konjunktion">Konjunktion / أداة ربط</option>
+                    </select>
+                    <div class="score-badge"><span id="flashcardProgress">0/0</span></div>
+                </div>
+            </div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-front">
+                        <h2 id="flashcardWord">...</h2>
+                        <p class="hint-text">Klicka för att vända / اضغط للقلب</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h2 id="flashcardTranslation">...</h2>
+                        <p id="flashcardExample" class="example-text"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flashcard-next-wrapper" style="display: flex; justify-content: center; margin-bottom: 1rem;">
+                <button id="flashcardNextBtn" class="next-btn"
+                    style="display: none; width: 100%; max-width: 300px;">Nästa / التالي ➜</button>
+            </div>
+
+            <div class="flashcard-controls">
+                <button id="fcWrongBtn" class="fc-btn wrong">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    Inte än / لا أعرفها
+                </button>
+                <button id="fcCorrectBtn" class="fc-btn correct">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Kan det / أعرفها
+                </button>
+            </div>
+        </div>
+
+        <!-- Pronunciation Game Container -->
+        <div id="pronunciationGame" class="active-game-container" style="display: none;">
+            <div class="game-header-inner">
+                <button class="game-back-btn" onclick="showGameMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <h3>Uttalscoach / مدرب النطق</h3>
+                <div class="score-badge">Score: <span id="pronunciationScore">0</span></div>
+            </div>
+
+            <div class="pronunciation-area">
+                <div class="target-word-display">
+                    <h2 id="pronunciationWord">...</h2>
+                    <p id="pronunciationTranslation" class="translation-hint">...</p>
+                </div>
+
+                <div class="mic-container">
+                    <button id="micBtn" class="mic-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </button>
+                    <p id="micStatus" class="mic-status">Tryck för att tala / اضغط للتحدث</p>
+                </div>
+
+                <div id="pronunciationFeedback" class="pronunciation-feedback"></div>
+
+                <button id="nextPronunciationBtn" class="next-btn" style="display: none;">Nästa / التالي ➜</button>
+            </div>
+        </div>
+
+        <!-- Spelling Game Container -->
+        <div id="spellingGame" class="active-game-container" style="display: none;">
+            <div class="game-header-inner">
+                <button class="game-back-btn" onclick="showGameMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <h3>Skriv Ordet / اكتب الكلمة</h3>
+                <div class="score-badge">Score: <span id="spellingScore">0</span></div>
+            </div>
+
+            <div class="spelling-area">
+                <div class="game-question-area">
+                    <p class="game-hint large" id="spellingHint">...</p>
+                    <p id="spellingExample" class="game-example"></p>
+                    <div class="wheel-controls" style="display: none;">
+                        <!-- Removed misplaced controls -->
+                    </div>
+
+                    <div id="wheelFeedback" class="game-feedback"></div>
+                    <button id="nextWheelBtn" class="next-btn" style="display: none;"
+                        onclick="startWordWheelGame()">Nästa / التالي ➜</button>
+                </div>
+
+                <div id="spellingOptions" class="spelling-options">
+                    <!-- Options injected here -->
+                </div>
+
+                <div id="spellingFeedback" class="game-feedback"></div>
+                <button id="nextSpellingBtn" class="next-btn" style="display: none;">Nästa / التالي ➜</button>
+            </div>
+        </div>
+
+        <!-- Word Wheel Game Container -->
+        <div id="wordWheelGame" class="active-game-container" style="display: none;">
+            <div class="game-header-inner">
+                <button class="game-back-btn" onclick="showGameMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <h3>Ord Hjulet / عجلة الكلمات</h3>
+                <div class="game-controls-header">
+                    <select id="wordWheelLength" class="game-filter-select" onchange="startWordWheelGame()">
+                        <option value="3">3 Bokstäver / حروف</option>
+                        <option value="4">4 Bokstäver / حروف</option>
+                        <option value="5">5 Bokstäver / حروف</option>
+                        <option value="6">6 Bokstäver / حروف</option>
+                        <option value="7">7 Bokstäver / حروف</option>
+                        <option value="8">8 Bokstäver / حروف</option>
+                    </select>
+                    <div class="score-badge">Score: <span id="wordWheelScore">0</span></div>
+                </div>
+            </div>
+
+            <div class="word-wheel-area">
+                <div class="wheel-answer-box" id="wheelAnswerBox"></div>
+                <div class="wheel-hint" id="wheelHint">...</div>
+
+                <div class="wheel-container">
+                    <div class="wheel-center">
+                        <button id="wheelCheckBtn" class="wheel-center-btn">✓</button>
+                    </div>
+                    <div id="wheelLetters" class="wheel-letters">
+                        <!-- Letters injected here -->
+                    </div>
+                </div>
+
+                <div id="wheelFeedback" class="game-feedback"></div>
+                <div class="game-controls-row fixed-controls">
+                    <button id="skipWheelBtn"
+                        style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important; grid-column: 1;"
+                        onclick="skipWordWheel()">⏭️</button>
+                    <button id="wheelShowAnswerBtn" style="grid-column: 2;" onclick="showWordWheelAnswer()">👁️</button>
+                    <button id="nextWheelBtn" class="next-btn" style="display: none; grid-column: 3;"
+                        onclick="startWordWheelGame()">➜</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sentence Builder Game Container -->
+        <div id="sentenceGame" class="active-game-container" style="display: none;">
+            <div class="game-header-inner">
+                <button class="game-back-btn" onclick="showGameMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                </button>
+                <h3>Bygg Meningen / بناء الجملة</h3>
+                <div class="score-badge">Score: <span id="sentenceScore">0</span></div>
+            </div>
+
+            <div class="sentence-area">
+                <div class="game-hint large" id="sentenceHint">...</div>
+
+                <div class="sentence-drop-zone" id="sentenceDropZone">
+                    <!-- Dropped words go here -->
+                </div>
+
+                <div class="sentence-word-bank" id="sentenceWordBank">
+                    <!-- Draggable words go here -->
+                </div>
+
+                <div id="sentenceFeedback" class="game-feedback"></div>
+
+                <div class="game-controls-row">
+                    <button id="sentenceShowAnswerBtn" class="show-answer-btn" onclick="showSentenceAnswer()">Visa
+                        Svaret / أظهر الإجابة 👁️</button>
+                    <button id="checkSentenceBtn" class="check-btn">Klar / تم</button>
+                    <button id="nextSentenceBtn" class="next-btn" style="display: none;">Nästa / التالي ➜</button>
+                </div>
+            </div>
+
+            <!-- Word Rain Game Container -->
+            <div id="rainGame" class="active-game-container" style="display: none;">
+                <div class="game-header-inner">
+                    <button class="game-back-btn" onclick="showGameMenu()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h3>Ord-Regn / مطر الكلمات</h3>
+                    <div class="score-badge">Score: <span id="rainScore">0</span> | ❤️ <span id="rainLives">3</span>
+                    </div>
+                </div>
+
+                <div class="rain-area">
+                    <canvas id="rainCanvas" width="600" height="400"></canvas>
+                    <div class="rain-controls" id="rainControls">
+                        <!-- Translation options -->
+                    </div>
+                    <button id="startRainBtn" class="start-btn">Starta / ابدأ</button>
+                </div>
+            </div>
+
+            <!-- Wordle Game Container -->
+            <div id="wordleGame" class="active-game-container" style="display: none;">
+                <div class="game-header-inner">
+                    <button class="game-back-btn" onclick="showGameMenu()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                    </button>
+                    <h3>Svenska Wordle / ووردل</h3>
+                    <div class="game-controls-header">
+                        <select id="wordleTypeFilter" class="game-filter-select" onchange="startWordleGame()">
+                            <option value="all">Alla typer / الكل</option>
+                            <option value="substantiv">Substantiv / اسم</option>
+                            <option value="verb">Verb / فعل</option>
+                            <option value="adjektiv">Adjektiv / صفة</option>
+                        </select>
+                        <div class="score-badge">Streak: <span id="wordleStreak">0</span></div>
+                    </div>
+                </div>
+
+                <div class="wordle-area">
+                    <div id="wordleGrid" class="wordle-grid">
+                        <!-- 6 rows x 5 cols -->
+                    </div>
+                    <div id="wordleKeyboard" class="wordle-keyboard">
+                        <!-- Keyboard keys -->
+                    </div>
+                    <div id="wordleMessage" class="game-feedback"></div>
+                    <button id="nextWordleBtn" class="next-btn" style="display: none;">Nästa Ord / كلمة جديدة</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="data.js"></script>
+        <script src="games.js"></script>
+</body>
+
+</html>

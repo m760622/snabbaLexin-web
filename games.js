@@ -1384,9 +1384,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextPronunciationBtn = document.getElementById('nextPronunciationBtn');
     const nextQuestionBtn = document.getElementById('nextQuestionBtn');
 
-    // Spelling Game Elements
-    const nextSpellingBtn = document.getElementById('nextSpellingBtn');
-
     // Word Wheel Elements
     const wheelCheckBtn = document.getElementById('wheelCheckBtn');
     const nextWheelBtn = document.getElementById('nextWheelBtn');
@@ -1404,8 +1401,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextPronunciationBtn) nextPronunciationBtn.addEventListener('click', startPronunciationGame);
     if (nextQuestionBtn) nextQuestionBtn.addEventListener('click', startRound);
 
-    // Spelling Listeners
-    if (nextSpellingBtn) nextSpellingBtn.addEventListener('click', startSpellingGame);
+    // Spelling Listeners - Handled via inline onclick in HTML for reliability
+    // document.addEventListener('click', (e) => {
+    //     const btn = e.target.closest('#nextSpellingBtn');
+    //     if (btn) {
+    //         e.preventDefault();
+    //         startSpellingGame();
+    //     }
+    // });
 
     // Word Wheel Listeners
     if (wheelCheckBtn) wheelCheckBtn.addEventListener('click', checkWordWheel);

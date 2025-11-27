@@ -48,55 +48,122 @@
         <div id="gameMenu" class="game-menu-container">
             <div class="game-cards-grid">
                 <div class="game-card-item" onclick="startGame('grammar')">
-                    <div class="game-icon-large">📚</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                        </svg>
+                    </div>
                     <h3>Grammatik</h3>
                     <p>قواعد اللغة</p>
                     <div class="high-score">Bästa: <span id="score-grammar">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('missing-word')">
-                    <div class="game-icon-large">🧩</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M19.439 15.424a1 1 0 0 0-1.009-1.504l-1.26.315a1 1 0 0 1-1.215-.755l-.315-1.26a1 1 0 0 0-1.504-1.009l-1.26.315a1 1 0 0 1-1.215-.755l-.315-1.26a1 1 0 0 0-1.504-1.009l-1.26.315a1 1 0 0 1-1.215-.755l-.315-1.26a1 1 0 0 0-1.504-1.009L5.64 4.96a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315a1 1 0 0 0-1.215.755l-.315 1.26a1 1 0 0 1-1.504 1.009l-1.26-.315z" />
+                            <path d="M10 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+                        </svg>
+                    </div>
                     <h3>Gissa Ordet</h3>
                     <p>تحدي الكلمة المفقودة</p>
                     <div class="high-score">Bästa: <span id="score-missing-word">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('flashcards')">
-                    <div class="game-icon-large">🃏</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                        </svg>
+                    </div>
                     <h3>Minneskort</h3>
                     <p>بطاقات الذاكرة</p>
                     <div class="high-score">Klarade: <span id="score-flashcards">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('spelling')">
-                    <div class="game-icon-large">✍️</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                        </svg>
+                    </div>
                     <h3>Skriv Ordet</h3>
                     <p>اكتب الكلمة</p>
                     <div class="high-score">Bästa: <span id="score-spelling">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('word-wheel')">
-                    <div class="game-icon-large">🎡</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path
+                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                            <path d="M2 12h20" />
+                        </svg>
+                    </div>
                     <h3>Ord Hjulet</h3>
                     <p>عجلة الكلمات</p>
                     <div class="high-score">Bästa: <span id="score-word-wheel">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('sentence-builder')">
-                    <div class="game-icon-large">📝</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6" />
+                            <line x1="8" y1="12" x2="21" y2="12" />
+                            <line x1="8" y1="18" x2="21" y2="18" />
+                            <line x1="3" y1="6" x2="3.01" y2="6" />
+                            <line x1="3" y1="12" x2="3.01" y2="12" />
+                            <line x1="3" y1="18" x2="3.01" y2="18" />
+                        </svg>
+                    </div>
                     <h3>Bygg Meningen</h3>
                     <p>بناء الجملة</p>
                     <div class="high-score">Bästa: <span id="score-sentence">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('word-rain')">
-                    <div class="game-icon-large">🌧️</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 16.2A4.5 4.5 0 0 0 17.5 8h-1.8A7 7 0 1 0 4 14.9" />
+                            <path d="M16 13v8" />
+                            <path d="M8 13v8" />
+                            <path d="M12 15v8" />
+                        </svg>
+                    </div>
                     <h3>Ord-Regn</h3>
                     <p>مطر الكلمات</p>
                     <div class="high-score">Bästa: <span id="score-rain">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('wordle')">
-                    <div class="game-icon-large">🔤</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <line x1="3" y1="9" x2="21" y2="9" />
+                            <line x1="3" y1="15" x2="21" y2="15" />
+                            <line x1="9" y1="3" x2="9" y2="21" />
+                            <line x1="15" y1="3" x2="15" y2="21" />
+                        </svg>
+                    </div>
                     <h3>Svenska Wordle</h3>
                     <p>ووردل السويدية</p>
                     <div class="high-score">Bästa: <span id="score-wordle">0</span></div>
                 </div>
                 <div class="game-card-item" onclick="startGame('pronunciation')">
-                    <div class="game-icon-large">🎙️</div>
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                            <line x1="12" y1="19" x2="12" y2="23" />
+                            <line x1="8" y1="23" x2="16" y2="23" />
+                        </svg>
+                    </div>
                     <h3>Uttalscoach</h3>
                     <p>مدرب النطق</p>
                     <div class="high-score">Bästa: <span id="score-pronunciation">0</span></div>

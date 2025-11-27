@@ -1401,14 +1401,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextPronunciationBtn) nextPronunciationBtn.addEventListener('click', startPronunciationGame);
     if (nextQuestionBtn) nextQuestionBtn.addEventListener('click', startRound);
 
-    // Spelling Listeners - Handled via inline onclick in HTML for reliability
-    // document.addEventListener('click', (e) => {
-    //     const btn = e.target.closest('#nextSpellingBtn');
-    //     if (btn) {
-    //         e.preventDefault();
-    //         startSpellingGame();
-    //     }
-    // });
+
 
     // Word Wheel Listeners
     if (wheelCheckBtn) wheelCheckBtn.addEventListener('click', checkWordWheel);

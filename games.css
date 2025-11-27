@@ -1,22 +1,51 @@
 /* Games Page Styles */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Inter:wght@300;500&display=swap');
+
 :root {
     --bg-gradient-light: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     --bg-gradient-dark: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-    --card-bg-light: white;
-    --card-bg-dark: #374151;
+    --card-bg-light: rgba(255, 255, 255, 0.6);
+    --card-bg-dark: rgba(31, 41, 55, 0.6);
+    --glass-border-light: rgba(255, 255, 255, 0.5);
+    --glass-border-dark: rgba(255, 255, 255, 0.1);
     --text-main-light: #1f2937;
     --text-main-dark: #f3f4f6;
     --text-sub-light: #6b7280;
     --text-sub-dark: #9ca3af;
+    --font-main: 'Inter', sans-serif;
+    --font-arabic: 'Cairo', sans-serif;
+    --glass-blur: blur(16px);
+
+    /* Game Theme Colors */
+    --color-grammar: #4f46e5;
+    /* Indigo */
+    --color-missing: #ea580c;
+    /* Orange */
+    --color-flashcards: #059669;
+    /* Emerald */
+    --color-spelling: #db2777;
+    /* Pink */
+    --color-wheel: #7c3aed;
+    /* Violet */
+    --color-sentence: #0284c7;
+    /* Sky */
+    --color-rain: #2563eb;
+    /* Blue */
+    --color-wordle: #65a30d;
+    /* Lime */
+    --color-pronunciation: #dc2626;
+    /* Red */
 }
 
 body {
     background: var(--bg-gradient-light);
-    min-height: 100vh;
+    height: 100dvh;
     margin: 0;
-    font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+    font-family: var(--font-main);
     color: var(--text-main-light);
     transition: background 0.3s, color 0.3s;
+    overflow: hidden;
+    /* Zero-Scroll on body */
 }
 
 body.dark-mode {
@@ -27,10 +56,27 @@ body.dark-mode {
 .games-container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 2rem;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    padding: 1rem 1.5rem;
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    /* Header, Content, Footer/Space */
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.game-menu-container {
+    overflow-y: auto;
+    padding-bottom: 2rem;
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE 10+ */
+}
+
+.game-menu-container::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
 }
 
 .games-header {
@@ -93,13 +139,15 @@ body.dark-mode .theme-toggle-btn {
 
 .game-card-item {
     background: var(--card-bg-light);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-light);
     border-radius: 1.5rem;
     padding: 1.5rem;
     text-align: center;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    border: 2px solid transparent;
+    transition: transform 0.1s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     position: relative;
     overflow: hidden;
     aspect-ratio: 1 / 1;
@@ -107,13 +155,62 @@ body.dark-mode .theme-toggle-btn {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    /* Distribute space evenly */
+}
+
+/* Individual Game Colors via nth-child */
+.game-card-item:nth-child(1) .game-icon-large {
+    color: var(--color-grammar);
+    filter: drop-shadow(0 4px 6px rgba(79, 70, 229, 0.3));
+}
+
+.game-card-item:nth-child(2) .game-icon-large {
+    color: var(--color-missing);
+    filter: drop-shadow(0 4px 6px rgba(234, 88, 12, 0.3));
+}
+
+.game-card-item:nth-child(3) .game-icon-large {
+    color: var(--color-flashcards);
+    filter: drop-shadow(0 4px 6px rgba(5, 150, 105, 0.3));
+}
+
+.game-card-item:nth-child(4) .game-icon-large {
+    color: var(--color-spelling);
+    filter: drop-shadow(0 4px 6px rgba(219, 39, 119, 0.3));
+}
+
+.game-card-item:nth-child(5) .game-icon-large {
+    color: var(--color-wheel);
+    filter: drop-shadow(0 4px 6px rgba(124, 58, 237, 0.3));
+}
+
+.game-card-item:nth-child(6) .game-icon-large {
+    color: var(--color-sentence);
+    filter: drop-shadow(0 4px 6px rgba(2, 132, 199, 0.3));
+}
+
+.game-card-item:nth-child(7) .game-icon-large {
+    color: var(--color-rain);
+    filter: drop-shadow(0 4px 6px rgba(37, 99, 235, 0.3));
+}
+
+.game-card-item:nth-child(8) .game-icon-large {
+    color: var(--color-wordle);
+    filter: drop-shadow(0 4px 6px rgba(101, 163, 13, 0.3));
+}
+
+.game-card-item:nth-child(9) .game-icon-large {
+    color: var(--color-pronunciation);
+    filter: drop-shadow(0 4px 6px rgba(220, 38, 38, 0.3));
+}
+
+.game-card-item:active {
+    transform: scale(0.96);
 }
 
 body.dark-mode .game-card-item {
     background: var(--card-bg-dark);
+    border-color: var(--glass-border-dark);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    border-color: #374151;
 }
 
 .game-card-item:hover {
@@ -151,7 +248,12 @@ body.dark-mode .game-card-item h3 {
 .game-card-item p {
     margin: 0 0 1rem 0;
     color: var(--text-sub-light);
-    font-family: 'Noto Sans Arabic', sans-serif;
+    font-family: var(--font-arabic);
+    font-weight: 700;
+    font-size: 1.1rem;
+    /* Increased size */
+    line-height: 1.6;
+    /* Better spacing for Arabic glyphs */
 }
 
 body.dark-mode .game-card-item p {
@@ -426,12 +528,17 @@ screen and (min-width: 0px) {
         border: 1px solid var(--border);
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
+        /* Changed from center to space-between */
         align-items: center;
         text-align: center;
         gap: 0.5rem;
-        min-height: 160px;
-        /* Ensure minimum height */
+        min-height: 180px;
+        /* Increased min-height */
+        height: auto;
+        /* Allow growth */
+        aspect-ratio: auto;
+        /* Remove square constraint */
     }
 
     .game-icon-large {
@@ -488,11 +595,13 @@ body.iphone-view .game-card-item {
     border: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     text-align: center;
     gap: 0.5rem;
-    min-height: 160px;
+    min-height: 180px;
+    height: auto;
+    aspect-ratio: auto;
 }
 
 body.iphone-view .game-icon-large {
@@ -513,11 +622,12 @@ body.iphone-view .game-card-item h3 {
 }
 
 body.iphone-view .game-card-item p {
-    font-size: 0.8rem;
+    font-size: 1rem;
+    /* Larger for mobile view too */
     margin: 0;
     color: var(--text-secondary);
     white-space: normal;
-    line-height: 1.3;
+    line-height: 1.5;
     opacity: 1;
 }
 
@@ -600,6 +710,7 @@ body.iphone-view.dark-mode .high-score {
         line-height: 1.2;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         /* Limit to 2 lines */
         -webkit-box-orient: vertical;
         overflow: hidden;
@@ -787,19 +898,23 @@ body.dark-mode .flashcard-back {
 }
 
 .flashcard h2 {
-    font-size: 3.5rem;
-    /* Very large font */
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    /* Responsive font size */
     margin: 0 0 1.5rem 0;
     font-weight: 800;
     background: linear-gradient(45deg, #1f2937, #4b5563);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
-    line-height: 1.2;
+    line-height: 1.4;
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
 body.dark-mode .flashcard h2 {
     background: linear-gradient(45deg, #f3f4f6, #d1d5db);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -808,6 +923,8 @@ body.dark-mode .flashcard h2 {
     color: #be123c;
     background: none;
     -webkit-text-fill-color: #be123c;
+    background-clip: border-box;
+    -webkit-background-clip: border-box;
 }
 
 body.dark-mode .flashcard-back h2 {
@@ -1654,4 +1771,918 @@ body.dark-mode #spellingHint {
 
 body.dark-mode .game-example {
     color: #d1d5db;
+}
+
+/* ========================================
+   DASHBOARD LAYOUT (Single Screen - iPhone 16 Pro)
+   ======================================== */
+
+.dashboard-game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    /* Dynamic Viewport Height */
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: 2000;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    /* Header, Main, Footer */
+    overflow: hidden;
+    /* ZERO SCROLLING */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body.dark-mode .dashboard-game-container {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    color: #f3f4f6;
+}
+
+/* --- Header --- */
+.dashboard-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+body.dark-mode .dashboard-header {
+    background: rgba(31, 41, 55, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.dashboard-title .subtitle {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+body.dark-mode .dashboard-title h3 {
+    color: #f3f4f6;
+}
+
+body.dark-mode .dashboard-title .subtitle {
+    color: #9ca3af;
+}
+
+.dashboard-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6366f1;
+}
+
+/* --- Main Content (Canvas) --- */
+.dashboard-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#rainCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    z-index: 5;
+}
+
+body.dark-mode .start-overlay {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Start Button */
+.premium-start-btn {
+    position: relative;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+    transition: transform 0.2s;
+}
+
+.premium-start-btn:active {
+    transform: scale(0.95);
+}
+
+.btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: rotate(45deg);
+    animation: glowRotate 3s infinite linear;
+}
+
+@keyframes glowRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Footer Controls --- */
+.dashboard-footer {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    /* Safe Area */
+}
+
+body.dark-mode .dashboard-footer {
+    background: rgba(31, 41, 55, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rain-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 Options side-by-side */
+    gap: 1rem;
+}
+
+.rain-option-btn {
+    padding: 1rem 0.5rem;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 60px;
+    /* Large touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+body.dark-mode .rain-option-btn {
+    background: #374151;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f3f4f6;
+}
+
+.rain-option-btn:active {
+    transform: scale(0.96);
+    background: #f3f4f6;
+}
+
+/* ========================================
+   DASHBOARD LAYOUT (Single Screen - iPhone 16 Pro)
+   ======================================== */
+
+.dashboard-game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    /* Dynamic Viewport Height */
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: 2000;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    /* Header, Main, Footer */
+    overflow: hidden;
+    /* ZERO SCROLLING */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body.dark-mode .dashboard-game-container {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    color: #f3f4f6;
+}
+
+/* --- Header --- */
+.dashboard-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+body.dark-mode .dashboard-header {
+    background: rgba(31, 41, 55, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.dashboard-title .subtitle {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+body.dark-mode .dashboard-title h3 {
+    color: #f3f4f6;
+}
+
+body.dark-mode .dashboard-title .subtitle {
+    color: #9ca3af;
+}
+
+.dashboard-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6366f1;
+}
+
+/* --- Main Content (Canvas) --- */
+.dashboard-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#rainCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    z-index: 50;
+    /* Increased to be above canvas */
+}
+
+body.dark-mode .start-overlay {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Start Button */
+.premium-start-btn {
+    position: relative;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+    transition: transform 0.2s;
+}
+
+.premium-start-btn:active {
+    transform: scale(0.95);
+}
+
+.btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: rotate(45deg);
+    animation: glowRotate 3s infinite linear;
+}
+
+@keyframes glowRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Footer Controls --- */
+.dashboard-footer {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    /* Safe Area */
+}
+
+body.dark-mode .dashboard-footer {
+    background: rgba(31, 41, 55, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rain-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 Options side-by-side */
+    gap: 1rem;
+}
+
+.rain-option-btn {
+    padding: 1rem 0.5rem;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 60px;
+    /* Large touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+body.dark-mode .rain-option-btn {
+    background: #374151;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f3f4f6;
+}
+
+.rain-option-btn:active {
+    transform: scale(0.96);
+    background: #f3f4f6;
+}
+
+/* ========================================
+   DASHBOARD LAYOUT (Single Screen - iPhone 16 Pro)
+   ======================================== */
+
+.dashboard-game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    /* Dynamic Viewport Height */
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    z-index: 2000;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    /* Header, Main, Footer */
+    overflow: hidden;
+    /* ZERO SCROLLING */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body.dark-mode .dashboard-game-container {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    color: #f3f4f6;
+}
+
+/* --- Header --- */
+.dashboard-header {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 10;
+}
+
+body.dark-mode .dashboard-header {
+    background: rgba(31, 41, 55, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.dashboard-title .subtitle {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+body.dark-mode .dashboard-title h3 {
+    color: #f3f4f6;
+}
+
+body.dark-mode .dashboard-title .subtitle {
+    color: #9ca3af;
+}
+
+.dashboard-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #6366f1;
+}
+
+/* --- Main Content (Canvas) --- */
+.dashboard-main {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#rainCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.start-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px);
+    z-index: 50;
+    /* Increased to be above canvas */
+    flex-direction: column;
+}
+
+.game-over-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 2rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+body.dark-mode .start-overlay {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Premium Start Button */
+.premium-start-btn {
+    position: relative;
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+    transition: transform 0.2s;
+}
+
+.premium-start-btn:active {
+    transform: scale(0.95);
+}
+
+.btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    transform: rotate(45deg);
+    animation: glowRotate 3s infinite linear;
+}
+
+@keyframes glowRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --- Footer Controls --- */
+.dashboard-footer {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    /* Safe Area */
+}
+
+body.dark-mode .dashboard-footer {
+    background: rgba(31, 41, 55, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.rain-controls-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 Options side-by-side */
+    gap: 1rem;
+}
+
+.rain-option-btn {
+    padding: 1rem 0.5rem;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 60px;
+    /* Large touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+body.dark-mode .rain-option-btn {
+    background: #374151;
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #f3f4f6;
+}
+
+.rain-option-btn:active {
+    transform: scale(0.96);
+    background: #f3f4f6;
+}
+
+/* =========================================
+   ORD-REGN (WORD RAIN) REFACTOR
+   Target: iPhone 16 Pro, OLED, Zero-Scroll
+   ========================================= */
+
+:root {
+    /* Core Palette - OLED Optimized */
+    --rain-bg: #121212;
+    /* Dark Grey for OLED (prevents smearing) */
+    --rain-text: #F8FAFC;
+
+    /* Bilingual Identity */
+    --rain-sv-color: #60A5FA;
+    /* Soft Blue for Swedish */
+    --rain-ar-color: #FBBF24;
+    /* Amber/Gold for Arabic */
+
+    /* Glassmorphism */
+    --rain-glass-bg: rgba(255, 255, 255, 0.08);
+    --rain-glass-border: rgba(255, 255, 255, 0.1);
+    --rain-glass-blur: 20px;
+
+    /* Functional */
+    --rain-danger: #EF4444;
+    --rain-success: #10B981;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --rain-bg: #F3F4F6;
+        --rain-text: #1F2937;
+        --rain-glass-bg: rgba(255, 255, 255, 0.6);
+        --rain-glass-border: rgba(0, 0, 0, 0.05);
+        --rain-sv-color: #2563EB;
+        --rain-ar-color: #D97706;
+    }
+}
+
+/* Main Container - The "Zero-Scroll" Wrapper */
+#rainGame.modern-game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    /* Dynamic Viewport Height for mobile browsers */
+    background-color: var(--rain-bg);
+    z-index: 2000;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    /* Header, Canvas, Controls */
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overflow: hidden;
+    /* No scrolling allowed */
+    box-sizing: border-box;
+    font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+}
+
+/* 1. Header Area */
+.rain-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    z-index: 10;
+}
+
+.glass-btn {
+    background: var(--rain-glass-bg);
+    backdrop-filter: blur(var(--rain-glass-blur));
+    -webkit-backdrop-filter: blur(var(--rain-glass-blur));
+    border: 1px solid var(--rain-glass-border);
+    color: var(--rain-text);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.glass-btn:active {
+    transform: scale(0.95);
+}
+
+.score-board {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    background: var(--rain-glass-bg);
+    backdrop-filter: blur(var(--rain-glass-blur));
+    -webkit-backdrop-filter: blur(var(--rain-glass-blur));
+    border: 1px solid var(--rain-glass-border);
+    font-weight: 700;
+    color: var(--rain-text);
+}
+
+/* 2. Canvas Area */
+.rain-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#rainCanvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Overlay for Start Button */
+.glass-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    z-index: 20;
+}
+
+.neon-btn {
+    background: linear-gradient(135deg, var(--rain-sv-color), var(--rain-ar-color));
+    border: none;
+    padding: 1.5rem 3rem;
+    border-radius: 2rem;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.neon-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.3);
+}
+
+.lang-sv {
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.9;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.lang-ar {
+    font-size: 1.8rem;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    line-height: 1;
+}
+
+/* 3. Controls Area */
+.rain-controls {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 Options */
+    gap: 1rem;
+    z-index: 10;
+    background: linear-gradient(to top, var(--rain-bg) 20%, transparent);
+}
+
+.rain-option-btn {
+    background: var(--rain-glass-bg);
+    backdrop-filter: blur(var(--rain-glass-blur));
+    -webkit-backdrop-filter: blur(var(--rain-glass-blur));
+    border: 1px solid var(--rain-glass-border);
+    color: var(--rain-ar-color);
+    /* Arabic Text Color */
+    font-family: 'Noto Sans Arabic', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 80px;
+    /* Touch target */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.rain-option-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.98);
+}
+
+/* Typography Hierarchy */
+.rain-word-sv {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    /* Regular/Light */
+    color: var(--rain-sv-color);
+}
+
+.rain-word-ar {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    font-weight: 700;
+    /* Bold */
+    color: var(--rain-ar-color);
 }

@@ -4,8 +4,8 @@
 :root {
     --bg-gradient-light: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     --bg-gradient-dark: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-    --card-bg-light: rgba(255, 255, 255, 0.6);
-    --card-bg-dark: rgba(31, 41, 55, 0.6);
+    --card-bg-light: #ffffff;
+    --card-bg-dark: #1f2937;
     --glass-border-light: rgba(255, 255, 255, 0.5);
     --glass-border-dark: rgba(255, 255, 255, 0.1);
     --text-main-light: #1f2937;
@@ -14,7 +14,17 @@
     --text-sub-dark: #9ca3af;
     --font-main: 'Inter', sans-serif;
     --font-arabic: 'Cairo', sans-serif;
+    --font-main: 'Inter', sans-serif;
+    --font-arabic: 'Cairo', sans-serif;
     --glass-blur: blur(16px);
+
+    /* Fun & Alive Gradients */
+    --mesh-gradient-light: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    --mesh-gradient-dark: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+
+    /* Spring Physics */
+    --spring-easing: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --bounce-easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     /* Game Theme Colors */
     --color-grammar: #4f46e5;
@@ -38,14 +48,21 @@
 }
 
 body {
-    background: var(--bg-gradient-light);
+    background-color: #0f172a;
+    /* Fallback */
+    background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+    background-size: 100% 100%;
+    background-attachment: fixed;
     height: 100dvh;
     margin: 0;
     font-family: var(--font-main);
-    color: var(--text-main-light);
-    transition: background 0.3s, color 0.3s;
+    color: var(--text-main-dark);
+    /* Default to dark mode text for this dark theme */
+    transition: background 0.5s ease;
     overflow: hidden;
-    /* Zero-Scroll on body */
 }
 
 body.dark-mode {
@@ -102,6 +119,13 @@ body.dark-mode {
     transition: transform 0.2s, background 0.3s, color 0.3s;
 }
 
+#mobileViewToggle {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white !important;
+}
+
 body.dark-mode .back-btn,
 body.dark-mode .theme-toggle-btn {
     background: var(--card-bg-dark);
@@ -146,8 +170,8 @@ body.dark-mode .theme-toggle-btn {
     padding: 1.5rem;
     text-align: center;
     cursor: pointer;
-    transition: transform 0.1s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.4s var(--spring-easing), box-shadow 0.4s var(--spring-easing), border-color 0.3s ease;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
     position: relative;
     overflow: hidden;
     aspect-ratio: 1 / 1;
@@ -155,6 +179,56 @@ body.dark-mode .theme-toggle-btn {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    animation: slideUpFade 0.6s var(--spring-easing) backwards;
+}
+
+/* Staggered Entrance */
+.game-card-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.game-card-item:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.game-card-item:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.game-card-item:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.game-card-item:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+.game-card-item:nth-child(6) {
+    animation-delay: 0.35s;
+}
+
+.game-card-item:nth-child(7) {
+    animation-delay: 0.4s;
+}
+
+.game-card-item:nth-child(8) {
+    animation-delay: 0.45s;
+}
+
+.game-card-item:nth-child(9) {
+    animation-delay: 0.5s;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* Individual Game Colors via nth-child */
@@ -204,7 +278,7 @@ body.dark-mode .theme-toggle-btn {
 }
 
 .game-card-item:active {
-    transform: scale(0.96);
+    transform: scale(0.95);
 }
 
 body.dark-mode .game-card-item {
@@ -214,9 +288,9 @@ body.dark-mode .game-card-item {
 }
 
 .game-card-item:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 25px 50px rgba(99, 102, 241, 0.2);
-    border-color: #6366f1;
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
 }
 
 body.dark-mode .game-card-item:hover {
@@ -286,8 +360,9 @@ body.dark-mode .high-score {
     border-radius: 1rem;
     font-weight: 700;
     font-size: 1rem;
+    font-size: 1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s var(--spring-easing);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: inline-flex;
@@ -321,8 +396,9 @@ body.dark-mode .high-score {
     color: white;
     border-radius: 1rem;
     font-weight: 700;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s var(--spring-easing);
     box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -357,7 +433,7 @@ body.dark-mode .next-btn {
     border-radius: 1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s var(--spring-easing);
     box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -403,8 +479,9 @@ body.dark-mode .check-btn:disabled {
     border-radius: 1rem;
     font-weight: 700;
     font-size: 1.1rem;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s var(--spring-easing);
     box-shadow: 0 4px 6px rgba(168, 85, 247, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -436,8 +513,27 @@ body.dark-mode .start-btn {
     border-radius: 2rem;
     padding: 2rem;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
-    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: slideUpFade 0.6s var(--spring-easing) backwards;
     flex: 1;
+}
+
+/* Skeleton Loader for Empty States */
+.skeleton-loader {
+    width: 100%;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-sub-light);
+    font-weight: 500;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+body.dark-mode .skeleton-loader {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-sub-dark);
 }
 
 body.dark-mode .active-game-container {

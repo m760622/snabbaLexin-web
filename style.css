@@ -186,8 +186,8 @@ header {
 
 /* Opposite Animation for Subtitle */
 .subtitle-anim {
-    /* Match Title Gradient Style */
-    background: linear-gradient(to right, #EF4444 0%, #3B82F6 33%, #EAB308 66%, #10B981 100%);
+    /* Gradient: Blue, Yellow */
+    background: linear-gradient(to right, #3B82F6 0%, #EAB308 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

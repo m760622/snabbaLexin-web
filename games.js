@@ -79,6 +79,24 @@ function initializeGrammarRules() {
     }
 }
 
+
+// Mobile View Toggle Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileViewToggle = document.getElementById('mobileViewToggle');
+    if (mobileViewToggle) {
+        mobileViewToggle.addEventListener('click', () => {
+            document.body.classList.toggle('iphone-view');
+            const isMobileView = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isMobileView);
+        });
+
+        // Restore state
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.body.classList.add('iphone-view');
+        }
+    }
+});
+
 // Start initialization (will retry until data is ready)
 initializeGrammarRules();
 
@@ -190,6 +208,9 @@ function startRound() {
     const gameOptions = document.getElementById('gameOptions');
     const nextQuestionBtn = document.getElementById('nextQuestionBtn');
 
+    // Ensure Next button triggers new round
+    nextQuestionBtn.onclick = startRound;
+
     // Check if data is loaded
     if (typeof dictionaryData === 'undefined' || !dictionaryData || dictionaryData.length === 0) {
         gameSentence.textContent = "Fel: Data inte laddad / خطأ: البيانات لم يتم تحميلها";
@@ -210,8 +231,13 @@ function startRound() {
         if (randomItem && randomItem[COL_EX_SWE] && randomItem[COL_SWE]) {
             const word = randomItem[COL_SWE].toLowerCase();
             const example = randomItem[COL_EX_SWE].toLowerCase();
-            // Ensure word is long enough and actually in the example
-            if (word.length > 2 && example.includes(word)) {
+
+            // Create regex here to ensure we can actually hide the word
+            // Use word boundary to avoid partial matches (e.g. hiding 'rum' in 'trumma')
+            const regex = new RegExp(`\\b${word}\\b`, 'i');
+
+            // Ensure word is long enough and actually matches the regex in the example
+            if (word.length > 2 && regex.test(example)) {
                 candidate = randomItem;
             }
         }

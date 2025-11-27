@@ -87,14 +87,14 @@ body.dark-mode .theme-toggle-btn {
 /* Game Menu Grid */
 .game-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1.5rem;
 }
 
 .game-card-item {
     background: var(--card-bg-light);
     border-radius: 1.5rem;
-    padding: 2rem;
+    padding: 1.5rem;
     text-align: center;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -102,6 +102,12 @@ body.dark-mode .theme-toggle-btn {
     border: 2px solid transparent;
     position: relative;
     overflow: hidden;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* Distribute space evenly */
 }
 
 body.dark-mode .game-card-item {
@@ -388,15 +394,313 @@ body.dark-mode .game-back-btn:hover {
     }
 }
 
-/* Mobile Responsiveness */
+/* Mobile Responsiveness & iPhone View Simulation */
 @media (max-width: 600px) {
     .games-container {
         padding: 1rem;
+    }
+}
+
+/* Apply mobile styles when screen is small OR when simulation is active */
+@media (max-width: 600px),
+screen and (min-width: 0px) {
+    /* 
+       HACK: We want these styles to apply if body has .iphone-view class 
+       BUT CSS doesn't support "OR" between media query and selector nesting easily without duplication.
+       So we will use a separate block for .iphone-view below.
+    */
+}
+
+/* Shared Mobile Styles (Applied to small screens AND .iphone-view) */
+@media (max-width: 600px) {
+    .game-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .game-card-item {
+        padding: 1rem 0.5rem;
+        border-radius: 1rem;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        gap: 0.5rem;
+        min-height: 160px;
+        /* Ensure minimum height */
+    }
+
+    .game-icon-large {
+        font-size: 2.5rem;
+        margin-bottom: 0;
+        flex-shrink: 0;
+        filter: none;
+    }
+
+    .game-card-item h3 {
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.4;
+        font-weight: 600;
+        color: var(--text-main);
+        /* Remove line clamp to avoid cutting text */
+        display: block;
+        height: auto;
+    }
+
+    .game-card-item p {
+        font-size: 0.8rem;
+        margin: 0;
+        color: var(--text-secondary);
+        white-space: normal;
+        /* Allow wrapping */
+        line-height: 1.3;
+        opacity: 1;
+    }
+
+    .high-score {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
+        margin-top: 0.25rem;
+        background: var(--background);
+        color: var(--primary);
+        border-radius: 1rem;
+        font-weight: 600;
+        border: 1px solid var(--border);
+    }
+}
+
+/* Force Mobile Styles for Simulation */
+body.iphone-view .game-cards-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.75rem !important;
+}
+
+body.iphone-view .game-card-item {
+    padding: 1rem 0.5rem;
+    border-radius: 1rem;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    min-height: 160px;
+}
+
+body.iphone-view .game-icon-large {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    filter: none;
+}
+
+body.iphone-view .game-card-item h3 {
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--text-main);
+    display: block;
+    height: auto;
+}
+
+body.iphone-view .game-card-item p {
+    font-size: 0.8rem;
+    margin: 0;
+    color: var(--text-secondary);
+    white-space: normal;
+    line-height: 1.3;
+    opacity: 1;
+}
+
+body.iphone-view .high-score {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    margin-top: 0.25rem;
+    background: var(--background);
+    color: var(--primary);
+    border-radius: 1rem;
+    font-weight: 600;
+    border: 1px solid var(--border);
+}
+
+/* Dark Mode Overrides for Simulation */
+body.iphone-view.dark-mode .game-card-item {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+body.iphone-view.dark-mode .game-card-item h3 {
+    color: #f3f4f6;
+}
+
+body.iphone-view.dark-mode .game-card-item p {
+    color: #9ca3af;
+}
+
+body.iphone-view.dark-mode .high-score {
+    background: rgba(129, 140, 248, 0.2);
+    color: #818cf8;
+}
+
+/* Continue with existing media query... */
+@media (max-width: 600px) {
+
+    /* Fullscreen Active Game */
+    .active-game-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+        border-radius: 0;
+        padding: 1rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .game-header-inner {
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
     }
 
     .game-cards-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
+    }
+
+    .game-card-item {
+        padding: 0.75rem;
+        /* Slightly less padding to give more room */
+        border-radius: 1rem;
+    }
+
+    .game-icon-large {
+        font-size: 2.5rem;
+        /* Smaller icon to fit text */
+        margin-bottom: 0;
+        /* Remove margin, let justify-content handle it */
+        flex-shrink: 0;
+    }
+
+    .game-card-item h3 {
+        font-size: 0.95rem;
+        margin: 0;
+        line-height: 1.2;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        /* Limit to 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .game-card-item p {
+        font-size: 0.8rem;
+        margin: 0;
+        color: var(--text-sub-light);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+    }
+
+    .high-score {
+        font-size: 0.7rem;
+        padding: 0.1rem 0.4rem;
+        margin-top: auto;
+        /* Push to bottom if needed, though justify-between handles it */
+    }
+
+    /* Flashcard Mobile Tweaks */
+    .flashcard-container {
+        height: 50vh;
+        /* Use viewport height */
+        max-height: 400px;
+        margin-bottom: 1rem;
+    }
+
+    .flashcard h2 {
+        font-size: 2.5rem;
+    }
+
+    .flashcard-controls {
+        gap: 1rem;
+    }
+
+    .fc-btn {
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+    }
+
+    /* General Game Options Mobile */
+    .game-options {
+        grid-template-columns: 1fr;
+        /* Stack options */
+    }
+
+    /* Grammar Game Mobile Tweaks */
+    .grammar-sentence-area {
+        font-size: 1.5rem;
+        line-height: 2;
+        padding: 1rem;
+        background: var(--card-bg-light);
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark-mode .grammar-sentence-area {
+        background: var(--card-bg-dark);
+    }
+
+    .word-drop-zone {
+        min-width: 80px;
+        height: 2.5rem;
+        margin: 0 0.25rem;
+        border-bottom-width: 3px;
+    }
+
+    .word-bank {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 1rem;
+        margin-top: auto;
+        /* Push to bottom */
+    }
+
+    body.dark-mode .word-bank {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .draggable-word {
+        padding: 0.75rem 1.25rem;
+        font-size: 1.1rem;
+        border-radius: 2rem;
+        /* Pill shape */
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        touch-action: none;
+        /* Important for drag on mobile */
+    }
+
+    body.dark-mode .draggable-word {
+        background: #374151;
+        color: white;
     }
 }
 

@@ -61,6 +61,48 @@ async function init() {
         }
     }
 
+    // PWA Install Prompt Logic
+    let deferredPrompt;
+    const pwaPrompt = document.getElementById('pwa-install-prompt');
+    const installBtn = document.getElementById('pwa-install-btn');
+    const laterBtn = document.getElementById('pwa-later-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI to notify the user they can add to home screen
+        if (pwaPrompt) {
+            pwaPrompt.style.display = 'block';
+        }
+    });
+
+    if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+            if (pwaPrompt) {
+                pwaPrompt.style.display = 'none';
+            }
+            // Show the install prompt
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                // Wait for the user to respond to the prompt
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                // We've used the prompt, and can't use it again, throw it away
+                deferredPrompt = null;
+            }
+        });
+    }
+
+    if (laterBtn) {
+        laterBtn.addEventListener('click', () => {
+            if (pwaPrompt) {
+                pwaPrompt.style.display = 'none';
+            }
+        });
+    }
+
     try {
         // ... (Loading logic remains the same)
         // Show loading spinner
@@ -417,10 +459,10 @@ function handleSearch(e) {
         results = results.filter(item => item[COL_TYPE] === selectedType);
     }
 
-    updateResults(results, sortMethod);
+    updateResults(results, sortMethod, query);
 }
 
-function updateResults(results, sortMethod) {
+function updateResults(results, sortMethod, query) {
     // Update Stats with Result Count
     statsElement.textContent = `Hittade ${results.length.toLocaleString()} resultat / تم العثور على ${results.length.toLocaleString()} نتيجة`;
 
@@ -430,8 +472,19 @@ function updateResults(results, sortMethod) {
         const bSwe = (b[COL_SWE] || '').toLowerCase();
 
         if (sortMethod === 'relevance') {
-            // ... (Relevance logic)
-            return 0; // Simplified for brevity, logic is same as before
+            // Relevance: Exact match > Starts with > Contains
+            const aExact = aSwe === query;
+            const bExact = bSwe === query;
+            if (aExact && !bExact) return -1;
+            if (!aExact && bExact) return 1;
+
+            const aStart = aSwe.startsWith(query);
+            const bStart = bSwe.startsWith(query);
+            if (aStart && !bStart) return -1;
+            if (!aStart && bStart) return 1;
+
+            // Fallback to alphabetical if relevance is equal
+            return aSwe.localeCompare(bSwe, 'sv');
         } else if (sortMethod === 'alpha_asc') {
             return aSwe.localeCompare(bSwe, 'sv');
         } else if (sortMethod === 'alpha_desc') {
@@ -565,3 +618,16 @@ function showToast(message) {
 }
 
 // --- GAME LOGIC MOVED TO games.js ---
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(registration => {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch(err => {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+    });
+}

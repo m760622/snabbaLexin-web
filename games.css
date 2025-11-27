@@ -470,6 +470,36 @@ body.dark-mode .check-btn:disabled {
     border: 1px solid #6b7280;
 }
 
+/* Show Answer Button - Warning/Caution */
+.show-answer-btn {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    border: none;
+    color: white;
+    border-radius: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s var(--spring-easing);
+    box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.show-answer-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(245, 158, 11, 0.4);
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+}
+
+.show-answer-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
 /* Start Button - Energetic Purple */
 .start-btn {
     padding: 1rem 2rem;
@@ -1271,6 +1301,40 @@ body.dark-mode .option-btn {
     100% {
         transform: scale(1);
     }
+}
+
+/* Grammar Rule Explanation - Premium Style */
+.grammar-explanation {
+    font-size: 1.1rem;
+    color: var(--text-main-light);
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.15);
+    line-height: 1.6;
+    text-align: center;
+    font-weight: 500;
+    animation: slideUpFade 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body.dark-mode .grammar-explanation {
+    background: rgba(31, 41, 55, 0.8);
+    color: var(--text-main-dark);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.grammar-explanation strong {
+    color: #6366f1;
+    font-weight: 700;
+}
+
+body.dark-mode .grammar-explanation strong {
+    color: #818cf8;
 }
 
 /* Spelling Game Styles */
@@ -2781,4 +2845,70 @@ body.dark-mode .rain-option-btn {
     font-weight: 700;
     /* Bold */
     color: var(--rain-ar-color);
+}
+
+/* Grammar Game Controls - Premium Redesign */
+.game-controls-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.score-badge {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 2rem;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.game-filter-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: var(--card-bg-light);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2rem;
+    padding: 0.75rem 2.5rem 0.75rem 1.25rem;
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-main-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    font-family: var(--font-main);
+}
+
+.game-filter-select:hover {
+    border-color: #6366f1;
+    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.15);
+    transform: translateY(-1px);
+}
+
+.game-filter-select:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+body.dark-mode .game-filter-select {
+    background-color: var(--card-bg-dark);
+    color: var(--text-main-dark);
+    border-color: rgba(99, 102, 241, 0.4);
+}
+
+body.dark-mode .game-filter-select:hover {
+    border-color: #818cf8;
 }

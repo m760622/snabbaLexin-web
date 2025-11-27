@@ -34,14 +34,7 @@
                 </svg>
             </a>
             <h1>Spelzon / منطقة الألعاب</h1>
-            <button id="mobileViewToggle" class="theme-toggle" aria-label="Mobilvy / عرض الجوال"
-                style="margin-left: auto;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                </svg>
-            </button>
+
         </header>
 
         <!-- Game Menu -->
@@ -488,7 +481,10 @@
 
         <!-- Grammar Game Container -->
         <div id="grammarGame" class="active-game-container" style="display: none;">
-            <div class="game-header-inner">
+            <div class="game-header-title" style="text-align: center; margin-bottom: 1rem;">
+                <h3 style="margin: 0; font-size: 1.5rem; color: #6366f1;">Grammatik / قواعد اللغة</h3>
+            </div>
+            <div class="game-header-inner" style="display: flex; justify-content: space-between; align-items: center;">
                 <button class="game-back-btn" onclick="showGameMenu()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -496,10 +492,10 @@
                         <polyline points="12 19 5 12 12 5"></polyline>
                     </svg>
                 </button>
-                <h3>Grammatik / قواعد اللغة</h3>
+
                 <div class="game-controls-header">
-                    <select id="grammarCategoryFilter" class="game-filter-select" onchange="startGrammarGame()"
-                        style="padding: 0.5rem; border-radius: 8px; border: 2px solid #6366f1;">
+                    <div class="score-badge">Poäng: <span id="grammarScore">0</span></div>
+                    <select id="grammarCategoryFilter" class="game-filter-select" onchange="startGrammarGame()">
                         <option value="all">✓ Alla regler / كل القواعد (130)</option>
                         <option value="word-order">Ordföljd / ترتيب الكلمات (15)</option>
                         <option value="v2-rule">V2-regeln / قاعدة V2 (15)</option>
@@ -514,14 +510,12 @@
                         <option value="komparativ">Komparativ / التفضil (15)</option>
                         <option value="subjunktioner">Subjunktioner / أدوات الربط (15)</option>
                     </select>
-                    <div class="score-badge">Poäng: <span id="grammarScore">0</span></div>
                 </div>
             </div>
 
             <div class="grammar-area">
                 <div class="game-hint large" id="grammarHint">...</div>
-                <div class="grammar-explanation" id="grammarExplanation"
-                    style="font-size: 0.9em; color: #666; margin: 1rem 0; padding: 0.75rem; background: rgba(99, 102, 241, 0.1); border-radius: 8px; display: none;">
+                <div class="grammar-explanation" id="grammarExplanation" style="display: none;">
                     <!-- Grammar rule explanation -->
                 </div>
 

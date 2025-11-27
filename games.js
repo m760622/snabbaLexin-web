@@ -79,23 +79,11 @@ function initializeGrammarRules() {
     }
 }
 
+// Check saved mobile view preference from main app
+if (localStorage.getItem('mobileView') === 'true') {
+    document.body.classList.add('iphone-view');
+}
 
-// Mobile View Toggle Logic
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileViewToggle = document.getElementById('mobileViewToggle');
-    if (mobileViewToggle) {
-        mobileViewToggle.addEventListener('click', () => {
-            document.body.classList.toggle('iphone-view');
-            const isMobileView = document.body.classList.contains('iphone-view');
-            localStorage.setItem('mobileView', isMobileView);
-        });
-
-        // Restore state
-        if (localStorage.getItem('mobileView') === 'true') {
-            document.body.classList.add('iphone-view');
-        }
-    }
-});
 
 // Start initialization (will retry until data is ready)
 initializeGrammarRules();
@@ -1079,7 +1067,7 @@ function startGrammarGame() {
             grammarScore += 20;
             document.getElementById('grammarScore').textContent = grammarScore;
             saveScore('grammar', grammarScore);
-            triggerConfetti();
+            // triggerConfetti(); // Removed per user request
 
             // Show explanation
             explanationEl.innerHTML = `<strong>✓ Korrekt!</strong><br>${currentGrammarRule.explanation}<br><span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>`;

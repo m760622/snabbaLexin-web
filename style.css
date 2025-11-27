@@ -110,8 +110,8 @@ header {
     font-weight: 900;
     margin: 0;
     line-height: 1.5;
-    /* Gradient: Red, Blue, Yellow, Green */
-    background: linear-gradient(to right, #EF4444 0%, #3B82F6 33%, #EAB308 66%, #10B981 100%);
+    /* Gradient: Red, Green, White */
+    background: linear-gradient(to right, #EF4444 0%, #10B981 50%, #FFFFFF 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

@@ -1667,3 +1667,52 @@ body.dark-mode .pwa-btn.secondary:hover {
         opacity: 1;
     }
 }
+
+/* Toast Notifications */
+.toast-notification {
+    position: fixed;
+    top: 2rem;
+    /* Moved to top */
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    /* Start from above */
+    background: var(--surface);
+    color: var(--text-main);
+    padding: 0.75rem 1.5rem;
+    /* Compact padding */
+    border-radius: 50px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 90%;
+    /* Ensure it fits on mobile */
+    text-align: center;
+    font-size: 0.95rem;
+    /* Slightly smaller text */
+    line-height: 1.4;
+}
+
+.toast-notification.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast-notification.success {
+    background: #10b981;
+    color: white;
+    border-color: #059669;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+.toast-notification.error {
+    background: #ef4444;
+    color: white;
+    border-color: #b91c1c;
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+}

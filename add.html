@@ -109,6 +109,11 @@
         if (savedTheme === 'dark') {
             document.body.classList.add('dark-mode');
         }
+
+        // Check saved mobile view preference from main app
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.body.classList.add('iphone-view');
+        }
     </script>
     <script src="add.js"></script>
 </body>

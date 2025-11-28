@@ -148,10 +148,60 @@ body.dark-mode .theme-toggle-btn {
 
 .games-header h1 {
     margin: 0;
-    font-size: 1.8rem;
-    background: linear-gradient(45deg, #6366f1, #8b5cf6);
+    font-size: clamp(1.2rem, 4vw, 2.2rem);
+    /* Responsive font size */
+    white-space: nowrap;
+    /* Force single line */
+    background: linear-gradient(45deg, #6366f1, #a855f7, #ec4899);
+    /* More vibrant gradient */
+    background-size: 200% auto;
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation:
+        popIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) both,
+        gradientFlow 3s ease infinite,
+        float 3s ease-in-out infinite 0.8s;
+    /* Float starts after popIn */
+}
+
+/* Animations */
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 /* Game Menu Grid */
@@ -581,6 +631,21 @@ body.dark-mode .active-game-container {
     gap: 1rem;
 }
 
+.game-header-inner h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    white-space: nowrap;
+    background: linear-gradient(to right, #6366f1, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation:
+        popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both,
+        gradientFlow 3s linear infinite;
+    text-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
+}
+
 .game-back-btn {
     background: transparent;
     border: none;
@@ -637,6 +702,34 @@ screen and (min-width: 0px) {
        BUT CSS doesn't support "OR" between media query and selector nesting easily without duplication.
        So we will use a separate block for .iphone-view below.
     */
+}
+
+/* iPhone View Simulation - Ported from style.css */
+body.iphone-view {
+    max-width: 393px;
+    margin: 2rem auto;
+    border: 12px solid #333;
+    border-radius: 50px;
+    min-height: calc(100vh - 4rem);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    overflow-x: hidden;
+    position: relative;
+}
+
+body.iphone-view::before {
+    /* Notch / Dynamic Island Simulation */
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 35px;
+    background-color: #000;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    z-index: 1000;
+    pointer-events: none;
 }
 
 /* Shared Mobile Styles (Applied to small screens AND .iphone-view) */
@@ -792,6 +885,21 @@ body.iphone-view.dark-mode .high-score {
 @media (max-width: 600px) {
 
     /* Fullscreen Active Game */
+    /* Force Mobile Styles for Simulation */
+    body.iphone-view .active-game-container {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 38px;
+        /* Match phone radius minus border */
+        z-index: 100;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
     .active-game-container {
         position: fixed;
         top: 0;
@@ -1205,23 +1313,44 @@ body.dark-mode .game-hint {
 }
 
 .option-btn {
-    background: var(--card-bg-light);
-    border: 2px solid transparent;
-    padding: 1rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 1.2rem;
     font-size: 1.2rem;
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
     color: var(--text-main-light);
-    font-weight: 600;
-    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0.8), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 body.dark-mode .option-btn {
-    background: var(--card-bg-dark);
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
     color: var(--text-main-dark);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.3),
+        0 2px 4px -1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }
 
 /* Staggered animation delays for options */
@@ -1242,36 +1371,53 @@ body.dark-mode .option-btn {
 }
 
 .option-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
     border-color: #6366f1;
+    z-index: 1;
+}
+
+.option-btn:hover::before {
+    opacity: 1;
 }
 
 .option-btn.correct {
-    background: #10b981;
-    color: white;
-    border-color: #059669;
-    animation: pulse-green 0.5s;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    border-color: #34d399 !important;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3) !important;
+    animation: pulse-green 0.6s cubic-bezier(0.4, 0, 0.6, 1);
+    opacity: 1 !important;
+    /* Force opacity */
 }
 
 .option-btn.wrong {
-    background: #ef4444;
-    color: white;
-    border-color: #b91c1c;
-    animation: shake 0.4s;
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+    color: white !important;
+    border-color: #f87171 !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3) !important;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    opacity: 1 !important;
+    /* Force opacity */
 }
 
-@keyframes popIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+.option-btn:disabled {
+    cursor: default;
+    transform: none !important;
+    box-shadow: none;
 }
+
+/* Ensure disabled state doesn't override colors for unselected buttons if needed, 
+   but we want them to look disabled unless they are the correct answer */
+.option-btn:disabled:not(.correct):not(.wrong) {
+    opacity: 0.6;
+    background: var(--surface);
+    /* Keep neutral */
+}
+
+
 
 @keyframes shake {
 
@@ -1350,17 +1496,22 @@ body.dark-mode .grammar-explanation strong {
 }
 
 .spelling-option-btn {
-    padding: 1rem 1.5rem;
-    /* Adjusted padding */
-    font-size: 1.2rem;
-    background: var(--card-bg-light);
-    border: 2px solid #e5e7eb;
+    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 1rem;
+    font-size: 1.1rem;
     border-radius: 1rem;
-    color: var(--text-main-light);
     cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 600;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        inset 0 2px 4px rgba(255, 255, 255, 0.8);
+    color: var(--text-main-light);
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
     flex: 1 1 auto;
     /* Allow growing */
     min-width: 120px;
@@ -1371,29 +1522,69 @@ body.dark-mode .grammar-explanation strong {
     /* Safety net */
 }
 
+.spelling-option-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0.8), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
 body.dark-mode .spelling-option-btn {
-    background: var(--card-bg-dark);
-    border-color: #4b5563;
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
     color: var(--text-main-dark);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.3),
+        0 2px 4px -1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }
 
 .spelling-option-btn:hover {
-    transform: translateY(-3px);
-    border-color: #6366f1;
-    box-shadow: 0 10px 15px rgba(99, 102, 241, 0.1);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: #db2777;
+    /* Pink for spelling */
+    z-index: 1;
+}
+
+.spelling-option-btn:hover::before {
+    opacity: 1;
 }
 
 .spelling-option-btn.correct {
-    background: #10b981;
-    color: white;
-    border-color: #10b981;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    border-color: #34d399 !important;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3) !important;
+    animation: pulse-green 0.6s cubic-bezier(0.4, 0, 0.6, 1);
+    opacity: 1 !important;
 }
 
 .spelling-option-btn.wrong {
-    background: #ef4444;
-    color: white;
-    border-color: #ef4444;
-    opacity: 0.7;
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+    color: white !important;
+    border-color: #f87171 !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3) !important;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    opacity: 1 !important;
+}
+
+.spelling-option-btn:disabled {
+    cursor: default;
+    transform: none !important;
+    box-shadow: none;
+}
+
+.spelling-option-btn:disabled:not(.correct):not(.wrong) {
+    opacity: 0.6;
+    background: var(--surface);
 }
 
 /* Word Wheel Styles */
@@ -1431,6 +1622,34 @@ body.dark-mode .spelling-option-btn {
 body.dark-mode .wheel-answer-box {
     background: rgba(99, 102, 241, 0.2);
     color: #818cf8;
+}
+
+.wheel-answer-box.correct {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: white !important;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    border: none;
+}
+
+.wheel-answer-box.wrong {
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+    color: white !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    border: none;
+}
+
+.game-hint {
+    font-size: 1.2rem;
+    color: var(--text-secondary-light);
+    margin-bottom: 1rem;
+    font-style: italic;
+    direction: rtl;
+    /* Ensure Arabic is RTL */
+    font-family: 'Noto Sans Arabic', sans-serif;
+    /* Use Arabic font */
+    line-height: 1.6;
 }
 
 .wheel-hint {
@@ -1485,25 +1704,25 @@ body.dark-mode .wheel-hint {
 
 .wheel-letter {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    /* Increased from 50px */
+    height: 60px;
+    /* Increased from 50px */
     border-radius: 50%;
     background: var(--card-bg-light);
     border: 2px solid #e5e7eb;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    /* Increased size */
+    font-size: 2rem;
+    /* Increased from 1.5rem */
     font-weight: 700;
     color: var(--text-main-light);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 5;
     text-transform: uppercase;
-    /* Capitalize letters */
-    /* Positioning handled by JS */
 }
 
 body.dark-mode .wheel-letter {
@@ -1520,11 +1739,9 @@ body.dark-mode .wheel-letter {
 }
 
 .wheel-letter.selected {
-    background: #e0e7ff;
-    border-color: #6366f1;
-    color: #6366f1;
-    transform: scale(0.9);
-    opacity: 0.7;
+    transform: scale(0);
+    opacity: 0;
+    pointer-events: none;
 }
 
 body.dark-mode .wheel-letter.selected {
@@ -1542,9 +1759,9 @@ body.dark-mode .wheel-letter.selected {
 
 .fixed-controls {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 equal columns for Skip/Next, Show Answer, and spacer */
-    gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 equal columns */
+    gap: 0.5rem;
     width: 100%;
     max-width: 600px;
     margin: 2rem auto 0;
@@ -1555,6 +1772,28 @@ body.dark-mode .wheel-letter.selected {
     /* width: 100%; Removed to allow circular shape */
     margin: 0 auto;
     /* Center in grid cell */
+}
+
+#undoWheelBtn {
+    padding: 0;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white !important;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(100, 116, 139, 0.3);
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.dark-mode #undoWheelBtn {
+    background: linear-gradient(135deg, #475569 0%, #334155 100%) !important;
 }
 
 #skipWheelBtn {
@@ -1693,6 +1932,28 @@ body.dark-mode #wheelShowAnswerBtn:disabled {
     color: #d1d5db !important;
     opacity: 0.8;
     border: 1px solid #6b7280;
+}
+
+#nextWheelBtn {
+    padding: 0;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white !important;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.dark-mode #nextWheelBtn {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
 }
 
 .sentence-word {
@@ -2911,4 +3172,127 @@ body.dark-mode .game-filter-select {
 
 body.dark-mode .game-filter-select:hover {
     border-color: #818cf8;
+}
+
+
+/* Creative Word Wheel Controls */
+.word-wheel-controls {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    /* Limit width for better look */
+    margin: 0 auto 1.5rem auto !important;
+    /* Center and add spacing */
+}
+
+body.dark-mode .word-wheel-controls {
+    background: rgba(30, 41, 59, 0.7);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.word-wheel-controls .game-filter-select {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    /* Adjust padding */
+    margin: 0;
+    width: auto;
+    font-weight: 700;
+    color: var(--text-main-light);
+}
+
+body.dark-mode .word-wheel-controls .game-filter-select {
+    color: var(--text-main-dark);
+}
+
+.word-wheel-controls .score-badge {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+    box-shadow: 0 2px 5px rgba(139, 92, 246, 0.3);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.game-example {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: var(--text-main-light);
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 4px solid #6366f1;
+}
+
+body.dark-mode .game-example {
+    color: var(--text-main-dark);
+    background: rgba(99, 102, 241, 0.2);
+}
+
+/* Sentence Builder Visual Feedback */
+.sentence-drop-zone.correct {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
+}
+
+.sentence-drop-zone.wrong {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+/* Sentence Builder Title Refinement */
+#sentenceGame .game-header-inner h3 {
+    font-size: 1.4rem;
+    /* Smaller to fit on one line */
+    white-space: nowrap;
+    background: linear-gradient(to right, #6366f1, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s infinite linear;
+    background-size: 200% auto;
+    margin: 0;
+    padding: 0;
+}
+
+to {
+    background-position: 200% center;
+}
+}
+
+/* Word Rain Title Refinement */
+#rainGame .game-header-inner h3 {
+    font-size: 1.5rem;
+    white-space: nowrap;
+    background: linear-gradient(to right, #3b82f6, #06b6d4, #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 3s infinite linear;
+    background-size: 200% auto;
+    margin: 0;
+    padding: 0;
+}
+
+.rain-controls-header {
+    justify-content: center;
+    margin-bottom: 1.5rem !important;
 }

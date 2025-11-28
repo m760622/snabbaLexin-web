@@ -27,6 +27,11 @@ async function init() {
     // Theme is now managed globally from index.html via localStorage
     // No need for local theme toggle
 
+    // Check saved mobile view preference from main app
+    if (localStorage.getItem('mobileView') === 'true') {
+        document.body.classList.add('iphone-view');
+    }
+
     // Load Data
     try {
         // Data is loaded via data.js as a global variable 'dictionaryData'

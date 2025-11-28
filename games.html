@@ -175,7 +175,9 @@
                     </svg>
                 </button>
                 <h3>Gissa ordet! / خمن الكلمة</h3>
-                <div class="score-badge">Score: <span id="gameScore">0</span></div>
+            </div>
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <div class="score-badge">Poäng: <span id="gameScore">0</span></div>
             </div>
 
             <div class="game-question-area">
@@ -204,19 +206,19 @@
                     </svg>
                 </button>
                 <h3>Minneskort / بطاقات الذاكرة</h3>
-                <div class="game-controls-header">
-                    <select id="flashcardTypeFilter" class="game-filter-select" onchange="initFlashcards()">
-                        <option value="all_dict">📚 Alla (Ordbok) / الكل</option>
-                        <option value="substantiv">Substantiv / اسم</option>
-                        <option value="verb">Verb / فعل</option>
-                        <option value="adjektiv">Adjektiv / صفة</option>
-                        <option value="adverb">Adverb / ظرف</option>
-                        <option value="preposition">Preposition / حرف جر</option>
-                        <option value="pronomen">Pronomen / ضمير</option>
-                        <option value="konjunktion">Konjunktion / أداة ربط</option>
-                    </select>
-                    <div class="score-badge"><span id="flashcardProgress">0/0</span></div>
-                </div>
+            </div>
+            <div class="game-controls-header" style="justify-content: center; margin-bottom: 1rem;">
+                <select id="flashcardTypeFilter" class="game-filter-select" onchange="initFlashcards()">
+                    <option value="all_dict">📚 Alla (Ordbok) / الكل</option>
+                    <option value="substantiv">Substantiv / اسم</option>
+                    <option value="verb">Verb / فعل</option>
+                    <option value="adjektiv">Adjektiv / صفة</option>
+                    <option value="adverb">Adverb / ظرف</option>
+                    <option value="preposition">Preposition / حرف جر</option>
+                    <option value="pronomen">Pronomen / ضمير</option>
+                    <option value="konjunktion">Konjunktion / أداة ربط</option>
+                </select>
+                <div class="score-badge"><span id="flashcardProgress">0/0</span></div>
             </div>
 
             <div class="flashcard-container">
@@ -306,7 +308,9 @@
                     </svg>
                 </button>
                 <h3>Skriv Ordet / اكتب الكلمة</h3>
-                <div class="score-badge">Score: <span id="spellingScore">0</span></div>
+            </div>
+            <div style="text-align: center; margin-bottom: 1rem;">
+                <div class="score-badge">Poäng: <span id="spellingScore">0</span></div>
             </div>
 
             <div class="spelling-area">
@@ -344,17 +348,18 @@
                     </svg>
                 </button>
                 <h3>Ord Hjulet / عجلة الكلمات</h3>
-                <div class="game-controls-header">
-                    <select id="wordWheelLength" class="game-filter-select" onchange="startWordWheelGame()">
-                        <option value="3">3 Bokstäver / حروف</option>
-                        <option value="4">4 Bokstäver / حروف</option>
-                        <option value="5">5 Bokstäver / حروف</option>
-                        <option value="6">6 Bokstäver / حروف</option>
-                        <option value="7">7 Bokstäver / حروف</option>
-                        <option value="8">8 Bokstäver / حروف</option>
-                    </select>
-                    <div class="score-badge">Score: <span id="wordWheelScore">0</span></div>
-                </div>
+            </div>
+            <div class="game-controls-header word-wheel-controls" style="margin-bottom: 1rem;">
+                <select id="wordWheelLength" class="game-filter-select" onchange="startWordWheelGame()"
+                    style="width: auto; flex-grow: 0;">
+                    <option value="3">3 Bokstäver / حروف</option>
+                    <option value="4">4 Bokstäver / حروف</option>
+                    <option value="5">5 Bokstäver / حروف</option>
+                    <option value="6">6 Bokstäver / حروف</option>
+                    <option value="7">7 Bokstäver / حروف</option>
+                    <option value="8">8 Bokstäver / حروف</option>
+                </select>
+                <div class="score-badge">Poäng: <span id="wordWheelScore">0</span></div>
             </div>
 
             <div class="word-wheel-area">
@@ -372,12 +377,12 @@
                 </div>
 
                 <div id="wheelFeedback" class="game-feedback"></div>
+                <div id="wheelExample" class="game-example" style="display: none;"></div>
                 <div class="game-controls-row fixed-controls">
-                    <button id="skipWheelBtn"
-                        style="display: inline-flex !important; visibility: visible !important; opacity: 1 !important; grid-column: 1;"
-                        onclick="skipWordWheel()">⏭️</button>
-                    <button id="wheelShowAnswerBtn" style="grid-column: 2;" onclick="showWordWheelAnswer()">👁️</button>
-                    <button id="nextWheelBtn" class="next-btn" style="display: none; grid-column: 3;"
+                    <button id="undoWheelBtn" onclick="undoWordWheel()">↩️</button>
+                    <button id="skipWheelBtn" onclick="skipWordWheel()">⏭️</button>
+                    <button id="wheelShowAnswerBtn" onclick="showWordWheelAnswer()">👁️</button>
+                    <button id="nextWheelBtn" class="next-btn" style="display: none;"
                         onclick="startWordWheelGame()">➜</button>
                 </div>
             </div>
@@ -394,7 +399,9 @@
                     </svg>
                 </button>
                 <h3>Bygg Meningen / بناء الجملة</h3>
-                <div class="score-badge">Score: <span id="sentenceScore">0</span></div>
+            </div>
+            <div class="game-controls-header sentence-controls" style="margin-bottom: 1rem;">
+                <div class="score-badge">Poäng: <span id="sentenceScore">0</span></div>
             </div>
 
             <div class="sentence-area">
@@ -431,8 +438,9 @@
                     </svg>
                 </button>
                 <h3>Ord-Regn / مطر الكلمات</h3>
-                <div class="score-badge">Score: <span id="rainScore">0</span> | ❤️ <span id="rainLives">3</span>
-                </div>
+            </div>
+            <div class="game-controls-header rain-controls-header" style="margin-bottom: 1rem;">
+                <div class="score-badge">Poäng: <span id="rainScore">0</span> | ❤️ <span id="rainLives">3</span></div>
             </div>
 
             <div class="rain-area">
@@ -541,15 +549,30 @@
     </div>
 
     <script>
-        // Apply theme from localStorage (managed from index.html)
+        // Apply theme from localStorage
         const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
         if (savedTheme === 'dark') {
             document.body.classList.add('dark-mode');
+        }
+
+        // Check saved mobile view preference from main app
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.body.classList.add('iphone-view');
         }
     </script>
     <script src="data.js"></script>
     <script src="grammarData.js"></script>
     <script src="games.js"></script>
+    <script src="grammarGame.js"></script>
+    <script src="missingWordGame.js"></script>
+    <script src="flashcardsGame.js"></script>
+    <script src="pronunciationGame.js"></script>
+    <script src="spellingGame.js"></script>
+    <script src="wordWheelGame.js"></script>
+    <script src="sentenceBuilderGame.js"></script>
+    <script src="wordRainGame.js"></script>
+    <script src="wordleGame.js"></script>
 </body>
 
 </html>

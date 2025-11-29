@@ -2,6 +2,7 @@
 //  SENTENCE BUILDER GAME LOGIC
 // ========================================
 
+console.log("sentenceBuilderGame.js LOADED");
 let sentenceTarget = []; // Array of words
 let sentenceCurrent = [];
 
@@ -30,6 +31,7 @@ function startSentenceGame() {
         showAnswerBtn.onclick = showSentenceAnswer;
     }
     sentenceCurrent = [];
+
 
     // Find sentence
     let candidate = null;

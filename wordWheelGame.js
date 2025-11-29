@@ -33,7 +33,11 @@ function startWordWheelGame() {
     nextBtn.style.display = 'none';
     checkBtn.disabled = false;
     checkBtn.onclick = checkWordWheelAnswer; // Bind the check function
-    if (skipBtn) skipBtn.style.display = 'inline-block';
+    if (skipBtn) {
+        skipBtn.style.display = 'inline-block';
+        skipBtn.onclick = skipWordWheel;
+    }
+    if (nextBtn) nextBtn.onclick = startWordWheelGame;
     lettersContainer.innerHTML = '';
 
     // Get selected length

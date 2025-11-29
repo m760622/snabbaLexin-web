@@ -1671,35 +1671,38 @@ body.dark-mode .pwa-btn.secondary:hover {
 /* Toast Notifications */
 .toast-notification {
     position: fixed;
-    top: 2rem;
-    /* Moved to top */
+    top: 50%;
+    /* Center vertically */
     left: 50%;
-    transform: translateX(-50%) translateY(-100px);
-    /* Start from above */
+    transform: translate(-50%, -50%) scale(0.9);
+    /* Start slightly smaller */
     background: var(--surface);
     color: var(--text-main);
-    padding: 0.75rem 1.5rem;
-    /* Compact padding */
-    border-radius: 50px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    font-weight: 600;
-    z-index: 1000;
+    padding: 1.5rem 2.5rem;
+    /* Larger padding */
+    border-radius: 1rem;
+    /* More rounded rect than pill */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    z-index: 9999;
+    /* Max visibility */
+    font-weight: 700;
+    font-size: 1.2rem;
+    /* Larger text */
     opacity: 0;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid var(--border);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid var(--border);
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center;
+    gap: 1rem;
     max-width: 90%;
-    /* Ensure it fits on mobile */
     text-align: center;
-    font-size: 0.95rem;
-    /* Slightly smaller text */
-    line-height: 1.4;
+    line-height: 1.5;
+    pointer-events: none;
 }
 
 .toast-notification.visible {
-    transform: translateX(-50%) translateY(0);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
 }
 
@@ -1707,12 +1710,37 @@ body.dark-mode .pwa-btn.secondary:hover {
     background: #10b981;
     color: white;
     border-color: #059669;
-    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
 }
 
 .toast-notification.error {
     background: #ef4444;
     color: white;
     border-color: #b91c1c;
-    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.5);
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate(-50%, -50%) translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate(-50%, -50%) translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate(-50%, -50%) translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate(-50%, -50%) translate3d(4px, 0, 0);
+    }
 }

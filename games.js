@@ -1,4 +1,5 @@
 // Game Logic for Snabba Lexin Games
+console.log("games.js LOADED and EXECUTING");
 
 // Constants (matching app.js)
 // Constants (matching app.js)
@@ -51,56 +52,71 @@ function showToast(message, type = 'default') {
 
 // Global Start Game Function
 window.startGame = function (gameType) {
-    const gameMenu = document.getElementById('gameMenu');
-    const missingWordGame = document.getElementById('missingWordGame');
-    const flashcardsGame = document.getElementById('flashcardsGame');
-    const pronunciationGame = document.getElementById('pronunciationGame');
-    const spellingGame = document.getElementById('spellingGame');
-    const wordWheelGame = document.getElementById('wordWheelGame');
-    const sentenceGame = document.getElementById('sentenceGame');
-    const rainGame = document.getElementById('rainGame');
-    const wordleGame = document.getElementById('wordleGame');
-    const grammarGame = document.getElementById('grammarGame');
+    try {
+        console.log("window.startGame called with:", gameType);
+        const gameMenu = document.getElementById('gameMenu');
+        const missingWordGame = document.getElementById('missingWordGame');
+        const flashcardsGame = document.getElementById('flashcardsGame');
+        const pronunciationGame = document.getElementById('pronunciationGame');
+        const spellingGame = document.getElementById('spellingGame');
+        const wordWheelGame = document.getElementById('wordWheelGame');
+        const sentenceGame = document.getElementById('sentenceGame');
+        const rainGame = document.getElementById('rainGame');
+        const wordleGame = document.getElementById('wordleGame');
+        const grammarGame = document.getElementById('grammarGame');
+        const wordConnectGame = document.getElementById('word-game-module');
 
-    // Hide all active game containers
-    document.querySelectorAll('.active-game-container').forEach(el => el.style.display = 'none');
+        // Hide all active game containers
+        document.querySelectorAll('.active-game-container').forEach(el => el.style.display = 'none');
 
-    // Hide Menu
-    gameMenu.style.display = 'none';
+        // Hide Menu
+        if (gameMenu) gameMenu.style.display = 'none';
 
-    // Reset Score for new game session
-    resetGameScore();
+        // Reset Score for new game session
+        resetGameScore();
 
-    if (gameType === 'missing-word') {
-        missingWordGame.style.display = 'block';
-        startMissingWordGame();
-    } else if (gameType === 'flashcards') {
-        flashcardsGame.style.display = 'block';
-        initFlashcards();
-    } else if (gameType === 'pronunciation') {
-        pronunciationGame.style.display = 'block';
-        startPronunciationGame();
-    } else if (gameType === 'spelling') {
-        spellingGame.style.display = 'block';
-        startSpellingGame();
-    } else if (gameType === 'word-wheel') {
-        wordWheelGame.style.display = 'block';
-        // Reset Wheel State
-        wheelLevel = 3;
-        wheelWordsSolved = 0;
-        startWordWheelGame();
-    } else if (gameType === 'sentence-builder') {
-        sentenceGame.style.display = 'block';
-        startSentenceGame();
-    } else if (gameType === 'word-rain') {
-        rainGame.style.display = 'block';
-        initRainGame();
-    } else if (gameType === 'wordle') {
-        wordleGame.style.display = 'block';
-        startWordleGame();
-    } else if (gameType === 'grammar') {
-        grammarGame.style.display = 'block';
-        startGrammarGame();
+        if (gameType === 'missing-word') {
+            missingWordGame.style.display = 'block';
+            startMissingWordGame();
+        } else if (gameType === 'flashcards') {
+            flashcardsGame.style.display = 'block';
+            initFlashcards();
+        } else if (gameType === 'pronunciation') {
+            pronunciationGame.style.display = 'block';
+            startPronunciationGame();
+        } else if (gameType === 'spelling') {
+            spellingGame.style.display = 'block';
+            startSpellingGame();
+        } else if (gameType === 'word-wheel') {
+            wordWheelGame.style.display = 'block';
+            // Reset Wheel State
+            wheelLevel = 3;
+            wheelWordsSolved = 0;
+            startWordWheelGame();
+        } else if (gameType === 'sentence-builder') {
+            sentenceGame.style.display = 'block';
+            startSentenceGame();
+        } else if (gameType === 'word-rain') {
+            if (rainGame) rainGame.style.display = 'block';
+            else console.error("rainGame element not found!");
+
+            if (typeof initRainGame === 'function') {
+                initRainGame();
+            } else {
+                console.error("initRainGame function not found!");
+            }
+        } else if (gameType === 'wordle') {
+            wordleGame.style.display = 'block';
+            startWordleGame();
+        } else if (gameType === 'grammar') {
+            grammarGame.style.display = 'block';
+            startGrammarGame();
+        } else if (gameType === 'word-connect') {
+            wordConnectGame.style.display = 'flex'; // Flex for full height layout
+            initWordConnect();
+        }
+    } catch (error) {
+        console.error("CRITICAL ERROR in startGame:", error);
     }
 }
 
@@ -117,6 +133,7 @@ window.showGameMenu = function () {
     document.getElementById('rainGame').style.display = 'none';
     document.getElementById('wordleGame').style.display = 'none';
     document.getElementById('grammarGame').style.display = 'none';
+    document.getElementById('word-game-module').style.display = 'none';
 
     // Refresh scores
     loadScores();
@@ -220,6 +237,7 @@ function loadScores() {
     document.getElementById('score-rain').textContent = scores['rain'] || 0;
     document.getElementById('score-wordle').textContent = scores['wordle'] || 0;
     document.getElementById('score-grammar').textContent = scores['grammar'] || 0;
+    document.getElementById('score-word-connect').textContent = scores['word-connect'] || 0;
 }
 
 function saveScore(game, score) {
@@ -237,6 +255,8 @@ function saveScore(game, score) {
 
 function initDarkMode() {
     const toggleBtn = document.getElementById('darkModeToggle');
+    if (!toggleBtn) return; // Exit if button doesn't exist
+
     const moonIcon = toggleBtn.querySelector('.moon-icon');
     const sunIcon = toggleBtn.querySelector('.sun-icon');
 
@@ -293,14 +313,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fcCorrectBtn) fcCorrectBtn.addEventListener('click', () => handleFlashcardResult(true));
     if (micBtn) micBtn.addEventListener('click', toggleMic);
     if (nextPronunciationBtn) nextPronunciationBtn.addEventListener('click', startPronunciationGame);
-    if (nextQuestionBtn) nextQuestionBtn.addEventListener('click', startRound);
+    // nextQuestionBtn is handled in missingWordGame.js
 
 
 
-    // Word Wheel Listeners
-    if (wheelCheckBtn) wheelCheckBtn.addEventListener('click', checkWordWheel);
-    if (nextWheelBtn) nextWheelBtn.addEventListener('click', startWordWheelGame);
-    if (skipWheelBtn) skipWheelBtn.addEventListener('click', skipWordWheel);
+    // Word Wheel Listeners are handled in wordWheelGame.js
+    // if (wheelCheckBtn) wheelCheckBtn.addEventListener('click', checkWordWheel);
+    // if (nextWheelBtn) nextWheelBtn.addEventListener('click', startWordWheelGame);
+    // if (skipWheelBtn) skipWheelBtn.addEventListener('click', skipWordWheel);
 
     // Keyboard Shortcuts
     document.addEventListener('keydown', (e) => {

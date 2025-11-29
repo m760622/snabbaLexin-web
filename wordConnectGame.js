@@ -236,6 +236,13 @@ function startLevel(chapter, stage) {
         }
         */
 
+        // Shuffle letters (Fisher-Yates)
+        for (let i = wcState.currentLevelData.letters.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [wcState.currentLevelData.letters[i], wcState.currentLevelData.letters[j]] =
+                [wcState.currentLevelData.letters[j], wcState.currentLevelData.letters[i]];
+        }
+
         renderGrid();
         renderWheel();
     } catch (error) {
@@ -346,20 +353,21 @@ function generateLevelData(rootWord, difficulty) {
     };
 }
 
-
-
+// Helper to count char frequency
 function getCharMap(str) {
     const map = {};
     for (const char of str) {
-        map[char] = (map[char] || 0) + 1;
+        const upper = char.toLocaleUpperCase('sv-SE');
+        map[upper] = (map[upper] || 0) + 1;
     }
     return map;
 }
 
-function isSubset(word, rootMap) {
+// Helper to check if word can be formed from letters
+function isSubset(word, letterMap) {
     const wordMap = getCharMap(word);
     for (const char in wordMap) {
-        if (!rootMap[char] || wordMap[char] > rootMap[char]) {
+        if (!letterMap[char] || wordMap[char] > letterMap[char]) {
             return false;
         }
     }
@@ -579,7 +587,7 @@ function validateWord() {
             saveProgress();
 
             // Find translation in WC_DICTIONARY
-            const entry = WC_DICTIONARY.find(item => item.w.toUpperCase() === word.trim().toUpperCase());
+            const entry = WC_DICTIONARY.find(item => item.w.toLocaleUpperCase('sv-SE') === word.trim().toLocaleUpperCase('sv-SE'));
 
             if (entry) {
                 const translation = entry.t;
@@ -631,6 +639,35 @@ function validateWord() {
                 saveProgress();
                 showToast(`Bonusord! +5 🪙 / كلمة إضافية!`, "success");
                 // triggerConfetti(); // Removed per user request
+            }
+        } else {
+            // Wrong Word Penalty
+            if (wcState.coins > 0) {
+                wcState.coins--;
+                saveProgress();
+                const coinEl = document.getElementById('wcCoinCount');
+                if (coinEl) coinEl.textContent = wcState.coins;
+            }
+
+            // Show error in Translation Display
+            const transEl = document.getElementById('wcTranslationDisplay');
+            if (transEl) {
+                transEl.innerHTML = `
+                    <div style="color: #ef4444; font-weight: 700; font-size: 1.2rem;">
+                        Fel ord! -1 🪙
+                    </div>
+                    <div style="color: #ef4444; font-size: 1rem;">
+                        كلمة خاطئة!
+                    </div>
+                `;
+                transEl.style.opacity = '1';
+                transEl.classList.add('shake'); // Add shake animation if available
+
+                // Clear after 1.5 seconds
+                setTimeout(() => {
+                    transEl.style.opacity = '0';
+                    transEl.classList.remove('shake');
+                }, 1500);
             }
         }
     }

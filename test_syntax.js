@@ -1,7 +1,7 @@
 // ========================================
 //  SWEDISH WORD CONNECT GAME MODULE
 // ========================================
-alert("Word Connect Loaded");
+// alert("Word Connect Loaded");
 
 // --- CONFIG & STATE ---
 const WC_CONFIG = {

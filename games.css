@@ -221,7 +221,11 @@ body.dark-mode .theme-toggle-btn {
     text-align: center;
     cursor: pointer;
     transition: transform 0.4s var(--spring-easing), box-shadow 0.4s var(--spring-easing), border-color 0.3s ease;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    /* Very Light Magical Black Glow */
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.05),
+        0 0 8px rgba(0, 0, 0, 0.02),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
     position: relative;
     overflow: hidden;
     aspect-ratio: 1 / 1;
@@ -229,7 +233,18 @@ body.dark-mode .theme-toggle-btn {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    animation: slideUpFade 0.6s var(--spring-easing) backwards;
+    animation: slideUpFade 0.6s var(--spring-easing) backwards, cardPulseDay 4s infinite ease-in-out 0.6s;
+}
+
+.game-card-item:hover {
+    transform: translateY(-5px) scale(1.03);
+    /* Day Mode Hover: Slightly deeper but still soft */
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.15),
+        0 0 20px rgba(0, 0, 0, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.7);
+    border-color: rgba(255, 255, 255, 0.9);
+    z-index: 10;
 }
 
 /* Staggered Entrance */
@@ -300,6 +315,27 @@ body.dark-mode .theme-toggle-btn {
 .game-card-item:nth-child(4) .game-icon-large {
     color: var(--color-spelling);
     filter: drop-shadow(0 4px 6px rgba(219, 39, 119, 0.3));
+}
+
+/* Night Mode Override for Game Cards */
+body.dark-mode .game-card-item {
+    background: var(--card-bg-dark);
+    border-color: var(--glass-border-dark);
+    /* Very Light Magical Sky Blue Glow */
+    box-shadow:
+        0 0 10px rgba(56, 189, 248, 0.1),
+        0 0 15px rgba(14, 165, 233, 0.05),
+        inset 0 0 5px rgba(56, 189, 248, 0.05);
+    animation: cardPulseNight 4s infinite ease-in-out;
+}
+
+body.dark-mode .game-card-item:hover {
+    box-shadow:
+        0 0 15px rgba(56, 189, 248, 0.2),
+        0 0 25px rgba(14, 165, 233, 0.1),
+        inset 0 0 10px rgba(56, 189, 248, 0.1);
+    border-color: rgba(56, 189, 248, 0.3);
+    transform: translateY(-5px) scale(1.03);
 }
 
 .game-card-item:nth-child(5) .game-icon-large {
@@ -1397,6 +1433,44 @@ body.dark-mode .tap-hint {
     justify-content: center;
     gap: 2rem;
     margin-top: 2rem;
+}
+
+.wc-level-btn {
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.wc-level-btn.unlocked {
+    background: #1e3a8a;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wc-level-btn.unlocked:hover {
+    transform: scale(1.05);
+    background: #2563eb;
+}
+
+.wc-level-btn.locked {
+    background: #374151;
+    color: #9ca3af;
+    border: 1px solid #4b5563;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.wc-level-btn.unlocked:active {
+    transform: scale(0.95);
 }
 
 .fc-btn {
@@ -3766,68 +3840,119 @@ body.dark-mode .game-example {
     position: relative;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, rgba(30, 27, 75, 0.4) 100%);
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
     border-radius: 50%;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(165, 180, 252, 0.3);
+    border: 1px solid rgba(0, 200, 255, 0.3);
     box-shadow:
-        0 0 30px rgba(99, 102, 241, 0.2),
-        0 0 60px rgba(168, 85, 247, 0.1),
-        inset 0 0 20px rgba(199, 210, 254, 0.1);
-    animation: magicalPulse 4s infinite ease-in-out;
-    transition: box-shadow 0.5s ease, border-color 0.5s ease;
+        0 0 20px rgba(0, 200, 255, 0.2),
+        0 0 40px rgba(0, 200, 255, 0.1),
+        inset 0 0 15px rgba(0, 200, 255, 0.1);
+    animation: magicalWheelPulse 4s infinite ease-in-out;
+    transition: box-shadow 0.5s ease, border-color 0.5s ease, background 0.5s ease;
 }
 
-@keyframes magicalPulse {
+@keyframes magicalWheelPulse {
 
     0%,
     100% {
         box-shadow:
-            0 0 30px rgba(99, 102, 241, 0.2),
-            0 0 60px rgba(168, 85, 247, 0.1),
-            inset 0 0 20px rgba(199, 210, 254, 0.1);
-        border-color: rgba(165, 180, 252, 0.3);
+            0 0 20px rgba(0, 200, 255, 0.2),
+            0 0 40px rgba(0, 200, 255, 0.1),
+            inset 0 0 15px rgba(0, 200, 255, 0.1);
+        border-color: rgba(0, 200, 255, 0.3);
     }
 
     50% {
         box-shadow:
-            0 0 40px rgba(99, 102, 241, 0.3),
-            0 0 80px rgba(168, 85, 247, 0.2),
-            0 0 100px rgba(236, 72, 153, 0.1),
-            inset 0 0 30px rgba(199, 210, 254, 0.2);
-        border-color: rgba(165, 180, 252, 0.5);
+            0 0 30px rgba(0, 200, 255, 0.4),
+            0 0 60px rgba(0, 200, 255, 0.2),
+            inset 0 0 25px rgba(0, 200, 255, 0.2);
+        border-color: rgba(0, 200, 255, 0.6);
     }
 }
 
 @keyframes neonPulseGreen {
-    from {
-        box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e, 0 0 40px #22c55e, inset 0 0 20px rgba(34, 197, 94, 0.3);
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 30px #22c55e,
+            0 0 60px #22c55e,
+            inset 0 0 30px rgba(34, 197, 94, 0.6);
+        border-color: #4ade80;
+        background: rgba(34, 197, 94, 0.1);
     }
 
-    to {
-        box-shadow: 0 0 20px #4ade80, 0 0 40px #4ade80, 0 0 80px #4ade80, inset 0 0 30px rgba(34, 197, 94, 0.5);
+    50% {
+        box-shadow:
+            0 0 50px #4ade80,
+            0 0 100px #22c55e,
+            0 0 150px #22c55e,
+            inset 0 0 60px rgba(74, 222, 128, 0.8);
+        border-color: #86efac;
+        background: rgba(34, 197, 94, 0.2);
     }
 }
 
 @keyframes neonPulseYellow {
-    from {
-        box-shadow: 0 0 10px #eab308, 0 0 20px #eab308, 0 0 40px #eab308, inset 0 0 20px rgba(234, 179, 8, 0.3);
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 30px #eab308,
+            0 0 60px #eab308,
+            inset 0 0 30px rgba(234, 179, 8, 0.6);
+        border-color: #facc15;
+        background: rgba(234, 179, 8, 0.1);
     }
 
-    to {
-        box-shadow: 0 0 20px #facc15, 0 0 40px #facc15, 0 0 80px #facc15, inset 0 0 30px rgba(234, 179, 8, 0.5);
+    50% {
+        box-shadow:
+            0 0 50px #facc15,
+            0 0 100px #eab308,
+            0 0 150px #eab308,
+            inset 0 0 60px rgba(250, 204, 21, 0.8);
+        border-color: #fde047;
+        background: rgba(234, 179, 8, 0.2);
     }
 }
 
 @keyframes neonPulseRed {
-    from {
-        box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444, 0 0 40px #ef4444, inset 0 0 20px rgba(239, 68, 68, 0.3);
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 30px #ef4444,
+            0 0 60px #ef4444,
+            inset 0 0 30px rgba(239, 68, 68, 0.6);
+        border-color: #f87171;
+        background: rgba(239, 68, 68, 0.1);
     }
 
-    to {
-        box-shadow: 0 0 20px #f87171, 0 0 40px #f87171, 0 0 80px #f87171, inset 0 0 30px rgba(239, 68, 68, 0.5);
+    50% {
+        box-shadow:
+            0 0 50px #f87171,
+            0 0 100px #ef4444,
+            0 0 150px #ef4444,
+            inset 0 0 60px rgba(248, 113, 113, 0.8);
+        border-color: #fca5a5;
+        background: rgba(239, 68, 68, 0.2);
     }
+}
+
+/* Utility Classes for JS Triggering */
+.wc-wheel.pulse-green {
+    animation: neonPulseGreen 0.8s infinite ease-in-out !important;
+}
+
+.wc-wheel.pulse-yellow {
+    animation: neonPulseYellow 0.8s infinite ease-in-out !important;
+}
+
+.wc-wheel.pulse-red {
+    animation: neonPulseRed 0.8s infinite ease-in-out !important;
 }
 
 .wc-connector-lines {
@@ -4064,76 +4189,18 @@ body.dark-mode .game-example {
 .wc-level-btn.unlocked {
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: white;
-    /* Day Mode: Black/Dark Glow */
+    /* Day Mode: Soft, Magical Black Glow */
     box-shadow:
-        0 4px 6px rgba(0, 0, 0, 0.2),
-        0 0 15px rgba(0, 0, 0, 0.1),
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(0, 0, 0, 0.1),
         inset 0 1px 1px rgba(255, 255, 255, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    animation: levelPulseDay 3s infinite ease-in-out;
+    animation: levelPulseDay 4s infinite ease-in-out;
+    position: relative;
+    overflow: hidden;
 }
 
-.wc-level-btn.unlocked:hover {
-    transform: translateY(-2px) scale(1.05);
-    /* Day Mode Hover */
-    box-shadow:
-        0 8px 15px rgba(0, 0, 0, 0.3),
-        0 0 25px rgba(0, 0, 0, 0.2),
-        inset 0 1px 1px rgba(255, 255, 255, 0.4);
-    z-index: 10;
-}
 
-/* Night Mode Override: Sky Blue Glow */
-body.dark-mode .wc-level-btn.unlocked {
-    box-shadow:
-        0 4px 6px rgba(56, 189, 248, 0.3),
-        0 0 15px rgba(14, 165, 233, 0.2),
-        inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    animation: levelPulseNight 3s infinite ease-in-out;
-}
-
-body.dark-mode .wc-level-btn.unlocked:hover {
-    box-shadow:
-        0 8px 15px rgba(56, 189, 248, 0.4),
-        0 0 25px rgba(14, 165, 233, 0.4),
-        inset 0 1px 1px rgba(255, 255, 255, 0.4);
-}
-
-@keyframes levelPulseDay {
-
-    0%,
-    100% {
-        box-shadow:
-            0 4px 6px rgba(0, 0, 0, 0.2),
-            0 0 15px rgba(0, 0, 0, 0.1),
-            inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    }
-
-    50% {
-        box-shadow:
-            0 4px 10px rgba(0, 0, 0, 0.3),
-            0 0 20px rgba(0, 0, 0, 0.2),
-            inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    }
-}
-
-@keyframes levelPulseNight {
-
-    0%,
-    100% {
-        box-shadow:
-            0 4px 6px rgba(56, 189, 248, 0.3),
-            0 0 15px rgba(14, 165, 233, 0.2),
-            inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    }
-
-    50% {
-        box-shadow:
-            0 4px 10px rgba(56, 189, 248, 0.4),
-            0 0 20px rgba(14, 165, 233, 0.3),
-            inset 0 1px 1px rgba(255, 255, 255, 0.3);
-    }
-}
 
 .wc-level-btn.locked {
     background: rgba(255, 255, 255, 0.05);

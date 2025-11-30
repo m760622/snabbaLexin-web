@@ -1,11 +1,11 @@
 // ========================================
 //  SWEDISH WORD CONNECT GAME MODULE
 // ========================================
-alert("Word Connect Loaded");
+// alert("Word Connect Loaded");
 
 // --- CONFIG & STATE ---
 const WC_CONFIG = {
-    totalChapters: 100, // Infinite
+    totalChapters: 10, // 10 Chapters
     stagesPerChapter: 10,
     hintCost: 5,
     version: "2.0" // Bump version to force reset
@@ -307,13 +307,22 @@ function startLevel(chapter, stage) {
         // Use new progression logic
         wcState.currentLevelData = getNextLevel(levelIndex + 1); // Pass 1-based level index
 
-        if (!wcState.currentLevelData || !wcState.currentLevelData.words || wcState.currentLevelData.words.length === 0) {
-            console.error("Failed to generate level data", wcState.currentLevelData);
+        if (!wcState.currentLevelData || !wcState.currentLevelData.targets || wcState.currentLevelData.targets.length === 0) {
+            console.error("Failed to load level data", wcState.currentLevelData);
             throw new Error("Kunde inte ladda nivådata / فشل تحميل بيانات المستوى");
         }
 
-        // Shuffle letters (Fisher-Yates) - ALREADY DONE IN getNextLevel but good to ensure
-        // getNextLevel returns { words: [...], letters: [...] }
+        // Ensure letters is an array (convert from string if needed)
+        if (typeof wcState.currentLevelData.main_chars === 'string') {
+            wcState.currentLevelData.letters = wcState.currentLevelData.main_chars.split('');
+        } else if (!wcState.currentLevelData.letters) {
+            wcState.currentLevelData.letters = wcState.currentLevelData.main_chars.split('');
+        }
+
+        // Ensure words array exists for backward compatibility
+        if (!wcState.currentLevelData.words) {
+            wcState.currentLevelData.words = wcState.currentLevelData.targets;
+        }
 
         renderGrid();
         // Reset Bomb Mode
@@ -336,51 +345,88 @@ function startLevel(chapter, stage) {
 
 // --- DYNAMIC GENERATION ENGINE ---
 function generateDynamicLevel(levelIndex) {
-    // 1. Determine Difficulty Parameters
-    // Levels 1-5: Exactly 2 words
-    // Levels 6-20: Exactly 3 words
-    // Levels 21-50: Exactly 4 words
-    // Levels 51+: Exactly 5 words
+    // 1. Determine Difficulty Parameters based on Stage in Chapter
+    const stagesPerChapter = WC_CONFIG.stagesPerChapter || 10;
+    const stageInChapter = ((levelIndex - 1) % stagesPerChapter) + 1;
 
-    let targetLength = 3;
-    let exactWordCount = 2;
+    let targetWordCount = 3;
+    let minWordLength = 3;
+    let maxWordLength = 4;
 
-    if (levelIndex <= 5) { targetLength = 3; exactWordCount = 2; }
-    else if (levelIndex <= 20) { targetLength = Math.random() > 0.5 ? 4 : 3; exactWordCount = 3; }
-    else if (levelIndex <= 50) { targetLength = Math.random() > 0.5 ? 5 : 4; exactWordCount = 4; }
-    else { targetLength = Math.min(7, 4 + Math.floor(Math.random() * 3)); exactWordCount = 4; }
+    if (stageInChapter <= 3) {
+        // Stages 1-3: 3 words, 3-4 letters
+        targetWordCount = 3;
+        minWordLength = 3;
+        maxWordLength = 4;
+    } else if (stageInChapter <= 6) {
+        // Stages 4-6: 4 words, 3-5 letters
+        targetWordCount = 4;
+        minWordLength = 3;
+        maxWordLength = 5;
+    } else if (stageInChapter <= 9) {
+        // Stages 7-9: 5 words, 3-6 letters
+        targetWordCount = 5;
+        minWordLength = 3;
+        maxWordLength = 6;
+    } else {
+        // Stage 10: 6 words, 3-7 letters
+        targetWordCount = 6;
+        minWordLength = 3;
+        maxWordLength = 7;
+    }
+
+    // Root word MUST be exactly maxWordLength to ensure the longest word is solvable
+    let rootLength = maxWordLength;
 
     // 2. Pick a Root Word
-    // Try up to 20 times to find a good root
-    for (let attempt = 0; attempt < 20; attempt++) {
-        const candidates = WC_OPTIMIZED_DICT.byLength[targetLength];
-        if (!candidates || candidates.length === 0) {
-            targetLength--; // Fallback to smaller words if none found
-            if (targetLength < 3) targetLength = 3;
-            continue;
+    // Try up to 50 times to find a good root
+    for (let attempt = 0; attempt < 50; attempt++) {
+        let rootWord = null;
+        let candidates = [];
+        let isThemeWord = false;
+
+        // PRIORITIZE THEME WORDS
+        if (typeof getThemeForChapter === 'function') {
+            const theme = getThemeForChapter(wcState.chapter);
+            if (theme && theme.words) {
+                // Get all unused theme words that match the required root length
+                // We can be slightly flexible: if theme word is shorter than max, we can't use it as root
+                // If it is longer, we can't use it because of the constraint "longest word X"
+                const themeCandidates = theme.words
+                    .map(item => (typeof item === 'string' ? item : item.word).toUpperCase())
+                    .filter(w => !wcState.usedRootWords.includes(w) && w.length === rootLength);
+
+                if (themeCandidates.length > 0) {
+                    rootWord = themeCandidates[Math.floor(Math.random() * themeCandidates.length)];
+                    isThemeWord = true;
+                }
+            }
         }
 
-        // Filter out used words
-        let availableCandidates = candidates.filter(w => !wcState.usedRootWords.includes(w));
+        // Fallback to dictionary
+        if (!rootWord) {
+            candidates = WC_OPTIMIZED_DICT.byLength[rootLength];
+            if (!candidates || candidates.length === 0) {
+                // Should not happen with standard dictionary, but safety first
+                continue;
+            }
 
-        // If all used, reset used list for this length (or global reset if preferred)
-        // For infinite play, we must eventually reuse.
-        if (availableCandidates.length === 0) {
-            console.log("All words of length " + targetLength + " used. Recycling.");
-            // Optional: Remove these specific words from usedRootWords to allow them again
-            // or just use candidates as is (allow reuse)
-            availableCandidates = candidates;
+            // Filter out used words
+            let availableCandidates = candidates.filter(w => !wcState.usedRootWords.includes(w));
+            if (availableCandidates.length === 0) {
+                availableCandidates = candidates; // Recycle
+            }
+            rootWord = availableCandidates[Math.floor(Math.random() * availableCandidates.length)];
         }
 
-        const rootWord = availableCandidates[Math.floor(Math.random() * availableCandidates.length)];
         const rootMap = getCharMap(rootWord);
 
         // 3. Find Valid Subsets
         const validSubsets = [];
         const levelDictionary = {};
 
-        // Optimization: Only check words <= root length
-        for (let len = 2; len <= targetLength; len++) {
+        // Only check words within the min/max length range
+        for (let len = minWordLength; len <= maxWordLength; len++) {
             const wordsOfLength = WC_OPTIMIZED_DICT.byLength[len];
             if (wordsOfLength) {
                 for (const w of wordsOfLength) {
@@ -395,36 +441,39 @@ function generateDynamicLevel(levelIndex) {
         }
 
         // 4. Validate Level Quality
-        if (validSubsets.length >= exactWordCount) {
-            // Success!
-            // Sort by length descending
-            validSubsets.sort((a, b) => b.length - a.length);
+        // We prefer exact count, but allow -1 if we are struggling (attempt > 20)
+        let minWordsRequired = targetWordCount;
+        if (attempt > 20) minWordsRequired = Math.max(2, targetWordCount - 1);
 
-            // Select EXACTLY 'exactWordCount' targets
+        if (validSubsets.length >= minWordsRequired) {
+            // Success!
+            // Sort by length descending, then alphabetical
+            validSubsets.sort((a, b) => b.length - a.length || a.localeCompare(b));
+
             let targets = [];
 
-            // Always try to include the root word if it fits the count
-            // (It usually makes the puzzle feel "complete")
+            // Always include the root word (it matches maxWordLength)
             if (validSubsets.includes(rootWord)) {
                 targets.push(rootWord);
             }
 
-            // Fill the rest with other valid subsets
+            // Fill the rest
             for (const word of validSubsets) {
-                if (targets.length >= exactWordCount) break;
+                if (targets.length >= targetWordCount) break;
                 if (!targets.includes(word)) {
                     targets.push(word);
                 }
             }
 
-            // Re-sort for display (optional, but usually length based)
+            // Final check: do we have enough?
+            if (targets.length < minWordsRequired) continue;
+
             targets.sort((a, b) => a.length - b.length);
 
-            // Add to used list
             if (!wcState.usedRootWords.includes(rootWord)) {
                 wcState.usedRootWords.push(rootWord);
             }
-            saveProgress(); // Save used list
+            saveProgress();
 
             return {
                 id: `gen_${levelIndex}_${Date.now()}`,
@@ -436,7 +485,6 @@ function generateDynamicLevel(levelIndex) {
         }
     }
 
-    // Fallback if dynamic fails (should rarely happen with good dictionary)
     console.warn("Dynamic generation failed, using fallback.");
     return SWEDISH_DATA[0];
 }
@@ -452,35 +500,46 @@ function getNextLevel(currentLevel) {
     if (WC_PREDEFINED_LEVELS[levelKey]) {
         console.log(`Loading predefined level: ${levelKey}`);
         const level = WC_PREDEFINED_LEVELS[levelKey];
-        // Limit to max 4 words per user request
-        const limitedWords = level.words.slice(0, 4);
+        // Limit to max 6 words per user request (Stage 10)
+        const limitedWords = level.words; // Use all words defined in static data
 
         // Use robust shuffle for predefined levels too
-        // Predefined levels usually have 'letters' array, but we should ensure it's shuffled well if it matches a word
         let letters = level.letters;
         const mainWord = level.words[0]; // Usually the first word is the main one
         if (mainWord && letters.join('') === mainWord) {
             letters = shuffleLetters(mainWord);
         } else {
-            // Just shuffle existing letters array to be safe
-            letters = shuffleLetters(letters.join(''));
+            // Just shuffle existing letters
+            for (let i = letters.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [letters[i], letters[j]] = [letters[j], letters[i]];
+            }
         }
 
+        // Build dictionary for this level
+        const levelDictionary = {};
+        level.validWords.forEach(w => {
+            const entry = WC_DICTIONARY.find(item => item.w === w);
+            if (entry) {
+                levelDictionary[w] = { ar: entry.t, sv: entry.s || "", st: entry.st || "" };
+            } else {
+                // Fallback if not in dictionary (should not happen with correct data)
+                levelDictionary[w] = { ar: "", sv: "", st: "" };
+            }
+        });
+
         return {
-            ...level,
-            words: limitedWords,
-            letters: letters
+            id: levelKey,
+            tier: chapter,
+            main_chars: letters.join(''),
+            targets: limitedWords,
+            dictionary: levelDictionary
         };
     }
 
-    // 2. Fallback to Dynamic Generation
-    const levelData = generateDynamicLevel(currentLevel);
-    wcState.currentLevelDictionary = levelData.dictionary;
-
-    return {
-        words: levelData.targets,
-        letters: shuffleLetters(levelData.main_chars)
-    };
+    // Fallback if static level is missing (should not happen with 100 levels)
+    console.error(`Level ${levelKey} not found in static data!`);
+    return null;
 }
 
 // Helper to shuffle letters and avoid original word
@@ -956,26 +1015,29 @@ function validateWord() {
                 let msg = `Bonusord! +1 🪙`;
 
                 if (globalEntry) {
-                    // Show sentence if available
-                    const sentence = globalEntry.s || "";
-                    const trans = globalEntry.t || "";
-                    if (sentence) {
-                        // Update Translation Display for Bonus
-                        const transEl = document.getElementById('wcTranslationDisplay');
-                        if (transEl) {
-                            transEl.innerHTML = `
-                                <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${wordUpper}</div>
-                                <div style="font-size: 1.2rem; font-weight: 700;">${trans}</div>
-                                <div class="wc-example-text" style="font-style: italic; color: #fbbf24;">"${sentence}"</div>
-                            `;
-                            transEl.style.opacity = '1';
-                            transEl.classList.add('pop-in');
-                            setTimeout(() => transEl.classList.remove('pop-in'), 300);
-                        }
+                    // Bonus word found!
+                    let msg = `Bonusord! +1 🪙`;
+
+                    // Show sentence if available for bonus word
+                    const trans = globalEntry.ar || globalEntry.t || "";
+                    const sentence = globalEntry.sv || globalEntry.s || "";
+
+                    const transEl = document.getElementById('wcTranslationDisplay');
+                    if (transEl) {
+                        transEl.innerHTML = `
+                            <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${wordUpper}</div>
+                            <div style="font-size: 1.2rem; font-weight: 700;">${trans}</div>
+                            ${sentence ? `<div class="wc-example-text" style="font-style: italic; color: #fbbf24; margin-top: 0.2rem;">"${sentence}"</div>` : ''}
+                        `;
+                        transEl.style.opacity = '1';
+                        transEl.classList.add('pop-in');
+                        setTimeout(() => transEl.classList.remove('pop-in'), 300);
                     }
-                    showRewardMessage(msg, "combo"); // Use combo style for visibility
+
+                    showRewardMessage(msg, "combo");
                 } else {
-                    showRewardMessage(msg, "default");
+                    showRewardMessage("Redan hittat bonusord! / كلمة إضافية مكررة", "default");
+                    triggerWheelGlow('bonus');
                 }
                 // triggerConfetti(); // Removed per user request
             } else {
@@ -1214,7 +1276,9 @@ function openLevelSelect() {
         // Chapter Header
         const header = document.createElement('div');
         header.className = 'wc-chapter-header';
-        header.textContent = `Kapitel ${c} `;
+
+        const theme = getThemeForChapter(c);
+        header.textContent = theme ? `Kapitel ${c}: ${theme.name}` : `Kapitel ${c}`;
         grid.appendChild(header);
 
         const chapterGrid = document.createElement('div');
@@ -1413,6 +1477,31 @@ function triggerBombExplosion() {
     // Shuffle Letters
     wcState.currentLevelData.letters = shuffleLetters(wcState.currentLevelData.letters.join(''));
     renderWheel();
+}
+
+function triggerWheelGlow(type) {
+    const wheel = document.getElementById('wcWheel');
+    if (!wheel) return;
+
+    // Remove existing pulse classes
+    wheel.classList.remove('pulse-green', 'pulse-yellow', 'pulse-red');
+
+    // Force reflow to restart animation
+    void wheel.offsetWidth;
+
+    // Add new class based on type
+    if (type === 'correct') {
+        wheel.classList.add('pulse-green');
+    } else if (type === 'bonus') {
+        wheel.classList.add('pulse-yellow');
+    } else if (type === 'error') {
+        wheel.classList.add('pulse-red');
+    }
+
+    // Remove class after animation completes (0.8s)
+    setTimeout(() => {
+        wheel.classList.remove('pulse-green', 'pulse-yellow', 'pulse-red');
+    }, 800);
 }
 
 function defuseBomb() {

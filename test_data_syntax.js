@@ -221,6 +221,7 @@ const WC_PREDEFINED_LEVELS = {
 };
 
 // Word Connect Data
+alert("wordConnectData.js Loaded");
 
 const WC_DICTIONARY = [
     // --- CHAPTER 1 & 2 WORDS ---

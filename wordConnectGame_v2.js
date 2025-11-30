@@ -1,6 +1,7 @@
 // ========================================
 //  SWEDISH WORD CONNECT GAME MODULE
 // ========================================
+alert("Word Connect Loaded");
 
 // --- CONFIG & STATE ---
 const WC_CONFIG = {
@@ -49,7 +50,9 @@ var wcState = {
     comboCount: 0,
     lastWordTime: 0,
     generatedLevels: {}, // Cache for session
-    usedRootWords: [] // Track used words to prevent repetition
+    generatedLevels: {}, // Cache for session
+    usedRootWords: [], // Track used words to prevent repetition
+    learnedWords: {} // { "food": ["MAT", "OST"], "nature": ["SOL"] }
 };
 
 // Optimized Dictionary Index for fast generation
@@ -126,6 +129,7 @@ function loadProgress() {
             // Load Proverb Progress
             wcState.currentProverbId = parsed.currentProverbId || 1;
             wcState.proverbProgress = parsed.proverbProgress || 0;
+            wcState.learnedWords = parsed.learnedWords || {};
         }
     }
     updateCoinDisplay();
@@ -150,8 +154,11 @@ function saveProgress() {
         streak: wcState.streak,
         lastLogin: wcState.lastLogin,
         version: WC_CONFIG.version, // Save version
-        usedRootWords: wcState.usedRootWords
+        version: WC_CONFIG.version, // Save version
+        usedRootWords: wcState.usedRootWords,
+        learnedWords: wcState.learnedWords
     };
+
     localStorage.setItem('wcProgress', JSON.stringify(data));
     updateCoinDisplay();
 }
@@ -251,8 +258,30 @@ function startLevel(chapter, stage) {
         }
 
         // Update UI
+        // Update UI
         document.getElementById('wcLevelTitle').textContent = `Nivå ${chapter}-${stage}`;
         document.getElementById('wcLevelCompleteModal').style.display = 'none';
+
+        // Apply Theme
+        if (typeof getThemeForChapter === 'function') {
+            const theme = getThemeForChapter(chapter);
+            if (theme) {
+                const container = document.getElementById('word-game-module'); // Or specific container
+                // We might want to style the header or background
+                // For now, let's set a CSS variable or background on the game area
+                const gameArea = document.querySelector('.wc-game-container');
+                if (gameArea) {
+                    // gameArea.style.background = theme.background; // Optional: Full background
+                    // Or just a subtle indicator
+                }
+
+                // Update Title with Icon
+                document.getElementById('wcLevelTitle').innerHTML = `${theme.icon} Nivå ${chapter}-${stage} <span style="font-size:0.8em; opacity:0.8">(${theme.name.split('/')[0].trim()})</span>`;
+
+                // Set accent color
+                document.documentElement.style.setProperty('--wc-accent', theme.accent);
+            }
+        }
 
         // Reset Buttons
         const hintBtn = document.querySelector('.wc-hint-btn');
@@ -1035,6 +1064,19 @@ function checkWin() {
         // Unlock Proverb Word
         unlockProverbWord();
 
+        // Track Learned Words
+        if (wcState.currentLevelData && wcState.currentLevelData.words) {
+            const theme = getThemeForChapter(wcState.chapter);
+            if (theme) {
+                if (!wcState.learnedWords[theme.id]) wcState.learnedWords[theme.id] = [];
+                wcState.currentLevelData.words.forEach(w => {
+                    if (!wcState.learnedWords[theme.id].includes(w)) {
+                        wcState.learnedWords[theme.id].push(w);
+                    }
+                });
+            }
+        }
+
         saveProgress();
 
         // Start Countdown
@@ -1226,6 +1268,40 @@ function closeLevelSelect() {
     document.getElementById('wcLevelSelectModal').style.display = 'none';
 }
 
+function clearLibrary() {
+    if (confirm("Är du säker på att du vill rensa hela biblioteket? / هل أنت متأكد أنك تريد مسح المكتبة بالكامل؟")) {
+        wcState.learnedWords = {};
+        saveProgress();
+        showLibrary();
+    }
+}
+
+function deleteWord(wordToDelete) {
+    if (!confirm(`Är du säker på att du vill ta bort "${wordToDelete}"? / هل أنت متأcker att du vill ta bort "${wordToDelete}"؟`)) return;
+
+    let found = false;
+    // Iterate over all themes in wcState.learnedWords
+    for (const themeId in wcState.learnedWords) {
+        const words = wcState.learnedWords[themeId];
+        const index = words.indexOf(wordToDelete);
+        if (index > -1) {
+            words.splice(index, 1);
+            found = true;
+            // If theme becomes empty, remove the key
+            if (words.length === 0) {
+                delete wcState.learnedWords[themeId];
+            }
+            break;
+        }
+    }
+
+    if (found) {
+        saveProgress();
+        showLibrary();
+    } else {
+        console.error("Word not found to delete:", wordToDelete);
+    }
+}
 function resetWordConnectProgress() {
     if (confirm("Är du säker på att du vill återställa dina framsteg? / هل أنت متأكد أنك تريد إعادة تعيين تقدمك؟")) {
         localStorage.removeItem('wcProgress');
@@ -1402,4 +1478,133 @@ function showProverbReward(proverb) {
     `;
 
     document.body.appendChild(modal);
+}
+
+
+// --- WORD LIBRARY ---
+function showLibrary() {
+    const modal = document.getElementById('wcLibraryModal');
+    const content = document.getElementById('wcLibraryContent');
+    content.innerHTML = ''; // Clear previous
+
+    // Add Clear All Button if there are words
+    if (wcState.learnedWords && Object.keys(wcState.learnedWords).length > 0) {
+        const clearBtnContainer = document.createElement('div');
+        clearBtnContainer.style.textAlign = 'right';
+        clearBtnContainer.style.marginBottom = '1rem';
+        clearBtnContainer.innerHTML = `
+            <button onclick="clearLibrary()" class="wc-lib-clear-btn">
+                Rensa allt / مسح الكل 🗑️
+            </button>
+        `;
+        content.appendChild(clearBtnContainer);
+    }
+
+    if (!wcState.learnedWords || Object.keys(wcState.learnedWords).length === 0) {
+        content.innerHTML = '<div class="wc-empty-library">Du har inte samlat några ord än! Spela mer för att fylla ditt bibliotek. <br> لم تجمع أي كلمات بعد! العب المزيد لملء مكتبتك.</div>';
+    } else {
+        // Render Themes
+        WC_THEMES.forEach(theme => {
+            const words = wcState.learnedWords[theme.id] || [];
+            if (words.length > 0) {
+                const section = document.createElement('div');
+                section.className = 'wc-library-section';
+
+                const header = document.createElement('div');
+                header.className = 'wc-library-header';
+                header.style.background = theme.background;
+                header.innerHTML = `<span>${theme.icon} ${theme.name}</span> <span class="wc-word-count">${words.length}</span>`;
+                section.appendChild(header);
+
+                const grid = document.createElement('div');
+                grid.className = 'wc-library-grid';
+
+                words.forEach(word => {
+                    const card = document.createElement('div');
+                    card.className = 'wc-library-card';
+
+                    // Find translation and examples
+                    let translation = "";
+                    let sentenceSv = "";
+                    let sentenceAr = "";
+
+                    const entry = WC_DICTIONARY.find(e => e.w === word);
+                    if (entry) {
+                        translation = entry.t;
+                        sentenceSv = entry.s || "";
+                        sentenceAr = entry.st || "";
+                    }
+
+                    card.innerHTML = `
+                        <div class="wc-lib-word">${word}</div>
+                        <div class="wc-lib-trans">${translation}</div>
+                        ${sentenceSv ? `
+                            <div class="wc-lib-sentence-row">
+                                <div class="wc-lib-sentence-sv">"${sentenceSv}"</div>
+                                <button class="wc-lib-speak-sm" onclick="speakSentence('${sentenceSv.replace(/'/g, "\\'")}')" title="Lyssna / استمع">🔊</button>
+                            </div>
+                        ` : ''}
+                        ${sentenceAr ? `<div class="wc-lib-sentence-ar">${sentenceAr}</div>` : ''}
+                        <button class="wc-lib-speak-main" onclick="speakWord('${word}')" title="Lyssna / استمع">🔊</button>
+                        <button class="wc-lib-delete" onclick="deleteWord('${word}')" title="Ta bort / حذف">🗑️</button>
+                    `;
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                content.appendChild(section);
+            }
+        });
+    }
+
+    modal.style.display = 'flex';
+}
+
+function speakSentence(text) {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'sv-SE';
+        utterance.rate = 0.9; // Slightly slower for sentences
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+function deleteWord(wordToDelete) {
+    if (!confirm(`Vill du ta bort "${wordToDelete}" från biblioteket? \n هل تريد حذف "${wordToDelete}" من المكتبة؟`)) {
+        return;
+    }
+
+    let found = false;
+    // Iterate through themes to find and remove the word
+    for (const themeId in wcState.learnedWords) {
+        const index = wcState.learnedWords[themeId].indexOf(wordToDelete);
+        if (index > -1) {
+            wcState.learnedWords[themeId].splice(index, 1);
+            // If theme becomes empty, delete the key (optional, but keeps it clean)
+            if (wcState.learnedWords[themeId].length === 0) {
+                delete wcState.learnedWords[themeId];
+            }
+            found = true;
+            break; // Word found and removed
+        }
+    }
+
+    if (found) {
+        saveProgress(); // Corrected function name
+        showLibrary(); // Re-render
+    }
+}
+
+function clearLibrary() {
+    if (!confirm("Är du säker på att du vill rensa hela biblioteket? Detta kan inte ångras. \n هل أنت متأكد أنك تريد مسح المكتبة بالكامل؟ لا يمكن التراجع عن هذا.")) {
+        return;
+    }
+
+    wcState.learnedWords = {};
+    saveProgress(); // Corrected function name
+    showLibrary(); // Re-render
+}
+
+function closeLibrary() {
+    document.getElementById('wcLibraryModal').style.display = 'none';
 }

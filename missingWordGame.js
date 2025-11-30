@@ -1,8 +1,8 @@
 // ========================================
-//  MISSING WORD GAME LOGIC
+// Missing Word Game Logic
 // ========================================
 
-let currentCorrectAnswer = '';
+let missingWordCurrent = null;
 
 // --- MISSING WORD GAME ---
 function startMissingWordGame() {

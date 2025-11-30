@@ -23,6 +23,17 @@ var wcState = {
     stage: 1,
     maxChapter: 1, // Highest reached
     maxStage: 1,   // Highest reached
+    // Bomb Mode State
+    bombActive: false,
+    bombIndex: -1,
+    bombTimer: 0,
+    bombInterval: null,
+
+    // Proverb State
+    currentProverbId: 1,
+    proverbProgress: 0, // Words unlocked
+
+    // Level Data
     coins: 300,
     currentLevelData: null,
     foundWords: [],
@@ -112,6 +123,9 @@ function loadProgress() {
             wcState.maxStage = parsed.maxStage || 1;
             wcState.coins = parsed.coins || 300;
             wcState.usedRootWords = parsed.usedRootWords || [];
+            // Load Proverb Progress
+            wcState.currentProverbId = parsed.currentProverbId || 1;
+            wcState.proverbProgress = parsed.proverbProgress || 0;
         }
     }
     updateCoinDisplay();
@@ -273,6 +287,15 @@ function startLevel(chapter, stage) {
         // getNextLevel returns { words: [...], letters: [...] }
 
         renderGrid();
+        // Reset Bomb Mode
+        wcState.bombActive = false;
+        if (wcState.bombInterval) clearInterval(wcState.bombInterval);
+
+        // Initialize Bomb Mode (Chance based on level, e.g., > Level 5)
+        if (wcState.currentLevel > 5 && Math.random() > 0.5) {
+            initBombMode(levelData.letters.length);
+        }
+
         renderWheel();
     } catch (error) {
         console.error("Error starting level:", error);
@@ -647,6 +670,21 @@ function renderWheel() {
         btn.addEventListener('mousedown', handleInputStart);
         btn.addEventListener('touchstart', handleInputStart, { passive: false });
 
+        // Bomb Overlay
+        if (wcState.bombActive && index === wcState.bombIndex) {
+            const bombOverlay = document.createElement('div');
+            bombOverlay.className = 'wc-bomb-overlay';
+            bombOverlay.innerHTML = '<span class="wc-bomb-icon">💣</span>';
+
+            const timerEl = document.createElement('div');
+            timerEl.className = 'wc-bomb-timer';
+            timerEl.id = 'wcBombTimer';
+            timerEl.textContent = wcState.bombTimer + 's';
+
+            bombOverlay.appendChild(timerEl);
+            btn.appendChild(bombOverlay);
+        }
+
         wheelContainer.appendChild(btn);
     });
     wheelContainer.addEventListener('mousemove', handleInputMove);
@@ -831,16 +869,17 @@ function validateWord() {
                 if (entry) {
                     transEl.innerHTML = `
                         <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${entry.ar}</div>
-                        <div class="wc-example-text" style="font-style: italic; color: #fbbf24; margin-bottom: 0.2rem;">"${entry.sv}"</div>
+                        <div class="wc-example-text" style="font-style: italic; color: #fbbf24; margin-bottom: 0.2rem; cursor: pointer; text-decoration: underline;" onclick="event.stopPropagation(); speakWord('${entry.sv.replace(/'/g, "\\'")}')">"${entry.sv}" 🔊</div>
                         ${entry.st ? `<div class="wc-example-translation" style="font-size: 0.9rem; color: #aaa;">(${entry.st})</div>` : ''}
                     `;
 
                     // Speak automatically
                     if (typeof speakWord === 'function') speakWord(word);
                 } else {
+                    const fallbackSentence = generateFallbackSentence(word, null);
                     transEl.innerHTML = `
                         <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${word}</div>
-                        <div class="wc-example-text">"${generateFallbackSentence(word, null)}"</div>
+                        <div class="wc-example-text" style="cursor: pointer; text-decoration: underline;" onclick="event.stopPropagation(); speakWord('${fallbackSentence.replace(/'/g, "\\'")}')">"${fallbackSentence}" 🔊</div>
                     `;
                 }
 
@@ -852,6 +891,16 @@ function validateWord() {
             }
 
             triggerWheelGlow('correct'); // Green Neon
+
+            // Check Bomb Defusal
+            if (wcState.bombActive) {
+                // Check if used letters include the bomb index
+                const usedIndices = wcState.visitedNodes;
+                if (usedIndices.includes(wcState.bombIndex)) {
+                    defuseBomb();
+                }
+            }
+
             checkWin();
         } else {
             // Already found
@@ -982,6 +1031,10 @@ function checkWin() {
         }
 
         wcState.coins += 20;
+
+        // Unlock Proverb Word
+        unlockProverbWord();
+
         saveProgress();
 
         // Start Countdown
@@ -1192,10 +1245,161 @@ function resetWordConnectProgress() {
 
 // --- AUDIO ---
 function speakWord(text) {
+    // 1. Try Online TTS (Google Translate)
+    playOnlineTTS(text);
+}
+
+function playOnlineTTS(text) {
+    const audio = new Audio();
+    audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(text)}`;
+
+    audio.play().catch(err => {
+        console.warn("Online TTS failed, falling back to local:", err);
+        playLocalTTS(text);
+    });
+}
+
+function playLocalTTS(text) {
     if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'sv-SE'; // Swedish
         utterance.rate = 0.9; // Slightly slower
+
+        // Smart Voice Selection
+        const voices = window.speechSynthesis.getVoices();
+        let selectedVoice = null;
+
+        // 1. Try to find a specific high-quality Swedish voice
+        const swedishVoices = voices.filter(voice => voice.lang.includes('sv'));
+
+        if (swedishVoices.length > 0) {
+            // Priority: Google > Microsoft > Enhanced > Default
+            selectedVoice = swedishVoices.find(v => v.name.includes('Google')) ||
+                swedishVoices.find(v => v.name.includes('Microsoft')) ||
+                swedishVoices.find(v => v.name.includes('Enhanced')) ||
+                swedishVoices[0];
+        }
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+            // Adjust rate based on voice type if needed
+            if (selectedVoice.name.includes('Google')) utterance.rate = 0.85;
+        }
+
         window.speechSynthesis.speak(utterance);
     }
+}
+
+// --- BOMB MODE LOGIC ---
+function initBombMode(letterCount) {
+    wcState.bombActive = true;
+    wcState.bombIndex = Math.floor(Math.random() * letterCount);
+    wcState.bombTimer = 15; // 15 seconds to defuse
+
+    // Start Timer
+    wcState.bombInterval = setInterval(updateBombTimer, 1000);
+    console.log(`Bomb Mode Activated! Index: ${wcState.bombIndex}`);
+}
+
+function updateBombTimer() {
+    if (!wcState.bombActive) return;
+
+    wcState.bombTimer--;
+    const timerEl = document.getElementById('wcBombTimer');
+    if (timerEl) timerEl.textContent = wcState.bombTimer + 's';
+
+    if (wcState.bombTimer <= 0) {
+        triggerBombExplosion();
+    }
+}
+
+function triggerBombExplosion() {
+    clearInterval(wcState.bombInterval);
+    wcState.bombActive = false;
+
+    // Visual Effect
+    const wheel = document.getElementById('wcWheel');
+    if (wheel) {
+        wheel.classList.add('wc-explosion-effect');
+        setTimeout(() => wheel.classList.remove('wc-explosion-effect'), 500);
+    }
+
+    // Penalty
+    if (wcState.coins >= 5) {
+        wcState.coins -= 5;
+        showRewardMessage("BOOM! -5 🪙", "error");
+    } else {
+        wcState.coins = 0;
+        showRewardMessage("BOOM! 💥", "error");
+    }
+    saveProgress();
+
+    // Shuffle Letters
+    wcState.currentLevelData.letters = shuffleLetters(wcState.currentLevelData.letters.join(''));
+    renderWheel();
+}
+
+function defuseBomb() {
+    if (!wcState.bombActive) return;
+
+    clearInterval(wcState.bombInterval);
+    wcState.bombActive = false;
+
+    // Remove UI
+    const timerEl = document.getElementById('wcBombTimer');
+    if (timerEl) {
+        const overlay = timerEl.parentElement;
+        if (overlay) overlay.remove();
+    }
+
+    // Reward
+    wcState.coins += 3;
+    saveProgress();
+    showRewardMessage("Bomb desarmerad! +3 🪙", "bonus");
+}
+
+// --- PROVERB LOGIC ---
+function unlockProverbWord() {
+    if (typeof WC_PROVERBS === 'undefined') return;
+
+    const proverb = WC_PROVERBS.find(p => p.id === wcState.currentProverbId);
+    if (!proverb) return;
+
+    const words = proverb.text.split(' ');
+    if (wcState.proverbProgress < words.length) {
+        wcState.proverbProgress++;
+
+        // Check if proverb completed
+        if (wcState.proverbProgress >= words.length) {
+            showProverbReward(proverb);
+            // Advance to next proverb
+            wcState.currentProverbId++;
+            wcState.proverbProgress = 0;
+        } else {
+            // Show progress toast
+            showRewardMessage(`Ordspråk: ${wcState.proverbProgress}/${words.length} ord`, "bonus");
+        }
+        saveProgress();
+    }
+}
+
+function showProverbReward(proverb) {
+    // Create Modal
+    const modal = document.createElement('div');
+    modal.className = 'wc-modal-overlay';
+    modal.style.display = 'flex';
+    modal.style.zIndex = '2000';
+
+    modal.innerHTML = `
+        <div class="wc-proverb-modal-content pop-in">
+            <div class="wc-proverb-title">Svenskt Ordspråk</div>
+            <div class="wc-proverb-text">"${proverb.text}"</div>
+            <div class="wc-proverb-translation">${proverb.translation}</div>
+            <button class="game-btn next-btn" onclick="this.closest('.wc-modal-overlay').remove()">
+                Fortsätt / استمر
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
 }

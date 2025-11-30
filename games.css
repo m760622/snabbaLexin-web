@@ -4218,3 +4218,84 @@ body.dark-mode .wc-reward-sentence {
 body.dark-mode .wc-reward-translation {
     color: #9ca3af;
 }
+
+/* Level Status Message */
+.wc-level-status {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #10b981;
+    /* Success green */
+    min-height: 1.5rem;
+    transition: all 0.3s ease;
+    margin-top: 0.25rem;
+    opacity: 0;
+    transform: translateY(-5px);
+}
+
+.wc-level-status.visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.8) translateY(-5px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Circular Countdown */
+.wc-countdown-container {
+    position: relative;
+    width: 60px;
+    /* Double size (was implicitly small) */
+    height: 60px;
+    margin: 0.5rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wc-countdown-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+    /* Start from top */
+}
+
+.wc-countdown-circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 4;
+}
+
+.wc-countdown-circle-progress {
+    fill: none;
+    stroke: #10b981;
+    /* Success Green */
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 176;
+    /* 2 * PI * r (r=28) */
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.wc-countdown-text {
+    font-size: 1.5rem;
+    /* Double size */
+    font-weight: 700;
+    color: #fbbf24;
+    /* Gold */
+    z-index: 1;
+}

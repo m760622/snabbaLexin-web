@@ -974,11 +974,12 @@ function checkWin() {
     if (wcState.foundWords.length === wcState.currentLevelData.words.length) {
         // Level Complete!
 
-        // Remove confetti per user request
-        // triggerConfetti(); 
-
-        const msg = `Nivå Klar! / اكتمل المستوى!`;
-        showRewardMessage(msg, "combo");
+        // Update Status Element
+        const statusEl = document.getElementById('wcLevelStatus');
+        if (statusEl) {
+            // statusEl.textContent = "Nivå Klar! / اكتمل المستوى!"; // Removed per user request
+            statusEl.classList.add('visible');
+        }
 
         wcState.coins += 20;
         saveProgress();
@@ -989,24 +990,48 @@ function checkWin() {
 }
 
 function startLevelCountdown() {
-    const countdownEl = document.getElementById('wcCountdown');
-    if (!countdownEl) {
+    const statusEl = document.getElementById('wcLevelStatus');
+    if (!statusEl) {
         nextLevel(); // Fallback
         return;
     }
 
-    let timeLeft = 3;
-    countdownEl.textContent = `Nästa nivå om ${timeLeft}... / التالي في ${timeLeft}...`;
-    countdownEl.classList.add('visible');
+    let timeLeft = 5;
+    const totalTime = 5;
+
+    // Render Circular Countdown
+    statusEl.innerHTML = `
+        <div class="wc-countdown-container">
+            <svg class="wc-countdown-svg" viewBox="0 0 60 60">
+                <circle class="wc-countdown-circle-bg" cx="30" cy="30" r="28"></circle>
+                <circle class="wc-countdown-circle-progress" cx="30" cy="30" r="28"></circle>
+            </svg>
+            <div class="wc-countdown-text">${timeLeft}</div>
+        </div>
+    `;
+    statusEl.classList.add('visible');
+
+    const progressCircle = statusEl.querySelector('.wc-countdown-circle-progress');
+    const textEl = statusEl.querySelector('.wc-countdown-text');
+    const circumference = 2 * Math.PI * 28; // ~176
 
     const interval = setInterval(() => {
         timeLeft--;
         if (timeLeft > 0) {
-            countdownEl.textContent = `Nästa nivå om ${timeLeft}... / التالي في ${timeLeft}...`;
+            if (textEl) textEl.textContent = timeLeft;
+
+            // Update Progress Ring
+            if (progressCircle) {
+                const offset = circumference - (timeLeft / totalTime) * circumference;
+                progressCircle.style.strokeDashoffset = offset;
+            }
         } else {
             clearInterval(interval);
-            countdownEl.classList.remove('visible');
-            nextLevel();
+            statusEl.classList.remove('visible');
+            setTimeout(() => {
+                statusEl.innerHTML = '';
+                nextLevel();
+            }, 300); // Wait for fade out
         }
     }, 1000);
 }

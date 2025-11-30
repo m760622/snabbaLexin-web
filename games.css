@@ -2176,6 +2176,10 @@ body.dark-mode .sentence-word {
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    width: 100%;
+    padding-bottom: 2rem;
+    /* Ensure padding at bottom for scrolling */
+    overflow: auto;
 }
 
 .wordle-grid {
@@ -3433,7 +3437,8 @@ body.dark-mode .game-example {
     z-index: 2000;
     padding: 0;
     box-shadow: none;
-    overflow: hidden;
+    overflow-y: auto;
+    /* Enabled scrolling for mobile support */
     /* Standard Game Background */
     background-image:
         radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
@@ -3525,8 +3530,13 @@ body.dark-mode .game-example {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    /* Changed from space-between to center to control gap */
+    gap: 0.25rem;
+    /* Explicit gap, reduced from previous implicit spacing */
     padding-bottom: 2rem;
+    overflow: visible;
+    /* Allow content to flow for scrolling */
 }
 
 /* Grid Area */
@@ -3538,7 +3548,12 @@ body.dark-mode .game-example {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 1rem;
+    padding: 0.5rem;
+    /* Reduced padding */
+    margin-bottom: 0;
+    /* Ensure no extra margin */
+    margin-top: 4rem;
+    /* Increased space above grid per user request */
 }
 
 .wc-word-row {
@@ -3602,7 +3617,98 @@ body.dark-mode .game-example {
     border-radius: 50%;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(124, 58, 237, 0.5);
+    box-shadow:
+        0 0 10px #7c3aed,
+        0 0 20px #7c3aed,
+        0 0 40px #7c3aed,
+        0 0 80px rgba(124, 58, 237, 0.5),
+        inset 0 0 20px rgba(124, 58, 237, 0.2);
+    animation: neonPulse 2s infinite alternate;
+    transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+.wc-wheel.correct {
+    border-color: rgba(34, 197, 94, 0.8);
+    box-shadow:
+        0 0 10px #22c55e,
+        0 0 20px #22c55e,
+        0 0 40px #22c55e,
+        0 0 80px rgba(34, 197, 94, 0.6),
+        inset 0 0 20px rgba(34, 197, 94, 0.3);
+    animation: neonPulseGreen 0.5s infinite alternate;
+}
+
+.wc-wheel.bonus {
+    border-color: rgba(234, 179, 8, 0.8);
+    box-shadow:
+        0 0 10px #eab308,
+        0 0 20px #eab308,
+        0 0 40px #eab308,
+        0 0 80px rgba(234, 179, 8, 0.6),
+        inset 0 0 20px rgba(234, 179, 8, 0.3);
+    animation: neonPulseYellow 0.5s infinite alternate;
+}
+
+.wc-wheel.error {
+    border-color: rgba(239, 68, 68, 0.8);
+    box-shadow:
+        0 0 10px #ef4444,
+        0 0 20px #ef4444,
+        0 0 40px #ef4444,
+        0 0 80px rgba(239, 68, 68, 0.6),
+        inset 0 0 20px rgba(239, 68, 68, 0.3);
+    animation: neonPulseRed 0.5s infinite alternate;
+}
+
+@keyframes neonPulse {
+    from {
+        box-shadow:
+            0 0 10px #7c3aed,
+            0 0 20px #7c3aed,
+            0 0 40px #7c3aed,
+            0 0 80px rgba(124, 58, 237, 0.5),
+            inset 0 0 20px rgba(124, 58, 237, 0.2);
+    }
+
+    to {
+        box-shadow:
+            0 0 15px #a855f7,
+            0 0 30px #a855f7,
+            0 0 60px #a855f7,
+            0 0 100px rgba(168, 85, 247, 0.6),
+            inset 0 0 30px rgba(168, 85, 247, 0.3);
+    }
+}
+
+@keyframes neonPulseGreen {
+    from {
+        box-shadow: 0 0 10px #22c55e, 0 0 20px #22c55e, 0 0 40px #22c55e, inset 0 0 20px rgba(34, 197, 94, 0.3);
+    }
+
+    to {
+        box-shadow: 0 0 20px #4ade80, 0 0 40px #4ade80, 0 0 80px #4ade80, inset 0 0 30px rgba(34, 197, 94, 0.5);
+    }
+}
+
+@keyframes neonPulseYellow {
+    from {
+        box-shadow: 0 0 10px #eab308, 0 0 20px #eab308, 0 0 40px #eab308, inset 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    to {
+        box-shadow: 0 0 20px #facc15, 0 0 40px #facc15, 0 0 80px #facc15, inset 0 0 30px rgba(234, 179, 8, 0.5);
+    }
+}
+
+@keyframes neonPulseRed {
+    from {
+        box-shadow: 0 0 10px #ef4444, 0 0 20px #ef4444, 0 0 40px #ef4444, inset 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    to {
+        box-shadow: 0 0 20px #f87171, 0 0 40px #f87171, 0 0 80px #f87171, inset 0 0 30px rgba(239, 68, 68, 0.5);
+    }
 }
 
 .wc-connector-lines {
@@ -3638,6 +3744,23 @@ body.dark-mode .game-example {
     transform: scale(1.2);
 }
 
+.wc-countdown {
+    height: 30px;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fbbf24;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.wc-countdown.visible {
+    opacity: 1;
+    animation: pulse 1s infinite;
+}
+
 /* Modal */
 .wc-modal-overlay {
     position: absolute;
@@ -3667,6 +3790,8 @@ body.dark-mode .game-example {
 .wc-modal-content h2 {
     color: #4f46e5;
     margin-top: 0;
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
 
 .wc-modal-actions {
@@ -3699,8 +3824,10 @@ body.dark-mode .game-example {
 
 .wc-hint-btn {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    /* Changed to absolute for centering */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background: white;
     border: none;
     border-radius: 50%;
@@ -3714,11 +3841,39 @@ body.dark-mode .game-example {
     cursor: pointer;
     color: #fbbf24;
     transition: transform 0.2s;
-    z-index: 10;
+    z-index: 5;
+    /* Above wheel background, below letters if needed, but letters are z-index 2 */
+    flex-shrink: 0;
+}
+
+.wc-hint-btn.active-hint {
+    animation: hintPulse 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+@keyframes hintPulse {
+    0% {
+        background-color: white;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    30% {
+        background-color: #ef4444;
+        /* Red */
+        color: white;
+        transform: translate(-50%, -50%) scale(1.2);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+    }
+
+    100% {
+        background-color: white;
+        color: #fbbf24;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
 .wc-hint-btn:active {
-    transform: scale(0.9);
+    transform: translate(-50%, -50%) scale(0.9);
+    /* Preserve centering */
 }
 
 .wc-hint-cost {
@@ -3729,8 +3884,8 @@ body.dark-mode .game-example {
 }
 
 .wc-hint-btn:hover {
-    background: #fbbf24;
-    transform: scale(1.1);
+    transform: translate(-50%, -50%) scale(1.1);
+    /* Preserve centering */
 }
 
 .wc-next-level-btn {
@@ -3801,4 +3956,108 @@ body.dark-mode .game-example {
 
 .wc-level-btn.unlocked:active {
     transform: scale(0.95);
+}
+
+/* Reward Message (Combo/Bonus) - Removed per user request */
+.wc-reward-message {
+    display: none;
+}
+
+.wc-reward-message.error {
+    background: #ef4444;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    animation: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+/* Ensure wheel container has relative positioning for absolute child */
+.wc-wheel-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    /* Reduced gap */
+    width: 100%;
+}
+
+.wc-wheel-row {
+    position: relative;
+    /* Anchor for absolute centering */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+    /* Constrain width */
+}
+
+/* Rich Reward Message Styles */
+.wc-reward-message {
+    /* Existing styles override */
+    white-space: normal;
+    /* Allow wrapping */
+    max-width: 280px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    line-height: 1.4;
+}
+
+.wc-combo-badge {
+    background: #f59e0b;
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.wc-reward-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.wc-reward-word {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #4f46e5;
+}
+
+.wc-reward-sentence {
+    font-style: italic;
+    color: #555;
+    font-size: 0.95rem;
+    margin-top: 0.2rem;
+}
+
+.wc-reward-translation {
+    color: #888;
+    font-size: 0.85rem;
+    font-family: 'Noto Sans Arabic', sans-serif;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .wc-reward-message {
+    background: rgba(31, 41, 55, 0.95);
+    border-color: #818cf8;
+}
+
+body.dark-mode .wc-reward-word {
+    color: #818cf8;
+}
+
+body.dark-mode .wc-reward-sentence {
+    color: #d1d5db;
+}
+
+body.dark-mode .wc-reward-translation {
+    color: #9ca3af;
 }

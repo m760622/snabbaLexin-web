@@ -649,23 +649,26 @@
             <!-- Interaction Wheel -->
             <div class="wc-wheel-container">
                 <div id="wcPreviewText" class="wc-preview-text"></div>
-                <div id="wcWheel" class="wc-wheel">
-                    <!-- Wheel letters injected by JS -->
+
+                <div class="wc-wheel-row">
+                    <div id="wcWheel" class="wc-wheel">
+                        <!-- Wheel letters injected by JS -->
+                    </div>
+
+                    <!-- Hint Button -->
+                    <button class="wc-hint-btn" onclick="useHint()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18h6" />
+                            <path d="M10 22h4" />
+                            <path d="M12 2v1" />
+                            <path d="M12 15a5 5 0 0 1-5-5c0-2.76 2.24-5 5-5s5 2.24 5 5a5 5 0 0 1-5 5z" />
+                        </svg>
+                        <span class="wc-hint-cost">5</span>
+                    </button>
                 </div>
 
-                <!-- Hint Button -->
-                <button class="wc-hint-btn" onclick="useHint()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 18h6" />
-                        <path d="M10 22h4" />
-                        <path d="M12 2v1" />
-                        <path d="M12 15a5 5 0 0 1-5-5c0-2.76 2.24-5 5-5s5 2.24 5 5a5 5 0 0 1-5 5z" />
-                    </svg>
-                    <span class="wc-hint-cost">50</span>
-                </button>
-
-                </button>
+                <div id="wcCountdown" class="wc-countdown"></div>
             </div>
         </div>
 

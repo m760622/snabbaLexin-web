@@ -4,10 +4,16 @@
 
 // --- CONFIG & STATE ---
 const WC_CONFIG = {
-    totalChapters: 10,
+    totalChapters: 100, // Infinite
     stagesPerChapter: 10,
-    hintCost: 50
+    hintCost: 5,
+    version: "2.0" // Bump version to force reset
 };
+
+const BONUS_REWARD = 5; // New Bonus Reward
+
+// --- DATA STRUCTURE ---
+// SWEDISH_DATA is now loaded from wordConnectData.js
 
 // Seed words for 100 levels (10 chapters x 10 stages)
 // WC_ROOT_WORDS is loaded from wordConnectData.js - DO NOT REDEFINE HERE
@@ -27,7 +33,18 @@ var wcState = {
     streak: 0,
     lastLogin: null,
     bonusWords: [],
-    timerInterval: null
+    timerInterval: null,
+    // --- NEW STATE ---
+    comboCount: 0,
+    lastWordTime: 0,
+    generatedLevels: {}, // Cache for session
+    usedRootWords: [] // Track used words to prevent repetition
+};
+
+// Optimized Dictionary Index for fast generation
+let WC_OPTIMIZED_DICT = {
+    byLength: {}, // { 3: ["ORD", ...], 4: ["BORD", ...] }
+    allWords: []  // Set of all valid words for quick lookup
 };
 
 let wcInitRetries = 0;
@@ -38,7 +55,7 @@ function initWordConnect() {
     console.log("Initializing Word Connect Module...");
 
     // Safeguard: Check if wordConnectData.js is loaded
-    if (typeof WC_PREDEFINED_LEVELS === 'undefined' || typeof WC_DICTIONARY === 'undefined' || typeof WC_ROOT_WORDS === 'undefined') {
+    if (typeof WC_PREDEFINED_LEVELS === 'undefined' || typeof WC_DICTIONARY === 'undefined' || typeof WC_ROOT_WORDS === 'undefined' || typeof SWEDISH_DATA === 'undefined') {
         if (wcInitRetries < 5) {
             wcInitRetries++;
             console.warn(`Word Connect: Data not ready. Retrying (${wcInitRetries}/5)...`);
@@ -52,19 +69,50 @@ function initWordConnect() {
 
     wcInitRetries = 0; // Reset on success
 
+    // Build Optimized Index
+    buildOptimizedDictionary();
+
     loadProgress();
     startLevel(wcState.chapter, wcState.stage);
+}
+
+function buildOptimizedDictionary() {
+    console.log("Building Optimized Dictionary...");
+    WC_OPTIMIZED_DICT.byLength = {};
+    WC_OPTIMIZED_DICT.allWords = [];
+
+    WC_DICTIONARY.forEach(entry => {
+        const word = entry.w.toUpperCase();
+        const len = word.length;
+
+        if (!WC_OPTIMIZED_DICT.byLength[len]) WC_OPTIMIZED_DICT.byLength[len] = [];
+        WC_OPTIMIZED_DICT.byLength[len].push(word);
+        WC_OPTIMIZED_DICT.allWords.push(word);
+    });
+    console.log("Dictionary Indexed.", WC_OPTIMIZED_DICT);
 }
 
 function loadProgress() {
     const saved = localStorage.getItem('wcProgress');
     if (saved) {
         const parsed = JSON.parse(saved);
-        wcState.chapter = parsed.chapter || 1;
-        wcState.stage = parsed.stage || 1;
-        wcState.maxChapter = parsed.maxChapter || 1;
-        wcState.maxStage = parsed.maxStage || 1;
-        wcState.coins = parsed.coins || 300;
+        // Version Check
+        if (parsed.version !== WC_CONFIG.version) {
+            console.log("New version detected. Resetting progress.");
+            localStorage.removeItem('wcProgress');
+            wcState.chapter = 1;
+            wcState.stage = 1;
+            wcState.maxChapter = 1;
+            wcState.maxStage = 1;
+            wcState.coins = 300;
+        } else {
+            wcState.chapter = parsed.chapter || 1;
+            wcState.stage = parsed.stage || 1;
+            wcState.maxChapter = parsed.maxChapter || 1;
+            wcState.maxStage = parsed.maxStage || 1;
+            wcState.coins = parsed.coins || 300;
+            wcState.usedRootWords = parsed.usedRootWords || [];
+        }
     }
     updateCoinDisplay();
 }
@@ -85,7 +133,10 @@ function saveProgress() {
         maxStage: wcState.maxStage,
         coins: wcState.coins,
         streak: wcState.streak,
-        lastLogin: wcState.lastLogin
+        streak: wcState.streak,
+        lastLogin: wcState.lastLogin,
+        version: WC_CONFIG.version, // Save version
+        usedRootWords: wcState.usedRootWords
     };
     localStorage.setItem('wcProgress', JSON.stringify(data));
     updateCoinDisplay();
@@ -175,6 +226,8 @@ function startLevel(chapter, stage) {
         wcState.isDragging = false;
         wcState.visitedNodes = [];
         wcState.bonusWords = [];
+        wcState.comboCount = 0; // Reset combo
+        wcState.lastWordTime = 0; // Reset timer
         if (wcState.timerInterval) clearInterval(wcState.timerInterval);
 
         const timerEl = document.getElementById('wcTimer');
@@ -208,40 +261,16 @@ function startLevel(chapter, stage) {
         // Generate Data
         const levelIndex = (chapter - 1) * 10 + (stage - 1);
 
-        // Safety check for root words
-        let rootWord = "SKOLAN"; // Default fallback
-        if (typeof WC_ROOT_WORDS !== 'undefined' && WC_ROOT_WORDS.length > 0) {
-            rootWord = WC_ROOT_WORDS[levelIndex % WC_ROOT_WORDS.length];
-        }
-
-        const difficulty = getDifficulty(chapter, stage);
-
-        wcState.currentLevelData = generateLevelData(rootWord, difficulty);
+        // Use new progression logic
+        wcState.currentLevelData = getNextLevel(levelIndex + 1); // Pass 1-based level index
 
         if (!wcState.currentLevelData || !wcState.currentLevelData.words || wcState.currentLevelData.words.length === 0) {
             console.error("Failed to generate level data", wcState.currentLevelData);
             throw new Error("Kunde inte ladda nivådata / فشل تحميل بيانات المستوى");
         }
 
-        // Theme logic disabled to restore original background color
-        /*
-        const gameModule = document.getElementById('word-game-module');
-        gameModule.className = ''; // Reset
-        if (chapter <= 3) {
-            gameModule.classList.add('theme-nature');
-        } else if (chapter <= 7) {
-            gameModule.classList.add('theme-city');
-        } else {
-            gameModule.classList.add('theme-ice');
-        }
-        */
-
-        // Shuffle letters (Fisher-Yates)
-        for (let i = wcState.currentLevelData.letters.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [wcState.currentLevelData.letters[i], wcState.currentLevelData.letters[j]] =
-                [wcState.currentLevelData.letters[j], wcState.currentLevelData.letters[i]];
-        }
+        // Shuffle letters (Fisher-Yates) - ALREADY DONE IN getNextLevel but good to ensure
+        // getNextLevel returns { words: [...], letters: [...] }
 
         renderGrid();
         renderWheel();
@@ -251,7 +280,184 @@ function startLevel(chapter, stage) {
     }
 }
 
+
+
+// --- DYNAMIC GENERATION ENGINE ---
+function generateDynamicLevel(levelIndex) {
+    // 1. Determine Difficulty Parameters
+    // Levels 1-5: Exactly 2 words
+    // Levels 6-20: Exactly 3 words
+    // Levels 21-50: Exactly 4 words
+    // Levels 51+: Exactly 5 words
+
+    let targetLength = 3;
+    let exactWordCount = 2;
+
+    if (levelIndex <= 5) { targetLength = 3; exactWordCount = 2; }
+    else if (levelIndex <= 20) { targetLength = Math.random() > 0.5 ? 4 : 3; exactWordCount = 3; }
+    else if (levelIndex <= 50) { targetLength = Math.random() > 0.5 ? 5 : 4; exactWordCount = 4; }
+    else { targetLength = Math.min(7, 4 + Math.floor(Math.random() * 3)); exactWordCount = 4; }
+
+    // 2. Pick a Root Word
+    // Try up to 20 times to find a good root
+    for (let attempt = 0; attempt < 20; attempt++) {
+        const candidates = WC_OPTIMIZED_DICT.byLength[targetLength];
+        if (!candidates || candidates.length === 0) {
+            targetLength--; // Fallback to smaller words if none found
+            if (targetLength < 3) targetLength = 3;
+            continue;
+        }
+
+        // Filter out used words
+        let availableCandidates = candidates.filter(w => !wcState.usedRootWords.includes(w));
+
+        // If all used, reset used list for this length (or global reset if preferred)
+        // For infinite play, we must eventually reuse.
+        if (availableCandidates.length === 0) {
+            console.log("All words of length " + targetLength + " used. Recycling.");
+            // Optional: Remove these specific words from usedRootWords to allow them again
+            // or just use candidates as is (allow reuse)
+            availableCandidates = candidates;
+        }
+
+        const rootWord = availableCandidates[Math.floor(Math.random() * availableCandidates.length)];
+        const rootMap = getCharMap(rootWord);
+
+        // 3. Find Valid Subsets
+        const validSubsets = [];
+        const levelDictionary = {};
+
+        // Optimization: Only check words <= root length
+        for (let len = 2; len <= targetLength; len++) {
+            const wordsOfLength = WC_OPTIMIZED_DICT.byLength[len];
+            if (wordsOfLength) {
+                for (const w of wordsOfLength) {
+                    if (isSubset(w, rootMap)) {
+                        validSubsets.push(w);
+                        // Add to level dictionary
+                        const entry = WC_DICTIONARY.find(item => item.w.toUpperCase() === w);
+                        if (entry) levelDictionary[w] = { ar: entry.t, sv: entry.s || "", st: entry.st || "" };
+                    }
+                }
+            }
+        }
+
+        // 4. Validate Level Quality
+        if (validSubsets.length >= exactWordCount) {
+            // Success!
+            // Sort by length descending
+            validSubsets.sort((a, b) => b.length - a.length);
+
+            // Select EXACTLY 'exactWordCount' targets
+            let targets = [];
+
+            // Always try to include the root word if it fits the count
+            // (It usually makes the puzzle feel "complete")
+            if (validSubsets.includes(rootWord)) {
+                targets.push(rootWord);
+            }
+
+            // Fill the rest with other valid subsets
+            for (const word of validSubsets) {
+                if (targets.length >= exactWordCount) break;
+                if (!targets.includes(word)) {
+                    targets.push(word);
+                }
+            }
+
+            // Re-sort for display (optional, but usually length based)
+            targets.sort((a, b) => a.length - b.length);
+
+            // Add to used list
+            if (!wcState.usedRootWords.includes(rootWord)) {
+                wcState.usedRootWords.push(rootWord);
+            }
+            saveProgress(); // Save used list
+
+            return {
+                id: `gen_${levelIndex}_${Date.now()}`,
+                tier: Math.floor(levelIndex / 10) + 1,
+                main_chars: rootWord,
+                targets: targets,
+                dictionary: levelDictionary
+            };
+        }
+    }
+
+    // Fallback if dynamic fails (should rarely happen with good dictionary)
+    console.warn("Dynamic generation failed, using fallback.");
+    return SWEDISH_DATA[0];
+}
+
+// Override getNextLevel to use Dynamic Engine
+function getNextLevel(currentLevel) {
+    // 1. Check for Predefined Level first
+    // Calculate Chapter/Stage from linear level index (1-based)
+    const chapter = Math.ceil(currentLevel / 10);
+    const stage = (currentLevel - 1) % 10 + 1;
+    const levelKey = `${chapter}-${stage}`;
+
+    if (WC_PREDEFINED_LEVELS[levelKey]) {
+        console.log(`Loading predefined level: ${levelKey}`);
+        const level = WC_PREDEFINED_LEVELS[levelKey];
+        // Limit to max 4 words per user request
+        const limitedWords = level.words.slice(0, 4);
+
+        // Use robust shuffle for predefined levels too
+        // Predefined levels usually have 'letters' array, but we should ensure it's shuffled well if it matches a word
+        let letters = level.letters;
+        const mainWord = level.words[0]; // Usually the first word is the main one
+        if (mainWord && letters.join('') === mainWord) {
+            letters = shuffleLetters(mainWord);
+        } else {
+            // Just shuffle existing letters array to be safe
+            letters = shuffleLetters(letters.join(''));
+        }
+
+        return {
+            ...level,
+            words: limitedWords,
+            letters: letters
+        };
+    }
+
+    // 2. Fallback to Dynamic Generation
+    const levelData = generateDynamicLevel(currentLevel);
+    wcState.currentLevelDictionary = levelData.dictionary;
+
+    return {
+        words: levelData.targets,
+        letters: shuffleLetters(levelData.main_chars)
+    };
+}
+
+// Helper to shuffle letters and avoid original word
+function shuffleLetters(word) {
+    let arr = word.split('');
+    // If word is short (<=3), simple shuffle is fine
+    if (arr.length <= 3) {
+        return arr.sort(() => Math.random() - 0.5);
+    }
+
+    // For longer words, ensure it doesn't match original
+    let shuffled;
+    let attempts = 0;
+    do {
+        shuffled = [...arr].sort(() => Math.random() - 0.5);
+        attempts++;
+    } while (shuffled.join('') === word && attempts < 10);
+
+    return shuffled;
+}
+
+// Kept for compatibility if needed, but getNextLevel replaces it
 function generateLevelData(rootWord, difficulty) {
+    // ... (Legacy code, can be kept or removed. Keeping for safety if we fall back)
+    return {
+        words: [rootWord],
+        letters: rootWord.split('')
+    };
+
     // 1. Check for Predefined Level
     const levelKey = `${wcState.chapter}-${wcState.stage}`;
     if (WC_PREDEFINED_LEVELS[levelKey]) {
@@ -575,6 +781,11 @@ function drawLine(startEl, endEl) {
 }
 
 // --- GAME LOGIC ---
+function showRewardMessage(text, type = 'default') {
+    // Message display removed per user request
+    console.log(`Reward Message: ${text} (${type})`);
+}
+
 function validateWord() {
     const word = wcState.currentInput;
     if (wcState.currentLevelData.words.includes(word)) {
@@ -583,64 +794,121 @@ function validateWord() {
             revealWord(word);
 
             // Reward & Translation
-            wcState.coins += 5;
+            let reward = 5;
+
+            // COMBO SYSTEM
+            const now = Date.now();
+            if (now - wcState.lastWordTime < 2500) { // 2.5 seconds window
+                wcState.comboCount++;
+                reward += (wcState.comboCount * 2); // Bonus: +2, +4, +6...
+                showRewardMessage(`COMBO x${wcState.comboCount + 1}! +${reward} 🪙`, "combo");
+                // triggerConfetti(); // Removed per user request
+            } else {
+                wcState.comboCount = 0;
+                // Simple reward message for normal word
+                showRewardMessage(`+${reward} 🪙`, "default");
+            }
+            wcState.lastWordTime = now;
+
+            wcState.coins += reward;
             saveProgress();
 
-            // Find translation in WC_DICTIONARY
-            const entry = WC_DICTIONARY.find(item => item.w.toLocaleUpperCase('sv-SE') === word.trim().toLocaleUpperCase('sv-SE'));
+            // Find translation in Level Dictionary
+            const wordUpper = word.toUpperCase();
+            let entry = wcState.currentLevelDictionary ? wcState.currentLevelDictionary[wordUpper] : null;
 
-            if (entry) {
-                const translation = entry.t;
-                const example = entry.s || generateFallbackSentence(word, null);
+            // Fallback lookup
+            if (!entry && typeof WC_DICTIONARY !== 'undefined') {
+                const globalEntry = WC_DICTIONARY.find(item => item.w.toUpperCase() === wordUpper);
+                if (globalEntry) {
+                    entry = { ar: globalEntry.t, sv: globalEntry.s || "", st: globalEntry.st || "" };
+                }
+            }
 
-                const transEl = document.getElementById('wcTranslationDisplay');
-                if (transEl) {
+            // Update Translation Display (Bottom)
+            const transEl = document.getElementById('wcTranslationDisplay');
+            if (transEl) {
+                if (entry) {
                     transEl.innerHTML = `
-                        <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${translation}</div>
-                        <div class="wc-example-text">"${example}"</div>
+                        <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${entry.ar}</div>
+                        <div class="wc-example-text" style="font-style: italic; color: #fbbf24; margin-bottom: 0.2rem;">"${entry.sv}"</div>
+                        ${entry.st ? `<div class="wc-example-translation" style="font-size: 0.9rem; color: #aaa;">(${entry.st})</div>` : ''}
                     `;
 
-                    transEl.style.opacity = '1';
-                    transEl.classList.add('pop-in');
-                    transEl.onclick = () => speakWord(word);
-                    transEl.style.cursor = 'pointer';
-                    setTimeout(() => transEl.classList.remove('pop-in'), 300);
-
                     // Speak automatically
-                    speakWord(word);
-                }
-            } else {
-                console.warn(`Translation not found in WC_DICTIONARY for: ${word}`);
-                // Fallback to generic display if not in dictionary
-                const transEl = document.getElementById('wcTranslationDisplay');
-                if (transEl) {
+                    if (typeof speakWord === 'function') speakWord(word);
+                } else {
                     transEl.innerHTML = `
                         <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${word}</div>
                         <div class="wc-example-text">"${generateFallbackSentence(word, null)}"</div>
                     `;
-                    transEl.style.opacity = '1';
                 }
+
+                transEl.style.opacity = '1';
+                transEl.classList.add('pop-in');
+                transEl.onclick = () => speakWord(word);
+                transEl.style.cursor = 'pointer';
+                setTimeout(() => transEl.classList.remove('pop-in'), 300);
             }
 
+            triggerWheelGlow('correct'); // Green Neon
             checkWin();
         } else {
-            showToast("Redan hittat! / وجدتها مسبقاً", "default");
+            // Already found
+            showRewardMessage("Redan hittat! / وجدتها مسبقاً", "default");
+            triggerWheelGlow('bonus'); // Yellow (reuse for duplicate/info)
         }
     } else {
-        // Check for Bonus Word
-        // Must be in dictionary and valid subset
-        const entry = WC_DICTIONARY.find(item => item.w.toUpperCase() === word.toUpperCase());
-        if (entry && !wcState.bonusWords.includes(word)) {
-            // Verify it is a subset of current letters (extra safety)
-            const rootMap = getCharMap(wcState.currentLevelData.letters.join(''));
-            if (isSubset(word, rootMap)) {
-                wcState.bonusWords.push(word);
-                wcState.coins += 5;
+        // Not in level words - Check for BONUS word
+        const wordUpper = word.toUpperCase();
+
+        // Check if valid word in global dictionary
+        const globalEntry = typeof WC_DICTIONARY !== 'undefined' ? WC_DICTIONARY.find(item => item.w.toUpperCase() === wordUpper) : null;
+        const isValidWord = !!globalEntry;
+
+        if (isValidWord) {
+            if (!wcState.bonusWords.includes(wordUpper)) {
+                wcState.bonusWords.push(wordUpper);
+                wcState.coins += 1; // Bonus coin
                 saveProgress();
-                showToast(`Bonusord! +5 🪙 / كلمة إضافية!`, "success");
+
+                triggerWheelGlow('bonus'); // Yellow Neon
+
+                // Find definition for bonus word
+                let msg = `Bonusord! +1 🪙`;
+
+                if (globalEntry) {
+                    // Show sentence if available
+                    const sentence = globalEntry.s || "";
+                    const trans = globalEntry.t || "";
+                    if (sentence) {
+                        // Update Translation Display for Bonus
+                        const transEl = document.getElementById('wcTranslationDisplay');
+                        if (transEl) {
+                            transEl.innerHTML = `
+                                <div style="font-size: 1.4rem; font-weight: 700; margin-bottom: 0.2rem;">${wordUpper}</div>
+                                <div style="font-size: 1.2rem; font-weight: 700;">${trans}</div>
+                                <div class="wc-example-text" style="font-style: italic; color: #fbbf24;">"${sentence}"</div>
+                            `;
+                            transEl.style.opacity = '1';
+                            transEl.classList.add('pop-in');
+                            setTimeout(() => transEl.classList.remove('pop-in'), 300);
+                        }
+                    }
+                    showRewardMessage(msg, "combo"); // Use combo style for visibility
+                } else {
+                    showRewardMessage(msg, "default");
+                }
                 // triggerConfetti(); // Removed per user request
+            } else {
+                showRewardMessage("Redan hittat bonusord! / كلمة إضافية مكررة", "default");
+                triggerWheelGlow('bonus');
             }
         } else {
+            // Invalid word
+            // showToast("Inte ett giltigt ord / ليست كلمة صحيحة", "error"); // Removed per user request
+            triggerWheelGlow('error'); // Red Neon
+
             // Wrong Word Penalty
             if (wcState.coins > 0) {
                 wcState.coins--;
@@ -648,29 +916,30 @@ function validateWord() {
                 const coinEl = document.getElementById('wcCoinCount');
                 if (coinEl) coinEl.textContent = wcState.coins;
             }
-
-            // Show error in Translation Display
-            const transEl = document.getElementById('wcTranslationDisplay');
-            if (transEl) {
-                transEl.innerHTML = `
-                    <div style="color: #ef4444; font-weight: 700; font-size: 1.2rem;">
-                        Fel ord! -1 🪙
-                    </div>
-                    <div style="color: #ef4444; font-size: 1rem;">
-                        كلمة خاطئة!
-                    </div>
-                `;
-                transEl.style.opacity = '1';
-                transEl.classList.add('shake'); // Add shake animation if available
-
-                // Clear after 1.5 seconds
-                setTimeout(() => {
-                    transEl.style.opacity = '0';
-                    transEl.classList.remove('shake');
-                }, 1500);
-            }
         }
     }
+}
+
+// --- VISUAL EFFECTS ---
+function triggerWheelGlow(type) {
+    const wheel = document.getElementById('wcWheel');
+    if (!wheel) return;
+
+    // Remove existing classes to reset animation
+    wheel.classList.remove('correct', 'bonus', 'error');
+
+    // Force reflow to restart animation if same class is re-added
+    void wheel.offsetWidth;
+
+    // Add specific class
+    if (type === 'correct') wheel.classList.add('correct');
+    if (type === 'bonus') wheel.classList.add('bonus');
+    if (type === 'error') wheel.classList.add('error');
+
+    // Remove class after animation (e.g., 1s)
+    setTimeout(() => {
+        wheel.classList.remove('correct', 'bonus', 'error');
+    }, 1000);
 }
 
 // Helper to generate simple sentences if missing
@@ -704,66 +973,57 @@ function revealWord(word) {
 function checkWin() {
     if (wcState.foundWords.length === wcState.currentLevelData.words.length) {
         // Level Complete!
-        // triggerConfetti(); // Removed per user request
 
-        // Hide Hint Button
-        const hintBtn = document.querySelector('.wc-hint-btn');
-        if (hintBtn) hintBtn.style.display = 'none';
+        // Remove confetti per user request
+        // triggerConfetti(); 
 
-        // Show Next Level Button (Inline)
-        const nextBtn = document.getElementById('wcNextLevelBtn');
-        if (nextBtn) {
-            nextBtn.style.display = 'block';
-            // Re-trigger animation
-            nextBtn.style.animation = 'none';
-            nextBtn.offsetHeight; /* trigger reflow */
-            nextBtn.style.animation = 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        }
-
-        // Start Timer
-        const timerEl = document.getElementById('wcTimer');
-        const timerText = document.getElementById('wcTimerText');
-
-        if (timerEl) {
-            timerEl.style.display = 'flex'; // Changed to flex for centering
-            // Reset animation
-            timerEl.style.animation = 'none';
-            timerEl.offsetHeight;
-            // We use the pseudo-element for the bar, so we don't animate the container itself
-
-            // Reset pseudo-element animation by removing/adding class or just relying on DOM reflow?
-            // The CSS animation is on ::after. To restart it, we need to re-insert the element or toggle a class.
-            // Simplest way: clone and replace
-            const newTimerEl = timerEl.cloneNode(true);
-            timerEl.parentNode.replaceChild(newTimerEl, timerEl);
-
-            // Re-select
-            const finalTimerEl = document.getElementById('wcTimer');
-            const finalTimerText = document.getElementById('wcTimerText');
-
-            let timeLeft = 5;
-            if (finalTimerText) finalTimerText.textContent = `Nästa nivå om ${timeLeft}s...`;
-
-            wcState.timerInterval = setInterval(() => {
-                timeLeft--;
-                if (finalTimerText) finalTimerText.textContent = `Nästa nivå om ${timeLeft}s...`;
-
-                if (timeLeft <= 0) {
-                    clearInterval(wcState.timerInterval);
-                    nextLevel();
-                }
-            }, 1000);
-        }
+        const msg = `Nivå Klar! / اكتمل المستوى!`;
+        showRewardMessage(msg, "combo");
 
         wcState.coins += 20;
         saveProgress();
+
+        // Start Countdown
+        startLevelCountdown();
     }
+}
+
+function startLevelCountdown() {
+    const countdownEl = document.getElementById('wcCountdown');
+    if (!countdownEl) {
+        nextLevel(); // Fallback
+        return;
+    }
+
+    let timeLeft = 3;
+    countdownEl.textContent = `Nästa nivå om ${timeLeft}... / التالي في ${timeLeft}...`;
+    countdownEl.classList.add('visible');
+
+    const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+            countdownEl.textContent = `Nästa nivå om ${timeLeft}... / التالي في ${timeLeft}...`;
+        } else {
+            clearInterval(interval);
+            countdownEl.classList.remove('visible');
+            nextLevel();
+        }
+    }, 1000);
 }
 
 // --- HINT SYSTEM ---
 function useHint() {
-    if (wcState.coins < WC_CONFIG.hintCost) {
-        showToast("Inte tillräckligt med mynt! / لا يوجد عملات كافية", "error");
+    // Animate button
+    const btn = document.querySelector('.wc-hint-btn');
+    if (btn) {
+        btn.classList.remove('active-hint');
+        void btn.offsetWidth; // Force reflow
+        btn.classList.add('active-hint');
+        setTimeout(() => btn.classList.remove('active-hint'), 600);
+    }
+
+    if (wcState.coins < 5) {
+        showRewardMessage("Inte tillräckligt med mynt! / لا يوجد عملات كافية", "default");
         return;
     }
 
@@ -784,7 +1044,7 @@ function useHint() {
     }
 
     if (targetBox) {
-        wcState.coins -= WC_CONFIG.hintCost;
+        wcState.coins -= 5; // Fixed cost
         saveProgress();
 
         targetBox.textContent = targetBox.dataset.letter;

@@ -533,7 +533,8 @@ function getNextLevel(currentLevel) {
             tier: chapter,
             main_chars: letters.join(''),
             targets: limitedWords,
-            dictionary: levelDictionary
+            dictionary: levelDictionary,
+            validWords: level.validWords // Include validWords for bonus check
         };
     }
 
@@ -999,9 +1000,23 @@ function validateWord() {
         // Not in level words - Check for BONUS word
         const wordUpper = word.toUpperCase();
 
-        // Check if valid word in global dictionary
-        const globalEntry = typeof WC_DICTIONARY !== 'undefined' ? WC_DICTIONARY.find(item => item.w.toUpperCase() === wordUpper) : null;
-        const isValidWord = !!globalEntry;
+        // Check if valid word (either in global dictionary OR in level's validWords)
+        let isValidWord = false;
+        let globalEntry = null;
+
+        // 1. Check Level's Valid Words (includes bonus words)
+        if (wcState.currentLevelData.validWords && wcState.currentLevelData.validWords.includes(wordUpper)) {
+            isValidWord = true;
+        }
+
+        // 2. Fallback to Global Dictionary (if defined)
+        if (!isValidWord && typeof WC_DICTIONARY !== 'undefined') {
+            globalEntry = WC_DICTIONARY.find(item => item.w.toUpperCase() === wordUpper);
+            if (globalEntry) isValidWord = true;
+        } else if (isValidWord && typeof WC_DICTIONARY !== 'undefined') {
+            // Look up definition even if we already know it's valid
+            globalEntry = WC_DICTIONARY.find(item => item.w.toUpperCase() === wordUpper);
+        }
 
         if (isValidWord) {
             if (!wcState.bonusWords.includes(wordUpper)) {
@@ -1036,8 +1051,16 @@ function validateWord() {
 
                     showRewardMessage(msg, "combo");
                 } else {
-                    showRewardMessage("Redan hittat bonusord! / كلمة إضافية مكررة", "default");
-                    triggerWheelGlow('bonus');
+                    // Valid bonus word, but no definition available
+                    showRewardMessage(`Bonusord! +1 🪙`, "combo");
+
+                    const transEl = document.getElementById('wcTranslationDisplay');
+                    if (transEl) {
+                        transEl.innerHTML = `<div style="font-size: 1.4rem; font-weight: 700;">${wordUpper}</div><div style="font-size: 1rem; color: #aaa;">Bonusord / كلمة إضافية</div>`;
+                        transEl.style.opacity = '1';
+                        transEl.classList.add('pop-in');
+                        setTimeout(() => transEl.classList.remove('pop-in'), 300);
+                    }
                 }
                 // triggerConfetti(); // Removed per user request
             } else {

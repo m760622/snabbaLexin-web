@@ -35,7 +35,7 @@ function normalizeArabic(text) {
 // Initialize
 async function init() {
     // Theme Logic
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
 
     themeToggle.addEventListener('click', () => {

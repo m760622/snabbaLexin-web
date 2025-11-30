@@ -594,6 +594,12 @@
             <!-- Level Status Message (New Location) -->
             <div id="wcLevelStatus" class="wc-level-status"></div>
 
+            <!-- Interactive Mascot -->
+            <div id="wcMascotContainer" class="wc-mascot-container">
+                <div id="wcMascot" class="wc-mascot">🦉</div>
+                <div id="wcMascotBubble" class="wc-mascot-bubble">Lycka till! / بالتوفيق!</div>
+            </div>
+
             <!-- Row 2: Controls -->
             <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                 <button class="wc-back-btn" onclick="goBackToMenu()">
@@ -705,7 +711,7 @@
 
     <script>
         // Apply theme from localStorage
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         if (savedTheme === 'dark') {
             document.body.classList.add('dark-mode');

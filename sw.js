@@ -1,16 +1,31 @@
-const CACHE_NAME = 'snabba-lexin-v1';
+const CACHE_NAME = 'snabba-lexin-v2';
 const ASSETS = [
     './',
     './index.html',
+    './games.html',
     './style.css',
+    './games.css',
     './app.js',
+    './games.js',
     './data.js',
-    './manifest.json',
-    './icon.svg',
+    './wordConnectData.js',
+    './wordConnectGame.js',
+    './grammarData.js',
+    './grammarGame.js',
+    './flashcardsGame.js',
+    './spellingGame.js',
+    './wordWheelGame.js',
+    './sentenceBuilderGame.js',
+    './wordRainGame.js',
+    './wordleGame.js',
+    './missingWordGame.js',
+    './pronunciationGame.js',
     './add.html',
     './add.js',
     './details.html',
-    './details.js'
+    './details.js',
+    './manifest.json',
+    './icon.svg'
 ];
 
 // Install Event

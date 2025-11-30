@@ -840,14 +840,36 @@ h1 {
 
 .card {
     background: var(--surface);
-    border-radius: 1rem;
-    padding: 2rem;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    border-radius: 0.75rem;
+    /* Smaller radius */
+    padding: 0.75rem;
+    /* Even smaller padding */
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    /* Dazzling base */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
     position: relative;
     border: 1px solid var(--border-subtle);
     content-visibility: auto;
     contain: layout paint style;
+    animation: dazzle-pulse 6s infinite alternate;
+    /* Slower animation */
+}
+
+@keyframes dazzle-pulse {
+    0% {
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+        border-color: rgba(99, 102, 241, 0.6);
+    }
+
+    100% {
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        border-color: rgba(99, 102, 241, 0.3);
+    }
 }
 
 [data-theme="dark"] .card {
@@ -879,14 +901,16 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    /* Reduced margin */
 }
 
 .word-swe {
-    font-size: 1.5rem;
+    font-size: 1rem;
+    /* Even smaller */
     font-weight: 700;
     color: var(--text-main);
-    line-height: 1.3;
+    line-height: 1.2;
     direction: ltr;
 }
 
@@ -904,12 +928,14 @@ h1 {
 
 .word-arb {
     font-family: var(--arabic-font);
-    font-size: 1.35rem;
+    font-size: 0.9rem;
+    /* Even smaller */
     color: var(--text-secondary);
     text-align: right;
-    margin: 1rem 0 1.5rem 0;
+    margin: 0.25rem 0 0.25rem 0;
+    /* Minimal margin */
     font-weight: 600;
-    line-height: 1.6;
+    line-height: 1.4;
     direction: rtl;
 }
 

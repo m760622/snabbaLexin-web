@@ -2,6 +2,7 @@
   "name": "Snabba Lexin",
   "short_name": "SnabbaLexin",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f3f4f6",

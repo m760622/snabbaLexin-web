@@ -1599,21 +1599,37 @@ function showLibrary() {
     const content = document.getElementById('wcLibraryContent');
     content.innerHTML = ''; // Clear previous
 
+    // Create Controls Container
+    const controlsContainer = document.createElement('div');
+    controlsContainer.style.display = 'flex';
+    controlsContainer.style.justifyContent = 'flex-end';
+    controlsContainer.style.alignItems = 'center';
+    controlsContainer.style.gap = '1rem';
+    controlsContainer.style.marginBottom = '1rem';
+
     // Add Clear All Button if there are words
     if (wcState.learnedWords && Object.keys(wcState.learnedWords).length > 0) {
-        const clearBtnContainer = document.createElement('div');
-        clearBtnContainer.style.textAlign = 'right';
-        clearBtnContainer.style.marginBottom = '1rem';
-        clearBtnContainer.innerHTML = `
-            <button onclick="clearLibrary()" class="wc-lib-clear-btn">
-                Rensa allt / مسح الكل 🗑️
-            </button>
-        `;
-        content.appendChild(clearBtnContainer);
+        const clearBtn = document.createElement('button');
+        clearBtn.onclick = clearLibrary;
+        clearBtn.className = 'wc-lib-clear-btn';
+        clearBtn.innerHTML = 'Rensa allt / مسح الكل 🗑️';
+        controlsContainer.appendChild(clearBtn);
     }
 
+    // Add Exit Button (Always)
+    const exitBtn = document.createElement('button');
+    exitBtn.className = 'wc-modal-close-btn';
+    exitBtn.onclick = closeLibrary;
+    exitBtn.innerHTML = '✕';
+    controlsContainer.appendChild(exitBtn);
+
+    content.appendChild(controlsContainer);
+
     if (!wcState.learnedWords || Object.keys(wcState.learnedWords).length === 0) {
-        content.innerHTML = '<div class="wc-empty-library">Du har inte samlat några ord än! Spela mer för att fylla ditt bibliotek. <br> لم تجمع أي كلمات بعد! العب المزيد لملء مكتبتك.</div>';
+        const emptyMsg = document.createElement('div');
+        emptyMsg.className = 'wc-empty-library';
+        emptyMsg.innerHTML = 'Du har inte samlat några ord än! Spela mer för att fylla ditt bibliotek. <br> لم تجمع أي كلمات بعد! العب المزيد لملء مكتبتك.';
+        content.appendChild(emptyMsg);
     } else {
         // Render Themes
         WC_THEMES.forEach(theme => {

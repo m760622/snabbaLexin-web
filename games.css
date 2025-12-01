@@ -3717,12 +3717,235 @@ body.dark-mode .game-example {
     transform: scale(0.9);
 }
 
-.wc-level-info h2 {
-    margin: 0;
+.wc-text-action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
     color: white;
-    font-size: 1.2rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 0.4rem 0.8rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
 }
+
+.wc-text-action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- COMPACT HEADER REDESIGN --- */
+.wc-header-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0 0 1.5rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.wc-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.wc-back-icon-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.wc-back-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
+}
+
+.wc-game-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    background: linear-gradient(to right, #fbbf24, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(251, 191, 36, 0.2);
+    white-space: nowrap;
+    text-align: center;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wc-level-badge {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.2));
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    padding: 0.3rem 0.6rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #a5b4fc;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.wc-level-badge:hover {
+    background: rgba(99, 102, 241, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.wc-header-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.wc-stats-capsule {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 2rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    flex: 1;
+    min-width: 0;
+    /* Allow shrinking */
+    justify-content: space-around;
+}
+
+.wc-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    white-space: nowrap;
+}
+
+.wc-stat-divider {
+    width: 1px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 0 0.3rem;
+}
+
+.wc-action-group {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.wc-mini-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.wc-mini-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Mobile Optimization */
+@media (max-width: 480px) {
+    .wc-header-compact {
+        padding: 0.6rem 0.8rem;
+        gap: 0.6rem;
+    }
+
+    .wc-game-title {
+        font-size: 1rem;
+    }
+
+    .wc-level-badge {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .wc-stats-capsule {
+        padding: 0.2rem 0.4rem;
+    }
+
+    .wc-stat-item {
+        font-size: 0.75rem;
+    }
+
+    .wc-mini-btn {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.7rem;
+    }
+}
+
+/* FORCE MOBILE MODE FOR WORD CONNECT */
+#word-game-module {
+    max-width: 480px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Apply mobile header styles to Word Connect regardless of screen size */
+#word-game-module .wc-header-compact {
+    padding: 0.6rem 0.8rem;
+    gap: 0.6rem;
+}
+
+#word-game-module .wc-game-title {
+    font-size: 1rem;
+}
+
+#word-game-module .wc-level-badge {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+}
+
+#word-game-module .wc-stats-capsule {
+    padding: 0.2rem 0.4rem;
+}
+
+#word-game-module .wc-stat-item {
+    font-size: 0.75rem;
+}
+
+#word-game-module .wc-mini-btn {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
+}
+
+
 
 .wc-translation-display {
     font-size: 1.5rem;
@@ -4187,7 +4410,7 @@ body.dark-mode .game-example {
 }
 
 .wc-level-btn.unlocked {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
     color: white;
     /* Day Mode: Soft, Magical Black Glow */
     box-shadow:
@@ -4772,14 +4995,14 @@ body.dark-mode .wc-reward-translation {
 
 /* --- Premium Level Select Modal --- */
 #wcLevelSelectModal .wc-modal-content {
-    background: linear-gradient(135deg, #0f172a 0%, #312e81 100%);
-    border: 1px solid rgba(139, 92, 246, 0.3);
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(251, 191, 36, 0.2);
     box-shadow:
-        0 0 40px rgba(49, 46, 129, 0.6),
-        inset 0 0 20px rgba(139, 92, 246, 0.1);
-    color: #e0e7ff;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+        0 0 40px rgba(0, 0, 0, 0.6),
+        inset 0 0 20px rgba(251, 191, 36, 0.05);
+    color: #e2e8f0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 #wcLevelSelectModal h2 {
@@ -4787,40 +5010,54 @@ body.dark-mode .wc-reward-translation {
     font-weight: 800;
     text-align: center;
     margin-bottom: 1.5rem;
-    background: linear-gradient(to right, #c084fc, #818cf8, #60a5fa);
+    background: linear-gradient(to right, #fbbf24, #f59e0b);
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
-    animation: neonPulseText 3s infinite alternate;
-}
-
-@keyframes neonPulseText {
-    from {
-        text-shadow: 0 0 10px rgba(139, 92, 246, 0.4);
-    }
-
-    to {
-        text-shadow: 0 0 20px rgba(139, 92, 246, 0.8), 0 0 40px rgba(139, 92, 246, 0.4);
-    }
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(251, 191, 36, 0.2);
+    animation: none;
 }
 
 #wcLevelSelectModal .wc-chapter-header {
-    color: #a78bfa;
-    border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+    color: #fbbf24;
+    border-bottom: 1px solid rgba(251, 191, 36, 0.2);
     padding-bottom: 0.5rem;
     margin-top: 1.5rem;
     font-size: 1.2rem;
-    text-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
 }
 
 #wcLevelSelectModal button[onclick="closeLevelSelect()"] {
-    color: #a78bfa;
+    color: #fbbf24;
     transition: all 0.3s;
 }
 
 #wcLevelSelectModal button[onclick="closeLevelSelect()"]:hover {
     color: #fff;
     transform: scale(1.1) rotate(90deg);
-    text-shadow: 0 0 10px #a78bfa;
+    text-shadow: 0 0 10px #fbbf24;
+}
+
+/* Modal Close Button */
+.wc-modal-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e2e8f0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.2rem;
+}
+
+.wc-modal-close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    /* Red tint on hover */
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+    transform: rotate(90deg);
 }

@@ -584,58 +584,50 @@
 
     <!-- Swedish Word Connect Module -->
     <div id="word-game-module" class="active-game-container" style="display: none;">
-        <div class="wc-header"
-            style="flex-direction: column; align-items: stretch; gap: 0.5rem; padding-bottom: 0.5rem;">
-            <!-- Row 1: Game Title -->
-            <div
-                style="text-align: center; font-weight: 700; font-size: 1.2rem; color: #fbbf24; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
-                Ord-Pussel / لغز الكلمات
-            </div>
-            <!-- Level Status Message (New Location) -->
-            <div id="wcLevelStatus" class="wc-level-status"></div>
-
-
-
-            <!-- Row 2: Controls -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                <button class="wc-back-btn" onclick="goBackToMenu()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+        <div class="wc-header-compact">
+            <!-- Row 1: Top Bar -->
+            <div class="wc-header-top">
+                <button class="wc-back-icon-btn" onclick="goBackToMenu()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 12H5M12 19l-7-7 7-7" />
                     </svg>
-                    <span class="wc-back-text">Meny</span>
                 </button>
 
-                <!-- Right Side: Level Title ABOVE Scores -->
-                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem;">
-                    <div class="wc-header-actions">
-                        <button class="wc-icon-btn" onclick="showLibrary()" title="Bibliotek / المكتبة">📚</button>
-                        <button class="wc-icon-btn" onclick="openLevelSelect()"
-                            title="Välj Nivå / اختر المستوى">☰</button>
-                    </div>
-                    <div class="wc-level-info"
-                        style="cursor: pointer; margin: 0; padding: 0; background: none; border: none; text-align: right;">
-                        <h2 id="wcLevelTitle" style="font-size: 1rem; margin: 0;">Nivå 1-1</h2>
-                        <small style="color: rgba(255,255,255,0.7); font-size: 0.7rem;">▼ Byt Nivå</small>
-                    </div>
+                <div class="wc-game-title">Ord-Pussel</div>
 
-                    <div style="display: flex; gap: 0.5rem;">
-                        <div class="wc-coin-counter" style="padding: 0.2rem 0.6rem; font-size: 0.9rem;">
-                            <span>⭐</span>
-                            <span id="wcBonusCount">0</span>
-                        </div>
-                        <div class="wc-coin-counter"
-                            style="background: rgba(255,100,0,0.3); color: #ffedd5; padding: 0.2rem 0.6rem; font-size: 0.9rem;">
-                            <span>🔥</span>
-                            <span id="wcStreakCount">0</span>
-                        </div>
-                        <div class="wc-coin-counter" style="padding: 0.2rem 0.6rem; font-size: 0.9rem;">
-                            <span>🪙</span>
-                            <span id="wcCoinCount">100</span>
-                        </div>
-                    </div>
+                <div class="wc-level-badge" onclick="openLevelSelect()">
+                    <span id="wcLevelTitle">Nivå 1-1</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
                 </div>
             </div>
+
+            <!-- Row 2: Stats & Actions -->
+            <div class="wc-header-bottom">
+                <div class="wc-stats-capsule">
+                    <div class="wc-stat-item" title="Bonus">
+                        <span>⭐</span> <span id="wcBonusCount">0</span>
+                    </div>
+                    <div class="wc-stat-divider"></div>
+                    <div class="wc-stat-item" title="Streak">
+                        <span>🔥</span> <span id="wcStreakCount">0</span>
+                    </div>
+                    <div class="wc-stat-divider"></div>
+                    <div class="wc-stat-item" title="Mynt / Coins">
+                        <span>🪙</span> <span id="wcCoinCount">100</span>
+                    </div>
+                </div>
+
+                <div class="wc-action-group">
+                    <button class="wc-mini-btn" onclick="showLibrary()">Bibliotek</button>
+                </div>
+            </div>
+
+            <!-- Level Status Message (Hidden by default, overlays if needed) -->
+            <div id="wcLevelStatus" class="wc-level-status"></div>
         </div>
 
         <div class="wc-game-area">
@@ -713,9 +705,7 @@
             style="display: none; align-items: flex-start; padding-top: 2rem;">
             <div class="wc-modal-content" style="width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h2>Ordbibliotek / مكتبة الكلمات</h2>
-                    <button onclick="closeLibrary()"
-                        style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">✕</button>
+                    <h2 style="font-size: 1.2rem;">Ordbibliotek / مكتبة الكلمات</h2>
                 </div>
                 <div id="wcLibraryContent">
                     <!-- Content injected by JS -->

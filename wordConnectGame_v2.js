@@ -69,7 +69,7 @@ function initWordConnect() {
     console.log("Initializing Word Connect Module...");
 
     // Safeguard: Check if wordConnectData.js is loaded
-    if (typeof WC_PREDEFINED_LEVELS === 'undefined' || typeof WC_DICTIONARY === 'undefined' || typeof WC_ROOT_WORDS === 'undefined' || typeof SWEDISH_DATA === 'undefined') {
+    if (typeof WC_PREDEFINED_LEVELS === 'undefined' || typeof WC_DICTIONARY === 'undefined') {
         if (wcInitRetries < 5) {
             wcInitRetries++;
             console.warn(`Word Connect: Data not ready. Retrying (${wcInitRetries}/5)...`);
@@ -1019,6 +1019,13 @@ function validateWord() {
         }
 
         if (isValidWord) {
+            // Bonus Word Rule: Must be > 2 chars (3 or more)
+            if (wordUpper.length < 3) {
+                // Too short for bonus
+                triggerWheelGlow('error');
+                return;
+            }
+
             if (!wcState.bonusWords.includes(wordUpper)) {
                 wcState.bonusWords.push(wordUpper);
                 wcState.coins += 1; // Bonus coin

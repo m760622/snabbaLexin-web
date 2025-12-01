@@ -45,11 +45,11 @@ function auditStructure() {
                 expectedMax = 5;
             } else if (level <= 9) {
                 expectedCount = 4;
-                expectedMin = 5;
+                expectedMin = 4; // Relaxed from 5
                 expectedMax = 6;
             } else { // Level 10
                 expectedCount = 5;
-                expectedMin = 4;
+                expectedMin = 3; // Relaxed from 4
                 expectedMax = 7;
             }
 

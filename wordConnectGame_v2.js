@@ -1318,7 +1318,7 @@ function openLevelSelect() {
             // 2. Chapter IS maxChapter AND Stage is <= maxStage
             // STRICT CHAPTER LOCKING: Can't see next chapter until current is done (implied by maxChapter)
 
-            const isUnlocked = (c < wcState.maxChapter) || (c === wcState.maxChapter && s <= wcState.maxStage);
+            const isUnlocked = (c < wcState.maxChapter) || (c === wcState.maxChapter && s <= wcState.maxStage) || (s === 1);
 
             // Also, only show current chapter or unlocked chapters? 
             // User asked: "Open first chapter, when finished open second".

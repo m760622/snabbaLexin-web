@@ -32,9 +32,10 @@ function auditDictionary() {
         // Strict Whole Word Check
         // We look for the word surrounded by non-alphanumeric characters (or start/end of string)
         // Swedish characters ÅÄÖ must be treated as letters.
-        // Regex: (?<![A-ZÅÄÖ])WORD(?![A-ZÅÄÖ])
-
-        const regex = new RegExp(`(?<![A-ZÅÄÖ])${word}(?![A-ZÅÄÖ])`, 'u');
+        // Check if cell contains the word (whole word match OR common suffixes)
+        // Suffixes: en, et, ar, er, na, a, s, an, on, or, erna, arna, t, de, r, te, dd, tt
+        const suffixes = "(?:en|et|ar|er|na|a|s|an|on|or|erna|arna|t|de|r|te|dd|tt)?";
+        const regex = new RegExp(`(?<![A-ZÅÄÖ])${word}${suffixes}(?![A-ZÅÄÖ])`, 'i');
 
         if (!regex.test(normSentence)) {
             issues.push({

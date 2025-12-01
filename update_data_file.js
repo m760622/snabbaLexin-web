@@ -36,14 +36,8 @@ if (oldDictMatch) {
 
 // 2. Prepare new dictionary string
 const newDictLines = newData.dictionary.map(item => {
-    // Check if we have an old entry for this word
-    if (oldDictMap.has(item.w)) {
-        return '    ' + oldDictMap.get(item.w);
-    } else {
-        // Format new item
-        // Ensure we escape quotes if needed, though our generator produced clean strings
-        return `    { w: "${item.w}", t: "${item.t}", s: "${item.s}", st: "${item.st}" },`;
-    }
+    // Always use new data from generator (which includes manual overrides)
+    return `    { w: "${item.w}", t: "${item.t}", s: "${item.s}", st: "${item.st}" },`;
 });
 
 const newDictString = `const WC_DICTIONARY = [\n${newDictLines.join('\n')}\n];`;

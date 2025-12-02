@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neon Search - Svenska</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d0d12;
+            --grid-bg: #1a1a24;
+            --text-color: #e0e0e0;
+            --primary-neon: #00f3ff;
+            /* Cyan */
+            --secondary-neon: #ff00ff;
+            /* Magenta */
+            --accent-neon: #bc13fe;
+            /* Purple */
+            --cell-size: 38px;
+            --gap: 3px;
+            --panel-bg: #1e1e24;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+        }
+
+        body {
+            margin: 0;
+            padding: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- Header --- */
+        header {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 0 5px;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-neon);
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+        }
+
+        .level-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 1px solid var(--secondary-neon);
+            box-shadow: 0 0 5px var(--secondary-neon);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 10px 0 0;
+        }
+
+        /* --- Game Container --- */
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 160px;
+            /* Space for bottom panel */
+        }
+
+        /* --- The Grid --- */
+        #grid {
+            display: grid;
+            gap: var(--gap);
+            background: var(--grid-bg);
+            padding: 8px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-bottom: 15px;
+            touch-action: none;
+            flex-shrink: 0;
+        }
+
+        .cell {
+            width: var(--cell-size);
+            height: var(--cell-size);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .cell.selected-pending {
+            background: rgba(0, 243, 255, 0.3);
+            border: 1px solid var(--primary-neon);
+            box-shadow: 0 0 10px var(--primary-neon);
+            z-index: 10;
+        }
+
+        .cell.found {
+            background: var(--accent-neon);
+            color: #fff;
+            box-shadow: 0 0 10px var(--accent-neon);
+            animation: pop 0.3s ease-out;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* --- Word List --- */
+        #word-bank {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            align-content: flex-start;
+            padding-bottom: 20px;
+        }
+
+        .word-item {
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #aaa;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .word-item.found {
+            text-decoration: line-through;
+            color: var(--primary-neon);
+            background: rgba(0, 243, 255, 0.1);
+            border-color: rgba(0, 243, 255, 0.3);
+        }
+
+        /* --- Floating Label --- */
+        #floating-label {
+            position: absolute;
+            pointer-events: none;
+            background: var(--primary-neon);
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: none;
+            z-index: 100;
+            box-shadow: 0 0 10px var(--primary-neon);
+            white-space: nowrap;
+        }
+
+        /* --- Bottom Info Panel --- */
+        #bottom-info-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--panel-bg);
+            border-top: 2px solid var(--primary-neon);
+            box-shadow: 0 -5px 20px rgba(0, 243, 255, 0.2);
+            padding: 15px;
+            z-index: 500;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+
+        #bottom-info-panel.active {
+            transform: translateY(0);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+            margin-bottom: 5px;
+        }
+
+        .panel-word {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-neon);
+            text-transform: uppercase;
+        }
+
+        .panel-translation {
+            font-size: 1.2rem;
+            color: #fff;
+            font-family: 'Noto Sans Arabic', sans-serif;
+            direction: rtl;
+        }
+
+        .panel-sentence-sv {
+            font-size: 0.95rem;
+            color: #e0e0e0;
+            font-style: italic;
+        }
+
+        .panel-sentence-ar {
+            font-size: 1rem;
+            color: #aaa;
+            font-family: 'Noto Sans Arabic', sans-serif;
+            direction: rtl;
+        }
+
+        /* --- Modals --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #1e1e24;
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid var(--primary-neon);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-btn {
+            background: var(--primary-neon);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.1s;
+            width: 100%;
+        }
+
+        .modal-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Level Complete Specifics */
+        .level-complete-title {
+            font-size: 1.8rem;
+            color: var(--secondary-neon);
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <button class="back-btn" onclick="window.location.href='games.html'">←</button>
+        <h1>Neon Search</h1>
+        <div class="level-badge">Nivå <span id="level-display">1</span></div>
+    </header>
+
+    <div id="game-container">
+        <div id="grid"></div>
+        <div id="word-bank"></div>
+    </div>
+
+    <div id="floating-label"></div>
+
+    <!-- Bottom Info Panel -->
+    <div id="bottom-info-panel">
+        <div class="panel-header">
+            <span id="panel-word" class="panel-word">WORD</span>
+            <span id="panel-translation" class="panel-translation">Translation</span>
+        </div>
+        <div id="panel-sentence-sv" class="panel-sentence-sv">Swedish sentence example.</div>
+        <div id="panel-sentence-ar" class="panel-sentence-ar">Arabic sentence translation.</div>
+    </div>
+
+    <!-- Level Complete Modal -->
+    <div id="level-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="level-complete-title">Nivå Klar! 🎉</h2>
+            <p>Bra jobbat!</p>
+            <button class="modal-btn" onclick="nextLevel()">Nästa Nivå / التالي</button>
+        </div>
+    </div>
+
+    <!-- Game Complete Modal -->
+    <div id="game-complete-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="level-complete-title">Grattis! 🏆</h2>
+            <p>Du har klarat alla nivåer!</p>
+            <button class="modal-btn" onclick="window.location.href='games.html'">Avsluta / خروج</button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Sound Manager using Web Audio API
+         */
+        class SoundManager {
+            constructor() {
+                this.audioCtx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.audioCtx) {
+                    this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.audioCtx.state === 'suspended') {
+                    this.audioCtx.resume();
+                }
+            }
+
+            playTone(freq, type, duration, startTime = 0) {
+                if (!this.enabled || !this.audioCtx) return;
+                const osc = this.audioCtx.createOscillator();
+                const gain = this.audioCtx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.audioCtx.currentTime + startTime);
+
+                gain.gain.setValueAtTime(0.1, this.audioCtx.currentTime + startTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + startTime + duration);
+
+                osc.connect(gain);
+                gain.connect(this.audioCtx.destination);
+
+                osc.start(this.audioCtx.currentTime + startTime);
+                osc.stop(this.audioCtx.currentTime + startTime + duration);
+            }
+
+            playClick() {
+                // Soft pop sound
+                this.playTone(600, 'sine', 0.1);
+            }
+
+            playConnect() {
+                // Higher pitch for connecting letters
+                this.playTone(800, 'sine', 0.1);
+            }
+
+            playSuccess() {
+                // Major chord arpeggio (C Major: C, E, G)
+                this.playTone(523.25, 'sine', 0.2, 0);
+                this.playTone(659.25, 'sine', 0.2, 0.1);
+                this.playTone(783.99, 'sine', 0.4, 0.2);
+            }
+
+            playLevelComplete() {
+                // Victory fanfare
+                if (!this.audioCtx) return;
+                const now = this.audioCtx.currentTime;
+                this.playTone(523.25, 'square', 0.2, 0); // C
+                this.playTone(523.25, 'square', 0.2, 0.2); // C
+                this.playTone(523.25, 'square', 0.2, 0.4); // C
+                this.playTone(659.25, 'square', 0.6, 0.6); // E
+                this.playTone(783.99, 'square', 0.8, 1.0); // G
+            }
+        }
+
+        /**
+         * 10 Levels of Swedish Words Data
+         */
+        const LEVELS_DATA = [
+            {
+                level: 1,
+                words: [
+                    { w: "ADVOKAT", t: "محامي", s: "Han är en mycket bra advokat.", st: "هو محام جيد جداً." },
+                    { w: "ÄPPLE", t: "تفاحة", s: "Man bör äta minst ett äpple om dagen.", st: "يجب على المرء أن يأكل تفاحة واحدة على الأقل في اليوم." },
+                    { w: "APOTEK", t: "صيدلية", s: "Jag går till apoteket för medicin.", st: "أذهب إلى الصيدلية للحصول على الدواء." },
+                    { w: "ANSIKTE", t: "وجه", s: "Hon har ett mycket vackert och vänligt ansikte.", st: "لديها وجه جميل جداً وودود." },
+                    { w: "ALLA", t: "الجميع", s: "Alla är välkomna till vår fest.", st: "الجميع مرحب بهم في حفلتنا." },
+                    { w: "ÄNGEL", t: "ملاك", s: "Du är en riktig ängel som hjälper mig.", st: "أنت ملاك حقيقي لأنك تساعدني." },
+                    { w: "ANKOMST", t: "وصول", s: "Vi väntar otåligt på tågets ankomst till stationen.", st: "ننتظر بفارغ الصبر وصول القطار إلى المحطة." }
+                ]
+            },
+            {
+                level: 2,
+                words: [
+                    { w: "APRIKOS", t: "مشمش", s: "En torkad aprikos är ett nyttigt godis.", st: "المشمش المجفف هو حلوى صحية." },
+                    { w: "ARENA", t: "ملعب", s: "Det är en mycket stor arena.", st: "إنه ملعب كبير جداً." },
+                    { w: "ARKIV", t: "أرشيف", s: "Alla viktiga dokumenten finns sparade i vårt arkiv.", st: "جميع الوثائق المهمة محفوظة في أرشيفنا." },
+                    { w: "ALPER", t: "جبال الألب", s: "På semestern åkte vi skidor i de höga Alperna.", st: "في الإجازة تزلجنا في جبال الألب العالية." },
+                    { w: "ANANAS", t: "أناناس", s: "Ananas är en söt och saftig tropisk frukt.", st: "الأناناس فاكهة استوائية حلوة وعصارية." },
+                    { w: "ANDAS", t: "يتنفس", s: "Kom ihåg att andas in djupt.", st: "تذكر أن تتنفس بعمق." },
+                    { w: "ALVAR", t: "سهل ألڤار", s: "Ölands stora alvar är ett unikt landskap.", st: "سهل ألڤار الكبير في أولاند هو منظر طبيعي فريد." }
+                ]
+            },
+            {
+                level: 3,
+                words: [
+                    { w: "ASTER", t: "زهرة النجمة", s: "I trädgården växer en vacker lila aster.", st: "تنمو زهرة نجمة أرجوانية جميلة في الحديقة." },
+                    { w: "ATLAS", t: "أطلس", s: "Jag hittade landet in min atlas.", st: "وجدت البلد في أطلسي." },
+                    { w: "ÄVENTYR", t: "مغامرة", s: "Att resa jorden runt är ett stort äventyr.", st: "السفر حول العالم هو مغامرة كبيرة." },
+                    { w: "AVTAL", t: "اتفاقية", s: "Vi skrev äntligen på ett viktigt avtal igår.", st: "وقعنا أخيراً على اتفاقية مهمة يوم أمس." },
+                    { w: "BADA", t: "يستحم", s: "Jag vill bada bastu efter träningen idag.", st: "أريد الاستحمام في الساونا بعد التمرين اليوم." },
+                    { w: "BADRUM", t: "حمام", s: "Jag tvättar mig varje morgon i badrummet.", st: "أغسل وجهي كل صباح في الحمام." },
+                    { w: "BAKA", t: "يخبز", s: "Vi ska baka en stor tårta till kalaset.", st: "سنخبز كعكة كبيرة للحفلة." },
+                    { w: "BALKONG", t: "شرفة", s: "Vi har blommor på vår balkong.", st: "لدينا زهور في شرفتنا." }
+                ]
+            },
+            {
+                level: 4,
+                words: [
+                    { w: "BANAN", t: "موزة", s: "Apor på zoo gillar att äta gula bananer.", st: "القرود في حديقة الحيوان تحب أكل الموز الأصفر." },
+                    { w: "BASAR", t: "أسواق", s: "Vi besökte en färgstark basar under vår resa.", st: "زرنا بازاراً ملوناً خلال رحلتنا." },
+                    { w: "BERG", t: "جبل", s: "Vi besteg ett mycket högt berg i somras.", st: "تسلقنا جبلاً عالياً جداً في الصيف الماضي." },
+                    { w: "BERÖM", t: "مدح", s: "Han fick beröm för sitt goda arbete.", st: "تلقى المديح على عمله الجيد." },
+                    { w: "BEVIS", t: "دليل", s: "Polisen har hittat nya avgörande bevis i fallet.", st: "وجدت الشرطة أدلة حاسمة جديدة في القضية." },
+                    { w: "BIFF", t: "شريحة لحم", s: "Jag vill ha en saftig biff.", st: "أريد شريحة لحم عصارية." },
+                    { w: "BILIST", t: "سائق", s: "Varje bilist måste vara uppmärksam i trafiken.", st: "يجب على كل سائق أن يكون منتبهاً في حركة المرور." },
+                    { w: "BILJETT", t: "تذكرة", s: "Jag har köpt en biljett till tåget.", st: "اشتريت تذكرة للقطار." }
+                ]
+            },
+            {
+                level: 5,
+                words: [
+                    { w: "BJÖRK", t: "شجرة البتولا", s: "Björken är ett träd som har en vit stam.", st: "شجرة البتولا هي شجرة لها جذع أبيض." },
+                    { w: "BJÖRN", t: "دب", s: "Den stora björnen sover djupt i sitt ide.", st: "الدب الكبير ينام بعمق في سباته." },
+                    { w: "BJÖRNBÄR", t: "توت العليق", s: "Skogen är full av svarta björnbär.", st: "الغابة مليئة بتوت العليق الأسود." },
+                    { w: "BLÅBÄR", t: "توت أزرق", s: "Vi plockar många blåbär i skogen varje höst.", st: "نقطف الكثير من التوت الأزرق في الغابة كل خريف." },
+                    { w: "BLAD", t: "ورقة شجر", s: "Trädens gröna blad faller ner på marken på hösten.", st: "أوراق الأشجار الخضراء تتساقط على الأرض في الخريف." },
+                    { w: "BLOCK", t: "دفتر", s: "Jag skriver anteckningar i mitt block.", st: "أكتب ملاحظات في دفتري." },
+                    { w: "BLOD", t: "دم", s: "Människans blod är alltid rött.", st: "دم الإنسان أحمر دائماً." },
+                    { w: "BOD", t: "كوخ", s: "Vi har en bod på gården.", st: "لدينا كوخ في الفناء." },
+                    { w: "BOK", t: "كتاب", s: "Jag läser en spännande bok just nu.", st: "أقرأ كتاباً مشوقاً الآن." }
+                ]
+            },
+            {
+                level: 6,
+                words: [
+                    { w: "BORD", t: "طاولة", s: "Maten står färdig och varm på köksbordet.", st: "الطعام جاهز ودافئ على طاولة المطبخ." },
+                    { w: "BORSTA", t: "يفرش", s: "Kom ihåg att borsta tänderna noga varje kväll.", st: "تذكر أن تفرش أسنانك جيداً كل مساء." },
+                    { w: "BÖN", t: "صلاة", s: "Hon bad en stilla bön i kyrkan.", st: "صلت صلاة هادئة في الكنيسة." },
+                    { w: "BRO", t: "جسر", s: "Vi promenerade över den gamla bron.", st: "مشينا فوق الجسر القديم." },
+                    { w: "BRÖD", t: "خبز", s: "Färskt bröd från ugnen doftar alltid gott.", st: "الخبز الطازج من الفرن له رائحة طيبة دائماً." },
+                    { w: "BROR", t: "أخ", s: "Min snälla bror leker ofta fotboll med mig.", st: "أخي اللطيف يلعب كرة القدم معي غالباً." },
+                    { w: "BÖTER", t: "غرامات", s: "Han fick betala dyra böter för fortkörning.", st: "اضطر لدفع غرامات باهظة بسبب السرعة الزائدة." },
+                    { w: "BUSS", t: "حافلة", s: "Bussen till staden är tyvärr sen idag.", st: "الحافلة المتجهة إلى المدينة متأخرة للأسف اليوم." },
+                    { w: "BULLAR", t: "كعك", s: "Vi äter nygräddade bullar med mjölk.", st: "نأكل الكعك الطازج مع الحليب." }
+                ]
+            },
+            {
+                level: 7,
+                words: [
+                    { w: "CYKEL", t: "دراجة", s: "Det är både roligt och nyttigt att cykla.", st: "من الممتع والمفيد ركوب الدراجة." },
+                    { w: "CIRKUS", t: "سيرك", s: "Vi gick på cirkus och såg roliga clowner.", st: "ذهبنا إلى السيرك ورأينا مهرجين مضحكين." },
+                    { w: "DANS", t: "رقص", s: "Får jag lov till en dans?", st: "هل تسمحين لي برقصة؟" },
+                    { w: "DATOR", t: "حاسوب", s: "Jag arbetar vid min nya dator varje dag.", st: "أعمل على حاسوبي الجديد كل يوم." },
+                    { w: "DOTTER", t: "ابنة", s: "Hon är en mycket smart och duktig dotter.", st: "هي ابنة ذكية جداً وموهوبة." },
+                    { w: "DUSCH", t: "دش", s: "Jag tar en varm och skön dusch på morgonen.", st: "آخذ دشاً دافئاً ومريحاً في الصباح." },
+                    { w: "DÖRR", t: "باب", s: "Stäng dörren, det drar kallt.", st: "أغلق الباب، هناك تيار هواء بارد." },
+                    { w: "DOMARE", t: "قاضي", s: "Han är en mycket rättvis domare.", st: "هو قاض عادل جداً." },
+                    { w: "FAMILJ", t: "عائلة", s: "Jag älskar att spendera tid med min familj.", st: "أحب قضاء الوقت مع عائلتي." },
+                    { w: "FARTYG", t: "سفينة", s: "Det stora fartyget seglar långt bort på havet.", st: "السفينة الكبيرة تبحر بعيداً في البحر." },
+                ]
+            },
+            {
+                level: 8,
+                words: [
+                    { w: "FÄRSK", t: "طازج", s: "Färsk fisk från havet smakar alltid bäst.", st: "السمك الطازج من البحر طعمه الأفضل دائماً." },
+                    { w: "FÄRJA", t: "عبّارة", s: "Vi tog färjan över havet till Danmark.", st: "أخذنا العبارة عبر البحر إلى الدنمارك." },
+                    { w: "FÄRD", t: "رحلة", s: "Vi tar en färd till Oslo.", st: "نأخذ رحلة إلى أوسلو." },
+                    { w: "FANA", t: "راية", s: "De bar en fana in tåget.", st: "حملوا راية في الموكب." },
+                    { w: "FALSK", t: "زائف", s: "Det där skrattet låter väldigt falskt.", st: "تلك الضحكة تبدو مصطنعة جداً." },
+                    { w: "ENERGI", t: "طاقة", s: "Solenergi är bra för vår miljö.", st: "الطاقة الشمسية جيدة لبيئتنا." },
+                    { w: "EKA", t: "قارب", s: "Vi rodde ut i en eka.", st: "جدفنا بقارب صغير." },
+                    { w: "EK", t: "شجرة بلوط", s: "Eken är ett mycket starkt och gammalt träd.", st: "شجرة البلوط هي شجرة قوية جداً وقديمة." },
+                    { w: "DYR", t: "غالي", s: "Den nya röda bilen var alldeles för dyr.", st: "السيارة الحمراء الجديدة كانت غالية جداً." },
+                    { w: "DRIVA", t: "ينجرف", s: "Vinden får båten att driva iväg.", st: "الرياح تجعل القارب ينجرف بعيداً." }
+                ]
+            },
+            {
+                level: 9,
+                words: [
+                    { w: "DATORN", t: "الحاسوب", s: "Den här datorn är helt ny.", st: "هذا الحاسوب جديد تماماً." },
+                    { w: "DATA", t: "بيانات", s: "Du måste spara all din data.", st: "يجب عليك حفظ جميع بياناتك." },
+                    { w: "DASS", t: "بيت خلاء", s: "Jag måste gå på dass nu.", st: "يجب أن أذهب إلى بيت الخلاء الآن." },
+                    { w: "DAL", t: "وادي", s: "Huset ligger i en grön dal.", st: "يقع المنزل في وادي أخضر." },
+                    { w: "DAG", t: "يوم", s: "Det är en vacker dag idag.", st: "إنه يوم جميل اليوم." },
+                    { w: "CHEF", t: "رئيس العمل", s: "Min chef på jobbet är mycket snäll och rättvis.", st: "رئيسي في العمل لطيف جداً وعادل." },
+                    { w: "BYGGA", t: "يبني", s: "Vi ska bygga ett nytt hus.", st: "سنبني منزلاً جديداً." },
+                    { w: "BYGG", t: "بناء", s: "Detta är ett mycket stabilt och säkert bygg.", st: "هذا بناء مستقر وآمن جداً." },
+                    { w: "BUSSAR", t: "حافلات", s: "Många blå bussar går in till centrum varje dag.", st: "العديد من الحافلات الزرقاء تذهب إلى المركز كل يوم." },
+                    { w: "BUSKAR", t: "شجيرات", s: "Katten gömde sig i buskarna.", st: "اختبأت القطة بين الشجيرات." },
+                    { w: "BUR", t: "قفص", s: "Fågeln sitter och sjunger i sin lilla bur.", st: "الطائر يجلس ويغني في قفصه الصغير." },
+                ]
+            },
+            {
+                level: 10,
+                words: [
+                    { w: "BRUSA", t: "يفور", s: "Vattnet i forsen började brusa högt.", st: "بدأ الماء في الشلال يفور بصوت عالٍ." },
+                    { w: "BRUKA", t: "يفلح", s: "Bonden måste bruka jorden för att få skörd.", st: "يجب على المزارع فلاحة الأرض للحصول على المحصول." },
+                    { w: "BROTT", t: "جريمة", s: "Att stjäla från andra är ett allvarligt brott.", st: "السرقة من الآخرين هي جريمة خطيرة." },
+                    { w: "BRÖST", t: "صدر", s: "Mamman gav den lilla babyn mat från bröstet.", st: "أعطت الأم الطفل الصغير الطعام من صدرها." },
+                    { w: "BRODER", t: "أخ", s: "Han är min kära broder som jag litar på.", st: "هو أخي العزيز الذي أثق به." },
+                    { w: "BRE", t: "يدهن", s: "Du kan bre lite mjukt smör på brödet.", st: "يمكنك دهن القليل من الزبدة الطرية على الخبز." },
+                    { w: "BRAS", t: "نار", s: "Vi tände en bras i öppna spisen.", st: "أشعلنا ناراً في المدفأة." },
+                    { w: "BOTT", t: "سكن", s: "Jag har bott här i hela mitt liv.", st: "لقد عشت هنا طوال حياتي." },
+                    { w: "BÖT", t: "كفر", s: "Han böt för sina synder genom att hjälpa andra.", st: "كفر عن ذنوبه بمساعدة الآخرين." },
+                    { w: "BOT", t: "غرامة", s: "Han fick betala en stor bot.", st: "اضطر لدفع غرامة كبيرة." },
+                    { w: "BULLAR", t: "كعك", s: "Mormor bakar goda nygräddade bullar.", st: "الجدة تخبز كعكاً طازجاً لذيذاً." }
+                ]
+            }
+        ];
+
+        /**
+         * Word Search Game Engine
+         */
+        class WordSearchGame {
+            constructor() {
+                this.currentLevelIndex = 0;
+                this.gridSize = { rows: 10, cols: 8 };
+                this.grid = [];
+                this.foundWords = new Set();
+                this.soundManager = new SoundManager();
+
+                // DOM Elements
+                this.gridEl = document.getElementById('grid');
+                this.wordBankEl = document.getElementById('word-bank');
+                this.floatingLabel = document.getElementById('floating-label');
+                this.levelDisplay = document.getElementById('level-display');
+                this.bottomInfoPanel = document.getElementById('bottom-info-panel');
+
+                // Modals
+                this.levelModal = document.getElementById('level-modal');
+                this.gameCompleteModal = document.getElementById('game-complete-modal');
+
+                // State
+                this.isDragging = false;
+                this.startCell = null;
+                this.currentSelection = [];
+
+                // Initialize Audio Context on first user interaction
+                this.handleInteraction = () => {
+                    this.soundManager.init();
+                    window.removeEventListener('touchstart', this.handleInteraction);
+                    window.removeEventListener('mousedown', this.handleInteraction);
+                    window.removeEventListener('keydown', this.handleInteraction);
+                };
+                window.addEventListener('touchstart', this.handleInteraction);
+                window.addEventListener('mousedown', this.handleInteraction);
+                window.addEventListener('keydown', this.handleInteraction);
+
+                this.initLevel(this.currentLevelIndex);
+            }
+
+            initLevel(levelIndex) {
+                if (levelIndex >= LEVELS_DATA.length) {
+                    this.gameCompleteModal.classList.add('active');
+                    this.soundManager.playLevelComplete(); // Play fanfare for game complete too
+                    return;
+                }
+
+                this.currentLevelData = LEVELS_DATA[levelIndex];
+                this.words = this.currentLevelData.words.map(item => item.w.toUpperCase());
+                this.foundWords.clear();
+                this.levelDisplay.textContent = this.currentLevelData.level;
+                this.bottomInfoPanel.classList.remove('active'); // Hide panel on new level
+
+                this.setupGrid();
+                this.placeWords();
+                this.fillEmptyCells();
+                this.renderGrid();
+                this.renderWordBank();
+                this.attachEvents();
+            }
+
+            setupGrid() {
+                // Initialize empty grid
+                for (let r = 0; r < this.gridSize.rows; r++) {
+                    this.grid[r] = [];
+                    for (let c = 0; c < this.gridSize.cols; c++) {
+                        this.grid[r][c] = null;
+                    }
+                }
+
+                // Set CSS Grid columns
+                this.gridEl.style.gridTemplateColumns = `repeat(${this.gridSize.cols}, 1fr)`;
+            }
+
+            placeWords() {
+                // Sort words by length (longest first) to reduce collisions
+                const sortedWords = [...this.words].sort((a, b) => b.length - a.length);
+
+                for (const word of sortedWords) {
+                    let placed = false;
+                    let attempts = 0;
+                    while (!placed && attempts < 100) {
+                        placed = this.tryPlaceWord(word);
+                        attempts++;
+                    }
+                    if (!placed) {
+                        console.warn(`Could not place word: ${word}`);
+                    }
+                }
+            }
+
+            tryPlaceWord(word) {
+                const directions = [
+                    { r: 0, c: 1 },   // Right
+                    { r: 1, c: 0 },   // Down
+                    { r: 1, c: 1 },   // Diagonal Down-Right
+                    { r: -1, c: 1 },  // Diagonal Up-Right
+                    { r: 0, c: -1 },  // Left
+                    { r: -1, c: 0 },  // Up
+                    { r: -1, c: -1 }, // Diagonal Up-Left
+                    { r: 1, c: -1 }   // Diagonal Down-Left
+                ];
+
+                const dir = directions[Math.floor(Math.random() * directions.length)];
+                const startR = Math.floor(Math.random() * this.gridSize.rows);
+                const startC = Math.floor(Math.random() * this.gridSize.cols);
+
+                // Check bounds and collisions
+                for (let i = 0; i < word.length; i++) {
+                    const r = startR + (i * dir.r);
+                    const c = startC + (i * dir.c);
+
+                    if (r < 0 || r >= this.gridSize.rows || c < 0 || c >= this.gridSize.cols) {
+                        return false; // Out of bounds
+                    }
+
+                    const existingChar = this.grid[r][c];
+                    if (existingChar !== null && existingChar !== word[i]) {
+                        return false; // Collision
+                    }
+                }
+
+                // Place word
+                for (let i = 0; i < word.length; i++) {
+                    const r = startR + (i * dir.r);
+                    const c = startC + (i * dir.c);
+                    this.grid[r][c] = word[i];
+                }
+
+                return true;
+            }
+
+            fillEmptyCells() {
+                const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ";
+                for (let r = 0; r < this.gridSize.rows; r++) {
+                    for (let c = 0; c < this.gridSize.cols; c++) {
+                        if (this.grid[r][c] === null) {
+                            this.grid[r][c] = alphabet[Math.floor(Math.random() * alphabet.length)];
+                        }
+                    }
+                }
+            }
+
+            renderGrid() {
+                this.gridEl.innerHTML = '';
+                for (let r = 0; r < this.gridSize.rows; r++) {
+                    for (let c = 0; c < this.gridSize.cols; c++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.textContent = this.grid[r][c];
+                        cell.dataset.row = r;
+                        cell.dataset.col = c;
+                        this.gridEl.appendChild(cell);
+                    }
+                }
+            }
+
+            renderWordBank() {
+                this.wordBankEl.innerHTML = '';
+                this.words.forEach(word => {
+                    const el = document.createElement('div');
+                    el.className = 'word-item';
+                    el.textContent = word;
+                    el.dataset.word = word;
+                    this.wordBankEl.appendChild(el);
+                });
+            }
+
+            attachEvents() {
+                // Remove old listeners to avoid duplicates if re-init
+                const newGrid = this.gridEl.cloneNode(true);
+                this.gridEl.parentNode.replaceChild(newGrid, this.gridEl);
+                this.gridEl = newGrid;
+
+                // Touch Events
+                this.gridEl.addEventListener('touchstart', (e) => this.handleStart(e.touches[0]), { passive: false });
+                this.gridEl.addEventListener('touchmove', (e) => this.handleMove(e.touches[0], e), { passive: false });
+                this.gridEl.addEventListener('touchend', () => this.handleEnd());
+
+                // Mouse Events
+                this.gridEl.addEventListener('mousedown', (e) => this.handleStart(e));
+                window.addEventListener('mousemove', (e) => {
+                    if (this.isDragging) this.handleMove(e, e);
+                });
+                window.addEventListener('mouseup', () => {
+                    if (this.isDragging) this.handleEnd();
+                });
+            }
+
+            getCellFromPoint(x, y) {
+                const el = document.elementFromPoint(x, y);
+                if (el && el.classList.contains('cell')) {
+                    return {
+                        row: parseInt(el.dataset.row),
+                        col: parseInt(el.dataset.col),
+                        el: el
+                    };
+                }
+                return null;
+            }
+
+            handleStart(point) {
+                const cell = this.getCellFromPoint(point.clientX, point.clientY);
+                if (!cell) return;
+
+                this.isDragging = true;
+                this.startCell = cell;
+                this.soundManager.playClick();
+                this.updateSelection(cell);
+            }
+
+            handleMove(point, event) {
+                if (event) event.preventDefault();
+
+                const cell = this.getCellFromPoint(point.clientX, point.clientY);
+                if (!cell) return;
+
+                const lastCell = this.currentSelection[this.currentSelection.length - 1];
+                if (lastCell && lastCell.dataset.row == cell.row && lastCell.dataset.col == cell.col) {
+                    return;
+                }
+
+                this.soundManager.playConnect();
+                this.updateSelection(cell);
+            }
+
+            updateSelection(endCell) {
+                const start = this.startCell;
+                const end = endCell;
+
+                const dRow = end.row - start.row;
+                const dCol = end.col - start.col;
+
+                const isHorizontal = dRow === 0;
+                const isVertical = dCol === 0;
+                const isDiagonal = Math.abs(dRow) === Math.abs(dCol);
+
+                if (!isHorizontal && !isVertical && !isDiagonal) {
+                    return;
+                }
+
+                document.querySelectorAll('.selected-pending').forEach(el => el.classList.remove('selected-pending'));
+                this.currentSelection = [];
+
+                const stepRow = Math.sign(dRow);
+                const stepCol = Math.sign(dCol);
+                const steps = Math.max(Math.abs(dRow), Math.abs(dCol));
+
+                let currentWord = "";
+
+                for (let i = 0; i <= steps; i++) {
+                    const r = start.row + (i * stepRow);
+                    const c = start.col + (i * stepCol);
+                    const index = r * this.gridSize.cols + c;
+                    const cellEl = this.gridEl.children[index];
+
+                    if (cellEl) {
+                        cellEl.classList.add('selected-pending');
+                        this.currentSelection.push(cellEl);
+                        currentWord += cellEl.textContent;
+                    }
+                }
+
+                this.showFloatingLabel(currentWord, endCell.el);
+            }
+
+            handleEnd() {
+                this.isDragging = false;
+                this.floatingLabel.style.display = 'none';
+
+                const word = this.currentSelection.map(el => el.textContent).join('');
+                this.checkWord(word);
+
+                document.querySelectorAll('.selected-pending').forEach(el => el.classList.remove('selected-pending'));
+                this.currentSelection = [];
+            }
+
+            checkWord(word) {
+                const reversed = word.split('').reverse().join('');
+                let foundWord = null;
+
+                if (this.words.includes(word) && !this.foundWords.has(word)) {
+                    foundWord = word;
+                } else if (this.words.includes(reversed) && !this.foundWords.has(reversed)) {
+                    foundWord = reversed;
+                }
+
+                if (foundWord) {
+                    this.foundWords.add(foundWord);
+                    this.markWordFound(foundWord);
+                    this.showWordInfo(foundWord);
+                    this.soundManager.playSuccess();
+                    this.checkLevelComplete();
+                }
+            }
+
+            markWordFound(word) {
+                this.currentSelection.forEach(el => {
+                    el.classList.add('found');
+                    el.classList.remove('selected-pending');
+                });
+
+                const wordItem = document.querySelector(`.word-item[data-word="${word}"]`);
+                if (wordItem) wordItem.classList.add('found');
+            }
+
+            showWordInfo(word) {
+                const wordData = this.currentLevelData.words.find(w => w.w.toUpperCase() === word);
+                if (wordData) {
+                    document.getElementById('panel-word').textContent = wordData.w;
+                    document.getElementById('panel-translation').textContent = wordData.t;
+                    document.getElementById('panel-sentence-sv').textContent = wordData.s;
+                    document.getElementById('panel-sentence-ar').textContent = wordData.st;
+                    this.bottomInfoPanel.classList.add('active');
+                }
+            }
+
+            showFloatingLabel(text, targetEl) {
+                const rect = targetEl.getBoundingClientRect();
+                this.floatingLabel.textContent = text;
+                this.floatingLabel.style.display = 'block';
+                this.floatingLabel.style.top = `${rect.top - 40}px`;
+                this.floatingLabel.style.left = `${rect.left}px`;
+            }
+
+            checkLevelComplete() {
+                if (this.foundWords.size === this.words.length) {
+                    setTimeout(() => {
+                        this.levelModal.classList.add('active');
+                        this.soundManager.playLevelComplete();
+                    }, 2000); // Delay to let user read the last word info
+                }
+            }
+        }
+
+        // Global Game Instance
+        let game;
+
+        // Init
+        window.onload = () => {
+            game = new WordSearchGame();
+        };
+
+        // UI Functions
+        function nextLevel() {
+            document.getElementById('level-modal').classList.remove('active');
+            game.currentLevelIndex++;
+            game.initLevel(game.currentLevelIndex);
+        }
+
+    </script>
+</body>
+
+</html>

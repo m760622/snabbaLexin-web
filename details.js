@@ -187,7 +187,8 @@ function setupShare(item) {
         const idiomArb = item[COL_IDIOM_ARB] || '';
 
         // Use the specific app URL provided by user
-        const shareUrl = 'https://snabbalexin-web.netlify.app/';
+        const shareUrl = 'https://aiaps.xyz/';
+
 
         // Build Message
         let text = `${swe} ${type ? `(${type})` : ''}\n`;

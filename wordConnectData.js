@@ -91,133 +91,133 @@ const WC_PREDEFINED_LEVELS = {
     // ===========================================
     // CHAPTER 1
     // ===========================================
-    "1-1": {"letters":["S","O","M"],"words":["MOS","SOM"],"validWords":["MOS","SOM"]},
-    "1-2": {"letters":["O","S","T"],"words":["OST","SO"],"validWords":["OST","SO"]},
-    "1-3": {"letters":["K","K","A","A"],"words":["KAKA","AKA"],"validWords":["KAKA","AKA"]},
-    "1-4": {"letters":["L","I","S","T","A"],"words":["LISTA","SILA","STIL"],"validWords":["LISTA","SILA","STIL"]},
-    "1-5": {"letters":["E","S","K","A","T"],"words":["STEKA","KAST","ASK"],"validWords":["STEKA","KAST","ASK"]},
-    "1-6": {"letters":["M","E","A","T","N"],"words":["MATEN","TEAM","META"],"validWords":["MATEN","TEAM","META"]},
-    "1-7": {"letters":["S","A","A","L","K","F"],"words":["FLASKA","FALSK","SKALA","KALAS"],"validWords":["FLASKA","FALSK","SKALA","KALAS"]},
-    "1-8": {"letters":["L","L","U","R","A","B"],"words":["BULLAR","RULLA","LURA","BUR"],"validWords":["BULLAR","RULLA","LURA","BUR"]},
-    "1-9": {"letters":["S","D","R","A","K","E"],"words":["SKEDAR","DERAS","KADER","SKADE"],"validWords":["SKEDAR","DERAS","KADER","SKADE"]},
-    "1-10": {"letters":["F","R","S","O","T","U","K"],"words":["FRUKOST","FROST","KUST","ROST","STOR"],"validWords":["FRUKOST","FROST","KUST","ROST","STOR"]},
+    "1-1": {"letters":["L","S","Å","K"],"words":["SKÅL","KÅL"],"validWords":["SKÅL","KÅL"]},
+    "1-2": {"letters":["F","I","S","K"],"words":["FISK","SIK"],"validWords":["FISK","SIK"]},
+    "1-3": {"letters":["Ö","R","G","T"],"words":["GRÖT","ÖRT"],"validWords":["GRÖT","ÖRT"]},
+    "1-4": {"letters":["L","Ö","J","M","K"],"words":["MJÖLK","MJÖL","LÖK"],"validWords":["MJÖLK","MJÖL","LÖK"]},
+    "1-5": {"letters":["T","O","R","S","K"],"words":["TORSK","OST","KOR"],"validWords":["TORSK","OST","KOR"]},
+    "1-6": {"letters":["B","E","Ä","R","N"],"words":["BÄREN","BÄR","BEN"],"validWords":["BÄREN","BÄR","BEN"]},
+    "1-7": {"letters":["S","A","F","T"],"words":["SAFT","FAT","FAST","FAS"],"validWords":["SAFT","FAT","FAST","FAS"]},
+    "1-8": {"letters":["Ä","T","E","R"],"words":["ÄTER","ÄRT","TRÄ","TÄR"],"validWords":["ÄTER","ÄRT","TRÄ","TÄR"]},
+    "1-9": {"letters":["K","O","R","A","K"],"words":["KAKOR","KAKA","KOK"],"validWords":["KAKOR","KAKA","KOK"]},
+    "1-10": {"letters":["Ö","R","G","Å","M","S","S"],"words":["SMÖRGÅS","SMÖR","GRÖT","GÅS","RÅG"],"validWords":["SMÖRGÅS","SMÖR","GRÖT","GÅS","RÅG"]},
     // ===========================================
     // CHAPTER 2
     // ===========================================
-    "2-1": {"letters":["L","O","S"],"words":["SOL","LOS"],"validWords":["SOL","LOS"]},
-    "2-2": {"letters":["V","A","H"],"words":["HAV","AV"],"validWords":["HAV","AV"]},
-    "2-3": {"letters":["D","Ä","R","T"],"words":["TRÄD","TRÄ"],"validWords":["TRÄD","TRÄ"]},
-    "2-4": {"letters":["S","T","E","N","A","R"],"words":["STENAR","ENAR","RENAR"],"validWords":["STENAR","ENAR","RENAR"]},
-    "2-5": {"letters":["D","A","L","A","R"],"words":["DALAR","DALA","LADA"],"validWords":["DALAR","DALA","LADA"]},
-    "2-6": {"letters":["L","D","N","F","E","O"],"words":["FLODEN","FLOD","ODEN"],"validWords":["FLODEN","FLOD","ODEN"]},
-    "2-7": {"letters":["N","R","A","Ä","J","T","S"],"words":["STJÄRNA","TJÄRNA","RÄNTA","TÄRNA"],"validWords":["STJÄRNA","TJÄRNA","RÄNTA","TÄRNA"]},
-    "2-8": {"letters":["K","A","U","B","S","R"],"words":["BUSKAR","BRUKA","SKURA","RAK"],"validWords":["BUSKAR","BRUKA","SKURA","RAK"]},
-    "2-9": {"letters":["G","R","E","B","E","T"],"words":["BERGET","BERG","GET"],"validWords":["BERGET","BERG","GET"]},
-    "2-10": {"letters":["N","N","E","A","U","R","T"],"words":["NATUREN","NATUR","RUNT","TUNA","RUTA"],"validWords":["NATUREN","NATUR","RUNT","TUNA","RUTA"]},
+    "2-1": {"letters":["S","Å","K","A"],"words":["ÅSKA","ASK"],"validWords":["ÅSKA","ASK"]},
+    "2-2": {"letters":["B","E","G","R"],"words":["BERG","BER","GER"],"validWords":["BERG","BER","GER"]},
+    "2-3": {"letters":["N","N","Ö","R"],"words":["RÖNN","ÖRN"],"validWords":["RÖNN","ÖRN"]},
+    "2-4": {"letters":["S","V","L","A","A"],"words":["SVALA","SVAL","VAL"],"validWords":["SVALA","SVAL","VAL"]},
+    "2-5": {"letters":["D","N","I","V"],"words":["VIND","VID","VIN","DIN"],"validWords":["VIND","VID","VIN","DIN"]},
+    "2-6": {"letters":["M","Y","R","R","O"],"words":["MYROR","MYRA","ROM"],"validWords":["MYROR","MYRA","ROM"]},
+    "2-7": {"letters":["H","V","A","Ö","L"],"words":["HALVÖ","HAV","LÖV","LAV"],"validWords":["HALVÖ","HAV","LÖV","LAV"]},
+    "2-8": {"letters":["R","N","E","G"],"words":["REGN","REN","GREN","GEN"],"validWords":["REGN","REN","GREN","GEN"]},
+    "2-9": {"letters":["G","O","K","S"],"words":["SKOG","SKO","KO","OS"],"validWords":["SKOG","SKO","KO","OS"]},
+    "2-10": {"letters":["B","K","J","Ö","R"],"words":["BJÖRK","RÖK","BÖR","KÖR"],"validWords":["BJÖRK","RÖK","BÖR","KÖR"]},
     // ===========================================
     // CHAPTER 3
     // ===========================================
-    "3-1": {"letters":["R","S","A","E"],"words":["RESA","RES"],"validWords":["RESA","RES"]},
-    "3-2": {"letters":["G","A","T","A"],"words":["GATA","TAG"],"validWords":["GATA","TAG"]},
-    "3-3": {"letters":["B","R","O"],"words":["BRO","BOR"],"validWords":["BRO","BOR"]},
-    "3-4": {"letters":["R","E","S","A","N"],"words":["RESAN","SNAR","SENA"],"validWords":["RESAN","SNAR","SENA"]},
-    "3-5": {"letters":["S","T","A","L","P"],"words":["PLATS","LAST","STAL"],"validWords":["PLATS","LAST","STAL"]},
-    "3-6": {"letters":["E","Ö","S","R","T"],"words":["ÖSTER","RÖST","REST"],"validWords":["ÖSTER","RÖST","REST"]},
-    "3-7": {"letters":["S","R","A","E","G","L"],"words":["SEGLAR","SEGLA","LAGER","SEGRA"],"validWords":["SEGLAR","SEGLA","LAGER","SEGRA"]},
-    "3-8": {"letters":["A","B","U","S","S","R"],"words":["BUSSAR","RUSA","BRAS","BARS"],"validWords":["BUSSAR","RUSA","BRAS","BARS"]},
-    "3-9": {"letters":["N","F","D","R","Ä","E"],"words":["FÄRDEN","FÄRDE","ÄNDER","NÄRDE"],"validWords":["FÄRDEN","FÄRDE","ÄNDER","NÄRDE"]},
-    "3-10": {"letters":["V","E","Ä","R","N","L","D"],"words":["VÄRLDEN","LÄNDER","LÄRDE","VÄRLD"],"validWords":["VÄRLDEN","LÄNDER","LÄRDE","VÄRLD"]},
+    "3-1": {"letters":["R","S","E","A"],"words":["RESA","SER"],"validWords":["RESA","SER"]},
+    "3-2": {"letters":["B","I","L","A"],"words":["BILA","BIL"],"validWords":["BILA","BIL"]},
+    "3-3": {"letters":["D","L","A","N"],"words":["LAND","DAL"],"validWords":["LAND","DAL"]},
+    "3-4": {"letters":["N","A","K","T","O"],"words":["KANOT","TANK","KANT"],"validWords":["KANOT","TANK","KANT"]},
+    "3-5": {"letters":["I","V","A","R","D"],"words":["DRIVA","VIDA","RIVA"],"validWords":["DRIVA","VIDA","RIVA"]},
+    "3-6": {"letters":["K","S","G","O","S"],"words":["SKOGS","SKOG","KOGG"],"validWords":["SKOGS","SKOG","KOGG"]},
+    "3-7": {"letters":["S","O","R","T","R","E"],"words":["SORTER","RESOR","ORTER","STORA"],"validWords":["SORTER","RESOR","ORTER","STORA"]},
+    "3-8": {"letters":["R","S","E","G","L","A"],"words":["SEGLAR","REGLA","LAGER","ALGER"],"validWords":["SEGLAR","REGLA","LAGER","ALGER"]},
+    "3-9": {"letters":["P","R","T","O","S","E"],"words":["POSTER","SPORT","ORTER","ROPET"],"validWords":["POSTER","SPORT","ORTER","ROPET"]},
+    "3-10": {"letters":["N","K","A","S","E","T","P"],"words":["KAPTENS","KAPTEN","PAKET","SPETA","SKENA"],"validWords":["KAPTENS","KAPTEN","PAKET","SPETA","SKENA"]},
     // ===========================================
     // CHAPTER 4
     // ===========================================
-    "4-1": {"letters":["R","U","M"],"words":["RUM","MUR"],"validWords":["RUM","MUR"]},
-    "4-2": {"letters":["H","U","S"],"words":["HUS"],"validWords":["HUS"]},
-    "4-3": {"letters":["K","A","T"],"words":["TAK","AKT"],"validWords":["TAK","AKT"]},
-    "4-4": {"letters":["L","O","S","T"],"words":["STOL","LOTS","STO"],"validWords":["STOL","LOTS","STO"]},
-    "4-5": {"letters":["D","R","O","B"],"words":["BORD","ORD","BOD"],"validWords":["BORD","ORD","BOD"]},
-    "4-6": {"letters":["N","S","G","Ä"],"words":["SÄNG","ÄNG"],"validWords":["SÄNG","ÄNG"]},
-    "4-7": {"letters":["D","R","Ö","R","A","R"],"words":["DÖRRAR","DÖRR","RÖRA","RÖDA"],"validWords":["DÖRRAR","DÖRR","RÖRA","RÖDA"]},
-    "4-8": {"letters":["T","A","A","N","M","T"],"words":["MATTAN","MATTA","MANAT","TANT"],"validWords":["MATTAN","MATTA","MANAT","TANT"]},
-    "4-9": {"letters":["N","S","O","F","A","F"],"words":["SOFFAN","SOFFA","FANS"],"validWords":["SOFFAN","SOFFA","FANS"]},
-    "4-10": {"letters":["N","D","I","R","A","G"],"words":["GARDIN","DRAG","RING","GRAD","GRAN"],"validWords":["GARDIN","DRAG","RING","GRAD","GRAN"]},
+    "4-1": {"letters":["V","Ä","G","G"],"words":["VÄGG","ÄGG"],"validWords":["VÄGG","ÄGG"]},
+    "4-2": {"letters":["B","O","D","R"],"words":["BORD","ORD"],"validWords":["BORD","ORD"]},
+    "4-3": {"letters":["K","V","L","Ä","L"],"words":["KVÄLL","VÄL","ÄLV"],"validWords":["KVÄLL","VÄL","ÄLV"]},
+    "4-4": {"letters":["T","E","T","N","A"],"words":["TENTA","NATT","ETT"],"validWords":["TENTA","NATT","ETT"]},
+    "4-5": {"letters":["G","E","N","O","M"],"words":["GENOM","GEM","MEN"],"validWords":["GENOM","GEM","MEN"]},
+    "4-6": {"letters":["O","T","A","K","R"],"words":["TORKA","TAK","KAR"],"validWords":["TORKA","TAK","KAR"]},
+    "4-7": {"letters":["N","R","G","D","I","A"],"words":["GARDIN","GRIND","DAG","RINGA"],"validWords":["GARDIN","GRIND","DAG","RINGA"]},
+    "4-8": {"letters":["L","A","A","N","T"],"words":["ALTAN","GATA","TALANG","ANA"],"validWords":["ALTAN","GATA","TALANG","ANA"]},
+    "4-9": {"letters":["S","G","P","E","E","L"],"words":["SPEGEL","SPEL","SE","SEG"],"validWords":["SPEGEL","SPEL","SE","SEG"]},
+    "4-10": {"letters":["E","R","F","Ö","S","N","T"],"words":["FÖNSTER","FEST","FÖR","FÖRE","RÖST"],"validWords":["FÖNSTER","FEST","FÖR","FÖRE","RÖST"]},
     // ===========================================
     // CHAPTER 5
     // ===========================================
-    "5-1": {"letters":["Å","T","R"],"words":["TÅR","RÅT"],"validWords":["TÅR","RÅT"]},
-    "5-2": {"letters":["A","L","S","H"],"words":["HALS","SAL"],"validWords":["HALS","SAL"]},
-    "5-3": {"letters":["Ö","G","A"],"words":["ÖGA"],"validWords":["ÖGA"]},
-    "5-4": {"letters":["U","L","P","S"],"words":["PULS","SLUP","PLUS"],"validWords":["PULS","SLUP","PLUS"]},
-    "5-5": {"letters":["F","S","I","R","K"],"words":["FRISK","RISK","SKRI"],"validWords":["FRISK","RISK","SKRI"]},
-    "5-6": {"letters":["R","E","L","V","E"],"words":["LEVER","ELEV","REV"],"validWords":["LEVER","ELEV","REV"]},
-    "5-7": {"letters":["S","M","Ä","R","A","T"],"words":["SMÄRTA","SMÄRT","SÄRTA","MÄTAR"],"validWords":["SMÄRTA","SMÄRT","SÄRTA","MÄTAR"]},
-    "5-8": {"letters":["S","D","A","N","A"],"words":["ANDAS","SAND","DANS","ANDA"],"validWords":["ANDAS","SAND","DANS","ANDA"]},
-    "5-9": {"letters":["R","S","T","Y","A","K"],"words":["STYRKA","YRKA","KRYA","TYSK"],"validWords":["STYRKA","YRKA","KRYA","TYSK"]},
-    "5-10": {"letters":["S","J","M","O","U","K","D"],"words":["SJUKDOM","SJUK","JOD","MJUK","KOS"],"validWords":["SJUKDOM","SJUK","JOD","MJUK","KOS"]},
+    "5-1": {"letters":["A","T","N","D"],"words":["TAND","DNA"],"validWords":["TAND","DNA"]},
+    "5-2": {"letters":["R","M","A","T"],"words":["TARM","ARM"],"validWords":["TARM","ARM"]},
+    "5-3": {"letters":["P","U","L","S"],"words":["PULS","LUS"],"validWords":["PULS","LUS"]},
+    "5-4": {"letters":["H","Ä","A","L","S"],"words":["HÄLSA","HÄL","HALS"],"validWords":["HÄLSA","HÄL","HALS"]},
+    "5-5": {"letters":["E","G","A","M"],"words":["MAGE","MAG","GEM"],"validWords":["MAGE","MAG","GEM"]},
+    "5-6": {"letters":["E","B","R","E","F"],"words":["FEBER","BRE","BER"],"validWords":["FEBER","BRE","BER"]},
+    "5-7": {"letters":["A","D","V","R","G","I"],"words":["GRAVID","GRAV","GAV","VAD"],"validWords":["GRAVID","GRAV","GAV","VAD"]},
+    "5-8": {"letters":["A","D","L","H","N","D","E"],"words":["HANDLED","HAND","ANDE","LED"],"validWords":["HANDLED","HAND","ANDE","LED"]},
+    "5-9": {"letters":["R","E","V","E","L"],"words":["LEVER","LEVE","REV"],"validWords":["LEVER","LEVE","REV"]},
+    "5-10": {"letters":["K","U","J","S"],"words":["SJUK","SJU"],"validWords":["SJUK","SJU"]},
     // ===========================================
     // CHAPTER 6
     // ===========================================
-    "6-1": {"letters":["L","Ö","N"],"words":["LÖN","ÖN"],"validWords":["LÖN","ÖN"]},
-    "6-2": {"letters":["F","E","C","H"],"words":["CHEF","FE"],"validWords":["CHEF","FE"]},
-    "6-3": {"letters":["Y","R","K","E"],"words":["YRKE","RYK"],"validWords":["YRKE","RYK"]},
-    "6-4": {"letters":["A","V","L","T","A"],"words":["AVTAL","VALT","TAL"],"validWords":["AVTAL","VALT","TAL"]},
-    "6-5": {"letters":["K","I","T","L","P"],"words":["PLIKT","PILT","LIKT"],"validWords":["PLIKT","PILT","LIKT"]},
-    "6-6": {"letters":["G","B","A","Y","G"],"words":["BYGGA","BYGG","GABY"],"validWords":["BYGGA","BYGG","GABY"]},
-    "6-7": {"letters":["R","K","O","O","N","T"],"words":["KONTOR","KORT","ORO","ORT"],"validWords":["KONTOR","KORT","ORO","ORT"]},
-    "6-8": {"letters":["K","L","L","A","O"],"words":["LOKAL","KAL","KALL"],"validWords":["LOKAL","KAL","KALL"]},
-    "6-9": {"letters":["R","I","K","A","R","E"],"words":["RIKARE","RIKA","KARR","REKA"],"validWords":["RIKARE","RIKA","KARR","REKA"]},
-    "6-10": {"letters":["P","S","N","O","E","N","I"],"words":["PENSION","SPION","PION","SNIP","SION"],"validWords":["PENSION","SPION","PION","SNIP","SION"]},
+    "6-1": {"letters":["L","Ä","R","A"],"words":["LÄRA","LÄR"],"validWords":["LÄRA","LÄR"]},
+    "6-2": {"letters":["L","Ä","X","A"],"words":["LÄXA","LÄS","ÄXA"],"validWords":["LÄXA","LÄS","ÄXA"]},
+    "6-3": {"letters":["E","S","T","T"],"words":["TEST","SET"],"validWords":["TEST","SET"]},
+    "6-4": {"letters":["E","N","M","Ä"],"words":["ÄMNE","ÄMN","MEN"],"validWords":["ÄMNE","ÄMN","MEN"]},
+    "6-5": {"letters":["I","V","S","R","K"],"words":["SKRIV","RIV","VIK"],"validWords":["SKRIV","RIV","VIK"]},
+    "6-6": {"letters":["M","Ö","R","E","B"],"words":["BERÖM","BÖR","MÖR"],"validWords":["BERÖM","BÖR","MÖR"]},
+    "6-7": {"letters":["K","O","O","N","R","T"],"words":["KONTOR","KORT","TOK","ORT"],"validWords":["KONTOR","KORT","TOK","ORT"]},
+    "6-8": {"letters":["C","O","L","K","B"],"words":["BLOCK","BOK"],"validWords":["BLOCK","BOK"]},
+    "6-9": {"letters":["D","U","I","T","S","E"],"words":["STUDIE","TID","UT","IDÉ"],"validWords":["STUDIE","TID","UT","IDÉ"]},
+    "6-10": {"letters":["K","R","G","Y","E","T","V"],"words":["VERKTYG","VERK","YRKE","TYP","TYG"],"validWords":["VERKTYG","VERK","YRKE","TYP","TYG"]},
     // ===========================================
     // CHAPTER 7
     // ===========================================
-    "7-1": {"letters":["V","O","R","P"],"words":["PROV","ROV"],"validWords":["PROV","ROV"]},
-    "7-2": {"letters":["S","R","U","K"],"words":["KURS","SUR"],"validWords":["KURS","SUR"]},
-    "7-3": {"letters":["T","S","A","R"],"words":["RAST","RAS"],"validWords":["RAST","RAS"]},
-    "7-4": {"letters":["A","L","O","K","S"],"words":["SKOLA","SKAL","KOLA"],"validWords":["SKOLA","SKAL","KOLA"]},
-    "7-5": {"letters":["T","L","A","V","A"],"words":["TAVLA","TALA","LAVA"],"validWords":["TAVLA","TALA","LAVA"]},
-    "7-6": {"letters":["A","K","R","A","T"],"words":["KARTA","RAKA","ARTA"],"validWords":["KARTA","RAKA","ARTA"]},
-    "7-7": {"letters":["N","I","M","R","E","T"],"words":["TERMIN","TIMER","RITEN","INTER"],"validWords":["TERMIN","TIMER","RITEN","INTER"]},
-    "7-8": {"letters":["N","R","N","E","P","O"],"words":["PENNOR","ROPEN","REP","REN"],"validWords":["PENNOR","ROPEN","REP","REN"]},
-    "7-9": {"letters":["A","V","I","R","K","S"],"words":["SKRIVA","SKIVA","VIRKA","ARKIV"],"validWords":["SKRIVA","SKIVA","VIRKA","ARKIV"]},
-    "7-10": {"letters":["T","U","T","N","S","D","E"],"words":["STUDENT","STUND","DUNST","STUT","SUNT"],"validWords":["STUDENT","STUND","DUNST","STUT","SUNT"]},
+    "7-1": {"letters":["S","I","R","P"],"words":["PRIS"],"validWords":["PRIS"]},
+    "7-2": {"letters":["R","A","A","V"],"words":["VARA","VAR"],"validWords":["VARA","VAR"]},
+    "7-3": {"letters":["E","D","O","M"],"words":["MODE","MED"],"validWords":["MODE","MED"]},
+    "7-4": {"letters":["A","G","U","L","F"],"words":["FLUGA"],"validWords":["FLUGA"]},
+    "7-5": {"letters":["M","Ä","R","E","K"],"words":["MÄRKE","ÄRM"],"validWords":["MÄRKE","ÄRM"]},
+    "7-6": {"letters":["E","A","L","G","R"],"words":["LAGER","REA"],"validWords":["LAGER","REA"]},
+    "7-7": {"letters":["A","K","R","O","S","T"],"words":["KOSTAR","KORT","SKOR","STOR"],"validWords":["KOSTAR","KORT","SKOR","STOR"]},
+    "7-8": {"letters":["D","E","M","O","R","N"],"words":["MODERN","MODE","REN","MEN"],"validWords":["MODERN","MODE","REN","MEN"]},
+    "7-9": {"letters":["O","R","E","A","G","N"],"words":["ORANGE","REA","REN","NOG"],"validWords":["ORANGE","REA","REN","NOG"]},
+    "7-10": {"letters":["O","J","R","K","S","A","T"],"words":["SKJORTA","SKOR","STOR","KOSTAR","KORT"],"validWords":["SKJORTA","SKOR","STOR","KOSTAR","KORT"]},
     // ===========================================
     // CHAPTER 8
     // ===========================================
-    "8-1": {"letters":["V","N","A","G"],"words":["VAGN","VAN"],"validWords":["VAGN","VAN"]},
-    "8-2": {"letters":["Å","R","A"],"words":["ÅRA","RÅA"],"validWords":["ÅRA","RÅA"]},
-    "8-3": {"letters":["R","S","P","Å"],"words":["SPÅR","PÅ","SÅ"],"validWords":["SPÅR","PÅ","SÅ"]},
-    "8-4": {"letters":["M","T","O","O","R"],"words":["MOTOR","ROM","ORM"],"validWords":["MOTOR","ROM","ORM"]},
-    "8-5": {"letters":["A","V","Ä","R","G"],"words":["VÄGAR","ARG","VÄG"],"validWords":["VÄGAR","ARG","VÄG"]},
-    "8-6": {"letters":["A","B","R","I","L"],"words":["BILAR","BILA","LIRA"],"validWords":["BILAR","BILA","LIRA"]},
-    "8-7": {"letters":["R","F","A","T","I","K"],"words":["TRAFIK","KRAFT","FRAKT","FIKA"],"validWords":["TRAFIK","KRAFT","FRAKT","FIKA"]},
-    "8-8": {"letters":["I","I","T","S","L","B"],"words":["BILIST","LIST","SLIT","BIL"],"validWords":["BILIST","LIST","SLIT","BIL"]},
-    "8-9": {"letters":["V","A","A","G","N","R"],"words":["VAGNAR","NAV","GARN","VANA"],"validWords":["VAGNAR","NAV","GARN","VANA"]},
-    "8-10": {"letters":["I","T","A","T","O","S","N"],"words":["STATION","STAT","STAN","NOTA","TONA"],"validWords":["STATION","STAT","STAN","NOTA","TONA"]},
+    "8-1": {"letters":["A","S","E","R"],"words":["RESA","REA"],"validWords":["RESA","REA"]},
+    "8-2": {"letters":["G","A","V","N"],"words":["VAGN","VAN"],"validWords":["VAGN","VAN"]},
+    "8-3": {"letters":["S","P","Å","R"],"words":["SPÅR","SÅR"],"validWords":["SPÅR","SÅR"]},
+    "8-4": {"letters":["T","S","A","M"],"words":["MAST","MAT","SAM"],"validWords":["MAST","MAT","SAM"]},
+    "8-5": {"letters":["N","M","A","H"],"words":["HAMN","HAN","MAN"],"validWords":["HAMN","HAN","MAN"]},
+    "8-6": {"letters":["O","N","T","A","K"],"words":["KANOT","KANT","NOT"],"validWords":["KANOT","KANT","NOT"]},
+    "8-7": {"letters":["O","O","T","R","M"],"words":["MOTOR","MOT","ORM","TOM"],"validWords":["MOTOR","MOT","ORM","TOM"]},
+    "8-8": {"letters":["S","Ä","V","T","R","E"],"words":["VÄSTER","VÄST","VET","ÄRT"],"validWords":["VÄSTER","VÄST","VET","ÄRT"]},
+    "8-9": {"letters":["O","S","A","M","R","T"],"words":["MATROS","MAT","MAST","MOT","MOR"],"validWords":["MATROS","MAT","MAST","MOT","MOR"]},
+    "8-10": {"letters":["S","A","T","O","M","K","N"],"words":["ANKOMST","NOT","NATO","NOTA","AKT"],"validWords":["ANKOMST","NOT","NATO","NOTA","AKT"]},
     // ===========================================
     // CHAPTER 9
     // ===========================================
-    "9-1": {"letters":["A","L","G"],"words":["LAG","GAL"],"validWords":["LAG","GAL"]},
-    "9-2": {"letters":["D","M","O"],"words":["DOM","MOD"],"validWords":["DOM","MOD"]},
-    "9-3": {"letters":["T","T","Ä","R"],"words":["RÄTT","TÄT"],"validWords":["RÄTT","TÄT"]},
-    "9-4": {"letters":["T","T","O","R","B"],"words":["BROTT","BORT","BOTT"],"validWords":["BROTT","BORT","BOTT"]},
-    "9-5": {"letters":["P","O","S","I","L"],"words":["POLIS","SILO","SIL"],"validWords":["POLIS","SILO","SIL"]},
-    "9-6": {"letters":["A","L","G","A","R"],"words":["LAGAR","LAGA","GALA"],"validWords":["LAGAR","LAGA","GALA"]},
-    "9-7": {"letters":["A","M","R","O","D","E"],"words":["DOMARE","DOMAR","DAMER","MODE"],"validWords":["DOMARE","DOMAR","DAMER","MODE"]},
-    "9-8": {"letters":["R","L","G","R","E","E"],"words":["REGLER","REGEL","LEGER","GER"],"validWords":["REGLER","REGEL","LEGER","GER"]},
-    "9-9": {"letters":["S","F","A","T","F","R"],"words":["STRAFF","STAFF","FART","SAFT"],"validWords":["STRAFF","STAFF","FART","SAFT"]},
-    "9-10": {"letters":["V","T","A","E","R"],"words":["ARVET","ARV","VAR","RET"],"validWords":["ARVET","ARV","VAR","RET"]},
+    "9-1": {"letters":["G","L","A"],"words":["LAG","ALG","GAL"],"validWords":["LAG","ALG","GAL"]},
+    "9-2": {"letters":["M","O","D"],"words":["DOM","MOD"],"validWords":["DOM","MOD"]},
+    "9-3": {"letters":["R","Ä","T","T"],"words":["RÄTT","TRÄ","ÄTT"],"validWords":["RÄTT","TRÄ","ÄTT"]},
+    "9-4": {"letters":["T","R","B","O","T"],"words":["BROTT","BOT","BRO"],"validWords":["BROTT","BOT","BRO"]},
+    "9-5": {"letters":["A","T","T","S"],"words":["STAT","SATT","ATT"],"validWords":["STAT","SATT","ATT"]},
+    "9-6": {"letters":["L","A","A","G","R"],"words":["LAGAR","LAG","LAGA"],"validWords":["LAGAR","LAG","LAGA"]},
+    "9-7": {"letters":["A","T","K","M"],"words":["MAKT","MAT","AKT","TAM"],"validWords":["MAKT","MAT","AKT","TAM"]},
+    "9-8": {"letters":["D","R","A","O","E","M"],"words":["DOMARE","DOM","DOMAR","ORD"],"validWords":["DOMARE","DOM","DOMAR","ORD"]},
+    "9-9": {"letters":["S","F","T","R","F","A"],"words":["STRAFF","STAFF","FAST","SAFT"],"validWords":["STRAFF","STAFF","FAST","SAFT"]},
+    "9-10": {"letters":["A","R","V","E","T"],"words":["ARVET","ARV","VAR","ÄRTA"],"validWords":["ARVET","ARV","VAR","ÄRTA"]},
     // ===========================================
     // CHAPTER 10
     // ===========================================
-    "10-1": {"letters":["T","R","O"],"words":["TRO","ROT"],"validWords":["TRO","ROT"]},
-    "10-2": {"letters":["R","D","I","F"],"words":["FRID","FRI"],"validWords":["FRID","FRI"]},
-    "10-3": {"letters":["F","R","E","D"],"words":["FRED","RED"],"validWords":["FRED","RED"]},
-    "10-4": {"letters":["A","L","L","A","H"],"words":["ALLAH","HALL","ALLA"],"validWords":["ALLAH","HALL","ALLA"]},
-    "10-5": {"letters":["A","I","S","L","M"],"words":["ISLAM","SIA","MILA"],"validWords":["ISLAM","SIA","MILA"]},
-    "10-6": {"letters":["Z","A","K","A","T"],"words":["ZAKAT","KATA","AKTA"],"validWords":["ZAKAT","KATA","AKTA"]},
-    "10-7": {"letters":["M","O","N","S","K","É"],"words":["MOSKÉN","MOSKÉ","SON","SKO"],"validWords":["MOSKÉN","MOSKÉ","SON","SKO"]},
-    "10-8": {"letters":["O","K","N","A","R"],"words":["KORNA","KORA","ARK","KAN"],"validWords":["KORNA","KORA","ARK","KAN"]},
-    "10-9": {"letters":["G","H","T","E","I","L"],"words":["HELIGT","HELIG","HELT","LITE"],"validWords":["HELIGT","HELIG","HELT","LITE"]},
-    "10-10": {"letters":["P","E","R","O","T","F"],"words":["PROFET","POET","PORT","FORT","ROP"],"validWords":["PROFET","POET","PORT","FORT","ROP"]},
+    "10-1": {"letters":["O","R","T"],"words":["TRO","ROT","ORT"],"validWords":["TRO","ROT","ORT"]},
+    "10-2": {"letters":["F","E","D","R"],"words":["FRED","RED"],"validWords":["FRED","RED"]},
+    "10-3": {"letters":["I","F","D","R"],"words":["FRID","FRI"],"validWords":["FRID","FRI"]},
+    "10-4": {"letters":["L","A","A","H","L"],"words":["ALLAH","HALL","ALLA"],"validWords":["ALLAH","HALL","ALLA"]},
+    "10-5": {"letters":["T","R","O","N"],"words":["TRON","TRO","TORN","ROT"],"validWords":["TRON","TRO","TORN","ROT"]},
+    "10-6": {"letters":["B","R","E","D","E"],"words":["BEDER","BED","BER","RED"],"validWords":["BEDER","BED","BER","RED"]},
+    "10-7": {"letters":["M","A","L","S","I"],"words":["ISLAM","SAL","SAM","SIL"],"validWords":["ISLAM","SAL","SAM","SIL"]},
+    "10-8": {"letters":["M","N","O","S","K","É"],"words":["MOSKÉN","MOSKÉ","SON","MEN"],"validWords":["MOSKÉN","MOSKÉ","SON","MEN"]},
+    "10-9": {"letters":["E","M","A","N"],"words":["AMEN","MAN","MEN","ENA"],"validWords":["AMEN","MAN","MEN","ENA"]},
+    "10-10": {"letters":["F","T","R","E","O","P"],"words":["PROFET","TRO","PRO","PORT"],"validWords":["PROFET","TRO","PRO","PORT"]},
 };
 
 // --- CENTRALIZED DICTIONARY ---
@@ -253,6 +253,12 @@ const WC_DICTIONARY = [
         "st": "الامتلاك."
     },
     {
+        "w": "ÄGG",
+        "t": "بيض",
+        "s": "Hönan lägger ett ägg varje dag.",
+        "st": "الدجاجة تبيض بيضة كل يوم."
+    },
+    {
         "w": "ÄGGA",
         "t": "يحرض",
         "s": "Han äggade upp stämningen.",
@@ -266,9 +272,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "AKT",
-        "t": "فصل",
-        "s": "Vi såg första akten av pjäsen.",
-        "st": "شاهدنا الفصل الأول من المسرحية."
+        "t": "وثيقة / احترام",
+        "s": "Ta akt om varningen.",
+        "st": "انتبه للتحذير."
     },
     {
         "w": "AKTA",
@@ -307,16 +313,34 @@ const WC_DICTIONARY = [
         "st": "الجميع يتقدم في العمر."
     },
     {
+        "w": "ALG",
+        "t": "طحالب",
+        "s": "Det växer alger i sjön.",
+        "st": "تنمو الطحالب في البحيرة."
+    },
+    {
+        "w": "ÄLG",
+        "t": "موس",
+        "s": "Skogens konung är älgen.",
+        "st": "ملك الغابة هو الموس."
+    },
+    {
         "w": "ÄLGA",
         "t": "يمشي بخطوات واسعة",
         "s": "Han älgade fram i skogen.",
         "st": "يمشي بسرعة."
     },
     {
+        "w": "ALGER",
+        "t": "طحالب",
+        "s": "Det finns gröna alger i vattnet.",
+        "st": "توجد طحالب خضراء في الماء."
+    },
+    {
         "w": "ALLA",
         "t": "الجميع",
-        "s": "Alla människor är födda fria.",
-        "st": "يولد جميع الناس أحراراً."
+        "s": "Alla människor är lika.",
+        "st": "جميع الناس سواسية."
     },
     {
         "w": "ALLAH",
@@ -331,10 +355,16 @@ const WC_DICTIONARY = [
         "st": "إنها مسؤولية الجميع."
     },
     {
+        "w": "ALTAN",
+        "t": "شرفة",
+        "s": "Vi dricker kaffe på altanen.",
+        "st": "نشرب القهوة في الشرفة."
+    },
+    {
         "w": "ÄLV",
         "t": "نهر",
-        "s": "Göta älv Kalix älv",
-        "st": "نهر يوتا نهر كاليكس"
+        "s": "En bred älv rinner genom staden.",
+        "st": "نهر عريض يجري عبر المدينة."
     },
     {
         "w": "ÄLVA",
@@ -343,10 +373,46 @@ const WC_DICTIONARY = [
         "st": "الجنية ترقص."
     },
     {
+        "w": "AMEN",
+        "t": "آمين",
+        "s": "Vi säger amen efter bönen.",
+        "st": "نقول آمين بعد الصلاة."
+    },
+    {
+        "w": "ÄMN",
+        "t": "مادة",
+        "s": "Ett farligt ämne.",
+        "st": "مادة خطرة."
+    },
+    {
+        "w": "ÄMNE",
+        "t": "مادة دراسية / موضوع",
+        "s": "Matematik är mitt favoritämne.",
+        "st": "الرياضيات هي مادتي المفضلة."
+    },
+    {
         "w": "AMS",
         "t": "مجلس سوق العمل",
         "s": "AMS - bidrag",
         "st": "منحة مجلس سوق العمل"
+    },
+    {
+        "w": "ANA",
+        "t": "يشك / يظن",
+        "s": "Jag anar att något är fel.",
+        "st": "أظن أن هناك خطأ ما."
+    },
+    {
+        "w": "ANANAS",
+        "t": "أناناس",
+        "s": "Ananas är en tropisk frukt.",
+        "st": "الأناناس فاكهة استوائية."
+    },
+    {
+        "w": "AND",
+        "t": "بطة",
+        "s": "En and simmar i dammen.",
+        "st": "بطة تسبح في البركة."
     },
     {
         "w": "ANDA",
@@ -369,8 +435,8 @@ const WC_DICTIONARY = [
     {
         "w": "ANDE",
         "t": "روح",
-        "s": "den helige Ande ond ande",
-        "st": "الروح القدس روح شرير"
+        "s": "Anden i flaskan.",
+        "st": "الجني في الزجاجة."
     },
     {
         "w": "ÄNDER",
@@ -403,10 +469,22 @@ const WC_DICTIONARY = [
         "st": "أنت ملاك."
     },
     {
+        "w": "ANGRE",
+        "t": "يندم",
+        "s": "Du kommer att angre dig.",
+        "st": "ستندم على ذلك."
+    },
+    {
         "w": "ÄNKA",
         "t": "أرملة",
         "s": "Hon är änka.",
         "st": "هي أرملة."
+    },
+    {
+        "w": "ANKOMST",
+        "t": "وصول",
+        "s": "Ankomst klockan tio.",
+        "st": "الوصول في الساعة العاشرة."
     },
     {
         "w": "ANKOR",
@@ -433,6 +511,18 @@ const WC_DICTIONARY = [
         "st": "الصيدلية."
     },
     {
+        "w": "ÄPPLE",
+        "t": "تفاحة",
+        "s": "Ett äpple om dagen.",
+        "st": "تفاحة في اليوم."
+    },
+    {
+        "w": "APRIKOS",
+        "t": "مشمش",
+        "s": "Torkad aprikos är godis.",
+        "st": "المشمش المجفف مثل الحلوى."
+    },
+    {
         "w": "AR",
         "t": "آر (وحدة مساحة)",
         "s": "Tomten är på 10 ar.",
@@ -457,10 +547,16 @@ const WC_DICTIONARY = [
         "st": "أسقطنا مجدافاً في البحيرة."
     },
     {
+        "w": "ARAK",
+        "t": "عرق",
+        "s": "Arak är en stark dryck.",
+        "st": "العرق مشروب قوي."
+    },
+    {
         "w": "ARG",
         "t": "غاضب",
-        "s": "Han var arg.",
-        "st": "كان غاضباً."
+        "s": "Han var mycket arg på sin bror.",
+        "st": "كان غاضباً جداً من أخيه."
     },
     {
         "w": "ARK",
@@ -475,6 +571,18 @@ const WC_DICTIONARY = [
         "st": "الوثائق موجودة في أرشيفنا."
     },
     {
+        "w": "ARM",
+        "t": "ذراع",
+        "s": "Han bröt sin arm.",
+        "st": "كسر ذراعه."
+    },
+    {
+        "w": "ÄRM",
+        "t": "كم",
+        "s": "Ärmen är för lång.",
+        "st": "الكم طويل جداً."
+    },
+    {
         "w": "ÄRRA",
         "t": "ندبة",
         "s": "Han har ett ärra på kinden.",
@@ -487,10 +595,16 @@ const WC_DICTIONARY = [
         "st": "مندوب."
     },
     {
+        "w": "ART",
+        "t": "نوع",
+        "s": "Detta är en sällsynt art.",
+        "st": "هذا نوع نادر."
+    },
+    {
         "w": "ÄRT",
         "t": "بازلاء",
-        "s": "Ärtsoppa är gott.",
-        "st": "حساء البازلاء."
+        "s": "Ärter är gröna.",
+        "st": "البازلاء خضراء."
     },
     {
         "w": "ARTA",
@@ -500,21 +614,33 @@ const WC_DICTIONARY = [
     },
     {
         "w": "ÄRTA",
+        "t": "يغيظ",
+        "s": "Sluta ärta honom.",
+        "st": "توقف عن إغاظته."
+    },
+    {
+        "w": "ÄRTER",
         "t": "بازلاء",
-        "s": "En ärta.",
-        "st": "بازلاء."
+        "s": "Gröna ärter är gott.",
+        "st": "البازلاء الخضراء لذيذة."
+    },
+    {
+        "w": "ÄRTOR",
+        "t": "بازلاء",
+        "s": "Gröna ärtor.",
+        "st": "بازلاء خضراء."
     },
     {
         "w": "ARV",
         "t": "إرث",
-        "s": "Miljön är ett arv till våra barn.",
-        "st": "البيئة إرث لأطفالنا."
+        "s": "Hon fick ett stort arv.",
+        "st": "حصلت على إرث كبير."
     },
     {
         "w": "ARVET",
         "t": "الإرث",
-        "s": "Arvet fördelades mellan barnen.",
-        "st": "تم توزيع الإرث بين الأبناء."
+        "s": "Arvet fördelades enligt lagen.",
+        "st": "تم توزيع الإرث حسب القانون."
     },
     {
         "w": "AS",
@@ -524,21 +650,27 @@ const WC_DICTIONARY = [
     },
     {
         "w": "ASK",
-        "t": "علبة",
-        "s": "Jag köpte en liten ask tändstickor.",
-        "st": "اشتريت علبة صغيرة من أعواد الثقاب."
+        "t": "شجرة الدردار / علبة",
+        "s": "En liten ask tändstickor låg på bordet.",
+        "st": "كانت هناك علبة كبريت صغيرة على الطاولة."
     },
     {
         "w": "ÅSKA",
         "t": "رعد",
-        "s": "Åskan går.",
-        "st": "الرعد والبرق."
+        "s": "Vi hörde åska och såg blixtar.",
+        "st": "سمعنا الرعد ورأينا البرق."
     },
     {
         "w": "ÅSNA",
         "t": "حمار",
         "s": "Åsnan är envis.",
         "st": "الحمار عنيد."
+    },
+    {
+        "w": "ASP",
+        "t": "حور رجراج",
+        "s": "Löven på en asp darrar.",
+        "st": "أوراق الحور الرجراج ترتجف."
     },
     {
         "w": "ASS",
@@ -559,6 +691,12 @@ const WC_DICTIONARY = [
         "st": "نحن نأكل العشاء الآن."
     },
     {
+        "w": "ÄTER",
+        "t": "يأكل",
+        "s": "Han äter en stor smörgås nu.",
+        "st": "هو يأكل شطيرة كبيرة الآن."
+    },
+    {
         "w": "ATP",
         "t": "التقاعد الإضافي العام",
         "s": "ATP - poäng",
@@ -566,9 +704,15 @@ const WC_DICTIONARY = [
     },
     {
         "w": "ATT",
-        "t": "ليد",
-        "s": "att .: Katarina Wall",
-        "st": "ليد: كاتارينا فال"
+        "t": "أن",
+        "s": "Det är svårt att förstå.",
+        "st": "من الصعب أن نفهم."
+    },
+    {
+        "w": "ÄTT",
+        "t": "عائلة / سلالة",
+        "s": "En gammal kunglig ätt.",
+        "st": "سلالة ملكية قديمة."
     },
     {
         "w": "ÄTTA",
@@ -597,8 +741,14 @@ const WC_DICTIONARY = [
     {
         "w": "AVTAL",
         "t": "اتفاقية",
-        "s": "Vi har skrivit på ett nytt avtal.",
-        "st": "لقد وقعنا على اتفاقية جديدة."
+        "s": "Vi skrev på ett avtal.",
+        "st": "وقعنا اتفاقية."
+    },
+    {
+        "w": "ÄXA",
+        "t": "يذم / ينتقد",
+        "s": "Ulla äxar sin rival.",
+        "st": "أولا تنتقد منافستها."
     },
     {
         "w": "BADRUM",
@@ -613,6 +763,30 @@ const WC_DICTIONARY = [
         "st": "جلسوا في آخر القاعة"
     },
     {
+        "w": "BÅL",
+        "t": "جذع",
+        "s": "Han har en stark bål.",
+        "st": "لديه جذع قوي."
+    },
+    {
+        "w": "BANA",
+        "t": "مسار",
+        "s": "Följ din egen bana.",
+        "st": "اتبع مسارك الخاص."
+    },
+    {
+        "w": "BANAN",
+        "t": "موزة",
+        "s": "Apor gillar att äta bananer.",
+        "st": "القرود تحب أكل الموز."
+    },
+    {
+        "w": "BANN",
+        "t": "حرمان",
+        "s": "Han lyste i bann.",
+        "st": "لقد حرم كنسياً."
+    },
+    {
         "w": "BAR",
         "t": "عارٍ",
         "s": "sova under bar himmel",
@@ -621,8 +795,14 @@ const WC_DICTIONARY = [
     {
         "w": "BÄR",
         "t": "توت",
-        "s": "Plocka bär i skogen.",
-        "st": "قطف التوت في الغابة."
+        "s": "Skogen är full av blå bär.",
+        "st": "الغابة مليئة بالتوت الأزرق."
+    },
+    {
+        "w": "BÄREN",
+        "t": "التوت",
+        "s": "Alla bären är mogna och söta.",
+        "st": "جميع التوت ناضج وحلو."
     },
     {
         "w": "BARN",
@@ -643,10 +823,34 @@ const WC_DICTIONARY = [
         "st": "في بازار."
     },
     {
+        "w": "BÅT",
+        "t": "قارب",
+        "s": "Vi har en båt på havet.",
+        "st": "لدينا قارب على البحر."
+    },
+    {
+        "w": "BÅTAR",
+        "t": "قوارب",
+        "s": "Vi ser många båtar.",
+        "st": "نرى العديد من القوارب."
+    },
+    {
+        "w": "BED",
+        "t": "صلاة",
+        "s": "Bönen är en bed till Gud.",
+        "st": "الصلاة دعاء إلى الله."
+    },
+    {
+        "w": "BEDER",
+        "t": "صلوات",
+        "s": "Hon gör sina beder dagligen.",
+        "st": "تؤدي صلواتها يومياً."
+    },
+    {
         "w": "BEN",
-        "t": "رِجْل",
-        "s": "sträcka på benen",
-        "st": "مَدَّ ساقيه"
+        "t": "عظم / ساق",
+        "s": "Hunden gnager på ett stort ben.",
+        "st": "الكلب يقضم عظماً كبيراً."
     },
     {
         "w": "BENIG",
@@ -655,16 +859,28 @@ const WC_DICTIONARY = [
         "st": "نحيل وهزيل"
     },
     {
+        "w": "BER",
+        "t": "يصلي / يطلب",
+        "s": "Han ber till Gud.",
+        "st": "يصلي لله."
+    },
+    {
         "w": "BERG",
         "t": "جبل",
-        "s": "Ett högt berg.",
-        "st": "جبل شاهق."
+        "s": "Vi besteg ett högt berg.",
+        "st": "تسلقنا جبلاً عالياً."
     },
     {
         "w": "BERGET",
         "t": "الجبل",
-        "s": "Vi besteg berget.",
-        "st": "تسلقنا الجبل."
+        "s": "Vi besteg det höga berget tillsammans.",
+        "st": "تسلقنا الجبل العالي معاً."
+    },
+    {
+        "w": "BERÖM",
+        "t": "مدح",
+        "s": "Hon fick beröm för sitt arbete.",
+        "st": "تلقت المديح على عملها."
     },
     {
         "w": "BESK",
@@ -679,16 +895,22 @@ const WC_DICTIONARY = [
         "st": "يوجد دليل على الجريمة."
     },
     {
+        "w": "BIFF",
+        "t": "شريحة لحم",
+        "s": "En saftig biff.",
+        "st": "شريحة لحم عصارية."
+    },
+    {
         "w": "BIL",
         "t": "سيارة",
-        "s": "En snabb bil.",
-        "st": "سيارة سريعة."
+        "s": "Min bil är parkerad utanför huset.",
+        "st": "سيارتي متوقفة خارج المنزل."
     },
     {
         "w": "BILA",
-        "t": "فأس",
-        "s": "Bödeln höjde sin bila.",
-        "st": "رفع الجلاد فأسه."
+        "t": "يسافر بالسيارة",
+        "s": "Vi ska bila genom hela Europa.",
+        "st": "سنسافر بالسيارة عبر أوروبا كلها."
     },
     {
         "w": "BILAR",
@@ -698,9 +920,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "BILD",
-        "t": "درس الرسم",
-        "s": "En fin bild på familjen.",
-        "st": "صورة جميلة للعائلة."
+        "t": "صورة",
+        "s": "En fin bild på väggen.",
+        "st": "صورة جميلة على الحائط."
     },
     {
         "w": "BILIST",
@@ -715,6 +937,30 @@ const WC_DICTIONARY = [
         "st": "اشتريت تذكرة."
     },
     {
+        "w": "BJÖRK",
+        "t": "شجرة البتولا",
+        "s": "Björken har en vit stam.",
+        "st": "شجرة البتولا لها جذع أبيض."
+    },
+    {
+        "w": "BJÖRN",
+        "t": "دب",
+        "s": "Björnen sover i idet.",
+        "st": "الدب ينام في السبات."
+    },
+    {
+        "w": "BJÖRNBÄR",
+        "t": "توت العليق الأسود",
+        "s": "Svarta björnbär.",
+        "st": "توت عليق أسود."
+    },
+    {
+        "w": "BLÅBÄR",
+        "t": "توت أزرق",
+        "s": "Vi plockar blåbär i skogen.",
+        "st": "نقطف التوت الأزرق في الغابة."
+    },
+    {
         "w": "BLAD",
         "t": "ورقة شجر",
         "s": "Trädens blad faller på hösten.",
@@ -725,6 +971,12 @@ const WC_DICTIONARY = [
         "t": "يصبح",
         "s": "Det kommer bli bra.",
         "st": "سأصبح طبيباً."
+    },
+    {
+        "w": "BLOCK",
+        "t": "دفتر / كتلة",
+        "s": "Skriv i ditt block.",
+        "st": "اكتب في دفترك."
     },
     {
         "w": "BLOD",
@@ -747,8 +999,8 @@ const WC_DICTIONARY = [
     {
         "w": "BOK",
         "t": "كتاب",
-        "s": "Läs en bok för att lära.",
-        "st": "اقرأ كتاباً لتتعلم."
+        "s": "Jag läser en bok.",
+        "st": "أقرأ كتاباً."
     },
     {
         "w": "BÖN",
@@ -763,16 +1015,28 @@ const WC_DICTIONARY = [
         "st": "نحن نسكن في شقة في المدينة."
     },
     {
+        "w": "BÖR",
+        "t": "ينبغي",
+        "s": "Du bör gå nu.",
+        "st": "ينبغي عليك الذهاب الآن."
+    },
+    {
         "w": "BORD",
         "t": "طاولة",
-        "s": "Maten står framdukad på bordet.",
-        "st": "الطعام موضوع على الطاولة."
+        "s": "Maten står färdig på bordet.",
+        "st": "الطعام جاهز على الطاولة."
     },
     {
         "w": "BORT",
         "t": "بعيداً",
         "s": "Gå bort och kom aldrig tillbaka.",
         "st": "اذهب بعيداً ولا تعد أبداً."
+    },
+    {
+        "w": "BOT",
+        "t": "غرامة",
+        "s": "Han fick böta tusen kronor.",
+        "st": "غرّم بألف كرونة."
     },
     {
         "w": "BOTT",
@@ -787,16 +1051,22 @@ const WC_DICTIONARY = [
         "st": "أشعلنا ناراً في المدفأة."
     },
     {
+        "w": "BRE",
+        "t": "يدهن",
+        "s": "Bre smör på brödet.",
+        "st": "ادهن الزبدة على الخبز."
+    },
+    {
         "w": "BRO",
         "t": "جسر",
-        "s": "Vi körde över en lång bro.",
-        "st": "قدنا السيارة فوق جسر طويل."
+        "s": "En bro över floden.",
+        "st": "جسر فوق النهر."
     },
     {
         "w": "BRÖD",
         "t": "خبز",
         "s": "Färskt bröd doftar gott.",
-        "st": "الخبز الطازج رائحته زكية."
+        "st": "الخبز الطازج له رائحة طيبة."
     },
     {
         "w": "BRODER",
@@ -819,8 +1089,8 @@ const WC_DICTIONARY = [
     {
         "w": "BROTT",
         "t": "جريمة",
-        "s": "Brott lönar sig inte.",
-        "st": "الجريمة لا تفيد."
+        "s": "Brott ska bestraffas.",
+        "st": "الجريمة يجب معاقبتها."
     },
     {
         "w": "BRUKA",
@@ -837,14 +1107,14 @@ const WC_DICTIONARY = [
     {
         "w": "BULLAR",
         "t": "كعك",
-        "s": "Vi bakar bullar.",
-        "st": "نحن نخبز الكعك."
+        "s": "Nygräddade bullar.",
+        "st": "كعك طازج."
     },
     {
         "w": "BUR",
         "t": "قفص",
-        "s": "Fågeln sitter i en bur.",
-        "st": "الطائر في قفص."
+        "s": "Fågeln i sin bur.",
+        "st": "الطائر في قفصه."
     },
     {
         "w": "BURAR",
@@ -908,9 +1178,15 @@ const WC_DICTIONARY = [
     },
     {
         "w": "DAG",
-        "t": "نهار",
-        "s": "natt och dag",
-        "st": "ليلاً نهاراً"
+        "t": "يوم",
+        "s": "Det är en vacker dag idag.",
+        "st": "إنه يوم جميل اليوم."
+    },
+    {
+        "w": "DAL",
+        "t": "وادي",
+        "s": "Huset ligger i en grön dal.",
+        "st": "يقع المنزل في وادي أخضر."
     },
     {
         "w": "DALA",
@@ -975,8 +1251,8 @@ const WC_DICTIONARY = [
     {
         "w": "DEL",
         "t": "جزء",
-        "s": "en del av semestern motorns delar",
-        "st": "جزء من الإجازة أجزاء المحرك"
+        "s": "En del av kakan.",
+        "st": "جزء من الكعكة."
     },
     {
         "w": "DELAR",
@@ -1028,9 +1304,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "DIN",
-        "t": "ك",
-        "s": "är det här din bok?",
-        "st": "هل هذا كتابك؟"
+        "t": "لك",
+        "s": "Är detta din nya bil?",
+        "st": "هل هذه سيارتك الجديدة؟"
     },
     {
         "w": "DIREKT",
@@ -1039,10 +1315,22 @@ const WC_DICTIONARY = [
         "st": "ديموقراطية مباشرة خطوط مباشرة"
     },
     {
+        "w": "DJUNGEL",
+        "t": "أدغال",
+        "s": "Tigern bor i djungeln.",
+        "st": "يعيش النمر في الأدغال."
+    },
+    {
         "w": "DJUREN",
         "t": "الحيوانات",
         "s": "Djuren lever i skogen.",
         "st": "الحيوانات في الغابة."
+    },
+    {
+        "w": "DNA",
+        "t": "حمض نووي",
+        "s": "DNA finns i alla celler.",
+        "st": "الحمض النووي موجود في كل الخلايا."
     },
     {
         "w": "DÖ",
@@ -1053,20 +1341,20 @@ const WC_DICTIONARY = [
     {
         "w": "DOM",
         "t": "حكم",
-        "s": "Domaren avkunnade en hård dom.",
-        "st": "أصدر القاضي حكماً قاسياً."
+        "s": "En rättvis dom.",
+        "st": "حكم عادل."
     },
     {
         "w": "DOMAR",
         "t": "أحكام",
-        "s": "Guds domar är rättvisa.",
-        "st": "أحكام الله عادلة."
+        "s": "Domarnas beslut är slutgiltiga.",
+        "st": "قرارات القضاة نهائية."
     },
     {
         "w": "DOMARE",
-        "t": "قاضي",
-        "s": "Domaren blåste av matchen.",
-        "st": "أطلق الحكم صافرة نهاية المباراة."
+        "t": "قاضي / حكم",
+        "s": "Domaren är opartisk.",
+        "st": "القاضي محايد."
     },
     {
         "w": "DOMS",
@@ -1111,6 +1399,12 @@ const WC_DICTIONARY = [
         "st": "قام بحركة ذكية في الشطرنج."
     },
     {
+        "w": "DRIVA",
+        "t": "ينجرف / يدير",
+        "s": "Vinden får båten att driva iväg.",
+        "st": "الرياح تجعل القارب ينجرف بعيداً."
+    },
+    {
         "w": "DROPPAR",
         "t": "يُنَقّط",
         "s": "det droppar från taket",
@@ -1123,16 +1417,34 @@ const WC_DICTIONARY = [
         "st": "ادعُ لأقاربك."
     },
     {
+        "w": "DUK",
+        "t": "مفرش",
+        "s": "En vit duk på bordet.",
+        "st": "مفرش أبيض على الطاولة."
+    },
+    {
         "w": "DUNST",
         "t": "بخار",
         "s": "En dunst av parfym kändes.",
         "st": "شوهدت سحابة من العطر."
     },
     {
+        "w": "DURK",
+        "t": "أرضية القارب",
+        "s": "Vattnet skvalpade på durken.",
+        "st": "تناثر الماء على أرضية القارب."
+    },
+    {
         "w": "EK",
         "t": "شجرة بلوط",
         "s": "Eken är ett starkt träd.",
         "st": "شجرة البلوط قوية."
+    },
+    {
+        "w": "EKA",
+        "t": "قارب",
+        "s": "Vi rodde ut i en eka.",
+        "st": "جدفنا بقارب صغير."
     },
     {
         "w": "EKAR",
@@ -1143,8 +1455,8 @@ const WC_DICTIONARY = [
     {
         "w": "EL",
         "t": "كهرباء",
-        "s": "Elen har gått.",
-        "st": "الكهرباء مقطوعة."
+        "s": "Vi behöver el till lampan.",
+        "st": "نحتاج الكهرباء للمصباح."
     },
     {
         "w": "ELEV",
@@ -1166,15 +1478,15 @@ const WC_DICTIONARY = [
     },
     {
         "w": "ENA",
-        "t": "أحدهما",
-        "s": "varken det ena eller det andra",
-        "st": "لاهذا ولا ذاك"
+        "t": "يوحد",
+        "s": "Tron enar människor.",
+        "st": "الإيمان يوحد الناس."
     },
     {
         "w": "ENAR",
-        "t": "عرعر",
-        "s": "Dessa enar är gröna året om.",
-        "st": "أشجار العرعر هذه خضراء طوال العام."
+        "t": "أشجار العرعر",
+        "s": "Det växer enar på backen.",
+        "st": "تنمو أشجار العرعر على التل."
     },
     {
         "w": "ENERGI",
@@ -1195,10 +1507,16 @@ const WC_DICTIONARY = [
         "st": "حَسَب جميع الحسابات"
     },
     {
+        "w": "ER",
+        "t": "أنتم / لكم",
+        "s": "Boken tillhör er.",
+        "st": "الكتاب ملك لكم."
+    },
+    {
         "w": "ETT",
         "t": "واحد",
-        "s": "Nummer ett.",
-        "st": "رقم واحد."
+        "s": "Jag har bara ett äpple kvar.",
+        "st": "لدي تفاحة واحدة فقط متبقية."
     },
     {
         "w": "FÅ",
@@ -1211,6 +1529,12 @@ const WC_DICTIONARY = [
         "t": "زائف",
         "s": "Det där skrattet låter väldigt falskt.",
         "st": "تلك الضحكة تبدو مصطنعة جداً."
+    },
+    {
+        "w": "FALUKORV",
+        "t": "سجق فالو",
+        "s": "Falukorv i ugn.",
+        "st": "سجق فالو في الفرن."
     },
     {
         "w": "FAMILJ",
@@ -1245,8 +1569,8 @@ const WC_DICTIONARY = [
     {
         "w": "FÄRD",
         "t": "رحلة",
-        "s": "en färd genom öknen",
-        "st": "رحلة عبر الصحراء"
+        "s": "Vi tar en färd till Oslo.",
+        "st": "نأخذ رحلة إلى أوسلو."
     },
     {
         "w": "FÄRDE",
@@ -1273,16 +1597,34 @@ const WC_DICTIONARY = [
         "st": "جدتي تخبز كعكاً."
     },
     {
+        "w": "FÄRS",
+        "t": "مفروم",
+        "s": "Stek färsen i pannan.",
+        "st": "اقلِ المفروم في المقلاة."
+    },
+    {
+        "w": "FÄRSK",
+        "t": "طازج",
+        "s": "Färsk fisk är bäst.",
+        "st": "السمك الطازج هو الأفضل."
+    },
+    {
         "w": "FART",
         "t": "سرعة",
         "s": "Det var full fart hela dagen.",
         "st": "كانت السرعة قصوى طوال اليوم."
     },
     {
+        "w": "FARTYG",
+        "t": "سفينة",
+        "s": "Fartyget seglar på havet.",
+        "st": "السفينة تبحر في البحر."
+    },
+    {
         "w": "FAS",
         "t": "مرحلة",
-        "s": "arbetets sista fas har påbörjats",
-        "st": "بدأ العمل في المرحلة الأخيرة من المشروع"
+        "s": "Detta är projektets första fas.",
+        "st": "هذه هي المرحلة الأولى للمشروع."
     },
     {
         "w": "FASA",
@@ -1298,9 +1640,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "FAST",
-        "t": "صلب, قاسٍ",
-        "s": "Han satt fast i trafiken.",
-        "st": "علق في الازدحام المروري."
+        "t": "ثابت",
+        "s": "En fast regel.",
+        "st": "قاعدة ثابتة."
     },
     {
         "w": "FASTA",
@@ -1309,16 +1651,52 @@ const WC_DICTIONARY = [
         "st": "نحن نصوم في رمضان."
     },
     {
+        "w": "FAT",
+        "t": "طبق",
+        "s": "Lägg maten på ett stort fat.",
+        "st": "ضع الطعام على طبق كبير."
+    },
+    {
         "w": "FE",
         "t": "جنية",
         "s": "Som en god fe i sagan.",
         "st": "مثل جنية طيبة في الحكاية."
     },
     {
+        "w": "FEBER",
+        "t": "حمى",
+        "s": "Barnet har hög feber.",
+        "st": "الطفل لديه حمى عالية."
+    },
+    {
+        "w": "FEST",
+        "t": "حفلة",
+        "s": "Vi ska ha fest på lördag.",
+        "st": "سنقيم حفلة يوم السبت."
+    },
+    {
+        "w": "FIK",
+        "t": "مقهى",
+        "s": "Vi träffas på ett fik.",
+        "st": "نلتقي في مقهى."
+    },
+    {
         "w": "FIKA",
         "t": "استراحة قهوة",
         "s": "Ska vi ta en fika tillsammans?",
         "st": "هل نأخذ استراحة قهوة معاً؟"
+    },
+    {
+        "w": "FIL",
+        "t": "لبن",
+        "s": "Jag tar en skål fil.",
+        "st": "سآخذ وعاء من اللبن."
+    },
+    {
+        "w": "FILMJÖLK",
+        "t": "لبن رائب",
+        "s": "Filmjölk med flingor.",
+        "st": "لبن رائب مع رقائق الذرة."
     },
     {
         "w": "FIN",
@@ -1329,14 +1707,20 @@ const WC_DICTIONARY = [
     {
         "w": "FISK",
         "t": "سمك",
-        "s": "Fisk simmar i vattnet.",
-        "st": "السمك يسبح في الماء."
+        "s": "Vi äter färsk fisk till middag.",
+        "st": "نأكل سمكاً طازجاً للعشاء."
     },
     {
         "w": "FISKAR",
         "t": "يصيد السمك",
         "s": "He fiskar i sjön.",
         "st": "هو يصطاد في البحيرة."
+    },
+    {
+        "w": "FJÄRR",
+        "t": "بعيد",
+        "s": "Väster är fjärran.",
+        "st": "الغرب بعيد."
     },
     {
         "w": "FLASKA",
@@ -1357,10 +1741,16 @@ const WC_DICTIONARY = [
         "st": "النهر يجري بهدوء عبر المدينة."
     },
     {
+        "w": "FLUGA",
+        "t": "ربطة عنق / ذبابة",
+        "s": "Han hade en röd fluga på festen.",
+        "st": "كان يرتدي ربطة عنق حمراء في الحفل."
+    },
+    {
         "w": "FLYG",
-        "t": "طائرة",
-        "s": "Flyget lyfter mot solen.",
-        "st": "الطائرة تقلع نحو الشمس."
+        "t": "طيران / رحلة جوية",
+        "s": "Vi tar flyget till Paris.",
+        "st": "نأخذ الرحلة الجوية إلى باريس."
     },
     {
         "w": "FLYGPLAN",
@@ -1371,20 +1761,20 @@ const WC_DICTIONARY = [
     {
         "w": "FÖNSTER",
         "t": "نافذة",
-        "s": "Öppna fönstret.",
-        "st": "افتح النافذة."
+        "s": "Titta ut genom fönstret.",
+        "st": "انظر من خلال النافذة."
     },
     {
         "w": "FÖR",
-        "t": "جداًً",
-        "s": "för gammal för snål",
-        "st": "هَرِم جداًً بخيل جداًً"
+        "t": "لأجل / جداً",
+        "s": "Det är alldeles för varmt här.",
+        "st": "الجو حار جداً هنا."
     },
     {
         "w": "FÖRE",
         "t": "قبل",
-        "s": "före månadens utgång före intervjun",
-        "st": "قبل انتهاء الشهر قبل المقابلة"
+        "s": "Kom gärna lite före klockan åtta.",
+        "st": "تعال من فضلك قبل الساعة الثامنة بقليل."
     },
     {
         "w": "FÖRST",
@@ -1424,7 +1814,7 @@ const WC_DICTIONARY = [
     },
     {
         "w": "FRID",
-        "t": "سلام",
+        "t": "سلام / راحة",
         "s": "Vila i frid.",
         "st": "ارقد في سلام."
     },
@@ -1443,8 +1833,20 @@ const WC_DICTIONARY = [
     {
         "w": "FRUKOST",
         "t": "فطور",
-        "s": "Frukost är dagens viktigaste måltid.",
-        "st": "الفطور هو أهم وجبة في اليوم."
+        "s": "Frukost är viktig.",
+        "st": "الفطور مهم."
+    },
+    {
+        "w": "FRUKT",
+        "t": "فاكهة",
+        "s": "Ät mer frukt och grönt.",
+        "st": "تناول المزيد من الفاكهة والخضروات."
+    },
+    {
+        "w": "FUL",
+        "t": "قبيح",
+        "s": "Det var en ful fisk.",
+        "st": "كانت سمكة قبيحة (تعبير مجازي عن شخص مشبوه)."
     },
     {
         "w": "GÅ",
@@ -1461,8 +1863,8 @@ const WC_DICTIONARY = [
     {
         "w": "GAL",
         "t": "يصيح",
-        "s": "Tuppen gal tidigt på morgonen.",
-        "st": "يصيح الديك في الصباح الباكر."
+        "s": "Tuppen gal tidigt.",
+        "st": "صاح الديك مبكراً."
     },
     {
         "w": "GALA",
@@ -1491,14 +1893,14 @@ const WC_DICTIONARY = [
     {
         "w": "GARDIN",
         "t": "ستارة",
-        "s": "Kan du dra för gardinen är du snäll?",
-        "st": "هل يمكنك إسدال الستارة من فضلك؟"
+        "s": "Dra för gardinen för fönstret.",
+        "st": "أغلق الستارة أمام النافذة."
     },
     {
         "w": "GARN",
         "t": "غزل",
-        "s": "Nystan av garn.",
-        "st": "كرة من الغزل."
+        "s": "Katten lekte med ett nystan av garn.",
+        "st": "لعبت القطة بكرة من الغزل."
     },
     {
         "w": "GAS",
@@ -1507,16 +1909,52 @@ const WC_DICTIONARY = [
         "st": "غازات سامة أشعل بالغاز"
     },
     {
+        "w": "GÅS",
+        "t": "إوزة",
+        "s": "En vit gås simmar i dammen.",
+        "st": "إوزة بيضاء تسبح في البركة."
+    },
+    {
         "w": "GATA",
         "t": "شارع",
-        "s": "Se dig för innan du går över gatan.",
-        "st": "انتبه قبل عبور الشارع."
+        "s": "Barnen leker på en lugn gata.",
+        "st": "الأطفال يلعبون في شارع هادئ."
+    },
+    {
+        "w": "GAV",
+        "t": "أعطى",
+        "s": "Han gav mig en present.",
+        "st": "أعطاني هدية."
+    },
+    {
+        "w": "GEL",
+        "t": "جل",
+        "s": "Han har gel i håret.",
+        "st": "لديه جل في شعره."
     },
     {
         "w": "GELET",
         "t": "الجيل",
         "s": "Gelet.",
         "st": "الجيل."
+    },
+    {
+        "w": "GEM",
+        "t": "مشبك ورق",
+        "s": "Fäst pappret med ett gem.",
+        "st": "ثبت الورقة بمشبك."
+    },
+    {
+        "w": "GEN",
+        "t": "جين",
+        "s": "Gener bestämmer vår ögonfärg.",
+        "st": "الجينات تحدد لون عيوننا."
+    },
+    {
+        "w": "GENOM",
+        "t": "عبر / خلال",
+        "s": "Vi gick en promenad genom skogen.",
+        "st": "مشينا في نزهة عبر الغابة."
     },
     {
         "w": "GENRE",
@@ -1539,14 +1977,20 @@ const WC_DICTIONARY = [
     {
         "w": "GER",
         "t": "يعطي",
-        "s": "Den som ger, han får.",
-        "st": "من يعطي، يأخذ."
+        "s": "Solen ger oss ljus och värme.",
+        "st": "الشمس تعطينا الضوء والدفء."
     },
     {
         "w": "GET",
         "t": "ماعز",
-        "s": "En get bräkte.",
-        "st": "ماعز ثغى."
+        "s": "En liten get bräkte i hagen.",
+        "st": "ثغت ماعز صغيرة في المرعى."
+    },
+    {
+        "w": "GLÄNTA",
+        "t": "فسحة",
+        "s": "En solig glänta i skogen.",
+        "st": "فسحة مشمسة في الغابة."
     },
     {
         "w": "GLASS",
@@ -1559,6 +2003,12 @@ const WC_DICTIONARY = [
         "t": "يُبَحلق",
         "s": "vad glor du på?",
         "st": "بماذا تبحلق؟"
+    },
+    {
+        "w": "GÖR",
+        "t": "يفعل",
+        "s": "Vad gör du?",
+        "st": "ماذا تفعل؟"
     },
     {
         "w": "GRAD",
@@ -1575,14 +2025,26 @@ const WC_DICTIONARY = [
     {
         "w": "GRAV",
         "t": "قبر",
-        "s": "Han vände sig i sin grav.",
-        "st": "تقلب في قبره (من الغضب)."
+        "s": "Lägg blommor på graven.",
+        "st": "ضع الزهور على القبر."
     },
     {
         "w": "GRAVID",
-        "t": "حامِل",
-        "s": "en gravid kvinna",
-        "st": "امرأة حامل"
+        "t": "حامل",
+        "s": "Hon är gravid i femte månaden.",
+        "st": "هي حامل في الشهر الخامس."
+    },
+    {
+        "w": "GREN",
+        "t": "غصن",
+        "s": "Fågeln sitter på en gren.",
+        "st": "الطائر يجلس على غصن."
+    },
+    {
+        "w": "GRIND",
+        "t": "بوابة",
+        "s": "Glöm inte att stänga grinden.",
+        "st": "لا تنس إغلاق البوابة."
     },
     {
         "w": "GROLL",
@@ -1599,14 +2061,20 @@ const WC_DICTIONARY = [
     {
         "w": "GRÖT",
         "t": "عصيدة",
-        "s": "Gröt är nyttig frukost.",
-        "st": "العصيدة فطور صحي."
+        "s": "Varm gröt är gott på morgonen.",
+        "st": "العصيدة الساخنة لذيذة في الصباح."
     },
     {
         "w": "GUL",
         "t": "أصفر",
-        "s": "solen lyser gul gul lök",
-        "st": "شُعاع الشمس أَصفر بصل"
+        "s": "Solen är gul.",
+        "st": "الشمس صفراء."
+    },
+    {
+        "w": "GYLF",
+        "t": "خليج (قديمة)",
+        "s": "Ett ord från fornnordiskan.",
+        "st": "كلمة من الإسكندنافية القديمة."
     },
     {
         "w": "HA",
@@ -1621,28 +2089,64 @@ const WC_DICTIONARY = [
         "st": "الحج رحلة إلى مكة."
     },
     {
+        "w": "HÄL",
+        "t": "كعب",
+        "s": "Jag har ont i hälen.",
+        "st": "لدي ألم في الكعب."
+    },
+    {
         "w": "HALL",
         "t": "قاعة",
-        "s": "Vi möttes i en stor hall.",
-        "st": "التقينا في قاعة كبيرة."
+        "s": "En stor hall.",
+        "st": "قاعة كبيرة."
     },
     {
         "w": "HALS",
-        "t": "حلق",
-        "s": "Jag har haft ont i halsen hela dagen.",
-        "st": "كان حلقي يؤلمني طوال اليوم."
+        "t": "حلق / رقبة",
+        "s": "Hon har ett halsband runt halsen.",
+        "st": "لديها قلادة حول رقبتها."
     },
     {
         "w": "HÄLSA",
         "t": "صحة",
-        "s": "Hälsa är viktigare än pengar.",
-        "st": "الصحة أهم من المال."
+        "s": "Hälsa är viktigt.",
+        "st": "الصحة مهمة."
+    },
+    {
+        "w": "HALVÖ",
+        "t": "شبه جزيرة",
+        "s": "Italien är en stor halvö.",
+        "st": "إيطاليا شبه جزيرة كبيرة."
+    },
+    {
+        "w": "HAMN",
+        "t": "ميناء",
+        "s": "Båten ligger i hamn.",
+        "st": "القارب في الميناء."
+    },
+    {
+        "w": "HAN",
+        "t": "هو",
+        "s": "Han reser ofta utomlands.",
+        "st": "هو يسافر كثيراً للخارج."
     },
     {
         "w": "HÅN",
         "t": "ازْدِراء",
         "s": "det känns som ett hån",
         "st": "أشعر كـأنه ازدراء من طرفك"
+    },
+    {
+        "w": "HAND",
+        "t": "يد",
+        "s": "Tvätta händerna.",
+        "st": "اغسل يديك."
+    },
+    {
+        "w": "HANDLED",
+        "t": "معصم",
+        "s": "Jag stukade handleden.",
+        "st": "لويت معصمي."
     },
     {
         "w": "HÄR",
@@ -1653,8 +2157,8 @@ const WC_DICTIONARY = [
     {
         "w": "HAV",
         "t": "بحر",
-        "s": "Han har seglat på de sju haven.",
-        "st": "لقد أبحر في البحار السبعة."
+        "s": "Havet är djupt och blått.",
+        "st": "البحر عميق وأزرق."
     },
     {
         "w": "HÅV",
@@ -1667,6 +2171,18 @@ const WC_DICTIONARY = [
         "t": "مرحباً",
         "s": "Hej på dig!",
         "st": "مرحباً بك!"
+    },
+    {
+        "w": "HEL",
+        "t": "كامل",
+        "s": "Jag vill ha en hel kaka.",
+        "st": "أريد كعكة كاملة."
+    },
+    {
+        "w": "HELG",
+        "t": "عطلة نهاية أسبوع",
+        "s": "God helg!",
+        "st": "عطلة سعيدة!"
     },
     {
         "w": "HELIG",
@@ -1695,8 +2211,8 @@ const WC_DICTIONARY = [
     {
         "w": "HEM",
         "t": "منزل",
-        "s": "Borta bra men hemma bäst.",
-        "st": "لا مكان مثل المنزل."
+        "s": "Vi ska gå hem nu.",
+        "st": "سنذهب إلى المنزل الآن."
     },
     {
         "w": "HIMMEL",
@@ -1709,6 +2225,18 @@ const WC_DICTIONARY = [
         "t": "قلب",
         "s": "Mitt hjärta.",
         "st": "قلبي."
+    },
+    {
+        "w": "HJORT",
+        "t": "أيل",
+        "s": "En hjort stod i skogsbrynet.",
+        "st": "وقف أيل عند حافة الغابة."
+    },
+    {
+        "w": "HJORTRON",
+        "t": "توت العليق",
+        "s": "Hjortron kallas skogens guld.",
+        "st": "يسمى توت العليق ذهب الغابة."
     },
     {
         "w": "HJUL",
@@ -1739,6 +2267,12 @@ const WC_DICTIONARY = [
         "t": "مَرْبَض",
         "s": "gå i ide",
         "st": "يرقد في البيات الشتوي"
+    },
+    {
+        "w": "IDÉ",
+        "t": "فكرة",
+        "s": "Jag har en bra idé.",
+        "st": "لدي فكرة جيدة."
     },
     {
         "w": "IDEL",
@@ -1803,8 +2337,8 @@ const WC_DICTIONARY = [
     {
         "w": "IS",
         "t": "جليد",
-        "s": "Halka på is.",
-        "st": "الجليد بارد."
+        "s": "Isen ligger blank.",
+        "st": "الجليد يلمع."
     },
     {
         "w": "ISKALL",
@@ -1815,8 +2349,8 @@ const WC_DICTIONARY = [
     {
         "w": "ISLAM",
         "t": "إسلام",
-        "s": "Islam betyder underkastelse och fred.",
-        "st": "الإسلام يعني الاستسلام والسلام."
+        "s": "Islam betyder fred och underkastelse.",
+        "st": "الإسلام يعني السلام والاستسلام."
     },
     {
         "w": "JA",
@@ -1849,6 +2383,12 @@ const WC_DICTIONARY = [
         "st": "أنت تعلم ذلك."
     },
     {
+        "w": "JUL",
+        "t": "عيد الميلاد",
+        "s": "God jul!",
+        "st": "عيد ميلاد مجيد!"
+    },
+    {
         "w": "KADER",
         "t": "كادر",
         "s": "En liten kader av lojala soldater.",
@@ -1857,20 +2397,32 @@ const WC_DICTIONARY = [
     {
         "w": "KAFFE",
         "t": "قهوة",
-        "s": "Jag dricker kaffe varje morgon.",
-        "st": "أشرب القهوة كل صباح."
+        "s": "En kopp kaffe, tack.",
+        "st": "فنجان قهوة، من فضلك."
     },
     {
         "w": "KAKA",
         "t": "كعكة",
-        "s": "Vi bakar en kaka.",
-        "st": "نحن نخبز كعكة."
+        "s": "Vill du ha en liten kaka?",
+        "st": "هل تريد كعكة صغيرة؟"
+    },
+    {
+        "w": "KAKOR",
+        "t": "كعك",
+        "s": "Vi bakar goda kakor till fikat.",
+        "st": "نخبز كعكاً لذيذاً للاستراحة."
     },
     {
         "w": "KAL",
         "t": "أصلع",
-        "s": "En kal fläck.",
-        "st": "بقعة صلعاء."
+        "s": "Han har en kal fläck på huvudet.",
+        "st": "لديه بقعة صلعاء في رأسه."
+    },
+    {
+        "w": "KÅL",
+        "t": "ملفوف",
+        "s": "Kål är en nyttig grönsak.",
+        "st": "الملفوف خضار صحي."
     },
     {
         "w": "KALAS",
@@ -1891,6 +2443,24 @@ const WC_DICTIONARY = [
         "st": "تقال مجازاً عن شيء يشابه القلنسوة"
     },
     {
+        "w": "KÅLROT",
+        "t": "لفت سويدي",
+        "s": "Rotmos görs på kålrot.",
+        "st": "يصنع هريس الجذور من اللفت السويدي."
+    },
+    {
+        "w": "KALV",
+        "t": "عجل",
+        "s": "Kalvkött är ljust.",
+        "st": "لحم العجل فاتح اللون."
+    },
+    {
+        "w": "KAM",
+        "t": "مشط",
+        "s": "Kamma håret med en kam.",
+        "st": "مشط شعرك بمشط."
+    },
+    {
         "w": "KAMERA",
         "t": "كاميرا",
         "s": "Ta ett kort med kameran.",
@@ -1903,6 +2473,18 @@ const WC_DICTIONARY = [
         "st": "هل يمكنك مساعدتي في هذا؟"
     },
     {
+        "w": "KANOT",
+        "t": "زورق",
+        "s": "Vi paddlar kanot på sjön.",
+        "st": "نجدف بالزورق في البحيرة."
+    },
+    {
+        "w": "KANT",
+        "t": "حافة",
+        "s": "Stå inte vid vägkanten.",
+        "st": "لا تقف عند حافة الطريق."
+    },
+    {
         "w": "KANTRAR",
         "t": "ينقلب",
         "s": "båten kantrar vinden kantrade",
@@ -1913,6 +2495,24 @@ const WC_DICTIONARY = [
         "t": "غنيمة",
         "s": "göra ett gott kap",
         "st": "غنم شيئاً جيداً"
+    },
+    {
+        "w": "KAPTEN",
+        "t": "قبطان",
+        "s": "Kapten styr båten säkert.",
+        "st": "القبطان يقود القارب بأمان."
+    },
+    {
+        "w": "KAPTENS",
+        "t": "للقبطان (مضاف)",
+        "s": "Detta är kaptens gamla hatt.",
+        "st": "هذه قبعة القبطان القديمة."
+    },
+    {
+        "w": "KAR",
+        "t": "حوض",
+        "s": "Ett stort kar fyllt med vatten.",
+        "st": "حوض كبير مملوء بالماء."
     },
     {
         "w": "KARL",
@@ -1941,8 +2541,8 @@ const WC_DICTIONARY = [
     {
         "w": "KARTA",
         "t": "خريطة",
-        "s": "Vi behöver en karta för att hitta.",
-        "st": "نحتاج إلى خريطة لنجد الطريق."
+        "s": "Jag använder en karta.",
+        "st": "أستخدم خريطة."
     },
     {
         "w": "KAST",
@@ -1987,22 +2587,46 @@ const WC_DICTIONARY = [
         "st": "فصلنا كبير."
     },
     {
+        "w": "KNIV",
+        "t": "سكين",
+        "s": "Skär brödet med en kniv.",
+        "st": "اقطع الخبز بالسكين."
+    },
+    {
         "w": "KO",
         "t": "بقرة",
-        "s": "En brun ko.",
-        "st": "بقرة بنية."
+        "s": "En ko betar på ängen.",
+        "st": "بقرة ترعى في المرج."
     },
     {
         "w": "KOCK",
         "t": "طباخ",
-        "s": "Kocken lagar god mat.",
-        "st": "الطباخ يطبخ طعاماً لذيذاً."
+        "s": "Han är en duktig kock.",
+        "st": "هو طباخ ماهر."
+    },
+    {
+        "w": "KOGG",
+        "t": "سفينة تجارية قديمة",
+        "s": "En kogg är ett gammalt fartyg.",
+        "st": "الكوج هي سفينة قديمة."
+    },
+    {
+        "w": "KOK",
+        "t": "غليان",
+        "s": "Vattnet har nått kokpunkten nu.",
+        "st": "وصل الماء إلى نقطة الغليان الآن."
     },
     {
         "w": "KÖKET",
         "t": "المطبخ",
         "s": "Vi lagar mat i köket.",
         "st": "نطبخ في المطبخ."
+    },
+    {
+        "w": "KÖL",
+        "t": "عارضة",
+        "s": "Båtens köl slog i botten.",
+        "st": "اصطدمت عارضة القارب بالقاع."
     },
     {
         "w": "KOLA",
@@ -2019,14 +2643,26 @@ const WC_DICTIONARY = [
     {
         "w": "KONTOR",
         "t": "مكتب",
-        "s": "Jag arbetar på ett stort kontor.",
-        "st": "أعمل في مكتب كبير."
+        "s": "Jag jobbar på kontor.",
+        "st": "أعمل في مكتب."
+    },
+    {
+        "w": "KOPP",
+        "t": "فنجان",
+        "s": "Vill du ha en kopp te?",
+        "st": "هل تريد فنجان شاي؟"
+    },
+    {
+        "w": "KOR",
+        "t": "أبقار",
+        "s": "Korna betar gräs på ängen.",
+        "st": "الأبقار ترعى العشب في المرج."
     },
     {
         "w": "KÖR",
-        "t": "استمرار",
-        "s": "i ett kör ( oavbrutet )",
-        "st": "باستمرار"
+        "t": "يقود / جوقة",
+        "s": "Han kör bilen mycket försiktigt.",
+        "st": "هو يقود السيارة بحذر شديد."
     },
     {
         "w": "KORA",
@@ -2049,8 +2685,8 @@ const WC_DICTIONARY = [
     {
         "w": "KORT",
         "t": "قصير",
-        "s": "Kan jag få betala med kort?",
-        "st": "هل يمكنني الدفع بالبطاقة؟"
+        "s": "Livet är kort.",
+        "st": "الحياة قصيرة."
     },
     {
         "w": "KORTA",
@@ -2062,25 +2698,55 @@ const WC_DICTIONARY = [
         "w": "KORV",
         "t": "سجق",
         "s": "Grilla korv.",
-        "st": "شوي السجق."
+        "st": "اشوي السجق."
     },
     {
         "w": "KOS",
-        "t": "رحيل",
-        "s": "Han drog sin kos.",
-        "st": "لقد رحل."
+        "t": "متعة / مرح",
+        "s": "Det är kos att leka.",
+        "st": "من الممتع اللعب."
     },
     {
         "w": "KOSTAR",
-        "t": "يكلـّف",
-        "s": "vad kostar äpplena?",
-        "st": "كم سعر التفاح؟"
+        "t": "يكلف",
+        "s": "Det kostar för mycket.",
+        "st": "هذا يكلف كثيراً جداً."
+    },
+    {
+        "w": "KÖTT",
+        "t": "لحم",
+        "s": "Jag äter inte kött.",
+        "st": "أنا لا آكل اللحم."
+    },
+    {
+        "w": "KÖTTFÄRS",
+        "t": "لحم مفروم",
+        "s": "Vi gör biffar av köttfärs.",
+        "st": "نصنع شرائح اللحم من اللحم المفروم."
     },
     {
         "w": "KRAFT",
         "t": "قوة",
         "s": "Kunskap är makt och kraft.",
         "st": "المعرفة هي سلطة وقوة."
+    },
+    {
+        "w": "KRAM",
+        "t": "عناق",
+        "s": "Ge mig en kram.",
+        "st": "اعطني عناقاً."
+    },
+    {
+        "w": "KRÄM",
+        "t": "كريم",
+        "s": "Smörj in huden med kräm.",
+        "st": "ادهن الجلد بالكريم."
+    },
+    {
+        "w": "KRAMP",
+        "t": "تشنج",
+        "s": "Jag fick kramp i benet.",
+        "st": "أصبت بتشنج في ساقي."
     },
     {
         "w": "KRAS",
@@ -2161,6 +2827,12 @@ const WC_DICTIONARY = [
         "st": "نعيش عند الساحل."
     },
     {
+        "w": "KVÄLL",
+        "t": "مساء",
+        "s": "Vi ses i kväll klockan åtta.",
+        "st": "نلتقي هذا المساء في الساعة الثامنة."
+    },
+    {
         "w": "KVART",
         "t": "ربع",
         "s": "om en kvart ett kvarts kilo",
@@ -2171,6 +2843,12 @@ const WC_DICTIONARY = [
         "t": "ثلاجة",
         "s": "I kylen.",
         "st": "في الثلاجة."
+    },
+    {
+        "w": "KYST",
+        "t": "ساحل",
+        "s": "Kusten är vacker.",
+        "st": "الساحل جميل."
     },
     {
         "w": "LADA",
@@ -2187,8 +2865,8 @@ const WC_DICTIONARY = [
     {
         "w": "LAG",
         "t": "قانون",
-        "s": "Lagen är lika för alla.",
-        "st": "القانون سواسية للجميع."
+        "s": "En ny lag antogs.",
+        "st": "تم تبني قانون جديد."
     },
     {
         "w": "LÅG",
@@ -2199,8 +2877,8 @@ const WC_DICTIONARY = [
     {
         "w": "LAGA",
         "t": "يصلح",
-        "s": "Jag ska laga mat ikväll.",
-        "st": "سأطبخ العشاء الليلة."
+        "s": "Laga det som är trasigt.",
+        "st": "أصلح ما كُسر."
     },
     {
         "w": "LAGAR",
@@ -2210,9 +2888,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "LAGER",
-        "t": "مخزون",
-        "s": "Vi har varan på lager just nu.",
-        "st": "لدينا السلعة في المخزون حالياً."
+        "t": "مخزون / طبقة",
+        "s": "Varan finns i lager.",
+        "st": "السلعة متوفرة في المخزون."
     },
     {
         "w": "LÄKARE",
@@ -2240,9 +2918,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "LAND",
-        "t": "بلد",
-        "s": "Ett land.",
-        "st": "بلد."
+        "t": "أرض / بلد",
+        "s": "Sverige är ett vackert land.",
+        "st": "السويد بلد جميل."
     },
     {
         "w": "LÄNDER",
@@ -2257,16 +2935,28 @@ const WC_DICTIONARY = [
         "st": "طوله متران"
     },
     {
+        "w": "LÄPP",
+        "t": "شفة",
+        "s": "Han bet sig i läppen.",
+        "st": "عض شفته."
+    },
+    {
+        "w": "LÅR",
+        "t": "فخذ",
+        "s": "Kycklinglår i ugn.",
+        "st": "فخذ دجاج في الفرن."
+    },
+    {
         "w": "LÄR",
-        "t": "يُدّعى أن",
-        "s": "hon lär vara miljonär",
-        "st": "يُقال إنها مليونيرة"
+        "t": "يعلم",
+        "s": "Han lär sig svenska.",
+        "st": "هو يتعلم السويدية."
     },
     {
         "w": "LÄRA",
         "t": "تعلم",
-        "s": "Man lär sig något nytt varje dag.",
-        "st": "المرء يتعلم شيئاً جديداً كل يوم."
+        "s": "Att lära är att leva.",
+        "st": "التعلم هو الحياة."
     },
     {
         "w": "LÄRARE",
@@ -2283,14 +2973,26 @@ const WC_DICTIONARY = [
     {
         "w": "LÅS",
         "t": "قفل",
-        "s": "Ett hänglås.",
-        "st": "القفل قوي."
+        "s": "Sätt ett lås på dörren.",
+        "st": "ضع قفلاً على الباب."
+    },
+    {
+        "w": "LÄS",
+        "t": "اقرأ",
+        "s": "Läs boken noga.",
+        "st": "اقرأ الكتاب بعناية."
     },
     {
         "w": "LAST",
         "t": "حمل",
         "s": "Lastbilen hade en mycket tung last.",
         "st": "كانت الشاحنة تحمل حمولة ثقيلة جداً."
+    },
+    {
+        "w": "LAV",
+        "t": "أشنة",
+        "s": "Lavar växer på gamla stenar.",
+        "st": "تنمو الأشنات على الحجارة القديمة."
     },
     {
         "w": "LAVA",
@@ -2301,8 +3003,8 @@ const WC_DICTIONARY = [
     {
         "w": "LÄXA",
         "t": "واجب منزلي",
-        "s": "Gör din läxa efter skolan.",
-        "st": "قم بواجبك بعد المدرسة."
+        "s": "Jag har mycket läxa idag.",
+        "st": "لدي الكثير من الواجب المنزلي اليوم."
     },
     {
         "w": "LE",
@@ -2312,15 +3014,21 @@ const WC_DICTIONARY = [
     },
     {
         "w": "LED",
-        "t": "مُتْعَب",
-        "s": "jag är led på mitt jobb",
-        "st": "سَئِمت عَمَلي"
+        "t": "مفصل / طرييق",
+        "s": "Jag har ont i en led.",
+        "st": "لدي ألم في مفصل."
     },
     {
         "w": "LEDD",
         "t": "اتّجاه",
         "s": "mattan passar bättre på andra ledden",
         "st": "تُناسِب السجادة بصورة أفضل في الإتّجاه الآخَر"
+    },
+    {
+        "w": "LEG",
+        "t": "ابتسامة",
+        "s": "Ett vänligt leende.",
+        "st": "ابتسامة ودية."
     },
     {
         "w": "LEGAL",
@@ -2342,15 +3050,27 @@ const WC_DICTIONARY = [
     },
     {
         "w": "LEN",
-        "t": "لَيّن",
-        "s": "en matta av len ull",
-        "st": "سجادة من الصوف الناعم"
+        "t": "ناعم",
+        "s": "Katten har len päls.",
+        "st": "القطة لديها فراء ناعم."
+    },
+    {
+        "w": "LEVE",
+        "t": "يعيش",
+        "s": "Hon ska leva länge.",
+        "st": "ستعيش طويلاً."
     },
     {
         "w": "LEVER",
         "t": "كبد",
-        "s": "Levern renar blodet i kroppen.",
-        "st": "الكبد ينقي الدم في الجسم."
+        "s": "Levern är ett viktigt organ.",
+        "st": "الكبد عضو مهم."
+    },
+    {
+        "w": "LIA",
+        "t": "ليانا",
+        "s": "Tarzan svingar sig i en lia.",
+        "st": "طرزان يتأرجح في ليانا."
     },
     {
         "w": "LIK",
@@ -2365,6 +3085,30 @@ const WC_DICTIONARY = [
         "st": "من عادته أن يفعل ذلك."
     },
     {
+        "w": "LILA",
+        "t": "أرجواني",
+        "s": "Lila blommor.",
+        "st": "زهور أرجوانية."
+    },
+    {
+        "w": "LILJA",
+        "t": "زنبق",
+        "s": "En vit lilja.",
+        "st": "زنبقة بيضاء."
+    },
+    {
+        "w": "LIM",
+        "t": "غراء",
+        "s": "Jag behöver lim.",
+        "st": "أحتاج إلى غراء."
+    },
+    {
+        "w": "LIND",
+        "t": "زيزفون",
+        "s": "Ett gammalt lindträd.",
+        "st": "شجرة زيزفون قديمة."
+    },
+    {
         "w": "LINJAL",
         "t": "مسطرة",
         "s": "Dra ett streck med linjalen.",
@@ -2375,6 +3119,12 @@ const WC_DICTIONARY = [
         "t": "يعزف",
         "s": "Ska vi lira lite boll?",
         "st": "هل نلعب الكرة قليلاً؟"
+    },
+    {
+        "w": "LIS",
+        "t": "مكر",
+        "s": "Han använde list för att vinna.",
+        "st": "استخدم المكر ليفوز."
     },
     {
         "w": "LISA",
@@ -2413,16 +3163,34 @@ const WC_DICTIONARY = [
         "st": "إنه лось حي يرزق."
     },
     {
+        "w": "LJUS",
+        "t": "ضوء / شمعة",
+        "s": "Tänd ett ljus.",
+        "st": "أشعل شمعة."
+    },
+    {
         "w": "LOGI",
         "t": "مَسكن مُؤَقّت",
         "s": "kost och logi",
         "st": "طعام وسكن"
     },
     {
+        "w": "LÖGN",
+        "t": "كذبة",
+        "s": "Det var en lögn.",
+        "st": "كانت تلك كذبة."
+    },
+    {
+        "w": "LOK",
+        "t": "قاطرة",
+        "s": "Tåget dras av ett lok.",
+        "st": "القطار تسحبه قاطرة."
+    },
+    {
         "w": "LÖK",
         "t": "بصل",
-        "s": "Hacka lök.",
-        "st": "افرم البصل."
+        "s": "Jag hackar lök till såsen.",
+        "st": "أفرم البصل للصلصة."
     },
     {
         "w": "LOKAL",
@@ -2439,8 +3207,8 @@ const WC_DICTIONARY = [
     {
         "w": "LÖN",
         "t": "راتب",
-        "s": "När får vi vår lön utbetald?",
-        "st": "متى سيتم دفع رواتبنا؟"
+        "s": "Jag har fått min lön.",
+        "st": "لقد استلمت راتبي."
     },
     {
         "w": "LOS",
@@ -2461,10 +3229,16 @@ const WC_DICTIONARY = [
         "st": "لوتا هي مجندة متطوعة."
     },
     {
+        "w": "LÖV",
+        "t": "ورقة شجر",
+        "s": "Gula löv faller från träden.",
+        "st": "أوراق صفراء تتساقط من الأشجار."
+    },
+    {
         "w": "LUGN",
         "t": "هادئ",
-        "s": "lugn vilar sjön en lugn gata",
-        "st": "ساد الهدوء على البحيرة شارع هادئ"
+        "s": "Han är en lugn person.",
+        "st": "هو شخص هادئ."
     },
     {
         "w": "LUKT",
@@ -2497,16 +3271,52 @@ const WC_DICTIONARY = [
         "st": "لا يمكنك خداعي."
     },
     {
+        "w": "LUS",
+        "t": "قملة",
+        "s": "En lus i håret.",
+        "st": "قملة في الشعر."
+    },
+    {
         "w": "LUTA",
         "t": "يميل",
         "s": "Luta dig.",
         "st": "استند."
     },
     {
+        "w": "MAG",
+        "t": "قدرة / معدة",
+        "s": "Hon har en stark mag.",
+        "st": "لديها معدة قوية."
+    },
+    {
+        "w": "MAGE",
+        "t": "معدة",
+        "s": "Jag har ont i magen.",
+        "st": "لدي ألم في معدتي."
+    },
+    {
+        "w": "MAKRILL",
+        "t": "إسقمري",
+        "s": "Rökt makrill är gott.",
+        "st": "الإسقمري المدخن لذيذ."
+    },
+    {
+        "w": "MAKT",
+        "t": "سلطة / قوة",
+        "s": "Politiker har stor makt.",
+        "st": "السياسيون لديهم سلطة كبيرة."
+    },
+    {
         "w": "MAL",
-        "t": "عِثّة",
-        "s": "Kvarnen mal säden.",
-        "st": "الطاحونة تطحن الحبوب."
+        "t": "سمك السلور",
+        "s": "Malen är en stor fisk.",
+        "st": "السلور سمكة كبيرة."
+    },
+    {
+        "w": "MAN",
+        "t": "شخص",
+        "s": "Man ska vara god.",
+        "st": "يجب على المرء أن يكون صالحاً."
     },
     {
         "w": "MANAT",
@@ -2517,14 +3327,26 @@ const WC_DICTIONARY = [
     {
         "w": "MARK",
         "t": "أرض",
-        "s": "Marken är täckt av snö.",
-        "st": "الأرض مغطاة بالثلج."
+        "s": "Sitta på marken.",
+        "st": "الجلوس على الأرض."
+    },
+    {
+        "w": "MÄRKE",
+        "t": "ماركة / علامة",
+        "s": "Det är ett känt märke.",
+        "st": "إنها ماركة معروفة."
+    },
+    {
+        "w": "MAST",
+        "t": "صاري",
+        "s": "Segelbåtens mast är stark.",
+        "st": "صاري المركب الشراعي قوي."
     },
     {
         "w": "MAT",
         "t": "طعام",
-        "s": "Mat är viktigt för hälsan.",
-        "st": "الطعام مهم للصحة."
+        "s": "God mat på restaurangen.",
+        "st": "طعام جيد في المطعم."
     },
     {
         "w": "MÄTA",
@@ -2545,6 +3367,18 @@ const WC_DICTIONARY = [
         "st": "تعالوا لتناول الطعام، الأكل جاهز!"
     },
     {
+        "w": "MATRÄTT",
+        "t": "طبق",
+        "s": "Vilken är din favorit maträtt?",
+        "st": "ما هو طبقك المفضل؟"
+    },
+    {
+        "w": "MATROS",
+        "t": "بحار",
+        "s": "Han jobbar som matros på färjan.",
+        "st": "يعمل كبحار على العبارة."
+    },
+    {
         "w": "MATT",
         "t": "ضعيف",
         "s": "Färgen är matt.",
@@ -2553,8 +3387,8 @@ const WC_DICTIONARY = [
     {
         "w": "MÄTT",
         "t": "شبعان",
-        "s": "äta sig mätt mätt på framgångar",
-        "st": "أكل حتى شبع شبع من الانتصارات"
+        "s": "Jag är proppmätt.",
+        "st": "أنا شبعان تماماً."
     },
     {
         "w": "MATTA",
@@ -2569,6 +3403,12 @@ const WC_DICTIONARY = [
         "st": "القطة نائمة على السجادة."
     },
     {
+        "w": "MED",
+        "t": "مع",
+        "s": "Kom med mig.",
+        "st": "تعال معي."
+    },
+    {
         "w": "MEDICIN",
         "t": "دواء",
         "s": "Ta din medicin i tid.",
@@ -2577,8 +3417,14 @@ const WC_DICTIONARY = [
     {
         "w": "MEN",
         "t": "لكن",
-        "s": "Men.",
-        "st": "لكن."
+        "s": "Det är sant, men svårt.",
+        "st": "هذا صحيح، لكنه صعب."
+    },
+    {
+        "w": "MER",
+        "t": "أكثر",
+        "s": "Jag vill ha mer mat.",
+        "st": "أريد المزيد من الطعام."
     },
     {
         "w": "MESON",
@@ -2605,10 +3451,16 @@ const WC_DICTIONARY = [
         "st": "ساروا ميلاً كاملاً."
     },
     {
+        "w": "MJÖL",
+        "t": "طحين",
+        "s": "Vi behöver mjöl för att baka bröd.",
+        "st": "نحتاج الطحين لخبز الخبز."
+    },
+    {
         "w": "MJÖLK",
         "t": "حليب",
-        "s": "Barn behöver mjölk för att växa.",
-        "st": "الأطفال يحتاجون الحليب للنمو."
+        "s": "Barnet dricker ett glas kall mjölk.",
+        "st": "يشرب الطفل كوباً من الحليب البارد."
     },
     {
         "w": "MJUK",
@@ -2631,20 +3483,32 @@ const WC_DICTIONARY = [
     {
         "w": "MODE",
         "t": "موضة",
-        "s": "Hon följer alltid senaste mode.",
-        "st": "هي تتبع دائماً أحدث صيحات الموضة."
+        "s": "Mode växlar snabbt.",
+        "st": "الموضة تتغير بسرعة."
+    },
+    {
+        "w": "MODERN",
+        "t": "حديث",
+        "s": "Det är en modern byggnad.",
+        "st": "إنه مبنى حديث."
     },
     {
         "w": "MOLN",
-        "t": "سحاب",
-        "s": "Det finns vita moln på himlen.",
-        "st": "يوجد سحاب أبيض في السماء."
+        "t": "سحابة",
+        "s": "Ett vitt moln på himlen.",
+        "st": "سحابة بيضاء في السماء."
     },
     {
         "w": "MOR",
         "t": "أم",
-        "s": "mor och barn",
-        "st": "أمي تطبخ الطعام."
+        "s": "Min mor älskar att resa.",
+        "st": "أمي تحب السفر."
+    },
+    {
+        "w": "MÖR",
+        "t": "طري",
+        "s": "Köttet är mört.",
+        "st": "اللحم طري."
     },
     {
         "w": "MORFAR",
@@ -2661,8 +3525,8 @@ const WC_DICTIONARY = [
     {
         "w": "MOSKÉ",
         "t": "مسجد",
-        "s": "Det finns en vacker moské här.",
-        "st": "يوجد مسجد جميل هنا."
+        "s": "En vacker moské.",
+        "st": "مسجد جميل."
     },
     {
         "w": "MOSKÉN",
@@ -2672,9 +3536,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "MOT",
-        "t": "ضد",
-        "s": "Vi går mot stranden.",
-        "st": "نحن ذاهبون نحو الشاطئ."
+        "t": "نحو / ضد",
+        "s": "Båten seglar mot vinden.",
+        "st": "يبحر القارب ضد الريح."
     },
     {
         "w": "MÖTE",
@@ -2685,14 +3549,32 @@ const WC_DICTIONARY = [
     {
         "w": "MOTOR",
         "t": "محرك",
-        "s": "Bilen har en stark motor.",
-        "st": "السيارة لها محرك قوي."
+        "s": "Bilens motor låter konstigt.",
+        "st": "محرك السيارة يصدر صوتاً غريباً."
     },
     {
         "w": "MUR",
         "t": "جدار",
         "s": "De byggde en hög mur runt huset.",
         "st": "بنوا جداراً عالياً حول المنزل."
+    },
+    {
+        "w": "MUS",
+        "t": "فأر",
+        "s": "Katten fångade en mus.",
+        "st": "أمسكت القطة فأراً."
+    },
+    {
+        "w": "MYRA",
+        "t": "نملة",
+        "s": "En liten myra bär ett stort blad.",
+        "st": "نملة صغيرة تحمل ورقة كبيرة."
+    },
+    {
+        "w": "MYROR",
+        "t": "نمل",
+        "s": "Myror är mycket starka insekter.",
+        "st": "النمل حشرات قوية جداً."
     },
     {
         "w": "NÅ",
@@ -2725,6 +3607,18 @@ const WC_DICTIONARY = [
         "st": "برزخ."
     },
     {
+        "w": "NATO",
+        "t": "الناتو",
+        "s": "NATO är en försvarsallians.",
+        "st": "الناتو تحالف دفاعي."
+    },
+    {
+        "w": "NATT",
+        "t": "ليل",
+        "s": "Katten jagar möss på natten.",
+        "st": "القط يطارد الفئران في الليل."
+    },
+    {
         "w": "NATUR",
         "t": "طبيعة",
         "s": "Sverige har en mycket vacker natur.",
@@ -2739,8 +3633,8 @@ const WC_DICTIONARY = [
     {
         "w": "NAV",
         "t": "محور",
-        "s": "Hjulets nav.",
-        "st": "محور العجلة."
+        "s": "Navet är hjulets viktigaste del.",
+        "st": "المحور هو أهم جزء في العجلة."
     },
     {
         "w": "NEDAN",
@@ -2779,6 +3673,12 @@ const WC_DICTIONARY = [
         "st": "إنسان في حالة العوز"
     },
     {
+        "w": "NOG",
+        "t": "ربما / كاف",
+        "s": "Det är nog sant.",
+        "st": "ربما يكون ذلك صحيحاً."
+    },
+    {
         "w": "NORD",
         "t": "شمال",
         "s": "vind mellan nord och nordost",
@@ -2792,15 +3692,27 @@ const WC_DICTIONARY = [
     },
     {
         "w": "NORR",
-        "t": "شمالاً",
-        "s": "norr om Stockholm",
-        "st": "في شمال ستوكهولم"
+        "t": "شمال",
+        "s": "Vi åker norr ut.",
+        "st": "نسافر نحو الشمال."
+    },
+    {
+        "w": "NOT",
+        "t": "نوتة",
+        "s": "Varje not i melodin.",
+        "st": "كل نوتة في اللحن."
+    },
+    {
+        "w": "NÖT",
+        "t": "جوز",
+        "s": "En hård nöt att knäcka.",
+        "st": "جوزة صعبة الكسر."
     },
     {
         "w": "NOTA",
         "t": "فاتورة",
-        "s": "Kan vi få in notan, tack?",
-        "st": "هل يمكننا الحصول على الفاتورة، من فضلك؟"
+        "s": "Kan vi få notan, tack?",
+        "st": "هل يمكننا الحصول على الفاتورة؟"
     },
     {
         "w": "NYCKEL",
@@ -2875,16 +3787,28 @@ const WC_DICTIONARY = [
         "st": "لديه ألم في البطن."
     },
     {
+        "w": "OPP",
+        "t": "فوق",
+        "s": "Opp och hoppa!",
+        "st": "انهض واقفز!"
+    },
+    {
         "w": "ÖRA",
         "t": "أذن",
-        "s": "Jag hör med örat.",
-        "st": "أسمع بأذني."
+        "s": "Jag har ont i mitt öra.",
+        "st": "أذني تؤلمني."
+    },
+    {
+        "w": "ORANGE",
+        "t": "برتقالي",
+        "s": "Apelsinen är orange.",
+        "st": "البرتقالة برتقالية."
     },
     {
         "w": "ORD",
         "t": "كلمة",
-        "s": "Ett ord kan säga mer än tusen bilder.",
-        "st": "كلمة واحدة قد تقول أكثر من ألف صورة."
+        "s": "Jag håller mitt ord.",
+        "st": "أحافظ على كلمتي."
     },
     {
         "w": "ORDNAR",
@@ -2899,16 +3823,28 @@ const WC_DICTIONARY = [
         "st": "الحساب مضبوط بالأوره"
     },
     {
+        "w": "ORK",
+        "t": "طاقة",
+        "s": "Jag har ingen ork.",
+        "st": "ليس لدي طاقة."
+    },
+    {
         "w": "ORM",
         "t": "ثعبان",
-        "s": "Jag är rädd för ormar.",
-        "st": "أنا أخاف من الثعابين."
+        "s": "En orm korsade vägen.",
+        "st": "ثعبان عبر الطريق."
     },
     {
         "w": "ORMAR",
         "t": "ثعابين",
         "s": "Ormar.",
         "st": "ثعابين."
+    },
+    {
+        "w": "ÖRN",
+        "t": "نسر",
+        "s": "Örnen flyger högt över bergen.",
+        "st": "النسر يطير عالياً فوق الجبال."
     },
     {
         "w": "ORO",
@@ -2918,15 +3854,15 @@ const WC_DICTIONARY = [
     },
     {
         "w": "ORT",
-        "t": "منطقة",
+        "t": "مكان",
         "s": "En liten ort.",
-        "st": "منطقة صغيرة."
+        "st": "مكان صغير."
     },
     {
         "w": "ÖRT",
-        "t": "عشب",
-        "s": "Timjan är en ört.",
-        "st": "أعشاب طبية."
+        "t": "عشبة",
+        "s": "Timjan är en doftande ört.",
+        "st": "الزعتر عشبة فواحة."
     },
     {
         "w": "ORTEN",
@@ -2935,22 +3871,34 @@ const WC_DICTIONARY = [
         "st": "من الحي."
     },
     {
+        "w": "ORTER",
+        "t": "أماكن",
+        "s": "Vi besökte vackra orter.",
+        "st": "زرنا أماكن جميلة."
+    },
+    {
         "w": "OS",
-        "t": "دخان/رائحة",
-        "s": "Det osar mat.",
-        "st": "رائحة طعام."
+        "t": "دخان / رائحة كريهة",
+        "s": "Det luktar os från köket.",
+        "st": "تفوح رائحة دخان من المطبخ."
     },
     {
         "w": "OST",
         "t": "جبن",
-        "s": "Jag älskar ost.",
-        "st": "أنا أحب الجبن."
+        "s": "Jag älskar ost på mackan.",
+        "st": "أحب الجبن على الشطيرة."
     },
     {
         "w": "ÖST",
         "t": "شرق",
         "s": "Solen går upp i öst.",
         "st": "الشمس تشرق من الشرق."
+    },
+    {
+        "w": "OSTAR",
+        "t": "أجبان",
+        "s": "Vi provade många olika ostar.",
+        "st": "جربنا العديد من الأجبان المختلفة."
     },
     {
         "w": "ÖSTER",
@@ -2991,14 +3939,20 @@ const WC_DICTIONARY = [
     {
         "w": "PÅ",
         "t": "على",
-        "s": "Ligg på soffan.",
-        "st": "استلقِ على الأريكة."
+        "s": "Det är skönt att ligga på soffan.",
+        "st": "من الرائع الاستلقاء على الأريكة."
+    },
+    {
+        "w": "PACKA",
+        "t": "يحزم",
+        "s": "Jag packar min väska.",
+        "st": "أنا أحزم حقيبتي."
     },
     {
         "w": "PAKET",
-        "t": "طرد",
-        "s": "Ett paket.",
-        "st": "طرد."
+        "t": "طرد / حزمة",
+        "s": "Jag fick ett stort paket med posten.",
+        "st": "تلقيت طرداً كبيراً بالبريد."
     },
     {
         "w": "PAR",
@@ -3013,6 +3967,12 @@ const WC_DICTIONARY = [
         "st": "لا تنس جواز سفرك."
     },
     {
+        "w": "PASTA",
+        "t": "معكرونة",
+        "s": "Vi äter pasta idag.",
+        "st": "نأكل المعكرونة اليوم."
+    },
+    {
         "w": "PASTOR",
         "t": "قِسّ",
         "s": "Pastorn talade i kyrkan.",
@@ -3023,6 +3983,12 @@ const WC_DICTIONARY = [
         "t": "شعور, عاطفة",
         "s": "hennes politiska patos",
         "st": "مشاعرها السياسيّة"
+    },
+    {
+        "w": "PENGAR",
+        "t": "نقود",
+        "s": "Har du några pengar?",
+        "st": "هل لديك أي نقود؟"
     },
     {
         "w": "PENNA",
@@ -3049,6 +4015,30 @@ const WC_DICTIONARY = [
         "st": "الفلفل حار."
     },
     {
+        "w": "PER",
+        "t": "اسم",
+        "s": "Per är ett namn.",
+        "st": "بير هو اسم."
+    },
+    {
+        "w": "PET",
+        "t": "نكز",
+        "s": "En lätt pet i sidan.",
+        "st": "نكزة خفيفة في الجانب."
+    },
+    {
+        "w": "PIL",
+        "t": "سهم",
+        "s": "En pil pekar åt höger.",
+        "st": "سهم يشير إلى اليمين."
+    },
+    {
+        "w": "PILOT",
+        "t": "طيار",
+        "s": "Piloten flyger planet.",
+        "st": "يقود الطيار الطائرة."
+    },
+    {
         "w": "PILT",
         "t": "صبي",
         "s": "En liten pilt lekte på gården.",
@@ -3062,9 +4052,15 @@ const WC_DICTIONARY = [
     },
     {
         "w": "PLAN",
-        "t": "خطة",
-        "s": "Vi har en bra plan.",
-        "st": "لدينا خطة جيدة."
+        "t": "طائرة / خطة",
+        "s": "Vi har en plan.",
+        "st": "لدينا خطة."
+    },
+    {
+        "w": "PLANET",
+        "t": "كوكب",
+        "s": "Jorden är en planet.",
+        "st": "الأرض كوكب."
     },
     {
         "w": "PLATS",
@@ -3091,16 +4087,28 @@ const WC_DICTIONARY = [
         "st": "كان شاعراً مشهوراً."
     },
     {
+        "w": "POL",
+        "t": "قطب",
+        "s": "Nordpolen är kall.",
+        "st": "القطب الشمالي بارد."
+    },
+    {
         "w": "POLIS",
         "t": "شرطة",
         "s": "Ring polisen om du ser något.",
         "st": "اتصل بالشرطة إذا رأيت شيئاً."
     },
     {
+        "w": "POP",
+        "t": "بوب",
+        "s": "Han gillar pop musik.",
+        "st": "هو يحب موسيقى البوب."
+    },
+    {
         "w": "PORT",
         "t": "بوابة",
-        "s": "Han stod vid himmelens port.",
-        "st": "وقف عند بوابة السماء."
+        "s": "Paradisets port.",
+        "st": "بوابة الجنة."
     },
     {
         "w": "POSERAR",
@@ -3109,10 +4117,28 @@ const WC_DICTIONARY = [
         "st": "تَتَّخذ وضعاً أمام الكاميرا"
     },
     {
+        "w": "POSTER",
+        "t": "ملصقات / بنود",
+        "s": "Det hänger många poster på väggen.",
+        "st": "هناك العديد من الملصقات معلقة على الجدار."
+    },
+    {
         "w": "PRAT",
         "t": "ثَرثرة",
         "s": "det är bara löst prat",
         "st": "هذه مجرد ثرثرة"
+    },
+    {
+        "w": "PRIS",
+        "t": "سعر",
+        "s": "Vad är det för pris på tröjan?",
+        "st": "ما هو سعر السترة؟"
+    },
+    {
+        "w": "PRO",
+        "t": "لصالح",
+        "s": "Han är pro fred.",
+        "st": "هو مؤيد للسلام."
     },
     {
         "w": "PROFET",
@@ -3135,8 +4161,8 @@ const WC_DICTIONARY = [
     {
         "w": "PULS",
         "t": "نبض",
-        "s": "Läkaren bad mig att känna pulsen.",
-        "st": "طلب مني الطبيب تحسس النبض."
+        "s": "Känn din puls.",
+        "st": "تحسس نبضك."
     },
     {
         "w": "RÅ",
@@ -3175,6 +4201,12 @@ const WC_DICTIONARY = [
         "st": "يجمع بسرعة."
     },
     {
+        "w": "RÅG",
+        "t": "جاودار",
+        "s": "Detta bröd är bakat av råg.",
+        "st": "هذا الخبز مخبوز من الجاودار."
+    },
+    {
         "w": "RÅGAD",
         "t": "طافح",
         "s": "en rågad sked",
@@ -3183,8 +4215,8 @@ const WC_DICTIONARY = [
     {
         "w": "RAK",
         "t": "مستقيم",
-        "s": "En rak linje.",
-        "st": "خط مستقيم."
+        "s": "Rita en rak linje med linjalen.",
+        "st": "ارسم خطاً مستقيماً بالمسطرة."
     },
     {
         "w": "RAKA",
@@ -3229,6 +4261,12 @@ const WC_DICTIONARY = [
         "st": "إجابة سريعة"
     },
     {
+        "w": "RAPS",
+        "t": "لفت",
+        "s": "Gula fält av raps.",
+        "st": "حقول صفراء من اللفت."
+    },
+    {
         "w": "RAS",
         "t": "انهيار",
         "s": "Det gick ett ras i bergen.",
@@ -3239,6 +4277,12 @@ const WC_DICTIONARY = [
         "t": "ينهار",
         "s": "Huset rasar.",
         "st": "المنزل ينهار."
+    },
+    {
+        "w": "RASAT",
+        "t": "انهار",
+        "s": "Taket har rasat in.",
+        "st": "لقد انهار السقف."
     },
     {
         "w": "RASK",
@@ -3265,6 +4309,12 @@ const WC_DICTIONARY = [
         "st": "مستقيم خط"
     },
     {
+        "w": "RATA",
+        "t": "يرفض",
+        "s": "Man ska inte rata mat.",
+        "st": "لا ينبغي رفض الطعام."
+    },
+    {
         "w": "RATT",
         "t": "مِقْوَد",
         "s": "sitta vid ratten",
@@ -3273,20 +4323,32 @@ const WC_DICTIONARY = [
     {
         "w": "RÄTT",
         "t": "حق",
-        "s": "Gör det som är rätt.",
-        "st": "افعل ما هو صواب."
+        "s": "Alla har rätt till rättvisa.",
+        "st": "للجميع الحق في العدالة."
+    },
+    {
+        "w": "RÄV",
+        "t": "ثعلب",
+        "s": "En röd räv i skogen.",
+        "st": "ثعلب أحمر في الغابة."
+    },
+    {
+        "w": "REA",
+        "t": "تخفيضات",
+        "s": "Det är stor rea i butiken.",
+        "st": "هناك تخفيضات كبيرة في المتجر."
     },
     {
         "w": "RECEPT",
-        "t": "وصفة",
-        "s": "Följ receptet noga.",
-        "st": "اتبع الوصفة بدقة."
+        "t": "وصفة طبية",
+        "s": "Läkaren skrev ett recept.",
+        "st": "كتب الطبيب وصفة طبية."
     },
     {
         "w": "RED",
         "t": "ركب",
-        "s": "Han red på en vit häst.",
-        "st": "ركب حصاناً أبيض."
+        "s": "Profeten red en kamel.",
+        "st": "ركب النبي جملاً."
     },
     {
         "w": "REDIG",
@@ -3307,6 +4369,12 @@ const WC_DICTIONARY = [
         "st": "إخراج و ديكور"
     },
     {
+        "w": "REGLA",
+        "t": "يغلق بمزلاج",
+        "s": "Du måste regla dörren ordentligt.",
+        "st": "يجب عليك إغلاق الباب بالمزلاج بإحكام."
+    },
+    {
         "w": "REGLER",
         "t": "قواعد",
         "s": "Det finns regler man måste följa.",
@@ -3314,9 +4382,15 @@ const WC_DICTIONARY = [
     },
     {
         "w": "REGN",
-        "t": "مَطَر",
-        "s": "Regnet öser ner.",
-        "st": "المطر ينهمر."
+        "t": "مطر",
+        "s": "Efter regn kommer solsken.",
+        "st": "بعد المطر يأتي شروق الشمس."
+    },
+    {
+        "w": "REGNA",
+        "t": "تمطر",
+        "s": "Det ska regna imorgon.",
+        "st": "ستمطر غداً."
     },
     {
         "w": "REKA",
@@ -3327,12 +4401,12 @@ const WC_DICTIONARY = [
     {
         "w": "REN",
         "t": "نظيف",
-        "s": "Luften är ren och klar här.",
-        "st": "الهواء نقي وصافٍ هنا."
+        "s": "Vattnet är rent.",
+        "st": "الماء نظيف."
     },
     {
         "w": "RENAR",
-        "t": "رنة",
+        "t": "حيوانات الرنة",
         "s": "Renar lever i norr.",
         "st": "تعيش الرنة في الشمال."
     },
@@ -3349,6 +4423,12 @@ const WC_DICTIONARY = [
         "st": "خَدْش في الدهان"
     },
     {
+        "w": "REPAN",
+        "t": "الخدش",
+        "s": "Repan i lacken var djup.",
+        "st": "الخدش في الطلاء كان عميقاً."
+    },
+    {
         "w": "RES",
         "t": "سافر",
         "s": "Res dig upp och kämpa vidare.",
@@ -3357,20 +4437,32 @@ const WC_DICTIONARY = [
     {
         "w": "RESA",
         "t": "سفر",
-        "s": "Att resa är att leva, sa han.",
-        "st": "قال إن السفر هو الحياة."
+        "s": "Vi ska på en lång resa.",
+        "st": "سنذهب في رحلة طويلة."
     },
     {
         "w": "RESAN",
         "t": "الرحلة",
-        "s": "Resan var lång och mycket tröttsam.",
-        "st": "كانت الرحلة طويلة ومرهقة جداً."
+        "s": "Resan var lång.",
+        "st": "كانت الرحلة طويلة."
+    },
+    {
+        "w": "RESÄR",
+        "t": "مطاط",
+        "s": "Byxorna har resår i midjan.",
+        "st": "السراويل لها مطاط في الخصر."
+    },
+    {
+        "w": "RESOR",
+        "t": "رحلات",
+        "s": "Mina resor har lärt mig mycket.",
+        "st": "رحلاتي علمتني الكثير."
     },
     {
         "w": "REST",
         "t": "سافر",
-        "s": "Vi har rest över hela världen.",
-        "st": "لقد سافرنا حول العالم بأسره."
+        "s": "Vi har rest hela dagen.",
+        "st": "سافرنا طوال اليوم."
     },
     {
         "w": "RET",
@@ -3386,9 +4478,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "REV",
-        "t": "شِعب",
-        "s": "Båten gick på ett undervattens rev.",
-        "st": "اصطدم القارب بشِعب مرجاني تحت الماء."
+        "t": "شقوق / صدع",
+        "s": "Det blev en rev i kläd",
+        "st": "حدث شق في الملابس."
     },
     {
         "w": "REVS",
@@ -3427,10 +4519,16 @@ const WC_DICTIONARY = [
         "st": "ترتدي خاتماً ذهبياً جميلاً في إصبعها."
     },
     {
+        "w": "RINGA",
+        "t": "يتصل",
+        "s": "Jag ska ringa dig senare ikväll.",
+        "st": "سأتصل بك لاحقاً هذا المساء."
+    },
+    {
         "w": "RIS",
-        "t": "أرُزّ",
-        "s": "Vi äter ris och kyckling.",
-        "st": "نأكل الأرز والدجاج."
+        "t": "أرز",
+        "s": "Vi äter kyckling och ris.",
+        "st": "نأكل الدجاج والأرز."
     },
     {
         "w": "RISK",
@@ -3445,10 +4543,22 @@ const WC_DICTIONARY = [
         "st": "أقيمت الطقوس بجدية كبيرة."
     },
     {
+        "w": "RIV",
+        "t": "مزق",
+        "s": "Riv inte sönder pappret.",
+        "st": "لا تمزق الورقة."
+    },
+    {
+        "w": "RIVA",
+        "t": "يهدم / يمزق",
+        "s": "De ska riva det gamla huset.",
+        "st": "سيهدمون المنزل القديم."
+    },
+    {
         "w": "RO",
         "t": "هدوء",
-        "s": "Jag behöver lugn och ro.",
-        "st": "أحتاج بعض الهدوء."
+        "s": "Jag vill ha lugn och ro.",
+        "st": "أريد الهدوء والسكينة."
     },
     {
         "w": "RÖD",
@@ -3463,6 +4573,12 @@ const WC_DICTIONARY = [
         "st": "حصلت على ورود حمراء في عيد ميلادها."
     },
     {
+        "w": "RÖK",
+        "t": "دخان",
+        "s": "Ingen rök utan eld.",
+        "st": "لا دخان بلا نار."
+    },
+    {
         "w": "ROLL",
         "t": "دَوْر",
         "s": "spela rollen som Hamlet",
@@ -3470,7 +4586,7 @@ const WC_DICTIONARY = [
     },
     {
         "w": "ROM",
-        "t": "روم",
+        "t": "بطرخ / روما",
         "s": "Alla vägar bär till Rom.",
         "st": "كل الطرق تؤدي إلى روما."
     },
@@ -3487,6 +4603,12 @@ const WC_DICTIONARY = [
         "st": "قام الطبيب بجولة استطلاع"
     },
     {
+        "w": "RÖNN",
+        "t": "شجرة الغبيراء",
+        "s": "Rönnens bär är röda på hösten.",
+        "st": "توت الغبيراء أحمر في الخريف."
+    },
+    {
         "w": "ROP",
         "t": "صرخة",
         "s": "Ett rop på hjälp.",
@@ -3497,6 +4619,18 @@ const WC_DICTIONARY = [
         "t": "الصرخات",
         "s": "Ropen skallade över torget.",
         "st": "دوت الصرخات في الساحة."
+    },
+    {
+        "w": "ROPET",
+        "t": "النداء / الصرخة",
+        "s": "Vi hörde ropet från skogen.",
+        "st": "سمعنا النداء من الغابة."
+    },
+    {
+        "w": "RÖR",
+        "t": "أنبوب",
+        "s": "Vattnet rinner i rör.",
+        "st": "الماء يجري في الأنابيب."
     },
     {
         "w": "RÖRA",
@@ -3512,33 +4646,51 @@ const WC_DICTIONARY = [
     },
     {
         "w": "ROS",
-        "t": "ورد",
-        "s": "En röd ros doftar gott.",
-        "st": "الوردة الحمراء تفوح منها رائحة طيبة."
+        "t": "وردة",
+        "s": "Ingen ros utan taggar.",
+        "st": "لا وردة بدون أشواك."
+    },
+    {
+        "w": "RÖS",
+        "t": "رجم",
+        "s": "Ett gammalt rös.",
+        "st": "رجم قديم."
     },
     {
         "w": "ROSA",
-        "t": "زهريّ",
-        "s": "en rosa klänning",
-        "st": "فستان زهري"
+        "t": "وردي",
+        "s": "Hon gillar rosa kläder.",
+        "st": "هي تحب الملابس الوردية."
     },
     {
         "w": "ROST",
         "t": "صدأ",
-        "s": "Rost på bilen.",
-        "st": "صدأ على السيارة."
+        "s": "Det finns mycket rost på den gamla bilen.",
+        "st": "يوجد الكثير من الصدأ على السيارة القديمة."
     },
     {
         "w": "RÖST",
         "t": "صوت",
-        "s": "Hon har en otroligt vacker röst.",
-        "st": "لديها صوت جميل بشكل لا يصدق."
+        "s": "Han talade med låg röst.",
+        "st": "تحدث بصوت منخفض."
+    },
+    {
+        "w": "ROSTA",
+        "t": "يحمص / يصدأ",
+        "s": "Järn kan rosta.",
+        "st": "الحديد يمكن أن يصدأ."
+    },
+    {
+        "w": "ROSTBIFF",
+        "t": "روست بيف",
+        "s": "Rostbiff med potatissallad.",
+        "st": "روست بيف مع سلطة البطاطس."
     },
     {
         "w": "ROT",
         "t": "جذر",
-        "s": "Kärleken är roten till allt gott.",
-        "st": "الحب هو جذر كل خير."
+        "s": "Trädet har djupa rötter.",
+        "st": "للشجرة جذور عميقة."
     },
     {
         "w": "ROTOR",
@@ -3549,8 +4701,8 @@ const WC_DICTIONARY = [
     {
         "w": "ROV",
         "t": "فريسة",
-        "s": "Lejonet smög på sitt rov.",
-        "st": "تسلل الأسد نحو فريسته."
+        "s": "Lejonet fångade sitt rov.",
+        "st": "اصطاد الأسد فريسته."
     },
     {
         "w": "RUIN",
@@ -3561,8 +4713,8 @@ const WC_DICTIONARY = [
     {
         "w": "RULLA",
         "t": "يدحرج",
-        "s": "Rulla köttbullarna.",
-        "st": "دحرج كرات اللحم."
+        "s": "Rulla en boll.",
+        "st": "دحرج كرة."
     },
     {
         "w": "RUM",
@@ -3627,8 +4779,8 @@ const WC_DICTIONARY = [
     {
         "w": "SÅ",
         "t": "يزرع",
-        "s": "Så ett frö.",
-        "st": "ازرع بذرة."
+        "s": "Man måste så ett frö för att skörda.",
+        "st": "يجب أن تزرع بذرة لتحصد."
     },
     {
         "w": "SADLA",
@@ -3639,14 +4791,14 @@ const WC_DICTIONARY = [
     {
         "w": "SAFT",
         "t": "عصير",
-        "s": "Barnen dricker saft och äter bullar.",
-        "st": "الأطفال يشربون العصير ويأكلون الكعك."
+        "s": "Färsk saft.",
+        "st": "عصير طازج."
     },
     {
         "w": "SAK",
         "t": "شيء",
-        "s": "var sak på sin plats",
-        "st": "كل شيء في مكانه"
+        "s": "Det är en annan sak.",
+        "st": "هذا شيء آخر."
     },
     {
         "w": "SAKNAR",
@@ -3657,8 +4809,8 @@ const WC_DICTIONARY = [
     {
         "w": "SAL",
         "t": "قاعة",
-        "s": "Patienten ligger på en stor sal.",
-        "st": "المريض يرقد في قاعة كبيرة."
+        "s": "En stor sal.",
+        "st": "قاعة كبيرة."
     },
     {
         "w": "SALLAD",
@@ -3685,6 +4837,12 @@ const WC_DICTIONARY = [
         "st": "للبيع"
     },
     {
+        "w": "SAM",
+        "t": "سوياً",
+        "s": "Vi ber sam.",
+        "st": "نصلي سوياً."
+    },
+    {
         "w": "SAMS",
         "t": "مُتَّفِق",
         "s": "barnen kan aldrig vara sams",
@@ -3703,10 +4861,22 @@ const WC_DICTIONARY = [
         "st": "لدي سرير ناعم ومريح جداً."
     },
     {
+        "w": "SANN",
+        "t": "حقيقي",
+        "s": "En sann historia.",
+        "st": "قصة حقيقية."
+    },
+    {
+        "w": "SANNA",
+        "t": "حقيقية",
+        "s": "Sanna mina ord.",
+        "st": "صدق كلماتي."
+    },
+    {
         "w": "SÅR",
-        "t": "جُرح, قُرْحَة, خَدْش",
-        "s": "tiden läker alla sår",
-        "st": "تلتئم كل الجروح مع الزمن"
+        "t": "جرح",
+        "s": "Han fick ett sår på handen.",
+        "st": "أصيب بجرح في يده."
     },
     {
         "w": "SÄRTA",
@@ -3717,14 +4887,32 @@ const WC_DICTIONARY = [
     {
         "w": "SÅS",
         "t": "صلصة",
-        "s": "Sås till köttet.",
-        "st": "صلصة للحم."
+        "s": "Såsen är pricken över i.",
+        "st": "الصلصة هي اللمسة الأخيرة."
+    },
+    {
+        "w": "SÄTE",
+        "t": "مقعد",
+        "s": "Ta plats i ditt säte.",
+        "st": "اجلس في مقعدك."
+    },
+    {
+        "w": "SATT",
+        "t": "جلس",
+        "s": "Han satt ner.",
+        "st": "جلس."
     },
     {
         "w": "SE",
         "t": "يرى",
-        "s": "Jag kan se dig.",
-        "st": "أنا أرى الطيور."
+        "s": "Kan du se vad som står där?",
+        "st": "هل يمكنك رؤية ما هو مكتوب هناك؟"
+    },
+    {
+        "w": "SEG",
+        "t": "قاسي / لزج",
+        "s": "Köttet var segt och svårtuggat.",
+        "st": "كان اللحم قاسياً وصعب المضغ."
     },
     {
         "w": "SEGLA",
@@ -3735,8 +4923,8 @@ const WC_DICTIONARY = [
     {
         "w": "SEGLAR",
         "t": "يبحر",
-        "s": "Han seglar sin båt varje sommar.",
-        "st": "يبحر بقاربه كل صيف."
+        "s": "Båten seglar över det blå havet.",
+        "st": "القارب يبحر عبر البحر الأزرق."
     },
     {
         "w": "SEGRA",
@@ -3751,6 +4939,12 @@ const WC_DICTIONARY = [
         "st": "نحن في إجازة."
     },
     {
+        "w": "SEN",
+        "t": "متأخر",
+        "s": "Han kom för sent.",
+        "st": "جاء متأخراً."
+    },
+    {
         "w": "SENA",
         "t": "متأخرة",
         "s": "Jag gillar sena kvällar på sommaren.",
@@ -3763,6 +4957,18 @@ const WC_DICTIONARY = [
         "st": "نحيل ووتري"
     },
     {
+        "w": "SER",
+        "t": "يرى",
+        "s": "Jag ser en båt på havet.",
+        "st": "أرى قارباً في البحر."
+    },
+    {
+        "w": "SET",
+        "t": "مجموعة",
+        "s": "Ett set med verktyg.",
+        "st": "مجموعة أدوات."
+    },
+    {
         "w": "SI",
         "t": "انظر (قديم)",
         "s": "En ton.",
@@ -3771,8 +4977,8 @@ const WC_DICTIONARY = [
     {
         "w": "SIA",
         "t": "يتنبأ",
-        "s": "Sia om framtiden.",
-        "st": "تنبأ بالمستقبل."
+        "s": "Ingen kan med säkerhet sia om framtiden.",
+        "st": "لا أحد يستطيع التنبؤ بالمستقبل بيقين."
     },
     {
         "w": "SIDA",
@@ -3781,10 +4987,16 @@ const WC_DICTIONARY = [
         "st": "اقلب الصفحة في الكتاب."
     },
     {
+        "w": "SIK",
+        "t": "سمك السيك",
+        "s": "Sik är en populär matfisk.",
+        "st": "السيك سمكة طعام شائعة."
+    },
+    {
         "w": "SIL",
         "t": "مصفاة",
-        "s": "Häll pastan i en sil.",
-        "st": "صب المعكرونة في مصفاة."
+        "s": "Ett sil för att sila.",
+        "st": "مصفاة للتصفية."
     },
     {
         "w": "SILA",
@@ -3794,9 +5006,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "SILL",
-        "t": "سمكة الرنكة",
-        "s": "Sill är gott.",
-        "st": "الرنجة لذيذة."
+        "t": "رنجة",
+        "s": "Inlagd sill till jul.",
+        "st": "رنجة مخللة لعيد الميلاد."
     },
     {
         "w": "SILO",
@@ -3823,22 +5035,28 @@ const WC_DICTIONARY = [
         "st": "حركة الملاحة البحرية الدولية"
     },
     {
+        "w": "SJU",
+        "t": "سبعة",
+        "s": "Klockan är sju.",
+        "st": "الساعة السابعة."
+    },
+    {
         "w": "SJUK",
         "t": "مريض",
-        "s": "Jag är tyvärr sjuk idag.",
-        "st": "للأسف أنا مريض اليوم."
+        "s": "Han är sjuk idag.",
+        "st": "هو مريض اليوم."
     },
     {
         "w": "SJUKDOM",
         "t": "مرض",
-        "s": "Han lider av en sällsynt sjukdom.",
-        "st": "هو يعاني من مرض نادر."
+        "s": "Cancer är en svår sjukdom.",
+        "st": "السرطان مرض صعب."
     },
     {
         "w": "SKA",
-        "t": "سوف, سـ, سيكون",
-        "s": "huset ska rivas",
-        "st": "سوف تُهْدَم البناية"
+        "t": "سوف",
+        "s": "Jag ska gå hem.",
+        "st": "سأذهب إلى المنزل."
     },
     {
         "w": "SKADE",
@@ -3853,6 +5071,12 @@ const WC_DICTIONARY = [
         "st": "التفاحة لها قشرة حمراء."
     },
     {
+        "w": "SKÅL",
+        "t": "وعاء",
+        "s": "Jag häller soppan i en skål.",
+        "st": "أصب الحساء في وعاء."
+    },
+    {
         "w": "SKALA",
         "t": "يقشر",
         "s": "Det är lätt att skala en banan.",
@@ -3865,6 +5089,12 @@ const WC_DICTIONARY = [
         "st": "ذخيرة حيّة"
     },
     {
+        "w": "SKAV",
+        "t": "جرح احتكاك",
+        "s": "Skorna gav mig skav.",
+        "st": "سببت لي الأحذية جرحاً."
+    },
+    {
         "w": "SKEDAR",
         "t": "ملاعق",
         "s": "Vi behöver skedar för att äta soppa.",
@@ -3875,6 +5105,12 @@ const WC_DICTIONARY = [
         "t": "بريق",
         "s": "Ett sken.",
         "st": "بريق."
+    },
+    {
+        "w": "SKENA",
+        "t": "سكة / قضيب",
+        "s": "Tåget rullar på sin skena.",
+        "st": "القطار يسير على سكته."
     },
     {
         "w": "SKENAR",
@@ -3919,16 +5155,28 @@ const WC_DICTIONARY = [
         "st": "هل تريد شريحة خبز؟"
     },
     {
+        "w": "SKJORTA",
+        "t": "قميص",
+        "s": "Han stryker sin skjorta.",
+        "st": "هو يكوي قميصه."
+    },
+    {
         "w": "SKO",
         "t": "حذاء",
-        "s": "Klämmer skon någonstans?",
-        "st": "هل يضغط الحذاء في مكان ما؟ (هل هناك مشكلة؟)"
+        "s": "Jag har tappat min ena sko.",
+        "st": "لقد فقدت فردة حذائي."
     },
     {
         "w": "SKOG",
         "t": "غابة",
-        "s": "Vi promenerar i skogen.",
-        "st": "نحن نتنزه في الغابة."
+        "s": "Det finns många träd i skogen.",
+        "st": "يوجد الكثير من الأشجار في الغابة."
+    },
+    {
+        "w": "SKOGS",
+        "t": "غابة (مضاف)",
+        "s": "Vi gick till skogs för att plocka bär.",
+        "st": "ذهبنا إلى الغابة لقطف التوت."
     },
     {
         "w": "SKOLA",
@@ -3943,10 +5191,22 @@ const WC_DICTIONARY = [
         "st": "المدرسة قريبة."
     },
     {
+        "w": "SKOR",
+        "t": "أحذية",
+        "s": "Ta av dig dina skor.",
+        "st": "اخلع حذائك."
+    },
+    {
         "w": "SKÖR",
         "t": "رقيق",
         "s": "ett skört vinglas",
         "st": "كأس نبيذ رقيق"
+    },
+    {
+        "w": "SKORPA",
+        "t": "قسماط",
+        "s": "Doppa en skorpa i kaffet.",
+        "st": "غمس قطعة قسماط في القهوة."
     },
     {
         "w": "SKRAL",
@@ -3971,6 +5231,12 @@ const WC_DICTIONARY = [
         "t": "صُراخ حادّ",
         "s": "ett gällt skrik",
         "st": "صراخ حاد"
+    },
+    {
+        "w": "SKRIV",
+        "t": "اكتب",
+        "s": "Skriv ditt namn här.",
+        "st": "اكتب اسمك هنا."
     },
     {
         "w": "SKRIVA",
@@ -4011,8 +5277,8 @@ const WC_DICTIONARY = [
     {
         "w": "SLOTT",
         "t": "قلعة",
-        "s": "Ett slott.",
-        "st": "قلعة."
+        "s": "Kungen bor i ett slott.",
+        "st": "يعيش الملك في قلعة."
     },
     {
         "w": "SLUP",
@@ -4063,16 +5329,34 @@ const WC_DICTIONARY = [
         "st": "تَعَرَّض الأطفال لخبطة على أصابعهم"
     },
     {
+        "w": "SMÖR",
+        "t": "زبدة",
+        "s": "Bre lite smör på brödet.",
+        "st": "ادهن القليل من الزبدة على الخبز."
+    },
+    {
+        "w": "SMÖRGÅS",
+        "t": "شطيرة",
+        "s": "Jag vill ha en smörgås med ost.",
+        "st": "أريد شطيرة بالجبن."
+    },
+    {
         "w": "SMULA",
         "t": "مقدار ضئيل",
         "s": "en smula ( lite ) hänsyn",
         "st": "مقدار ضئيل من الاعتبار"
     },
     {
+        "w": "SMULTRON",
+        "t": "فراولة برية",
+        "s": "Smultron är sommarens bär.",
+        "st": "الفراولة البرية هي توت الصيف."
+    },
+    {
         "w": "SNAR",
         "t": "قريب",
-        "s": "En snar framtid.",
-        "st": "مستقبل قريب."
+        "s": "Vi ses inom en snar framtid.",
+        "st": "نراك في المستقبل القريب."
     },
     {
         "w": "SNÄV",
@@ -4137,8 +5421,8 @@ const WC_DICTIONARY = [
     {
         "w": "SOL",
         "t": "شمس",
-        "s": "Solen skiner från en klarblå himmel.",
-        "st": "الشمس تشرق من سماء زرقاء صافية."
+        "s": "Solen värmer skönt.",
+        "st": "الشمس تدفئ بشكل لطيف."
     },
     {
         "w": "SOLO",
@@ -4159,6 +5443,12 @@ const WC_DICTIONARY = [
         "st": "كما تزرع تحصد."
     },
     {
+        "w": "SÖM",
+        "t": "درزة",
+        "s": "Sömmen gick upp på byxorna.",
+        "st": "انفكت درزة البنطال."
+    },
+    {
         "w": "SOMMAR",
         "t": "صيف",
         "s": "Sommaren är varm.",
@@ -4173,8 +5463,8 @@ const WC_DICTIONARY = [
     {
         "w": "SON",
         "t": "ابن",
-        "s": "Han är sin fars son.",
-        "st": "إنه ابن أبيه."
+        "s": "Profetens son.",
+        "st": "ابن النبي."
     },
     {
         "w": "SÖNDER",
@@ -4183,10 +5473,16 @@ const WC_DICTIONARY = [
         "st": "تَعَطَّلَت السيارة تَلِفَ"
     },
     {
+        "w": "SORTER",
+        "t": "أنواع / أصناف",
+        "s": "Det finns många sorter av äpplen.",
+        "st": "هناك العديد من أصناف التفاح."
+    },
+    {
         "w": "SÖT",
         "t": "حلو",
-        "s": "Kakan är söt.",
-        "st": "الكعكة حلوة."
+        "s": "Kakan är väldigt söt.",
+        "st": "الكعكة حلوة جداً."
     },
     {
         "w": "SOVRUM",
@@ -4196,9 +5492,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "SPÅR",
-        "t": "آثار",
-        "s": "Följ spåren.",
-        "st": "اتبع الآثار."
+        "t": "قضبان / آثار",
+        "s": "Tåget stannar vid spår tre.",
+        "st": "يتوقف القطار عند القضيب الثالث."
     },
     {
         "w": "SPARK",
@@ -4215,8 +5511,26 @@ const WC_DICTIONARY = [
     {
         "w": "SPEGEL",
         "t": "مرآة",
-        "s": "Titta i spegeln.",
-        "st": "انظر في المرآة."
+        "s": "Hon tittade sig i spegeln.",
+        "st": "نظرت إلى نفسها في المرآة."
+    },
+    {
+        "w": "SPEL",
+        "t": "لعبة",
+        "s": "Detta är ett mycket roligt spel.",
+        "st": "هذه لعبة ممتعة جداً."
+    },
+    {
+        "w": "SPETA",
+        "t": "شظية / عود",
+        "s": "Hon fick en speta i fingret.",
+        "st": "دخلت شظية في إصبعها."
+    },
+    {
+        "w": "SPINDEL",
+        "t": "عنكبوت",
+        "s": "Spindeln väver sitt nät.",
+        "st": "العنكبوت ينسج شبكته."
     },
     {
         "w": "SPION",
@@ -4231,10 +5545,22 @@ const WC_DICTIONARY = [
         "st": "ملف."
     },
     {
+        "w": "SPORT",
+        "t": "رياضة",
+        "s": "Fotboll är en populär sport.",
+        "st": "كرة القدم رياضة شعبية."
+    },
+    {
+        "w": "STAD",
+        "t": "مدينة",
+        "s": "Stockholm är en stor stad.",
+        "st": "ستوكهولم مدينة كبيرة."
+    },
+    {
         "w": "STAFF",
         "t": "طاقم",
-        "s": "Hela vår staff är här.",
-        "st": "طاقمنا بأكمله هنا."
+        "s": "En kompetent staff.",
+        "st": "طاقم مؤهل."
     },
     {
         "w": "STAL",
@@ -4275,8 +5601,8 @@ const WC_DICTIONARY = [
     {
         "w": "STAT",
         "t": "دولة",
-        "s": "Staten ska tjäna folket.",
-        "st": "يجب أن تخدم الدولة الشعب."
+        "s": "Staten ska skydda sina medborgare.",
+        "st": "يجب على الدولة حماية مواطنيها."
     },
     {
         "w": "STATION",
@@ -4291,10 +5617,28 @@ const WC_DICTIONARY = [
         "st": "سنقلي كرات اللحم للعشاء."
     },
     {
+        "w": "STEN",
+        "t": "حجر",
+        "s": "En stor sten låg på vägen.",
+        "st": "كان هناك حجر كبير على الطريق."
+    },
+    {
         "w": "STENAR",
         "t": "أحجار",
-        "s": "Man ska inte kasta stenar i glashus.",
-        "st": "لا ترمِ الناس بالحجارة وبيتك من زجاج."
+        "s": "Kasta inte stenar.",
+        "st": "لا ترمِ الحجارة."
+    },
+    {
+        "w": "STEWARD",
+        "t": "مضيف",
+        "s": "En steward serverade kaffe.",
+        "st": "قدم المضيف القهوة."
+    },
+    {
+        "w": "STIG",
+        "t": "مسار",
+        "s": "En smal stig genom skogen.",
+        "st": "مسار ضيق عبر الغابة."
     },
     {
         "w": "STIL",
@@ -4316,9 +5660,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "STO",
-        "t": "فرس",
-        "s": "Ett sto med sitt föl.",
-        "st": "فرس مع مهرها."
+        "t": "وقف",
+        "s": "Tåget sto vid stationen.",
+        "st": "وقف القطار عند المحطة."
     },
     {
         "w": "STÖD",
@@ -4341,14 +5685,20 @@ const WC_DICTIONARY = [
     {
         "w": "STOR",
         "t": "كبير",
-        "s": "Han beställde en stor stark öl.",
-        "st": "طلب كأساً كبيراً من البيرة القوية."
+        "s": "En stor stark, tack.",
+        "st": "واحدة كبيرة وقوية، من فضلك (بيرة)."
+    },
+    {
+        "w": "STORA",
+        "t": "كبيرة",
+        "s": "De stora båtarna ligger i hamnen.",
+        "st": "القوارب الكبيرة راسية في الميناء."
     },
     {
         "w": "STORM",
         "t": "عاصفة",
-        "s": "Stormen fällde många träd.",
-        "st": "أسقطت العاصفة أشجاراً كثيرة."
+        "s": "En kraftig storm drog in.",
+        "st": "هبت عاصفة قوية."
     },
     {
         "w": "STORMAR",
@@ -4357,10 +5707,16 @@ const WC_DICTIONARY = [
         "st": "تَعْصِف مشاعر عنيفة"
     },
     {
+        "w": "STORMIG",
+        "t": "عاصف",
+        "s": "Det var en stormig natt.",
+        "st": "كانت ليلة عاصفة."
+    },
+    {
         "w": "STRAFF",
         "t": "عقاب",
-        "s": "Han fick ett strängt straff.",
-        "st": "تلقى عقاباً شديداً."
+        "s": "Straffet var rättvist.",
+        "st": "كانت العقوبة عادلة."
     },
     {
         "w": "STRAM",
@@ -4371,8 +5727,8 @@ const WC_DICTIONARY = [
     {
         "w": "STRAND",
         "t": "شاطئ",
-        "s": "Vi leker på stranden.",
-        "st": "نلعب على الشاطئ."
+        "s": "Vi badar vid stranden.",
+        "st": "نسبح عند الشاطئ."
     },
     {
         "w": "STRÄV",
@@ -4391,6 +5747,12 @@ const WC_DICTIONARY = [
         "t": "طالب",
         "s": "Han är student vid universitetet.",
         "st": "هو طالب في الجامعة."
+    },
+    {
+        "w": "STUDIE",
+        "t": "دراسة",
+        "s": "En ny studie visar detta.",
+        "st": "تظهر دراسة جديدة هذا."
     },
     {
         "w": "STUND",
@@ -4423,6 +5785,12 @@ const WC_DICTIONARY = [
         "st": "هل لديك ممحاة؟"
     },
     {
+        "w": "SUM",
+        "t": "مجموع",
+        "s": "En stor summa pengar.",
+        "st": "مبلغ كبير من المال."
+    },
+    {
         "w": "SUNT",
         "t": "صحي",
         "s": "Det är sunt förnuft.",
@@ -4447,8 +5815,20 @@ const WC_DICTIONARY = [
         "st": "حفيف الريح."
     },
     {
+        "w": "SVAL",
+        "t": "بارد / منعش",
+        "s": "En sval vind blåser från havet.",
+        "st": "تهب رياح منعشة من البحر."
+    },
+    {
+        "w": "SVALA",
+        "t": "سنونو",
+        "s": "En svala gör ingen sommar, sägs det.",
+        "st": "يقال إن سنونوة واحدة لا تصنع الصيف."
+    },
+    {
         "w": "SVAR",
-        "t": "إجابة",
+        "t": "جواب",
         "s": "Jag vill ha ett svar.",
         "st": "أريد جواباً."
     },
@@ -4479,14 +5859,14 @@ const WC_DICTIONARY = [
     {
         "w": "TAK",
         "t": "سقف",
-        "s": "Taket läcker när det regnar mycket.",
-        "st": "السقف يسرب الماء عندما تمطر بغزارة."
+        "s": "Taket på huset behöver lagas.",
+        "st": "سقف المنزل يحتاج إلى إصلاح."
     },
     {
         "w": "TAL",
-        "t": "خطاب",
-        "s": "Han höll ett tal.",
-        "st": "ألقى خطاباً."
+        "t": "خطاب / عدد",
+        "s": "Han höll ett bra tal.",
+        "st": "ألقى خطاباً جيداً."
     },
     {
         "w": "TALA",
@@ -4495,22 +5875,40 @@ const WC_DICTIONARY = [
         "st": "الكلام من فضة والسكوت من ذهب."
     },
     {
+        "w": "TALANG",
+        "t": "موهبة",
+        "s": "Hon har en stor musikalisk talang.",
+        "st": "لديها موهبة موسيقية كبيرة."
+    },
+    {
         "w": "TAM",
         "t": "أليف",
-        "s": "en tam fågel ett tamt anfall",
-        "st": "طير داجن هجمة ضعيفة , هجوم ضعيف"
+        "s": "En tam katt.",
+        "st": "قطة أليفة."
     },
     {
         "w": "TAND",
         "t": "سن",
-        "s": "En tand.",
-        "st": "سن."
+        "s": "Jag har ont i en tand.",
+        "st": "لدي ألم في سن."
+    },
+    {
+        "w": "TANK",
+        "t": "خزان",
+        "s": "Bilen har en full tank bensin.",
+        "st": "السيارة بها خزان وقود ممتلئ."
     },
     {
         "w": "TANT",
         "t": "سيدة",
         "s": "En snäll tant gav mig godis.",
         "st": "سيدة لطيفة أعطتني الحلوى."
+    },
+    {
+        "w": "TAR",
+        "t": "يأخذ",
+        "s": "Det tar tid.",
+        "st": "الأمر يستغرق وقتاً."
     },
     {
         "w": "TÅR",
@@ -4520,15 +5918,27 @@ const WC_DICTIONARY = [
     },
     {
         "w": "TÄR",
-        "t": "يستهلك",
-        "s": "projekten tärde hårt på ekonomin",
-        "st": "استهلك المشروع كثيراً من الموارد الاقتصادية"
+        "t": "يستهلك / يقطع",
+        "s": "Oron tär på hans krafter.",
+        "st": "القلق يستنزف قواه."
+    },
+    {
+        "w": "TARM",
+        "t": "أمعاء",
+        "s": "Tarmen är lång.",
+        "st": "الأمعاء طويلة."
     },
     {
         "w": "TÄRNA",
         "t": "وصيفة",
         "s": "Hon valdes till årets Lucia tärna.",
         "st": "تم اختيارها لتكون وصيفة لوسيا لهذا العام."
+    },
+    {
+        "w": "TAS",
+        "t": "يؤخذ",
+        "s": "Provet tas på morgonen.",
+        "st": "تؤخذ العينة في الصباح."
     },
     {
         "w": "TÄT",
@@ -4561,16 +5971,28 @@ const WC_DICTIONARY = [
         "st": "الهاتف يرن."
     },
     {
+        "w": "TENTA",
+        "t": "امتحان",
+        "s": "Jag har en svår tenta imorgon.",
+        "st": "لدي امتحان صعب غداً."
+    },
+    {
         "w": "TERMIN",
         "t": "فصل دراسي",
         "s": "Höstterminen är ganska lång.",
         "st": "فصل الخريف الدراسي طويل نوعاً ما."
     },
     {
+        "w": "TEST",
+        "t": "اختبار",
+        "s": "Vi har ett test idag.",
+        "st": "لدينا اختبار اليوم."
+    },
+    {
         "w": "TID",
         "t": "وقت",
-        "s": "Tid.",
-        "st": "وقت."
+        "s": "Vad är det för tid?",
+        "st": "كم الوقت؟"
     },
     {
         "w": "TILL",
@@ -4591,6 +6013,12 @@ const WC_DICTIONARY = [
         "st": "اضبط المؤقت على عشر دقائق."
     },
     {
+        "w": "TIO",
+        "t": "عشرة",
+        "s": "Tio kronor.",
+        "st": "عشر كرونات."
+    },
+    {
         "w": "TJÄRA",
         "t": "قطران",
         "s": "Svart tjära.",
@@ -4604,9 +6032,15 @@ const WC_DICTIONARY = [
     },
     {
         "w": "TOK",
-        "t": "أبْلَه",
-        "s": "Det gick på tok.",
-        "st": "سارت الأمور بشكل خاطئ."
+        "t": "مجنون / أحمق",
+        "s": "Han är en riktig tok.",
+        "st": "إنه أحمق حقاً."
+    },
+    {
+        "w": "TOM",
+        "t": "فارغ",
+        "s": "Tanken är nästan tom.",
+        "st": "الخزان شبه فارغ."
     },
     {
         "w": "TOMT",
@@ -4639,6 +6073,18 @@ const WC_DICTIONARY = [
         "st": "نلتقي في الساحة."
     },
     {
+        "w": "TORKA",
+        "t": "يجفف / جفاف",
+        "s": "Häng tvätten på tork i solen.",
+        "st": "علق الغسيل ليجف في الشمس."
+    },
+    {
+        "w": "TORN",
+        "t": "برج",
+        "s": "Ett högt torn.",
+        "st": "برج عالٍ."
+    },
+    {
         "w": "TORPE",
         "t": "كوخ",
         "s": "Ett torp.",
@@ -4657,6 +6103,12 @@ const WC_DICTIONARY = [
         "st": "لا تجرؤ على الرفض"
     },
     {
+        "w": "TORSK",
+        "t": "سمك القد",
+        "s": "Torsk är en mycket god fisk.",
+        "st": "القد سمكة لذيذة جداً."
+    },
+    {
         "w": "TOTAL",
         "t": "شامل",
         "s": "en total förnyelse totalt sett",
@@ -4664,9 +6116,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "TRÄ",
-        "t": "يُدخل",
-        "s": "Det är svårt att trä nålen.",
-        "st": "من الصعب إدخال الخيط في الإبرة."
+        "t": "خشب",
+        "s": "Ett hus av trä.",
+        "st": "منزل من الخشب."
     },
     {
         "w": "TRÄD",
@@ -4693,6 +6145,12 @@ const WC_DICTIONARY = [
         "st": "حركة المرور كثيفة اليوم."
     },
     {
+        "w": "TRE",
+        "t": "ثلاثة",
+        "s": "Ett, två, tre.",
+        "st": "واحد، اثنان، ثلاثة."
+    },
+    {
         "w": "TRIST",
         "t": "مُحْزِن",
         "s": "ett trist bostadsområde en trist föreläsning",
@@ -4701,8 +6159,8 @@ const WC_DICTIONARY = [
     {
         "w": "TRO",
         "t": "إيمان",
-        "s": "Tro kan försätta berg.",
-        "st": "الإيمان يمكنه نقل الجبال."
+        "s": "Stark tro i Gud.",
+        "st": "إيمان قوي بالله."
     },
     {
         "w": "TROLIG",
@@ -4711,16 +6169,34 @@ const WC_DICTIONARY = [
         "st": "تَطَوُّر مُحْتَمَل"
     },
     {
+        "w": "TRON",
+        "t": "الإيمان",
+        "s": "Tron är stark.",
+        "st": "الإيمان قوي."
+    },
+    {
         "w": "TUNA",
         "t": "ساحة",
         "s": "Eskilstuna är en fin gammal stad.",
         "st": "إسكيلستونا مدينة قديمة وجميلة."
     },
     {
+        "w": "TUNNBRÖD",
+        "t": "خبز رقيق",
+        "s": "Tunnbröd med lax.",
+        "st": "خبز رقيق مع السلمون."
+    },
+    {
         "w": "TUR",
         "t": "رحلة",
         "s": "båten gör två turer om dagen",
         "st": "قام القارب برحلتين في اليوم"
+    },
+    {
+        "w": "TURER",
+        "t": "جولات",
+        "s": "Vi bokade flera turer.",
+        "st": "حجزنا عدة جولات."
     },
     {
         "w": "TURIST",
@@ -4741,6 +6217,18 @@ const WC_DICTIONARY = [
         "st": "بِعَرض الشارع"
     },
     {
+        "w": "TYG",
+        "t": "قماش",
+        "s": "Klänningen är sydd av fint tyg.",
+        "st": "الفستان مخيط من قماش فاخر."
+    },
+    {
+        "w": "TYP",
+        "t": "نوع",
+        "s": "Vilken typ av bil har du?",
+        "st": "ما نوع السيارة التي لديك؟"
+    },
+    {
         "w": "TYSK",
         "t": "ألماني",
         "s": "Jag träffade en trevlig tysk turist.",
@@ -4748,9 +6236,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "UGN",
-        "t": "فُرن",
-        "s": "steka kött i ugnen",
-        "st": "شوى اللحم بالفرن"
+        "t": "فرن",
+        "s": "Sätt in kakan i ugnen.",
+        "st": "ضع الكعكة في الفرن."
     },
     {
         "w": "UNDAN",
@@ -4765,6 +6253,12 @@ const WC_DICTIONARY = [
         "st": "دَعَت تصرفاته إلى العَجَب"
     },
     {
+        "w": "UNG",
+        "t": "شاب",
+        "s": "Han är ung och stark.",
+        "st": "هو شاب وقوي."
+    },
+    {
         "w": "UR",
         "t": "من/ساعة",
         "s": "Gå ur rummet.",
@@ -4773,8 +6267,8 @@ const WC_DICTIONARY = [
     {
         "w": "UT",
         "t": "خارج",
-        "s": "Gå ut.",
-        "st": "اذهب للخارج."
+        "s": "Gå ut och lek.",
+        "st": "اخرج والعب."
     },
     {
         "w": "UTIFRÅN",
@@ -4801,10 +6295,22 @@ const WC_DICTIONARY = [
         "st": "نحن هنا."
     },
     {
+        "w": "VAD",
+        "t": "بطة الساق / ماذا",
+        "s": "Jag har ont i vaden.",
+        "st": "لدي ألم في بطة الساق."
+    },
+    {
         "w": "VÄDRET",
         "t": "الطقس",
         "s": "Alla gillar att prata om vädret.",
         "st": "الجميع يحب الحديث عن الطقس."
+    },
+    {
+        "w": "VÅFFLA",
+        "t": "وافل",
+        "s": "Vi äter våfflor med sylt.",
+        "st": "نأكل الوافل مع المربى."
     },
     {
         "w": "VAG",
@@ -4815,8 +6321,8 @@ const WC_DICTIONARY = [
     {
         "w": "VÄG",
         "t": "طريق",
-        "s": "En lång väg.",
-        "st": "طريق طويل."
+        "s": "Vi har en lång väg att vandra.",
+        "st": "لدينا طريق طويل لنقطعه."
     },
     {
         "w": "VÄGAR",
@@ -4825,10 +6331,16 @@ const WC_DICTIONARY = [
         "st": "طرق الرب لا يمكن سبر أغوارها."
     },
     {
+        "w": "VÄGG",
+        "t": "جدار",
+        "s": "Tavlan hänger på den vita väggen.",
+        "st": "اللوحة معلقة على الجدار الأبيض."
+    },
+    {
         "w": "VAGN",
         "t": "عربة",
-        "s": "Hästen drog en tung vagn.",
-        "st": "سحب الحصان عربة ثقيلة."
+        "s": "Tågets vagn är full.",
+        "st": "عربة القطار ممتلئة."
     },
     {
         "w": "VAGNAR",
@@ -4841,6 +6353,18 @@ const WC_DICTIONARY = [
         "t": "حِراسة",
         "s": "även om platsen där man vaktar",
         "st": "تقال أيضاً عن المكان المحروس"
+    },
+    {
+        "w": "VAL",
+        "t": "حوت / خيار",
+        "s": "Vi såg en stor val i havet.",
+        "st": "رأينا حوتاً كبيراً في البحر."
+    },
+    {
+        "w": "VÄL",
+        "t": "حسناً / جيداً",
+        "s": "Det går väl bra för dig?",
+        "st": "الأمور تسير جيداً معك، أليس كذلك؟"
     },
     {
         "w": "VÄLDIG",
@@ -4863,8 +6387,8 @@ const WC_DICTIONARY = [
     {
         "w": "VAN",
         "t": "معتاد",
-        "s": "Han är van vid hårt arbete.",
-        "st": "هو معتاد على العمل الشاق."
+        "s": "Han är van vid resor.",
+        "st": "هو معتاد على السفر."
     },
     {
         "w": "VÄN",
@@ -4881,14 +6405,20 @@ const WC_DICTIONARY = [
     {
         "w": "VAR",
         "t": "أين",
-        "s": "Var har du varit någonstans?",
-        "st": "أين كنت؟"
+        "s": "Var är beviset?",
+        "st": "أين الدليل؟"
     },
     {
         "w": "VÅR",
         "t": "لنا",
         "s": "vårt eget modersmål",
         "st": "لغتنا الأم"
+    },
+    {
+        "w": "VARA",
+        "t": "سلعة / يكون",
+        "s": "Det är en bra vara.",
+        "st": "إنها سلعة جيدة."
     },
     {
         "w": "VÅRAS",
@@ -4946,9 +6476,9 @@ const WC_DICTIONARY = [
     },
     {
         "w": "VÄRST",
-        "t": "بصورة خاصّة",
-        "s": "inte så värst ofta",
-        "st": "ليس كثيراً بصورة خاصة"
+        "t": "أسوأ",
+        "s": "Det var det värsta jag hört.",
+        "st": "هذا أسوأ ما سمعت."
     },
     {
         "w": "VART",
@@ -4959,8 +6489,20 @@ const WC_DICTIONARY = [
     {
         "w": "VÄSKA",
         "t": "حقيبة",
-        "s": "Packa din väska inför resan.",
-        "st": "حزم حقيبتك قبل السفر."
+        "s": "Jag packade min väska.",
+        "st": "حزمت حقيبتي."
+    },
+    {
+        "w": "VÄST",
+        "t": "سترة",
+        "s": "Han har en vit väst på sig.",
+        "st": "يرتدي سترة بيضاء."
+    },
+    {
+        "w": "VÄSTER",
+        "t": "غرب",
+        "s": "Vi färdas mot väster.",
+        "st": "نسافر نحو الغرب."
     },
     {
         "w": "VÄSTRA",
@@ -4981,16 +6523,46 @@ const WC_DICTIONARY = [
         "st": "اشرب الكثير من الماء."
     },
     {
+        "w": "VÄXA",
+        "t": "ينمو",
+        "s": "Blommorna växa snabbt.",
+        "st": "الزهور تنمو بسرعة."
+    },
+    {
+        "w": "VERK",
+        "t": "عمل / مصنع",
+        "s": "Ett stort verk.",
+        "st": "عمل كبير."
+    },
+    {
+        "w": "VERKTYG",
+        "t": "أداة",
+        "s": "Hammaren är ett verktyg.",
+        "st": "المطرقة أداة."
+    },
+    {
         "w": "VERS",
         "t": "آية",
         "s": "Läs en vers ur boken.",
         "st": "اقرأ بيتاً من الكتاب."
     },
     {
+        "w": "VET",
+        "t": "يعلم",
+        "s": "Han vet vägen hem.",
+        "st": "هو يعرف الطريق إلى المنزل."
+    },
+    {
         "w": "VID",
-        "t": "عريض",
-        "s": "Huset ligger vid sjön.",
-        "st": "يقع المنزل عند البحيرة."
+        "t": "واسع / عند",
+        "s": "Huset ligger vid en vacker sjö.",
+        "st": "يقع المنزل عند بحيرة جميلة."
+    },
+    {
+        "w": "VIDA",
+        "t": "واسع / عريض",
+        "s": "De har rest över vida hav.",
+        "st": "لقد سافروا عبر بحار واسعة."
     },
     {
         "w": "VIDGAR",
@@ -5005,10 +6577,28 @@ const WC_DICTIONARY = [
         "st": "قفزة رشيقة"
     },
     {
+        "w": "VIK",
+        "t": "طوى",
+        "s": "Vik pappret på mitten.",
+        "st": "اطو الورقة من المنتصف."
+    },
+    {
         "w": "VILD",
         "t": "بَريّ",
         "s": "vilda växter vilda djur",
         "st": "نباتات بريّة حيوانات برية ( وحشيّة )"
+    },
+    {
+        "w": "VIN",
+        "t": "نبيذ",
+        "s": "Rött vin passar bra till kött.",
+        "st": "النبيذ الأحمر يناسب اللحم جيداً."
+    },
+    {
+        "w": "VIND",
+        "t": "ريح",
+        "s": "En stark vind blåser i träden.",
+        "st": "رياح قوية تعصف بالأشجار."
     },
     {
         "w": "VINTER",

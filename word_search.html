@@ -197,17 +197,24 @@
         }
 
         .hint-btn {
-            background: linear-gradient(135deg, #ffd700, #ffaa00);
-            border: none;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 255, 255, 0.3);
             border-radius: 20px;
-            padding: 5px 15px;
-            color: #000;
+            padding: 8px 15px;
+            color: #fff;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 5px;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+
+        .hint-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
         }
 
         .hint-btn:disabled {
@@ -950,6 +957,60 @@
             cursor: pointer;
             padding: 5px;
         }
+
+        .nav-arrow-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .nav-arrow-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .nav-arrow-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
+        }
+
+        .bottom-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 10px;
+            padding: 0 10px;
+            gap: 20px;
+            /* Suitable space */
+        }
+
+        #mystery-hint {
+            /* Existing styles moved/adapted if needed, but keeping inline for now or relying on existing CSS if any */
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #fff;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 
@@ -970,8 +1031,11 @@
         <!-- Row 3: Controls -->
         <div class="header-row-3">
             <button class="icon-btn" onclick="game.showMenu()">⚙️</button>
+
+            <button id="prev-level-btn" class="nav-arrow-btn" onclick="game.prevLevel()">❮</button>
             <div id="level-badge-container" class="level-badge" style="cursor: pointer;"
                 onclick="game.showNavigation()">Nivå <span id="level-display">1</span></div>
+            <button id="next-level-btn" class="nav-arrow-btn" onclick="game.nextLevel()">❯</button>
 
             <div id="score-container">
                 <span>💎</span> <span id="score-display">0</span>
@@ -979,9 +1043,7 @@
                     style="display:none; margin-left: 10px; color: #ff0055; font-weight: bold; animation: pulse 0.5s infinite;">x1</span>
             </div>
 
-            <button class="hint-btn" onclick="game.useHint()" id="hint-btn">
-                <span>💡</span> -5
-            </button>
+
 
             <div id="timer-display">60s</div>
         </div>
@@ -995,7 +1057,12 @@
         </div>
         <div id="flashlight-overlay"></div>
         <div id="word-bank"></div>
-        <div id="mystery-hint">🕵️ Mystery: <span id="mystery-text">...</span></div>
+        <div class="bottom-controls">
+            <div id="mystery-hint">🕵️ Mystery: <span id="mystery-text">...</span></div>
+            <button class="hint-btn" onclick="game.useHint()" id="hint-btn">
+                <span>💡</span> -5
+            </button>
+        </div>
     </div>
     <div id="floating-label"></div>
 
@@ -1178,7 +1245,38 @@
             playSuccess() {
                 this.playTone(523.25, 'sine', 0.2, 0);
                 this.playTone(659.25, 'sine', 0.2, 0.1);
-                this.playTone(783.99, 'sine', 0.4, 0.2);
+            }
+
+            playWaterDrop() {
+                if (!this.enabled || !this.audioCtx) return;
+
+                const t = this.audioCtx.currentTime;
+
+                // Oscillator 1: The main "bloop"
+                const osc1 = this.audioCtx.createOscillator();
+                const gain1 = this.audioCtx.createGain();
+                osc1.type = 'sine';
+                osc1.frequency.setValueAtTime(1000, t);
+                osc1.frequency.exponentialRampToValueAtTime(200, t + 0.15);
+                gain1.gain.setValueAtTime(0.5, t);
+                gain1.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+                osc1.connect(gain1);
+                gain1.connect(this.audioCtx.destination);
+                osc1.start(t);
+                osc1.stop(t + 0.15);
+
+                // Oscillator 2: The "dazzle" high pitch sparkle
+                const osc2 = this.audioCtx.createOscillator();
+                const gain2 = this.audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(2000, t);
+                osc2.frequency.exponentialRampToValueAtTime(800, t + 0.1);
+                gain2.gain.setValueAtTime(0.3, t);
+                gain2.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                osc2.connect(gain2);
+                gain2.connect(this.audioCtx.destination);
+                osc2.start(t);
+                osc2.stop(t + 0.1);
             }
             playLevelComplete() {
                 if (!this.audioCtx) return;
@@ -1932,6 +2030,7 @@
             }
 
             initLevel() {
+                this.updateNavButtons();
                 const topic = TOPICS[this.currentTopicIndex];
                 const levelData = topic.levels[this.currentLevelIndex];
 
@@ -2350,7 +2449,7 @@
                 if (frozenCells.length > 0) {
                     // Crack the ice
                     frozenCells.forEach(el => el.classList.remove('frozen'));
-                    this.soundManager.playTone(600, 'sine', 0.1); // Glass/Ice sound
+                    this.soundManager.playWaterDrop(); // Water drop sound
                     this.showComboEffect('ICE CRACKED! ❄️');
                     return; // Do NOT find the word yet
                 }
@@ -2424,12 +2523,51 @@
             }
 
             nextLevel() {
-                this.currentLevelIndex++;
-                this.levelModal.classList.remove('active');
-                if (this.currentLevelIndex >= 10) {
-                    this.gameCompleteModal.classList.add('active');
-                } else {
+                const currentTopic = TOPICS[this.currentTopicIndex];
+                const maxLevel = currentTopic.levels.length - 1;
+                const nextLevelIdx = this.currentLevelIndex + 1;
+
+                // Check if next level is unlocked
+                const isNextUnlocked = this.progress.unlockedLevels[`${this.currentTopicIndex}-${nextLevelIdx}`];
+
+                if (this.currentLevelIndex >= maxLevel) return;
+
+                // Allow if next level is unlocked
+                if (isNextUnlocked) {
+                    this.currentLevelIndex++;
+                    this.levelModal.classList.remove('active');
                     this.initLevel();
+                }
+            }
+
+            prevLevel() {
+                if (this.currentLevelIndex > 0) {
+                    this.currentLevelIndex--;
+                    this.initLevel();
+                }
+            }
+
+            updateNavButtons() {
+                const prevBtn = document.getElementById('prev-level-btn');
+                const nextBtn = document.getElementById('next-level-btn');
+
+                if (prevBtn) {
+                    prevBtn.disabled = this.currentLevelIndex === 0;
+                    prevBtn.style.opacity = this.currentLevelIndex === 0 ? '0.3' : '1';
+                }
+
+                if (nextBtn) {
+                    const currentTopic = TOPICS[this.currentTopicIndex];
+                    const maxLevel = currentTopic.levels.length - 1;
+                    const nextLevelIdx = this.currentLevelIndex + 1;
+
+                    const isNextUnlocked = this.progress.unlockedLevels[`${this.currentTopicIndex}-${nextLevelIdx}`];
+
+                    // Enable if not at max level AND next level is unlocked
+                    const canGoNext = (this.currentLevelIndex < maxLevel) && isNextUnlocked;
+
+                    nextBtn.disabled = !canGoNext;
+                    nextBtn.style.opacity = canGoNext ? '1' : '0.3';
                 }
             }
 

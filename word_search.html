@@ -1288,7 +1288,13 @@
                 this.levelDisplay.textContent = this.currentLevelIndex + 1;
                 this.saveProgress(); // Save that we are playing this level
 
-                this.words = levelData.words.map(item => item.w.toUpperCase());
+                this.words = levelData.words
+                    .map(item => item.w.toUpperCase())
+                    .filter(word => {
+                        const fits = word.length <= Math.max(this.gridSize.rows, this.gridSize.cols);
+                        if (!fits) console.warn(`Skipping word "${word}" (Length: ${word.length}) as it exceeds grid dimensions.`);
+                        return fits;
+                    });
                 this.foundWords.clear();
                 this.bottomInfoPanel.classList.remove('active');
                 this.mysteryWord = null;
@@ -1302,11 +1308,16 @@
                 // Mystery Word Logic
                 if (this.mysteryEnabled) {
                     const otherLevel = topic.levels[(this.currentLevelIndex + 1) % 10];
-                    const mw = otherLevel.words[Math.floor(Math.random() * otherLevel.words.length)];
-                    this.mysteryWord = mw.w.toUpperCase();
-                    this.mysteryHintEl.style.display = 'block';
-                    this.mysteryTextEl.textContent = mw.t;
-                    this.words.push(this.mysteryWord);
+                    // Filter potential mystery words to ensure they fit
+                    const validMysteryWords = otherLevel.words.filter(w => w.w.length <= Math.max(this.gridSize.rows, this.gridSize.cols));
+
+                    if (validMysteryWords.length > 0) {
+                        const mw = validMysteryWords[Math.floor(Math.random() * validMysteryWords.length)];
+                        this.mysteryWord = mw.w.toUpperCase();
+                        this.mysteryHintEl.style.display = 'block';
+                        this.mysteryTextEl.textContent = mw.t;
+                        this.words.push(this.mysteryWord);
+                    }
                 }
 
                 this.setupGrid();

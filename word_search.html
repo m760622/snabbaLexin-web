@@ -1317,7 +1317,47 @@
                 osc.stop(this.audioCtx.currentTime + startTime + duration);
             }
 
-            playClick() { this.playTone(600, 'sine', 0.1); }
+            playLetterSound() {
+                if (!this.enabled || !this.audioCtx) return;
+                const t = this.audioCtx.currentTime;
+                const osc = this.audioCtx.createOscillator();
+                const gain = this.audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, t);
+                osc.frequency.exponentialRampToValueAtTime(600, t + 0.1); // The "soft" slide effect (Lås Upp style)
+
+                gain.gain.setValueAtTime(0.1, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+
+                osc.connect(gain);
+                gain.connect(this.audioCtx.destination);
+                osc.start(t);
+                osc.stop(t + 0.1);
+            }
+
+            playUISound() {
+                // Tweaked: 500->700Hz, slightly faster (0.08s)
+                if (!this.enabled || !this.audioCtx) return;
+                const t = this.audioCtx.currentTime;
+                const osc = this.audioCtx.createOscillator();
+                const gain = this.audioCtx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, t);
+                osc.frequency.exponentialRampToValueAtTime(700, t + 0.08);
+
+                gain.gain.setValueAtTime(0.1, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+
+                osc.connect(gain);
+                gain.connect(this.audioCtx.destination);
+                osc.start(t);
+                osc.stop(t + 0.08);
+            }
+
+            playClickSound() { this.playUISound(); } // Alias for backward compatibility if needed
+            playHoverSound() { this.playTone(200, 'sine', 0.05, 0); } // New hover sound
             playConnect() { this.playTone(800, 'sine', 0.1); }
             playSuccess() {
                 this.playTone(523.25, 'sine', 0.2, 0);
@@ -1811,7 +1851,8 @@
                 this.startDynamicLighting();
 
                 // Attach UI Sounds
-                this.attachUISounds();
+                // Setup Global Input Listeners (Sounds & Effects)
+                this.setupGlobalInputListeners();
             }
 
             startDynamicLighting() {
@@ -1833,29 +1874,14 @@
                 }, 15000);
             }
 
-            attachUISounds() {
-                const interactiveSelectors = [
-                    'button',
-                    '.settings-btn',
-                    '.mode-card',
-                    '.level-btn',
-                    '.topic-card',
-                    '.level-badge'
-                ];
+            setupGlobalInputListeners() {
+                document.addEventListener('click', (e) => {
+                    // Check if the clicked element or its parent is interactive
+                    const target = e.target.closest('button, .settings-btn, .mode-card, .level-btn, .topic-card, .level-badge, .nav-arrow-btn, .back-btn, .panel-close-btn, .btn-exit-modern, .nav-back');
 
-                interactiveSelectors.forEach(selector => {
-                    document.querySelectorAll(selector).forEach(el => {
-                        // Remove existing listeners to avoid duplicates if any
-                        el.removeEventListener('mouseenter', () => this.soundManager.playHoverSound());
-                        el.removeEventListener('click', () => this.soundManager.playClickSound());
-
-                        el.addEventListener('mouseenter', () => {
-                            this.soundManager.playHoverSound();
-                        });
-                        el.addEventListener('click', () => {
-                            this.soundManager.playClickSound();
-                        });
-                    });
+                    if (target) {
+                        this.soundManager.playUISound();
+                    }
                 });
             }
 
@@ -2451,7 +2477,7 @@
                 if (!cell) return;
                 this.isDragging = true;
                 this.startCell = cell;
-                this.soundManager.playClick();
+                this.soundManager.playLetterSound();
                 this.updateSelection(cell);
             }
 

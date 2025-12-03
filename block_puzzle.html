@@ -204,13 +204,15 @@
 
     <script>
         /**
-         * Neon Blocks - Game Logic
+         * Neon Blocks - Game Logic & Visual Effects
          * Architecture:
          * 1. GridSystem: Manages the 9x9 state, validation, and clearing logic.
          * 2. ShapeSystem: Manages the 3 hand slots and shape definitions.
          * 3. InputSystem: Handles touch/mouse coordinates and drag states.
-         * 4. Renderer: Draws everything to the Canvas.
-         * 5. GameLoop: Orchestrates the flow.
+         * 4. VisualFX: Handles particles, floating text, and animations.
+         * 5. SoundManager: Handles synthesized sound effects.
+         * 6. Renderer: Draws everything to the Canvas.
+         * 7. GameLoop: Orchestrates the flow.
          */
 
         const CONFIG = {
@@ -220,10 +222,12 @@
                 bg: '#1a1a24',
                 gridLine: '#2a2a35',
                 block: '#00f3ff',
-                blockShadow: 'rgba(0, 243, 255, 0.4)',
+                blockShadow: 'rgba(0, 243, 255, 0.6)',
                 ghost: 'rgba(0, 243, 255, 0.2)',
                 valid: 'rgba(0, 255, 0, 0.2)',
-                invalid: 'rgba(255, 0, 0, 0.2)'
+                invalid: 'rgba(255, 0, 0, 0.2)',
+                clearFlash: '#ffffff',
+                particles: ['#00f3ff', '#bc13fe', '#ffffff']
             }
         };
 
@@ -245,6 +249,184 @@
             [[1, 1, 1], [1, 1, 1], [1, 1, 1]] // 3x3 Block (Rare)
         ];
 
+        class SoundManager {
+            constructor() {
+                this.ctx = null;
+                this.enabled = true;
+            }
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playTone(freq, type, duration, startTime = 0, vol = 0.1) {
+                if (!this.enabled || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime + startTime);
+
+                gain.gain.setValueAtTime(vol, this.ctx.currentTime + startTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + startTime + duration);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.start(this.ctx.currentTime + startTime);
+                osc.stop(this.ctx.currentTime + startTime + duration);
+            }
+
+            playPickup() {
+                this.playTone(400, 'sine', 0.1, 0, 0.05);
+                this.playTone(600, 'sine', 0.1, 0.05, 0.05);
+            }
+
+            playPlace() {
+                this.playTone(200, 'triangle', 0.1, 0, 0.1);
+            }
+
+            playClear(combo = 1) {
+                const baseFreq = 440; // A4
+                const notes = [1, 1.25, 1.5, 2]; // Major chord ratios
+
+                // Play chord
+                notes.forEach((ratio, i) => {
+                    this.playTone(baseFreq * ratio * (1 + (combo * 0.1)), 'sine', 0.4, i * 0.05, 0.1);
+                });
+
+                if (combo > 1) {
+                    // Add a high sparkle for combos
+                    this.playTone(880 * (1 + (combo * 0.1)), 'square', 0.2, 0.2, 0.05);
+                }
+            }
+
+            playGameOver() {
+                this.playTone(300, 'sawtooth', 0.5, 0, 0.1);
+                this.playTone(250, 'sawtooth', 0.5, 0.4, 0.1);
+                this.playTone(200, 'sawtooth', 1.0, 0.8, 0.1);
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 3 + 1;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.03 + 0.02;
+                this.size = Math.random() * 4 + 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                this.size *= 0.95;
+            }
+
+            draw(ctx) {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        class FloatingText {
+            constructor(x, y, text, color = '#fff') {
+                this.x = x;
+                this.y = y;
+                this.text = text;
+                this.color = color;
+                this.life = 1.0;
+                this.vy = -1;
+            }
+
+            update() {
+                this.y += this.vy;
+                this.life -= 0.02;
+            }
+
+            draw(ctx) {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.font = 'bold 20px Inter';
+                ctx.textAlign = 'center';
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 10;
+                ctx.fillText(this.text, this.x, this.y);
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        class VisualFX {
+            constructor() {
+                this.particles = [];
+                this.texts = [];
+                this.shake = 0;
+            }
+
+            spawnExplosion(x, y, count = 10, color) {
+                for (let i = 0; i < count; i++) {
+                    this.particles.push(new Particle(x, y, color || CONFIG.colors.particles[Math.floor(Math.random() * CONFIG.colors.particles.length)]));
+                }
+            }
+
+            spawnText(x, y, text, color) {
+                this.texts.push(new FloatingText(x, y, text, color));
+            }
+
+            triggerShake(amount = 5) {
+                this.shake = amount;
+            }
+
+            update() {
+                // Update Particles
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    this.particles[i].update();
+                    if (this.particles[i].life <= 0) this.particles.splice(i, 1);
+                }
+
+                // Update Texts
+                for (let i = this.texts.length - 1; i >= 0; i--) {
+                    this.texts[i].update();
+                    if (this.texts[i].life <= 0) this.texts.splice(i, 1);
+                }
+
+                // Update Shake
+                if (this.shake > 0) {
+                    this.shake *= 0.9;
+                    if (this.shake < 0.5) this.shake = 0;
+                }
+            }
+
+            draw(ctx) {
+                this.particles.forEach(p => p.draw(ctx));
+                this.texts.forEach(t => t.draw(ctx));
+            }
+
+            getShakeOffset() {
+                if (this.shake === 0) return { x: 0, y: 0 };
+                return {
+                    x: (Math.random() - 0.5) * this.shake,
+                    y: (Math.random() - 0.5) * this.shake
+                };
+            }
+        }
+
         class Game {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
@@ -259,6 +441,9 @@
                 this.isDragging = false;
                 this.draggedShapeIndex = -1;
                 this.dragPos = { x: 0, y: 0 };
+
+                this.fx = new VisualFX();
+                this.sound = new SoundManager();
 
                 // Layout metrics (calculated on resize)
                 this.metrics = {
@@ -302,6 +487,15 @@
             }
 
             initInput() {
+                // Initialize audio on first interaction
+                const initAudio = () => {
+                    this.sound.init();
+                    window.removeEventListener('touchstart', initAudio);
+                    window.removeEventListener('mousedown', initAudio);
+                };
+                window.addEventListener('touchstart', initAudio);
+                window.addEventListener('mousedown', initAudio);
+
                 const handleStart = (x, y) => {
                     if (this.modal.classList.contains('active')) return;
 
@@ -317,6 +511,7 @@
                             this.dragPos = { x, y };
                             // Offset drag to center finger on shape center roughly
                             this.dragOffset = { x: 0, y: -50 };
+                            this.sound.playPickup();
                         }
                     }
                 };
@@ -417,15 +612,27 @@
 
             placeShape(shape, r, c) {
                 let blocksPlaced = 0;
+                const centerX = this.metrics.gridX + (c + shape[0].length / 2) * this.metrics.cellSize;
+                const centerY = this.metrics.gridY + (r + shape.length / 2) * this.metrics.cellSize;
+
                 for (let i = 0; i < shape.length; i++) {
                     for (let j = 0; j < shape[0].length; j++) {
                         if (shape[i][j] === 1) {
                             this.grid[r + i][c + j] = 1;
                             blocksPlaced++;
+
+                            // Small placement dust
+                            const px = this.metrics.gridX + (c + j) * this.metrics.cellSize + this.metrics.cellSize / 2;
+                            const py = this.metrics.gridY + (r + i) * this.metrics.cellSize + this.metrics.cellSize / 2;
+                            this.fx.spawnExplosion(px, py, 3, CONFIG.colors.block);
                         }
                     }
                 }
+
                 this.addScore(blocksPlaced * 10);
+                this.fx.spawnText(centerX, centerY, `+${blocksPlaced * 10}`, '#fff');
+                this.fx.triggerShake(2); // Small shake on placement
+                this.sound.playPlace();
             }
 
             checkClear() {
@@ -463,28 +670,52 @@
                 // Clear and Score
                 const totalClears = rowsToClear.length + colsToClear.length + squaresToClear.length;
                 if (totalClears > 0) {
-                    // Simple animation delay or effect could go here
+                    this.fx.triggerShake(totalClears * 4); // Big shake
+                    this.sound.playClear(totalClears); // Play sound with combo multiplier
 
                     // Clear Rows
                     rowsToClear.forEach(r => {
-                        for (let c = 0; c < 9; c++) this.grid[r][c] = 0;
+                        for (let c = 0; c < 9; c++) {
+                            this.grid[r][c] = 0;
+                            this.spawnClearEffect(r, c);
+                        }
                     });
                     // Clear Cols
                     colsToClear.forEach(c => {
-                        for (let r = 0; r < 9; r++) this.grid[r][c] = 0;
+                        for (let r = 0; r < 9; r++) {
+                            this.grid[r][c] = 0;
+                            this.spawnClearEffect(r, c);
+                        }
                     });
                     // Clear Squares
                     squaresToClear.forEach(sq => {
                         for (let r = 0; r < 3; r++) {
                             for (let c = 0; c < 3; c++) {
                                 this.grid[sq.r * 3 + r][sq.c * 3 + c] = 0;
+                                this.spawnClearEffect(sq.r * 3 + r, sq.c * 3 + c);
                             }
                         }
                     });
 
                     // Bonus Score
-                    this.addScore(totalClears * 100);
+                    const bonus = totalClears * 100;
+                    this.addScore(bonus);
+
+                    // Center text roughly
+                    const cx = this.metrics.gridX + this.metrics.gridSize / 2;
+                    const cy = this.metrics.gridY + this.metrics.gridSize / 2;
+
+                    let msg = totalClears > 1 ? `COMBO x${totalClears}!` : 'CLEARED!';
+                    this.fx.spawnText(cx, cy - 50, msg, CONFIG.colors.particles[1]); // Using secondary_neon for combo
+                    this.fx.spawnText(cx, cy, `+${bonus}`, '#fff');
                 }
+            }
+
+            spawnClearEffect(r, c) {
+                const x = this.metrics.gridX + c * this.metrics.cellSize + this.metrics.cellSize / 2;
+                const y = this.metrics.gridY + r * this.metrics.cellSize + this.metrics.cellSize / 2;
+                this.fx.spawnExplosion(x, y, 8, '#fff');
+                this.fx.spawnExplosion(x, y, 4, CONFIG.colors.particles[0]); // Using primary_neon for clear
             }
 
             checkGameOver() {
@@ -511,6 +742,7 @@
             endGame() {
                 this.finalScoreEl.textContent = this.score;
                 this.modal.classList.add('active');
+                this.sound.playGameOver();
             }
 
             restart() {
@@ -523,12 +755,17 @@
 
             // --- Rendering ---
             loop() {
+                this.fx.update();
                 this.draw();
                 requestAnimationFrame(() => this.loop());
             }
 
             draw() {
                 this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                const shake = this.fx.getShakeOffset();
+                this.ctx.save();
+                this.ctx.translate(shake.x, shake.y);
 
                 // Draw Grid Background
                 this.drawGrid();
@@ -562,6 +799,11 @@
                     const shapeH = shape.length * this.metrics.cellSize;
                     this.drawShape(shape, dragX - shapeW / 2 + this.metrics.cellSize / 2, dragY - shapeH / 2 + this.metrics.cellSize / 2, this.metrics.cellSize, CONFIG.colors.block, true);
                 }
+
+                // Draw FX
+                this.fx.draw(this.ctx);
+
+                this.ctx.restore();
             }
 
             drawGrid() {
@@ -664,8 +906,8 @@
         window.onload = () => {
             game = new Game();
         };
-
     </script>
 </body>
 
 </html>
+```

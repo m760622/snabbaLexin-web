@@ -198,18 +198,77 @@
 
         .hint-btn {
             background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 255, 255, 0.3);
+            /* Gradient Border Trick */
+            border: 2px solid transparent;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), linear-gradient(135deg, #ffd700, #ffaa00, #ff0055);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+
             border-radius: 20px;
-            padding: 8px 15px;
+            padding: 0 15px;
+            height: 40px;
+            min-height: 40px;
+            /* Force min-height */
+            box-sizing: border-box;
+            /* Ensure padding doesn't add to height */
             color: #fff;
             font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            gap: 8px;
             backdrop-filter: blur(4px);
             transition: all 0.3s ease;
+            /* Reset line-height */
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            /* Gold glow */
+            animation: hint-pulse 2s infinite;
+        }
+
+        #mystery-hint {
+            background: rgba(0, 0, 0, 0.6);
+            /* Gradient Border Trick */
+            border: 2px solid transparent;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), linear-gradient(135deg, #ffd700, #ffaa00, #ff0055);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+
+            border-radius: 20px;
+            padding: 0 15px;
+            height: 40px;
+            min-height: 40px;
+            /* Force min-height */
+            box-sizing: border-box;
+            /* Ensure padding doesn't add to height */
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            /* Gold glow */
+            animation: hint-pulse 2s infinite;
+        }
+
+        @keyframes hint-pulse {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.6), 0 0 5px rgba(255, 0, 85, 0.5);
+            }
+
+            100% {
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            }
         }
 
         .hint-btn:hover {
@@ -489,6 +548,8 @@
             color: #b8b8cc;
             cursor: pointer;
             transition: background 0.1s;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .cell.selected-pending {
@@ -993,23 +1054,39 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            /* Center vertically */
             width: 100%;
             max-width: 600px;
             margin-top: 10px;
             padding: 0 10px;
             gap: 20px;
-            /* Suitable space */
+            height: 40px;
+            /* Enforce container height */
         }
 
         #mystery-hint {
-            /* Existing styles moved/adapted if needed, but keeping inline for now or relying on existing CSS if any */
             background: rgba(0, 0, 0, 0.6);
-            padding: 8px 15px;
+            /* Gradient Border Trick to match Hint Button */
+            border: 2px solid transparent;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), linear-gradient(135deg, #bc13fe, #00f3ff);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+
+            padding: 0 15px;
+            height: 40px;
+            min-height: 40px;
+            /* Force min-height */
+            box-sizing: border-box;
+            /* Ensure padding doesn't add to height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Center content vertically and horizontally */
             border-radius: 20px;
             font-size: 0.9rem;
             color: #fff;
-            border: 1px solid rgba(0, 255, 255, 0.3);
             backdrop-filter: blur(4px);
+            box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
         }
     </style>
 </head>
@@ -1252,31 +1329,38 @@
 
                 const t = this.audioCtx.currentTime;
 
-                // Oscillator 1: The main "bloop"
+                // Oscillator 1: High pitch "drip"
                 const osc1 = this.audioCtx.createOscillator();
                 const gain1 = this.audioCtx.createGain();
                 osc1.type = 'sine';
-                osc1.frequency.setValueAtTime(1000, t);
-                osc1.frequency.exponentialRampToValueAtTime(200, t + 0.15);
-                gain1.gain.setValueAtTime(0.5, t);
-                gain1.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+                osc1.frequency.setValueAtTime(2000, t);
+                osc1.frequency.exponentialRampToValueAtTime(600, t + 0.2);
+
+                gain1.gain.setValueAtTime(0, t);
+                gain1.gain.linearRampToValueAtTime(0.6, t + 0.02); // Fast attack
+                gain1.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+
                 osc1.connect(gain1);
                 gain1.connect(this.audioCtx.destination);
                 osc1.start(t);
-                osc1.stop(t + 0.15);
+                osc1.stop(t + 0.2);
 
-                // Oscillator 2: The "dazzle" high pitch sparkle
+                // Oscillator 2: "Sparkle" / "Dazzle" - higher frequency, delayed slightly
                 const osc2 = this.audioCtx.createOscillator();
                 const gain2 = this.audioCtx.createGain();
-                osc2.type = 'sine';
-                osc2.frequency.setValueAtTime(2000, t);
-                osc2.frequency.exponentialRampToValueAtTime(800, t + 0.1);
-                gain2.gain.setValueAtTime(0.3, t);
-                gain2.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                osc2.type = 'triangle'; // Triangle wave for more harmonics (sparkle)
+                osc2.frequency.setValueAtTime(3000, t + 0.05);
+                osc2.frequency.linearRampToValueAtTime(1000, t + 0.25);
+
+                gain2.gain.setValueAtTime(0, t);
+                gain2.gain.setValueAtTime(0, t + 0.05); // Delay start
+                gain2.gain.linearRampToValueAtTime(0.3, t + 0.07);
+                gain2.gain.exponentialRampToValueAtTime(0.01, t + 0.25);
+
                 osc2.connect(gain2);
                 gain2.connect(this.audioCtx.destination);
                 osc2.start(t);
-                osc2.stop(t + 0.1);
+                osc2.stop(t + 0.3);
             }
             playLevelComplete() {
                 if (!this.audioCtx) return;

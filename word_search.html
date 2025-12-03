@@ -50,7 +50,8 @@
             width: 100%;
             max-width: 400px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 5px;
             align-items: center;
             margin-bottom: 10px;
             padding: 0 5px;
@@ -58,11 +59,58 @@
             z-index: 20;
         }
 
+        .header-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .header-title-row {
+            width: 100%;
+            text-align: center;
+        }
+
         .header-left,
         .header-right {
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        #score-container {
+            font-size: 1.2rem;
+            color: var(--primary-neon);
+            text-shadow: 0 0 5px var(--primary-neon);
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hint-btn {
+            background: none;
+            border: 1px solid var(--secondary-neon);
+            color: var(--secondary-neon);
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s;
+            box-shadow: 0 0 5px var(--secondary-neon);
+        }
+
+        .hint-btn:active {
+            transform: scale(0.95);
+        }
+
+        .hint-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
         }
 
         h1 {
@@ -570,15 +618,25 @@
 <body>
 
     <header>
-        <div class="header-left">
-            <button class="back-btn" onclick="window.location.href='games.html'">←</button>
-            <button class="icon-btn" onclick="game.showMenu()">⚙️</button>
-            <button class="icon-btn" onclick="game.showNavigation()">📚</button>
+        <div class="header-top-row">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.location.href='games.html'">←</button>
+                <button class="icon-btn" onclick="game.showMenu()">⚙️</button>
+                <button class="icon-btn" onclick="game.showNavigation()">📚</button>
+            </div>
+            <div class="header-right" style="display: flex; align-items: center;">
+                <div id="score-container">
+                    <span>💎</span> <span id="score-display">0</span>
+                </div>
+                <button class="hint-btn" onclick="game.useHint()" id="hint-btn">
+                    <span>💡</span> -5
+                </button>
+                <div id="timer-display">60s</div>
+                <div id="level-badge-container" class="level-badge">Nivå <span id="level-display">1</span></div>
+            </div>
         </div>
-        <h1 id="header-title">Neon Search</h1>
-        <div class="header-right">
-            <div id="timer-display">60s</div>
-            <div id="level-badge-container" class="level-badge">Nivå <span id="level-display">1</span></div>
+        <div class="header-title-row">
+            <h1 id="header-title">Neon Search</h1>
         </div>
     </header>
 
@@ -705,7 +763,9 @@
                     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 }
                 if (this.audioCtx.state === 'suspended') {
-                    this.audioCtx.resume();
+                    this.audioCtx.resume().catch(() => {
+                        // Ignore autoplay policy errors, will resume on next interaction
+                    });
                 }
             }
 
@@ -1079,12 +1139,15 @@
                 this.progress = this.loadProgress();
                 this.currentTopicIndex = this.progress.lastTopic || 0;
                 this.currentLevelIndex = this.progress.lastLevel || 0;
+                this.score = this.progress.score || 0;
 
                 // DOM Elements
                 this.gridEl = document.getElementById('grid');
                 this.wordBankEl = document.getElementById('word-bank');
                 this.floatingLabel = document.getElementById('floating-label');
                 this.levelDisplay = document.getElementById('level-display');
+                this.scoreDisplay = document.getElementById('score-display');
+                this.hintBtn = document.getElementById('hint-btn');
                 this.bottomInfoPanel = document.getElementById('bottom-info-panel');
                 this.flashlightEl = document.getElementById('flashlight-overlay');
                 this.timerEl = document.getElementById('timer-display');
@@ -1127,7 +1190,10 @@
                     unlockedTopics: [],
                     unlockedLevels: {},
                     lastTopic: 0,
-                    lastLevel: 0
+                    unlockedLevels: {},
+                    lastTopic: 0,
+                    lastLevel: 0,
+                    score: 0
                 };
 
                 // Ensure all topics are unlocked and level 0 of each is unlocked
@@ -1147,7 +1213,19 @@
             saveProgress() {
                 this.progress.lastTopic = this.currentTopicIndex;
                 this.progress.lastLevel = this.currentLevelIndex;
+                this.progress.score = this.score;
                 localStorage.setItem('neonSearch_progress', JSON.stringify(this.progress));
+                this.updateScoreUI();
+            }
+
+            updateScoreUI() {
+                if (this.scoreDisplay) {
+                    this.scoreDisplay.textContent = this.score;
+                    // Disable hint if not enough points
+                    if (this.hintBtn) {
+                        this.hintBtn.disabled = this.score < 5;
+                    }
+                }
             }
 
             unlockNextLevel() {
@@ -1286,6 +1364,9 @@
                 // Update Header
                 this.headerTitle.textContent = topic.title;
                 this.levelDisplay.textContent = this.currentLevelIndex + 1;
+                this.headerTitle.textContent = topic.title;
+                this.levelDisplay.textContent = this.currentLevelIndex + 1;
+                this.updateScoreUI();
                 this.saveProgress(); // Save that we are playing this level
 
                 this.words = levelData.words
@@ -1307,7 +1388,13 @@
 
                 // Mystery Word Logic
                 if (this.mysteryEnabled) {
-                    const otherLevel = topic.levels[(this.currentLevelIndex + 1) % 10];
+                    // Pick a RANDOM level index that is NOT the current one
+                    let randomLevelIndex = Math.floor(Math.random() * 10);
+                    if (randomLevelIndex === this.currentLevelIndex) {
+                        randomLevelIndex = (randomLevelIndex + 1) % 10;
+                    }
+
+                    const otherLevel = topic.levels[randomLevelIndex];
                     // Filter potential mystery words to ensure they fit
                     const validMysteryWords = otherLevel.words.filter(w => w.w.length <= Math.max(this.gridSize.rows, this.gridSize.cols));
 
@@ -1602,6 +1689,10 @@
                 this.foundWords.add(word);
                 this.soundManager.playSuccess();
 
+                // Add points
+                this.score += 10;
+                this.saveProgress(); // Updates UI and saves
+
                 this.currentSelection.forEach(el => el.classList.add('found'));
 
                 if (word === this.mysteryWord) {
@@ -1642,6 +1733,79 @@
                     this.gameCompleteModal.classList.add('active');
                 } else {
                     this.initLevel();
+                }
+            }
+
+            useHint() {
+                if (this.score < 5) {
+                    this.soundManager.playClick(); // Or error sound
+                    return;
+                }
+
+                // Find a word that hasn't been found yet
+                const missingWords = this.words.filter(w => !this.foundWords.has(w));
+                if (missingWords.length === 0) return;
+
+                const targetWord = missingWords[Math.floor(Math.random() * missingWords.length)];
+
+                // Find the first letter of this word in the grid
+                // We need to know where we placed it. 
+                // Since we don't store placement explicitly in a map, we scan the grid.
+                // But wait, the grid only has characters. We don't know which 'A' belongs to 'APPLE'.
+                // Ideally, we should have stored the placement.
+                // Workaround: Scan the grid for the start of the word in all directions.
+
+                let startCell = null;
+
+                // Brute force search for the word in the grid to find its start
+                for (let r = 0; r < this.gridSize.rows; r++) {
+                    for (let c = 0; c < this.gridSize.cols; c++) {
+                        if (this.grid[r][c] === targetWord[0]) {
+                            // Check all directions
+                            const directions = [
+                                { r: 0, c: 1 }, { r: 1, c: 0 }, { r: 1, c: 1 }, { r: -1, c: 1 },
+                                { r: 0, c: -1 }, { r: -1, c: 0 }, { r: -1, c: -1 }, { r: 1, c: -1 }
+                            ];
+
+                            for (let d of directions) {
+                                let match = true;
+                                for (let i = 1; i < targetWord.length; i++) {
+                                    const nr = r + i * d.r;
+                                    const nc = c + i * d.c;
+                                    if (nr < 0 || nr >= this.gridSize.rows || nc < 0 || nc >= this.gridSize.cols || this.grid[nr][nc] !== targetWord[i]) {
+                                        match = false;
+                                        break;
+                                    }
+                                }
+                                if (match) {
+                                    startCell = { r, c };
+                                    break;
+                                }
+                            }
+                        }
+                        if (startCell) break;
+                    }
+                    if (startCell) break;
+                }
+
+                if (startCell) {
+                    this.score -= 5;
+                    this.saveProgress();
+
+                    // Visual Hint
+                    const cellEl = this.gridEl.querySelector(`.cell[data-row="${startCell.r}"][data-col="${startCell.c}"]`);
+                    if (cellEl) {
+                        cellEl.style.backgroundColor = '#ffff00';
+                        cellEl.style.color = '#000';
+                        cellEl.style.boxShadow = '0 0 15px #ffff00';
+
+                        setTimeout(() => {
+                            cellEl.style.backgroundColor = '';
+                            cellEl.style.color = '';
+                            cellEl.style.boxShadow = '';
+                        }, 2000);
+                    }
+                    this.soundManager.playClick();
                 }
             }
         }

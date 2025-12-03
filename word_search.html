@@ -22,6 +22,7 @@
             --cell-size: 38px;
             --gap: 3px;
             --panel-bg: #1e1e24;
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -55,11 +56,19 @@
             margin-bottom: 10px;
             padding: 0 5px;
             flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .header-left,
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         h1 {
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--primary-neon);
@@ -82,7 +91,18 @@
             color: #fff;
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0 10px 0 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
         }
 
         /* --- Game Container --- */
@@ -95,7 +115,7 @@
             flex: 1;
             overflow-y: auto;
             padding-bottom: 160px;
-            /* Space for bottom panel */
+            position: relative;
         }
 
         /* --- The Grid --- */
@@ -109,6 +129,8 @@
             margin-bottom: 15px;
             touch-action: none;
             flex-shrink: 0;
+            position: relative;
+            z-index: 10;
         }
 
         .cell {
@@ -163,6 +185,7 @@
             justify-content: center;
             align-content: flex-start;
             padding-bottom: 20px;
+            z-index: 20;
         }
 
         .word-item {
@@ -180,6 +203,11 @@
             color: var(--primary-neon);
             background: rgba(0, 243, 255, 0.1);
             border-color: rgba(0, 243, 255, 0.3);
+        }
+
+        .word-item.mystery {
+            border: 1px dashed var(--secondary-neon);
+            color: var(--secondary-neon);
         }
 
         /* --- Floating Label --- */
@@ -308,17 +336,95 @@
             cursor: pointer;
             transition: transform 0.1s, box-shadow 0.1s;
             width: 100%;
+            margin-top: 10px;
         }
 
         .modal-btn:active {
             transform: scale(0.95);
         }
 
-        /* Level Complete Specifics */
         .level-complete-title {
             font-size: 1.8rem;
             color: var(--secondary-neon);
             margin-bottom: 10px;
+        }
+
+        /* --- New Features CSS --- */
+
+        /* Main Menu */
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mode-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-neon);
+            transform: translateY(-2px);
+        }
+
+        .mode-icon {
+            font-size: 28px;
+        }
+
+        .mode-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #fff;
+        }
+
+        /* Flashlight Overlay */
+        #flashlight-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle 120px at var(--x, 50%) var(--y, 50%), transparent 0%, rgba(0, 0, 0, 0.98) 100%);
+            pointer-events: none;
+            z-index: 50;
+            display: none;
+        }
+
+        /* Timer */
+        #timer-display {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--secondary-neon);
+            color: var(--secondary-neon);
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Mystery Hint */
+        #mystery-hint {
+            background: rgba(188, 19, 254, 0.2);
+            border: 1px dashed var(--accent-neon);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #fff;
+            display: none;
+            width: 100%;
+            text-align: center;
         }
     </style>
 </head>
@@ -326,14 +432,22 @@
 <body>
 
     <header>
-        <button class="back-btn" onclick="window.location.href='games.html'">←</button>
+        <div class="header-left">
+            <button class="back-btn" onclick="window.location.href='games.html'">←</button>
+            <button class="icon-btn" onclick="game.showMenu()">⚙️</button>
+        </div>
         <h1>Neon Search</h1>
-        <div class="level-badge">Nivå <span id="level-display">1</span></div>
+        <div class="header-right">
+            <div id="timer-display">60s</div>
+            <div class="level-badge">Nivå <span id="level-display">1</span></div>
+        </div>
     </header>
 
     <div id="game-container">
         <div id="grid"></div>
+        <div id="flashlight-overlay"></div>
         <div id="word-bank"></div>
+        <div id="mystery-hint">🕵️ Mystery: <span id="mystery-text">...</span></div>
     </div>
 
     <div id="floating-label"></div>
@@ -348,12 +462,45 @@
         <div id="panel-sentence-ar" class="panel-sentence-ar">Arabic sentence translation.</div>
     </div>
 
+    <!-- Main Menu Modal -->
+    <div id="main-menu" class="modal-overlay active">
+        <div class="modal-content" style="width: 400px;">
+            <h2 class="level-complete-title">Neon Search</h2>
+            <p style="opacity: 0.7; margin-bottom: 20px;">Select Mode / اختر النمط</p>
+
+            <div class="mode-grid">
+                <div class="mode-card" onclick="game.startMode('classic')">
+                    <div class="mode-icon">🧩</div>
+                    <div class="mode-name">Classic</div>
+                </div>
+                <div class="mode-card" onclick="game.startMode('flashlight')">
+                    <div class="mode-icon">🔦</div>
+                    <div class="mode-name">Flashlight</div>
+                </div>
+                <div class="mode-card" onclick="game.startMode('timerush')">
+                    <div class="mode-icon">⏳</div>
+                    <div class="mode-name">Time Rush</div>
+                </div>
+                <div class="mode-card" onclick="game.startMode('shifting')">
+                    <div class="mode-icon">🌊</div>
+                    <div class="mode-name">Shifting Grid</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; font-size: 0.9rem; color: #aaa;">
+                <input type="checkbox" id="mystery-toggle"> <label for="mystery-toggle">Enable Mystery Word 🕵️</label>
+            </div>
+        </div>
+    </div>
+
     <!-- Level Complete Modal -->
     <div id="level-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="level-complete-title">Nivå Klar! 🎉</h2>
             <p>Bra jobbat!</p>
-            <button class="modal-btn" onclick="nextLevel()">Nästa Nivå / التالي</button>
+            <button class="modal-btn" onclick="game.nextLevel()">Nästa Nivå / التالي</button>
+            <button class="modal-btn" style="background:transparent; border:1px solid #555; color:#fff;"
+                onclick="game.showMenu()">Menu / القائمة</button>
         </div>
     </div>
 
@@ -363,6 +510,17 @@
             <h2 class="level-complete-title">Grattis! 🏆</h2>
             <p>Du har klarat alla nivåer!</p>
             <button class="modal-btn" onclick="window.location.href='games.html'">Avsluta / خروج</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal (Time Rush) -->
+    <div id="game-over-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="level-complete-title" style="color: #ff0055;">Game Over ⏳</h2>
+            <p>Tiden är slut!</p>
+            <button class="modal-btn" onclick="game.restartLevel()">Try Again / حاول مجدداً</button>
+            <button class="modal-btn" style="background:transparent; border:1px solid #555; color:#fff;"
+                onclick="game.showMenu()">Menu / القائمة</button>
         </div>
     </div>
 
@@ -403,33 +561,22 @@
                 osc.stop(this.audioCtx.currentTime + startTime + duration);
             }
 
-            playClick() {
-                // Soft pop sound
-                this.playTone(600, 'sine', 0.1);
-            }
-
-            playConnect() {
-                // Higher pitch for connecting letters
-                this.playTone(800, 'sine', 0.1);
-            }
-
+            playClick() { this.playTone(600, 'sine', 0.1); }
+            playConnect() { this.playTone(800, 'sine', 0.1); }
             playSuccess() {
-                // Major chord arpeggio (C Major: C, E, G)
                 this.playTone(523.25, 'sine', 0.2, 0);
                 this.playTone(659.25, 'sine', 0.2, 0.1);
                 this.playTone(783.99, 'sine', 0.4, 0.2);
             }
-
             playLevelComplete() {
-                // Victory fanfare
                 if (!this.audioCtx) return;
-                const now = this.audioCtx.currentTime;
-                this.playTone(523.25, 'square', 0.2, 0); // C
-                this.playTone(523.25, 'square', 0.2, 0.2); // C
-                this.playTone(523.25, 'square', 0.2, 0.4); // C
-                this.playTone(659.25, 'square', 0.6, 0.6); // E
-                this.playTone(783.99, 'square', 0.8, 1.0); // G
+                this.playTone(523.25, 'square', 0.2, 0);
+                this.playTone(523.25, 'square', 0.2, 0.2);
+                this.playTone(523.25, 'square', 0.2, 0.4);
+                this.playTone(659.25, 'square', 0.6, 0.6);
+                this.playTone(783.99, 'square', 0.8, 1.0);
             }
+            playShift() { this.playTone(300, 'sawtooth', 0.3); }
         }
 
         /**
@@ -588,6 +735,12 @@
                 this.grid = [];
                 this.foundWords = new Set();
                 this.soundManager = new SoundManager();
+                this.mode = 'classic';
+                this.mysteryEnabled = false;
+                this.mysteryWord = null;
+                this.timer = 0;
+                this.timerInterval = null;
+                this.shiftInterval = null;
 
                 // DOM Elements
                 this.gridEl = document.getElementById('grid');
@@ -595,10 +748,16 @@
                 this.floatingLabel = document.getElementById('floating-label');
                 this.levelDisplay = document.getElementById('level-display');
                 this.bottomInfoPanel = document.getElementById('bottom-info-panel');
+                this.flashlightEl = document.getElementById('flashlight-overlay');
+                this.timerEl = document.getElementById('timer-display');
+                this.mysteryHintEl = document.getElementById('mystery-hint');
+                this.mysteryTextEl = document.getElementById('mystery-text');
 
                 // Modals
                 this.levelModal = document.getElementById('level-modal');
                 this.gameCompleteModal = document.getElementById('game-complete-modal');
+                this.mainMenu = document.getElementById('main-menu');
+                this.gameOverModal = document.getElementById('game-over-modal');
 
                 // State
                 this.isDragging = false;
@@ -615,14 +774,35 @@
                 window.addEventListener('touchstart', this.handleInteraction);
                 window.addEventListener('mousedown', this.handleInteraction);
                 window.addEventListener('keydown', this.handleInteraction);
+            }
+
+            startMode(mode) {
+                this.mode = mode;
+                this.mysteryEnabled = document.getElementById('mystery-toggle').checked;
+                this.mainMenu.classList.remove('active');
+                this.currentLevelIndex = 0;
+
+                // Reset UI
+                this.flashlightEl.style.display = mode === 'flashlight' ? 'block' : 'none';
+                this.timerEl.style.display = mode === 'timerush' ? 'block' : 'none';
+
+                if (mode === 'flashlight') this.initFlashlight();
 
                 this.initLevel(this.currentLevelIndex);
+            }
+
+            showMenu() {
+                this.stopTimer();
+                this.stopShifting();
+                this.levelModal.classList.remove('active');
+                this.gameOverModal.classList.remove('active');
+                this.mainMenu.classList.add('active');
             }
 
             initLevel(levelIndex) {
                 if (levelIndex >= LEVELS_DATA.length) {
                     this.gameCompleteModal.classList.add('active');
-                    this.soundManager.playLevelComplete(); // Play fanfare for game complete too
+                    this.soundManager.playLevelComplete();
                     return;
                 }
 
@@ -630,7 +810,21 @@
                 this.words = this.currentLevelData.words.map(item => item.w.toUpperCase());
                 this.foundWords.clear();
                 this.levelDisplay.textContent = this.currentLevelData.level;
-                this.bottomInfoPanel.classList.remove('active'); // Hide panel on new level
+                this.bottomInfoPanel.classList.remove('active');
+                this.mysteryWord = null;
+                this.mysteryHintEl.style.display = 'none';
+
+                // Mystery Word Logic
+                if (this.mysteryEnabled) {
+                    // Pick a word from next level or previous level as mystery
+                    const otherLevel = LEVELS_DATA[(levelIndex + 1) % LEVELS_DATA.length];
+                    const mw = otherLevel.words[Math.floor(Math.random() * otherLevel.words.length)];
+                    this.mysteryWord = mw.w.toUpperCase();
+                    this.mysteryHintEl.style.display = 'block';
+                    this.mysteryTextEl.textContent = mw.t; // Show translation as hint
+                    // Add to words list for placement but NOT for word bank
+                    this.words.push(this.mysteryWord);
+                }
 
                 this.setupGrid();
                 this.placeWords();
@@ -638,25 +832,86 @@
                 this.renderGrid();
                 this.renderWordBank();
                 this.attachEvents();
+
+                // Mode Specific Init
+                this.stopTimer();
+                this.stopShifting();
+
+                if (this.mode === 'timerush') {
+                    this.timer = 60;
+                    this.updateTimerDisplay();
+                    this.timerInterval = setInterval(() => {
+                        this.timer--;
+                        this.updateTimerDisplay();
+                        if (this.timer <= 0) this.gameOver();
+                    }, 1000);
+                }
+
+                if (this.mode === 'shifting') {
+                    this.shiftInterval = setInterval(() => this.shiftGrid(), 10000);
+                }
+            }
+
+            updateTimerDisplay() {
+                this.timerEl.textContent = `${this.timer}s`;
+                this.timerEl.style.color = this.timer < 10 ? '#ff0055' : '#ff00ff';
+            }
+
+            gameOver() {
+                this.stopTimer();
+                this.gameOverModal.classList.add('active');
+            }
+
+            restartLevel() {
+                this.gameOverModal.classList.remove('active');
+                this.initLevel(this.currentLevelIndex);
+            }
+
+            stopTimer() { if (this.timerInterval) clearInterval(this.timerInterval); }
+            stopShifting() { if (this.shiftInterval) clearInterval(this.shiftInterval); }
+
+            initFlashlight() {
+                const move = (e) => {
+                    const t = e.touches ? e.touches[0] : e;
+                    const r = this.gridEl.getBoundingClientRect();
+                    const x = t.clientX - r.left;
+                    const y = t.clientY - r.top;
+                    this.flashlightEl.style.setProperty('--x', x + 'px');
+                    this.flashlightEl.style.setProperty('--y', y + 'px');
+                };
+                window.addEventListener('mousemove', move);
+                window.addEventListener('touchmove', move);
+            }
+
+            shiftGrid() {
+                this.soundManager.playShift();
+                // Shift rows down
+                const lastRow = this.grid[this.gridSize.rows - 1];
+                for (let r = this.gridSize.rows - 1; r > 0; r--) {
+                    this.grid[r] = this.grid[r - 1];
+                }
+                this.grid[0] = lastRow;
+
+                // Re-render
+                this.renderGrid();
+
+                // Visual feedback
+                this.gridEl.style.transform = 'translateY(5px)';
+                setTimeout(() => this.gridEl.style.transform = 'none', 200);
             }
 
             setupGrid() {
-                // Initialize empty grid
                 for (let r = 0; r < this.gridSize.rows; r++) {
                     this.grid[r] = [];
                     for (let c = 0; c < this.gridSize.cols; c++) {
                         this.grid[r][c] = null;
                     }
                 }
-
-                // Set CSS Grid columns
                 this.gridEl.style.gridTemplateColumns = `repeat(${this.gridSize.cols}, 1fr)`;
             }
 
             placeWords() {
-                // Sort words by length (longest first) to reduce collisions
                 const sortedWords = [...this.words].sort((a, b) => b.length - a.length);
-
                 for (const word of sortedWords) {
                     let placed = false;
                     let attempts = 0;
@@ -664,50 +919,32 @@
                         placed = this.tryPlaceWord(word);
                         attempts++;
                     }
-                    if (!placed) {
-                        console.warn(`Could not place word: ${word}`);
-                    }
+                    if (!placed) console.warn(`Could not place word: ${word}`);
                 }
             }
 
             tryPlaceWord(word) {
                 const directions = [
-                    { r: 0, c: 1 },   // Right
-                    { r: 1, c: 0 },   // Down
-                    { r: 1, c: 1 },   // Diagonal Down-Right
-                    { r: -1, c: 1 },  // Diagonal Up-Right
-                    { r: 0, c: -1 },  // Left
-                    { r: -1, c: 0 },  // Up
-                    { r: -1, c: -1 }, // Diagonal Up-Left
-                    { r: 1, c: -1 }   // Diagonal Down-Left
+                    { r: 0, c: 1 }, { r: 1, c: 0 }, { r: 1, c: 1 }, { r: -1, c: 1 },
+                    { r: 0, c: -1 }, { r: -1, c: 0 }, { r: -1, c: -1 }, { r: 1, c: -1 }
                 ];
-
                 const dir = directions[Math.floor(Math.random() * directions.length)];
                 const startR = Math.floor(Math.random() * this.gridSize.rows);
                 const startC = Math.floor(Math.random() * this.gridSize.cols);
 
-                // Check bounds and collisions
                 for (let i = 0; i < word.length; i++) {
                     const r = startR + (i * dir.r);
                     const c = startC + (i * dir.c);
-
-                    if (r < 0 || r >= this.gridSize.rows || c < 0 || c >= this.gridSize.cols) {
-                        return false; // Out of bounds
-                    }
-
+                    if (r < 0 || r >= this.gridSize.rows || c < 0 || c >= this.gridSize.cols) return false;
                     const existingChar = this.grid[r][c];
-                    if (existingChar !== null && existingChar !== word[i]) {
-                        return false; // Collision
-                    }
+                    if (existingChar !== null && existingChar !== word[i]) return false;
                 }
 
-                // Place word
                 for (let i = 0; i < word.length; i++) {
                     const r = startR + (i * dir.r);
                     const c = startC + (i * dir.c);
                     this.grid[r][c] = word[i];
                 }
-
                 return true;
             }
 
@@ -731,6 +968,7 @@
                         cell.textContent = this.grid[r][c];
                         cell.dataset.row = r;
                         cell.dataset.col = c;
+                        // Check if part of found word (needs logic if shifting, but for now simple)
                         this.gridEl.appendChild(cell);
                     }
                 }
@@ -739,6 +977,7 @@
             renderWordBank() {
                 this.wordBankEl.innerHTML = '';
                 this.words.forEach(word => {
+                    if (word === this.mysteryWord) return; // Don't show mystery word in bank
                     const el = document.createElement('div');
                     el.className = 'word-item';
                     el.textContent = word;
@@ -748,34 +987,23 @@
             }
 
             attachEvents() {
-                // Remove old listeners to avoid duplicates if re-init
                 const newGrid = this.gridEl.cloneNode(true);
                 this.gridEl.parentNode.replaceChild(newGrid, this.gridEl);
                 this.gridEl = newGrid;
 
-                // Touch Events
                 this.gridEl.addEventListener('touchstart', (e) => this.handleStart(e.touches[0]), { passive: false });
                 this.gridEl.addEventListener('touchmove', (e) => this.handleMove(e.touches[0], e), { passive: false });
                 this.gridEl.addEventListener('touchend', () => this.handleEnd());
 
-                // Mouse Events
                 this.gridEl.addEventListener('mousedown', (e) => this.handleStart(e));
-                window.addEventListener('mousemove', (e) => {
-                    if (this.isDragging) this.handleMove(e, e);
-                });
-                window.addEventListener('mouseup', () => {
-                    if (this.isDragging) this.handleEnd();
-                });
+                window.addEventListener('mousemove', (e) => { if (this.isDragging) this.handleMove(e, e); });
+                window.addEventListener('mouseup', () => { if (this.isDragging) this.handleEnd(); });
             }
 
             getCellFromPoint(x, y) {
                 const el = document.elementFromPoint(x, y);
                 if (el && el.classList.contains('cell')) {
-                    return {
-                        row: parseInt(el.dataset.row),
-                        col: parseInt(el.dataset.col),
-                        el: el
-                    };
+                    return { row: parseInt(el.dataset.row), col: parseInt(el.dataset.col), el: el };
                 }
                 return null;
             }
@@ -783,7 +1011,6 @@
             handleStart(point) {
                 const cell = this.getCellFromPoint(point.clientX, point.clientY);
                 if (!cell) return;
-
                 this.isDragging = true;
                 this.startCell = cell;
                 this.soundManager.playClick();
@@ -792,101 +1019,100 @@
 
             handleMove(point, event) {
                 if (event) event.preventDefault();
-
                 const cell = this.getCellFromPoint(point.clientX, point.clientY);
                 if (!cell) return;
-
                 const lastCell = this.currentSelection[this.currentSelection.length - 1];
-                if (lastCell && lastCell.dataset.row == cell.row && lastCell.dataset.col == cell.col) {
-                    return;
-                }
-
-                this.soundManager.playConnect();
+                if (lastCell && lastCell.dataset.row == cell.row && lastCell.dataset.col == cell.col) return;
                 this.updateSelection(cell);
-            }
-
-            updateSelection(endCell) {
-                const start = this.startCell;
-                const end = endCell;
-
-                const dRow = end.row - start.row;
-                const dCol = end.col - start.col;
-
-                const isHorizontal = dRow === 0;
-                const isVertical = dCol === 0;
-                const isDiagonal = Math.abs(dRow) === Math.abs(dCol);
-
-                if (!isHorizontal && !isVertical && !isDiagonal) {
-                    return;
-                }
-
-                document.querySelectorAll('.selected-pending').forEach(el => el.classList.remove('selected-pending'));
-                this.currentSelection = [];
-
-                const stepRow = Math.sign(dRow);
-                const stepCol = Math.sign(dCol);
-                const steps = Math.max(Math.abs(dRow), Math.abs(dCol));
-
-                let currentWord = "";
-
-                for (let i = 0; i <= steps; i++) {
-                    const r = start.row + (i * stepRow);
-                    const c = start.col + (i * stepCol);
-                    const index = r * this.gridSize.cols + c;
-                    const cellEl = this.gridEl.children[index];
-
-                    if (cellEl) {
-                        cellEl.classList.add('selected-pending');
-                        this.currentSelection.push(cellEl);
-                        currentWord += cellEl.textContent;
-                    }
-                }
-
-                this.showFloatingLabel(currentWord, endCell.el);
             }
 
             handleEnd() {
                 this.isDragging = false;
-                this.floatingLabel.style.display = 'none';
-
-                const word = this.currentSelection.map(el => el.textContent).join('');
-                this.checkWord(word);
-
-                document.querySelectorAll('.selected-pending').forEach(el => el.classList.remove('selected-pending'));
-                this.currentSelection = [];
+                this.checkSelection();
+                this.clearSelection();
             }
 
-            checkWord(word) {
-                const reversed = word.split('').reverse().join('');
-                let foundWord = null;
+            updateSelection(currentCell) {
+                // Simple line algorithm
+                if (!this.startCell) return;
+
+                const dr = currentCell.row - this.startCell.row;
+                const dc = currentCell.col - this.startCell.col;
+
+                // Check if diagonal, horizontal or vertical
+                if (dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc)) {
+                    this.clearSelectionVisuals();
+                    this.currentSelection = [];
+
+                    const steps = Math.max(Math.abs(dr), Math.abs(dc));
+                    const rStep = dr === 0 ? 0 : dr / steps;
+                    const cStep = dc === 0 ? 0 : dc / steps;
+
+                    let wordStr = "";
+
+                    for (let i = 0; i <= steps; i++) {
+                        const r = this.startCell.row + (i * rStep);
+                        const c = this.startCell.col + (i * cStep);
+                        const cellEl = this.gridEl.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+                        if (cellEl) {
+                            cellEl.classList.add('selected-pending');
+                            this.currentSelection.push(cellEl);
+                            wordStr += cellEl.textContent;
+                        }
+                    }
+
+                    // Update Floating Label
+                    const rect = currentCell.el.getBoundingClientRect();
+                    this.floatingLabel.style.display = 'block';
+                    this.floatingLabel.style.left = `${rect.left}px`;
+                    this.floatingLabel.style.top = `${rect.top - 40}px`;
+                    this.floatingLabel.textContent = wordStr;
+                }
+            }
+
+            clearSelectionVisuals() {
+                this.gridEl.querySelectorAll('.selected-pending').forEach(el => el.classList.remove('selected-pending'));
+            }
+
+            clearSelection() {
+                this.clearSelectionVisuals();
+                this.currentSelection = [];
+                this.startCell = null;
+                this.floatingLabel.style.display = 'none';
+            }
+
+            checkSelection() {
+                const word = this.currentSelection.map(el => el.textContent).join('');
+                const reversedWord = word.split('').reverse().join('');
 
                 if (this.words.includes(word) && !this.foundWords.has(word)) {
-                    foundWord = word;
-                } else if (this.words.includes(reversed) && !this.foundWords.has(reversed)) {
-                    foundWord = reversed;
-                }
-
-                if (foundWord) {
-                    this.foundWords.add(foundWord);
-                    this.markWordFound(foundWord);
-                    this.showWordInfo(foundWord);
-                    this.soundManager.playSuccess();
-                    this.checkLevelComplete();
+                    this.handleWordFound(word);
+                } else if (this.words.includes(reversedWord) && !this.foundWords.has(reversedWord)) {
+                    this.handleWordFound(reversedWord);
                 }
             }
 
-            markWordFound(word) {
-                this.currentSelection.forEach(el => {
-                    el.classList.add('found');
-                    el.classList.remove('selected-pending');
-                });
+            handleWordFound(word) {
+                this.foundWords.add(word);
+                this.soundManager.playSuccess();
 
-                const wordItem = document.querySelector(`.word-item[data-word="${word}"]`);
-                if (wordItem) wordItem.classList.add('found');
-            }
+                // Mark grid cells
+                this.currentSelection.forEach(el => el.classList.add('found'));
 
-            showWordInfo(word) {
-                const wordData = this.currentLevelData.words.find(w => w.w.toUpperCase() === word);
+                // Mark word bank
+                if (word === this.mysteryWord) {
+                    this.mysteryHintEl.innerHTML = `🎉 Mystery Found: <b>${word}</b>`;
+                    this.mysteryHintEl.style.background = 'rgba(0, 255, 0, 0.2)';
+                    this.soundManager.playLevelComplete(); // Extra fanfare
+                } else {
+                    const bankItem = this.wordBankEl.querySelector(`.word-item[data-word="${word}"]`);
+                    if (bankItem) bankItem.classList.add('found');
+                }
+
+                // Show Info Panel
+                const wordData = this.currentLevelData.words.find(w => w.w.toUpperCase() === word) ||
+                    (this.mysteryWord === word ? { w: word, t: this.mysteryTextEl.textContent, s: "Mystery Word!", st: "!" } : null);
+
                 if (wordData) {
                     document.getElementById('panel-word').textContent = wordData.w;
                     document.getElementById('panel-translation').textContent = wordData.t;
@@ -894,41 +1120,39 @@
                     document.getElementById('panel-sentence-ar').textContent = wordData.st;
                     this.bottomInfoPanel.classList.add('active');
                 }
-            }
 
-            showFloatingLabel(text, targetEl) {
-                const rect = targetEl.getBoundingClientRect();
-                this.floatingLabel.textContent = text;
-                this.floatingLabel.style.display = 'block';
-                this.floatingLabel.style.top = `${rect.top - 40}px`;
-                this.floatingLabel.style.left = `${rect.left}px`;
-            }
-
-            checkLevelComplete() {
-                if (this.foundWords.size === this.words.length) {
-                    setTimeout(() => {
-                        this.levelModal.classList.add('active');
-                        this.soundManager.playLevelComplete();
-                    }, 2000); // Delay to let user read the last word info
+                // Time Rush Bonus
+                if (this.mode === 'timerush') {
+                    this.timer += 10;
+                    this.updateTimerDisplay();
                 }
+
+                // Check Level Complete
+                // Note: Mystery word is optional for level completion unless we want to force it.
+                // Let's say you need to find all visible words. Mystery is bonus.
+                const visibleWords = this.words.filter(w => w !== this.mysteryWord);
+                const foundVisible = visibleWords.every(w => this.foundWords.has(w));
+
+                if (foundVisible) {
+                    setTimeout(() => {
+                        this.soundManager.playLevelComplete();
+                        this.levelModal.classList.add('active');
+                    }, 500);
+                }
+            }
+
+            nextLevel() {
+                this.currentLevelIndex++;
+                this.levelModal.classList.remove('active');
+                this.initLevel(this.currentLevelIndex);
             }
         }
 
-        // Global Game Instance
+        // Start Game
         let game;
-
-        // Init
         window.onload = () => {
             game = new WordSearchGame();
         };
-
-        // UI Functions
-        function nextLevel() {
-            document.getElementById('level-modal').classList.remove('active');
-            game.currentLevelIndex++;
-            game.initLevel(game.currentLevelIndex);
-        }
-
     </script>
 </body>
 

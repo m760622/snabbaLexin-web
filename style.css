@@ -100,9 +100,12 @@ body.iphone-view::before {
 /* Header & Search */
 header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    /* Reduced from 2rem */
     animation: fadeIn 0.8s ease-out;
     position: relative;
+    padding-top: 3.5rem;
+    /* Space for top nav */
 }
 
 .main-title-text {
@@ -481,14 +484,54 @@ header {
     color: white;
 }
 
-.main-actions {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    margin-bottom: 2rem;
+/* Top Navigation Bar */
+.top-nav {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    z-index: 50;
+    pointer-events: none;
+    /* Let clicks pass through empty space */
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    gap: 0.5rem;
+    pointer-events: auto;
+    /* Re-enable clicks for buttons */
+}
+
+/* Sticky Header for Search */
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(243, 244, 246, 0.85);
+    /* Matches light theme background */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 1rem 0 0.5rem 0;
+    margin: 0 -2rem;
+    /* Extend to edges */
+    padding-left: 2rem;
+    padding-right: 2rem;
+    transition: background 0.3s ease;
+}
+
+[data-theme="dark"] .sticky-header {
+    background: rgba(15, 23, 42, 0.85);
+    /* Matches dark theme background */
+}
+
+/* Adjust search container within sticky header */
+.search-container {
+    margin-bottom: 0.5rem;
 }
 
 .main-actions>button,
@@ -665,13 +708,23 @@ h1 {
     }
 
     .header-center {
-        padding: 1rem;
-        padding-top: max(1rem, env(safe-area-inset-top));
+        padding: 0.5rem;
+        padding-top: max(3.5rem, env(safe-area-inset-top));
+        /* More space for top nav */
+    }
+
+    .sticky-header {
+        margin: 0 -1rem;
+        /* Match mobile body padding */
+        padding-left: 1rem;
+        padding-right: 1rem;
+        top: 0;
     }
 
     .search-container {
         flex-direction: column;
         gap: 0.75rem;
+        margin-bottom: 0;
     }
 
     .sort-wrapper {

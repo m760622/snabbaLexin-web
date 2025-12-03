@@ -29,7 +29,6 @@
             box-sizing: border-box;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: none;
         }
 
         body {
@@ -73,6 +72,10 @@
             letter-spacing: 1px;
             color: var(--primary-neon);
             text-shadow: 0 0 8px rgba(0, 243, 255, 0.5);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 120px;
         }
 
         .level-badge {
@@ -203,6 +206,11 @@
             color: var(--primary-neon);
             background: rgba(0, 243, 255, 0.1);
             border-color: rgba(0, 243, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .word-item.found:hover {
+            background: rgba(0, 243, 255, 0.2);
         }
 
         .word-item.mystery {
@@ -285,6 +293,17 @@
             direction: rtl;
         }
 
+        .panel-close-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.2rem;
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            cursor: pointer;
+        }
+
         /* --- Modals --- */
         .modal-overlay {
             position: fixed;
@@ -319,6 +338,10 @@
             box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
             transform: scale(0.9);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 80vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-overlay.active .modal-content {
@@ -426,6 +449,121 @@
             width: 100%;
             text-align: center;
         }
+
+        /* --- Topic & Level Selection Styles --- */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .topic-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .topic-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-neon);
+        }
+
+        .topic-info {
+            text-align: left;
+        }
+
+        .topic-info h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--primary-neon);
+        }
+
+        .topic-info p {
+            margin: 2px 0 0;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        .topic-progress {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--secondary-neon);
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            padding: 10px;
+        }
+
+        .level-btn {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .level-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .level-btn.locked::after {
+            content: '🔒';
+            font-size: 0.8rem;
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+        }
+
+        .level-btn.completed {
+            border-color: var(--primary-neon);
+            color: var(--primary-neon);
+            box-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+        }
+
+        .level-btn.current {
+            background: var(--accent-neon);
+            border-color: var(--accent-neon);
+            color: #fff;
+            box-shadow: 0 0 10px var(--accent-neon);
+        }
+
+        .nav-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .nav-back {
+            background: none;
+            border: none;
+            color: var(--primary-neon);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+        }
     </style>
 </head>
 
@@ -435,25 +573,28 @@
         <div class="header-left">
             <button class="back-btn" onclick="window.location.href='games.html'">←</button>
             <button class="icon-btn" onclick="game.showMenu()">⚙️</button>
+            <button class="icon-btn" onclick="game.showNavigation()">📚</button>
         </div>
-        <h1>Neon Search</h1>
+        <h1 id="header-title">Neon Search</h1>
         <div class="header-right">
             <div id="timer-display">60s</div>
-            <div class="level-badge">Nivå <span id="level-display">1</span></div>
+            <div id="level-badge-container" class="level-badge">Nivå <span id="level-display">1</span></div>
         </div>
     </header>
 
+    <!-- GAME VIEW (Always active now) -->
     <div id="game-container">
         <div id="grid"></div>
         <div id="flashlight-overlay"></div>
         <div id="word-bank"></div>
         <div id="mystery-hint">🕵️ Mystery: <span id="mystery-text">...</span></div>
     </div>
-
     <div id="floating-label"></div>
 
     <!-- Bottom Info Panel -->
     <div id="bottom-info-panel">
+        <button class="panel-close-btn"
+            onclick="document.getElementById('bottom-info-panel').classList.remove('active')">×</button>
         <div class="panel-header">
             <span id="panel-word" class="panel-word">WORD</span>
             <span id="panel-translation" class="panel-translation">Translation</span>
@@ -462,33 +603,58 @@
         <div id="panel-sentence-ar" class="panel-sentence-ar">Arabic sentence translation.</div>
     </div>
 
-    <!-- Main Menu Modal -->
-    <div id="main-menu" class="modal-overlay active">
+    <!-- Main Menu (Settings) Modal -->
+    <div id="main-menu" class="modal-overlay">
         <div class="modal-content" style="width: 400px;">
-            <h2 class="level-complete-title">Neon Search</h2>
+            <h2 class="level-complete-title">Inställningar / الإعدادات</h2>
             <p style="opacity: 0.7; margin-bottom: 20px;">Select Mode / اختر النمط</p>
 
             <div class="mode-grid">
-                <div class="mode-card" onclick="game.startMode('classic')">
+                <div class="mode-card" onclick="game.setMode('classic')">
                     <div class="mode-icon">🧩</div>
                     <div class="mode-name">Classic</div>
                 </div>
-                <div class="mode-card" onclick="game.startMode('flashlight')">
+                <div class="mode-card" onclick="game.setMode('flashlight')">
                     <div class="mode-icon">🔦</div>
                     <div class="mode-name">Flashlight</div>
                 </div>
-                <div class="mode-card" onclick="game.startMode('timerush')">
+                <div class="mode-card" onclick="game.setMode('timerush')">
                     <div class="mode-icon">⏳</div>
                     <div class="mode-name">Time Rush</div>
                 </div>
-                <div class="mode-card" onclick="game.startMode('shifting')">
+                <div class="mode-card" onclick="game.setMode('shifting')">
                     <div class="mode-icon">🌊</div>
                     <div class="mode-name">Shifting Grid</div>
                 </div>
             </div>
 
             <div style="margin-top: 20px; font-size: 0.9rem; color: #aaa;">
-                <input type="checkbox" id="mystery-toggle"> <label for="mystery-toggle">Enable Mystery Word 🕵️</label>
+                <input type="checkbox" id="mystery-toggle" onchange="game.toggleMystery(this.checked)"> <label
+                    for="mystery-toggle">Enable Mystery Word 🕵️</label>
+            </div>
+
+            <button class="modal-btn" style="margin-top: 20px;" onclick="game.closeMenu()">Play / العب</button>
+        </div>
+    </div>
+
+    <!-- Navigation Modal (Topics & Levels) -->
+    <div id="nav-modal" class="modal-overlay">
+        <div class="modal-content" style="width: 400px; padding: 15px;">
+            <div class="nav-header">
+                <button id="nav-back-btn" class="nav-back" style="display:none;"
+                    onclick="game.showTopicsInNav()">←</button>
+                <h2 id="nav-title"
+                    style="margin:0; flex:1; text-align:center; font-size:1.2rem; color:var(--primary-neon);">Topics
+                </h2>
+                <button class="nav-back" onclick="game.closeNavigation()">×</button>
+            </div>
+
+            <div id="nav-topics-container">
+                <div class="topics-grid" id="topics-list"></div>
+            </div>
+
+            <div id="nav-levels-container" style="display:none;">
+                <div class="levels-grid" id="levels-list"></div>
             </div>
         </div>
     </div>
@@ -500,7 +666,7 @@
             <p>Bra jobbat!</p>
             <button class="modal-btn" onclick="game.nextLevel()">Nästa Nivå / التالي</button>
             <button class="modal-btn" style="background:transparent; border:1px solid #555; color:#fff;"
-                onclick="game.showMenu()">Menu / القائمة</button>
+                onclick="game.showNavigation()">Levels / المستويات</button>
         </div>
     </div>
 
@@ -508,8 +674,8 @@
     <div id="game-complete-modal" class="modal-overlay">
         <div class="modal-content">
             <h2 class="level-complete-title">Grattis! 🏆</h2>
-            <p>Du har klarat alla nivåer!</p>
-            <button class="modal-btn" onclick="window.location.href='games.html'">Avsluta / خروج</button>
+            <p>Du har klarat alla nivåer i detta ämne!</p>
+            <button class="modal-btn" onclick="game.showNavigation()">Välj nytt ämne / اختر موضوعاً جديداً</button>
         </div>
     </div>
 
@@ -520,7 +686,7 @@
             <p>Tiden är slut!</p>
             <button class="modal-btn" onclick="game.restartLevel()">Try Again / حاول مجدداً</button>
             <button class="modal-btn" style="background:transparent; border:1px solid #555; color:#fff;"
-                onclick="game.showMenu()">Menu / القائمة</button>
+                onclick="game.showNavigation()">Exit / خروج</button>
         </div>
     </div>
 
@@ -580,149 +746,315 @@
         }
 
         /**
-         * 10 Levels of Swedish Words Data
+         * TOPICS DATA STRUCTURE
+         * 20 Topics, 10 Levels each
          */
-        const LEVELS_DATA = [
-            {
-                level: 1,
-                words: [
-                    { w: "ADVOKAT", t: "محامي", s: "Han är en mycket bra advokat.", st: "هو محام جيد جداً." },
-                    { w: "ÄPPLE", t: "تفاحة", s: "Man bör äta minst ett äpple om dagen.", st: "يجب على المرء أن يأكل تفاحة واحدة على الأقل في اليوم." },
-                    { w: "APOTEK", t: "صيدلية", s: "Jag går till apoteket för medicin.", st: "أذهب إلى الصيدلية للحصول على الدواء." },
-                    { w: "ANSIKTE", t: "وجه", s: "Hon har ett mycket vackert och vänligt ansikte.", st: "لديها وجه جميل جداً وودود." },
-                    { w: "ALLA", t: "الجميع", s: "Alla är välkomna till vår fest.", st: "الجميع مرحب بهم في حفلتنا." },
-                    { w: "ÄNGEL", t: "ملاك", s: "Du är en riktig ängel som hjälper mig.", st: "أنت ملاك حقيقي لأنك تساعدني." },
-                    { w: "ANKOMST", t: "وصول", s: "Vi väntar otåligt på tågets ankomst till stationen.", st: "ننتظر بفارغ الصبر وصول القطار إلى المحطة." }
-                ]
-            },
-            {
-                level: 2,
-                words: [
-                    { w: "APRIKOS", t: "مشمش", s: "En torkad aprikos är ett nyttigt godis.", st: "المشمش المجفف هو حلوى صحية." },
-                    { w: "ARENA", t: "ملعب", s: "Det är en mycket stor arena.", st: "إنه ملعب كبير جداً." },
-                    { w: "ARKIV", t: "أرشيف", s: "Alla viktiga dokumenten finns sparade i vårt arkiv.", st: "جميع الوثائق المهمة محفوظة في أرشيفنا." },
-                    { w: "ALPER", t: "جبال الألب", s: "På semestern åkte vi skidor i de höga Alperna.", st: "في الإجازة تزلجنا في جبال الألب العالية." },
-                    { w: "ANANAS", t: "أناناس", s: "Ananas är en söt och saftig tropisk frukt.", st: "الأناناس فاكهة استوائية حلوة وعصارية." },
-                    { w: "ANDAS", t: "يتنفس", s: "Kom ihåg att andas in djupt.", st: "تذكر أن تتنفس بعمق." },
-                    { w: "ALVAR", t: "سهل ألڤار", s: "Ölands stora alvar är ett unikt landskap.", st: "سهل ألڤار الكبير في أولاند هو منظر طبيعي فريد." }
-                ]
-            },
-            {
-                level: 3,
-                words: [
-                    { w: "ASTER", t: "زهرة النجمة", s: "I trädgården växer en vacker lila aster.", st: "تنمو زهرة نجمة أرجوانية جميلة في الحديقة." },
-                    { w: "ATLAS", t: "أطلس", s: "Jag hittade landet in min atlas.", st: "وجدت البلد في أطلسي." },
-                    { w: "ÄVENTYR", t: "مغامرة", s: "Att resa jorden runt är ett stort äventyr.", st: "السفر حول العالم هو مغامرة كبيرة." },
-                    { w: "AVTAL", t: "اتفاقية", s: "Vi skrev äntligen på ett viktigt avtal igår.", st: "وقعنا أخيراً على اتفاقية مهمة يوم أمس." },
-                    { w: "BADA", t: "يستحم", s: "Jag vill bada bastu efter träningen idag.", st: "أريد الاستحمام في الساونا بعد التمرين اليوم." },
-                    { w: "BADRUM", t: "حمام", s: "Jag tvättar mig varje morgon i badrummet.", st: "أغسل وجهي كل صباح في الحمام." },
-                    { w: "BAKA", t: "يخبز", s: "Vi ska baka en stor tårta till kalaset.", st: "سنخبز كعكة كبيرة للحفلة." },
-                    { w: "BALKONG", t: "شرفة", s: "Vi har blommor på vår balkong.", st: "لدينا زهور في شرفتنا." }
-                ]
-            },
-            {
-                level: 4,
-                words: [
-                    { w: "BANAN", t: "موزة", s: "Apor på zoo gillar att äta gula bananer.", st: "القرود في حديقة الحيوان تحب أكل الموز الأصفر." },
-                    { w: "BASAR", t: "أسواق", s: "Vi besökte en färgstark basar under vår resa.", st: "زرنا بازاراً ملوناً خلال رحلتنا." },
-                    { w: "BERG", t: "جبل", s: "Vi besteg ett mycket högt berg i somras.", st: "تسلقنا جبلاً عالياً جداً في الصيف الماضي." },
-                    { w: "BERÖM", t: "مدح", s: "Han fick beröm för sitt goda arbete.", st: "تلقى المديح على عمله الجيد." },
-                    { w: "BEVIS", t: "دليل", s: "Polisen har hittat nya avgörande bevis i fallet.", st: "وجدت الشرطة أدلة حاسمة جديدة في القضية." },
-                    { w: "BIFF", t: "شريحة لحم", s: "Jag vill ha en saftig biff.", st: "أريد شريحة لحم عصارية." },
-                    { w: "BILIST", t: "سائق", s: "Varje bilist måste vara uppmärksam i trafiken.", st: "يجب على كل سائق أن يكون منتبهاً في حركة المرور." },
-                    { w: "BILJETT", t: "تذكرة", s: "Jag har köpt en biljett till tåget.", st: "اشتريت تذكرة للقطار." }
-                ]
-            },
-            {
-                level: 5,
-                words: [
-                    { w: "BJÖRK", t: "شجرة البتولا", s: "Björken är ett träd som har en vit stam.", st: "شجرة البتولا هي شجرة لها جذع أبيض." },
-                    { w: "BJÖRN", t: "دب", s: "Den stora björnen sover djupt i sitt ide.", st: "الدب الكبير ينام بعمق في سباته." },
-                    { w: "BJÖRNBÄR", t: "توت العليق", s: "Skogen är full av svarta björnbär.", st: "الغابة مليئة بتوت العليق الأسود." },
-                    { w: "BLÅBÄR", t: "توت أزرق", s: "Vi plockar många blåbär i skogen varje höst.", st: "نقطف الكثير من التوت الأزرق في الغابة كل خريف." },
-                    { w: "BLAD", t: "ورقة شجر", s: "Trädens gröna blad faller ner på marken på hösten.", st: "أوراق الأشجار الخضراء تتساقط على الأرض في الخريف." },
-                    { w: "BLOCK", t: "دفتر", s: "Jag skriver anteckningar i mitt block.", st: "أكتب ملاحظات في دفتري." },
-                    { w: "BLOD", t: "دم", s: "Människans blod är alltid rött.", st: "دم الإنسان أحمر دائماً." },
-                    { w: "BOD", t: "كوخ", s: "Vi har en bod på gården.", st: "لدينا كوخ في الفناء." },
-                    { w: "BOK", t: "كتاب", s: "Jag läser en spännande bok just nu.", st: "أقرأ كتاباً مشوقاً الآن." }
-                ]
-            },
-            {
-                level: 6,
-                words: [
-                    { w: "BORD", t: "طاولة", s: "Maten står färdig och varm på köksbordet.", st: "الطعام جاهز ودافئ على طاولة المطبخ." },
-                    { w: "BORSTA", t: "يفرش", s: "Kom ihåg att borsta tänderna noga varje kväll.", st: "تذكر أن تفرش أسنانك جيداً كل مساء." },
-                    { w: "BÖN", t: "صلاة", s: "Hon bad en stilla bön i kyrkan.", st: "صلت صلاة هادئة في الكنيسة." },
-                    { w: "BRO", t: "جسر", s: "Vi promenerade över den gamla bron.", st: "مشينا فوق الجسر القديم." },
-                    { w: "BRÖD", t: "خبز", s: "Färskt bröd från ugnen doftar alltid gott.", st: "الخبز الطازج من الفرن له رائحة طيبة دائماً." },
-                    { w: "BROR", t: "أخ", s: "Min snälla bror leker ofta fotboll med mig.", st: "أخي اللطيف يلعب كرة القدم معي غالباً." },
-                    { w: "BÖTER", t: "غرامات", s: "Han fick betala dyra böter för fortkörning.", st: "اضطر لدفع غرامات باهظة بسبب السرعة الزائدة." },
-                    { w: "BUSS", t: "حافلة", s: "Bussen till staden är tyvärr sen idag.", st: "الحافلة المتجهة إلى المدينة متأخرة للأسف اليوم." },
-                    { w: "BULLAR", t: "كعك", s: "Vi äter nygräddade bullar med mjölk.", st: "نأكل الكعك الطازج مع الحليب." }
-                ]
-            },
-            {
-                level: 7,
-                words: [
-                    { w: "CYKEL", t: "دراجة", s: "Det är både roligt och nyttigt att cykla.", st: "من الممتع والمفيد ركوب الدراجة." },
-                    { w: "CIRKUS", t: "سيرك", s: "Vi gick på cirkus och såg roliga clowner.", st: "ذهبنا إلى السيرك ورأينا مهرجين مضحكين." },
-                    { w: "DANS", t: "رقص", s: "Får jag lov till en dans?", st: "هل تسمحين لي برقصة؟" },
-                    { w: "DATOR", t: "حاسوب", s: "Jag arbetar vid min nya dator varje dag.", st: "أعمل على حاسوبي الجديد كل يوم." },
-                    { w: "DOTTER", t: "ابنة", s: "Hon är en mycket smart och duktig dotter.", st: "هي ابنة ذكية جداً وموهوبة." },
-                    { w: "DUSCH", t: "دش", s: "Jag tar en varm och skön dusch på morgonen.", st: "آخذ دشاً دافئاً ومريحاً في الصباح." },
-                    { w: "DÖRR", t: "باب", s: "Stäng dörren, det drar kallt.", st: "أغلق الباب، هناك تيار هواء بارد." },
-                    { w: "DOMARE", t: "قاضي", s: "Han är en mycket rättvis domare.", st: "هو قاض عادل جداً." },
-                    { w: "FAMILJ", t: "عائلة", s: "Jag älskar att spendera tid med min familj.", st: "أحب قضاء الوقت مع عائلتي." },
-                    { w: "FARTYG", t: "سفينة", s: "Det stora fartyget seglar långt bort på havet.", st: "السفينة الكبيرة تبحر بعيداً في البحر." },
-                ]
-            },
-            {
-                level: 8,
-                words: [
-                    { w: "FÄRSK", t: "طازج", s: "Färsk fisk från havet smakar alltid bäst.", st: "السمك الطازج من البحر طعمه الأفضل دائماً." },
-                    { w: "FÄRJA", t: "عبّارة", s: "Vi tog färjan över havet till Danmark.", st: "أخذنا العبارة عبر البحر إلى الدنمارك." },
-                    { w: "FÄRD", t: "رحلة", s: "Vi tar en färd till Oslo.", st: "نأخذ رحلة إلى أوسلو." },
-                    { w: "FANA", t: "راية", s: "De bar en fana in tåget.", st: "حملوا راية في الموكب." },
-                    { w: "FALSK", t: "زائف", s: "Det där skrattet låter väldigt falskt.", st: "تلك الضحكة تبدو مصطنعة جداً." },
-                    { w: "ENERGI", t: "طاقة", s: "Solenergi är bra för vår miljö.", st: "الطاقة الشمسية جيدة لبيئتنا." },
-                    { w: "EKA", t: "قارب", s: "Vi rodde ut i en eka.", st: "جدفنا بقارب صغير." },
-                    { w: "EK", t: "شجرة بلوط", s: "Eken är ett mycket starkt och gammalt träd.", st: "شجرة البلوط هي شجرة قوية جداً وقديمة." },
-                    { w: "DYR", t: "غالي", s: "Den nya röda bilen var alldeles för dyr.", st: "السيارة الحمراء الجديدة كانت غالية جداً." },
-                    { w: "DRIVA", t: "ينجرف", s: "Vinden får båten att driva iväg.", st: "الرياح تجعل القارب ينجرف بعيداً." }
-                ]
-            },
-            {
-                level: 9,
-                words: [
-                    { w: "DATORN", t: "الحاسوب", s: "Den här datorn är helt ny.", st: "هذا الحاسوب جديد تماماً." },
-                    { w: "DATA", t: "بيانات", s: "Du måste spara all din data.", st: "يجب عليك حفظ جميع بياناتك." },
-                    { w: "DASS", t: "بيت خلاء", s: "Jag måste gå på dass nu.", st: "يجب أن أذهب إلى بيت الخلاء الآن." },
-                    { w: "DAL", t: "وادي", s: "Huset ligger i en grön dal.", st: "يقع المنزل في وادي أخضر." },
-                    { w: "DAG", t: "يوم", s: "Det är en vacker dag idag.", st: "إنه يوم جميل اليوم." },
-                    { w: "CHEF", t: "رئيس العمل", s: "Min chef på jobbet är mycket snäll och rättvis.", st: "رئيسي في العمل لطيف جداً وعادل." },
-                    { w: "BYGGA", t: "يبني", s: "Vi ska bygga ett nytt hus.", st: "سنبني منزلاً جديداً." },
-                    { w: "BYGG", t: "بناء", s: "Detta är ett mycket stabilt och säkert bygg.", st: "هذا بناء مستقر وآمن جداً." },
-                    { w: "BUSSAR", t: "حافلات", s: "Många blå bussar går in till centrum varje dag.", st: "العديد من الحافلات الزرقاء تذهب إلى المركز كل يوم." },
-                    { w: "BUSKAR", t: "شجيرات", s: "Katten gömde sig i buskarna.", st: "اختبأت القطة بين الشجيرات." },
-                    { w: "BUR", t: "قفص", s: "Fågeln sitter och sjunger i sin lilla bur.", st: "الطائر يجلس ويغني في قفصه الصغير." },
-                ]
-            },
-            {
-                level: 10,
-                words: [
-                    { w: "BRUSA", t: "يفور", s: "Vattnet i forsen började brusa högt.", st: "بدأ الماء في الشلال يفور بصوت عالٍ." },
-                    { w: "BRUKA", t: "يفلح", s: "Bonden måste bruka jorden för att få skörd.", st: "يجب على المزارع فلاحة الأرض للحصول على المحصول." },
-                    { w: "BROTT", t: "جريمة", s: "Att stjäla från andra är ett allvarligt brott.", st: "السرقة من الآخرين هي جريمة خطيرة." },
-                    { w: "BRÖST", t: "صدر", s: "Mamman gav den lilla babyn mat från bröstet.", st: "أعطت الأم الطفل الصغير الطعام من صدرها." },
-                    { w: "BRODER", t: "أخ", s: "Han är min kära broder som jag litar på.", st: "هو أخي العزيز الذي أثق به." },
-                    { w: "BRE", t: "يدهن", s: "Du kan bre lite mjukt smör på brödet.", st: "يمكنك دهن القليل من الزبدة الطرية على الخبز." },
-                    { w: "BRAS", t: "نار", s: "Vi tände en bras i öppna spisen.", st: "أشعلنا ناراً في المدفأة." },
-                    { w: "BOTT", t: "سكن", s: "Jag har bott här i hela mitt liv.", st: "لقد عشت هنا طوال حياتي." },
-                    { w: "BÖT", t: "كفر", s: "Han böt för sina synder genom att hjälpa andra.", st: "كفر عن ذنوبه بمساعدة الآخرين." },
-                    { w: "BOT", t: "غرامة", s: "Han fick betala en stor bot.", st: "اضطر لدفع غرامة كبيرة." },
-                    { w: "BULLAR", t: "كعك", s: "Mormor bakar goda nygräddade bullar.", st: "الجدة تخبز كعكاً طازجاً لذيذاً." }
-                ]
-            }
+        const TOPICS = [
+            { id: 'greetings', title: 'Hälsningar & Presentation', titleAr: 'التحيات والتعريف', levels: [] },
+            { id: 'family', title: 'Familj & Vänner', titleAr: 'العائلة والأصدقاء', levels: [] },
+            { id: 'food', title: 'Mat & Dryck', titleAr: 'الطعام والشراب', levels: [] },
+            { id: 'housing', title: 'Boende & Hem', titleAr: 'السكن والمنزل', levels: [] },
+            { id: 'body', title: 'Kroppen & Hälsa', titleAr: 'الجسم والصحة', levels: [] },
+            { id: 'clothes', title: 'Kläder & Mode', titleAr: 'الملابس والموضة', levels: [] },
+            { id: 'weather', title: 'Väder & Natur', titleAr: 'الطقس والطبيعة', levels: [] },
+            { id: 'time', title: 'Tid & Kalender', titleAr: 'الوقت والتقويم', levels: [] },
+            { id: 'city', title: 'Stad & Trafik', titleAr: 'المدينة والمرور', levels: [] },
+            { id: 'work', title: 'Arbete & Yrken', titleAr: 'العمل والمهن', levels: [] },
+            { id: 'school', title: 'Skola & Utbildning', titleAr: 'المدرسة والتعليم', levels: [] },
+            { id: 'hobbies', title: 'Fritid & Hobby', titleAr: 'أوقات الفراغ والهوايات', levels: [] },
+            { id: 'travel', title: 'Resor & Transport', titleAr: 'السفر والمواصلات', levels: [] },
+            { id: 'shopping', title: 'Handla & Affärer', titleAr: 'التسوق والمتاجر', levels: [] },
+            { id: 'feelings', title: 'Känslor & Egenskaper', titleAr: 'المشاعر والصفات', levels: [] },
+            { id: 'animals', title: 'Djur & Natur', titleAr: 'الحيوانات والطبيعة', levels: [] },
+            { id: 'tech', title: 'Teknik & Media', titleAr: 'التكنولوجيا والإعلام', levels: [] },
+            { id: 'society', title: 'Samhälle & Politik', titleAr: 'المجتمع والسياسة', levels: [] },
+            { id: 'culture', title: 'Kultur & Traditioner', titleAr: 'الثقافة والتقاليد', levels: [] },
+            { id: 'sports', title: 'Sport & Idrott', titleAr: 'الرياضة', levels: [] }
+        ];
+
+        // Helper to create levels
+        function createLevel(words) { return { words: words }; }
+
+        // --- POPULATING DATA (Sample for Topic 1 & 2, placeholders for others) ---
+
+        // Topic 1: Greetings
+        TOPICS[0].levels = [
+            createLevel([{ w: "HEJ", t: "مرحباً", s: "Hej, hur mår du?", st: "مرحباً، كيف حالك؟" }, { w: "TACK", t: "شكراً", s: "Tack så mycket för hjälpen.", st: "شكراً جزيلاً على المساعدة." }, { w: "JA", t: "نعم", s: "Ja, jag vill ha kaffe.", st: "نعم، أريد قهوة." }, { w: "NEJ", t: "لا", s: "Nej, jag kan inte komma.", st: "لا، لا أستطيع القدوم." }, { w: "BRA", t: "جيد", s: "Det går bra för mig.", st: "الأمور تسير بشكل جيد معي." }]),
+            createLevel([{ w: "NAMN", t: "اسم", s: "Vad är ditt namn?", st: "ما هو اسمك؟" }, { w: "HETER", t: "يسمى", s: "Jag heter Anna.", st: "اسمي آنا." }, { w: "VAR", t: "أين", s: "Var bor du?", st: "أين تسكن؟" }, { w: "FRÅN", t: "من", s: "Jag kommer från Sverige.", st: "أنا من السويد." }, { w: "SPRÅK", t: "لغة", s: "Vilka språk talar du?", st: "ما اللغات التي تتحدثها؟" }]),
+            createLevel([{ w: "MORGON", t: "صباح", s: "God morgon!", st: "صباح الخير!" }, { w: "KVÄLL", t: "مساء", s: "God kväll!", st: "مساء الخير!" }, { w: "NATT", t: "ليل", s: "God natt och sov gott.", st: "تصبح على خير ونم جيداً." }, { w: "DAG", t: "يوم", s: "Ha en bra dag!", st: "أتمنى لك يوماً جيداً!" }, { w: "HEJDÅ", t: "وداعاً", s: "Hejdå, vi ses imorgon.", st: "وداعاً، نراك غداً." }]),
+            createLevel([{ w: "URSÄKTA", t: "عذراً", s: "Ursäkta, vad är klockan?", st: "عذراً، كم الساعة؟" }, { w: "FÖRLÅT", t: "آسف", s: "Förlåt att jag är sen.", st: "آسف لأنني تأخرت." }, { w: "VARSÅGOD", t: "تفضل", s: "Varsågod, här är maten.", st: "تفضل، ها هو الطعام." }, { w: "SNÄLLA", t: "من فضلك", s: "Kan du hjälpa mig, snälla?", st: "هل يمكنك مساعدتي من فضلك؟" }, { w: "VÄLKOMMEN", t: "أهلاً بك", s: "Välkommen till vårt hem.", st: "أهلاً بك في منزلنا." }]),
+            createLevel([{ w: "TREVLIG", t: "لطيف", s: "Det var trevligt att träffas.", st: "كان من اللطيف لقاؤك." }, { w: "SES", t: "نلتقي", s: "Vi ses senare!", st: "نلتقي لاحقاً!" }, { w: "HÖR", t: "يسمع", s: "Vi hörs snart.", st: "سنتحدث قريباً." }, { w: "LYCKA", t: "حظ", s: "Lycka till med provet!", st: "حظاً سعيداً في الامتحان!" }, { w: "KRAM", t: "عناق", s: "En stor kram till dig.", st: "عناق كبير لك." }]),
+            createLevel([{ w: "HERR", t: "سيد", s: "Herr Andersson är här.", st: "السيد أندرسون هنا." }, { w: "FRU", t: "سيدة", s: "Fru Larsson arbetar här.", st: "السيدة لارسون تعمل هنا." }, { w: "FRÖKEN", t: "آنسة", s: "Fröken, får jag fråga en sak?", st: "يا آنسة، هل لي أن أسأل شيئاً؟" }, { w: "POJKE", t: "ولد", s: "En liten pojke leker.", st: "ولد صغير يلعب." }, { w: "FLICKA", t: "فتاة", s: "En flicka läser en bok.", st: "فتاة تقرأ كتاباً." }]),
+            createLevel([{ w: "MAN", t: "رجل", s: "En man går på gatan.", st: "رجل يمشي في الشارع." }, { w: "KVINNA", t: "امرأة", s: "En kvinna kör bilen.", st: "امرأة تقود السيارة." }, { w: "BARN", t: "طفل", s: "Barn leker i parken.", st: "الأطفال يلعبون في الحديقة." }, { w: "VÄN", t: "صديق", s: "Han är min bästa vän.", st: "هو صديقي المفضل." }, { w: "GRANNE", t: "جار", s: "Min granne är mycket snäll.", st: "جاري لطيف جداً." }]),
+            createLevel([{ w: "GAMMAL", t: "قديم/عجوز", s: "Min farfar är gammal.", st: "جدي عجوز." }, { w: "UNG", t: "شاب", s: "Hon är ung och stark.", st: "هي شابة وقوية." }, { w: "LITEN", t: "صغير", s: "Huset är litet men mysigt.", st: "المنزل صغير لكنه مريح." }, { w: "STOR", t: "كبير", s: "Stockholm är en stor stad.", st: "ستوكهولم مدينة كبيرة." }, { w: "NY", t: "جديد", s: "Jag har en ny cykel.", st: "لدي دراجة جديدة." }]),
+            createLevel([{ w: "GLAD", t: "سعيد", s: "Jag är glad idag.", st: "أنا سعيد اليوم." }, { w: "LEDSEN", t: "حزين", s: "Varför är du ledsen?", st: "لماذا أنت حزين؟" }, { w: "ARG", t: "غاضب", s: "Han blev arg på mig.", st: "لقد غضب مني." }, { w: "TRÖTT", t: "متعب", s: "Jag är trött efter jobbet.", st: "أنا متعب بعد العمل." }, { w: "PIGG", t: "نشيط", s: "Jag känner mig pigg nu.", st: "أشعر بالنشاط الآن." }]),
+            createLevel([{ w: "ÄLSKAR", t: "يحب", s: "Jag älskar dig.", st: "أنا أحبك." }, { w: "GILLAR", t: "يعجب بـ", s: "Jag gillar glass.", st: "أنا أحب الآيس كريم." }, { w: "HATAR", t: "يكره", s: "Jag hatar spindlar.", st: "أنا أكره العناكب." }, { w: "SAKNAR", t: "يفتقد", s: "Jag saknar min familj.", st: "أفتقد عائلتي." }, { w: "KÄNNER", t: "يشعر/يعرف", s: "Jag känner honom väl.", st: "أعرفه جيداً." }])
+        ];
+
+        // Topic 1: Family & Friends
+        TOPICS[1].levels = [
+            createLevel([{ w: "FAMILJ", t: "عائلة", s: "Jag älskar min familj.", st: "أحب عائلتي." }, { w: "MAMMA", t: "أم", s: "Min mamma är snäll.", st: "أمي لطيفة." }, { w: "PAPPA", t: "أب", s: "Pappa läser tidningen.", st: "أبي يقرأ الجريدة." }, { w: "BROR", t: "أخ", s: "Jag har en storebror.", st: "لدي أخ أكبر." }, { w: "SYSTER", t: "أخت", s: "Min syster är yngre än jag.", st: "أختي أصغر مني." }]),
+            createLevel([{ w: "SON", t: "ابن", s: "Han har en son.", st: "لديه ابن." }, { w: "DOTTER", t: "ابنة", s: "Deras dotter går i skolan.", st: "ابنتهم تذهب إلى المدرسة." }, { w: "FARFAR", t: "جد (أب الأب)", s: "Farfar berättar sagor.", st: "جدي يحكي قصصاً." }, { w: "MORMOR", t: "جدة (أم الأم)", s: "Mormor bakar bullar.", st: "جدتي تخبز الكعك." }, { w: "BARN", t: "طفل/أطفال", s: "Barnen leker ute.", st: "الأطفال يلعبون في الخارج." }]),
+            createLevel([{ w: "VÄN", t: "صديق", s: "Hon är min bästa vän.", st: "هي صديقتي المفضلة." }, { w: "KOMPIS", t: "صديق/زميل", s: "Jag ska träffa en kompis.", st: "سأقابل صديقاً." }, { w: "POJKE", t: "ولد", s: "En pojke cyklar.", st: "ولد يركب دراجة." }, { w: "FLICKA", t: "فتاة", s: "Flickan sjunger fint.", st: "الفتاة تغني بشكل جميل." }, { w: "MAN", t: "رجل/زوج", s: "Hennes man arbetar här.", st: "زوجها يعمل هنا." }]),
+            createLevel([{ w: "KVINNA", t: "امرأة", s: "En kvinna frågade om vägen.", st: "سألت امرأة عن الطريق." }, { w: "FRU", t: "زوجة", s: "Hans fru är läkare.", st: "زوجته طبيبة." }, { w: "SLÄKT", t: "أقارب", s: "Hela släkten kom på festen.", st: "جاء كل الأقارب إلى الحفلة." }, { w: "KUSIN", t: "ابن العم/الخال", s: "Min kusin bor i Malmö.", st: "ابن عمي يسكن في مالمو." }, { w: "FARBROR", t: "عم", s: "Min farbror är rolig.", st: "عمي مضحك." }]),
+            createLevel([{ w: "MOSTER", t: "خالة", s: "Moster Anna hälsar på.", st: "الخالة آنا تزورنا." }, { w: "SYSKON", t: "إخوة", s: "Har du några syskon?", st: "هل لديك إخوة؟" }, { w: "BEBIS", t: "رضيع", s: "Bebisen sover.", st: "الرضيع نائم." }, { w: "TVILLING", t: "توأم", s: "De är tvillingar.", st: "هما توأمان." }, { w: "SAMBO", t: "شريك سكن", s: "Min sambo lagar mat.", st: "شريكي في السكن يطبخ." }]),
+            createLevel([{ w: "GRANNE", t: "جار", s: "Vår granne hjälpte oss.", st: "جارنا ساعدنا." }, { w: "GÄST", t: "ضيف", s: "Vi har gäster ikväll.", st: "لدينا ضيوف الليلة." }, { w: "FOLK", t: "ناس", s: "Det var mycket folk där.", st: "كان هناك الكثير من الناس." }, { w: "PERSON", t: "شخص", s: "En trevlig person.", st: "شخص لطيف." }, { w: "NAMN", t: "اسم", s: "Vad heter du i efternamn?", st: "ما هو اسم عائلتك؟" }]),
+            createLevel([{ w: "ÅLDER", t: "عمر", s: "Vilken ålder har han?", st: "كم عمره؟" }, { w: "FÖDD", t: "مولود", s: "Jag är född i maj.", st: "أنا مولود في مايو." }, { w: "DÖD", t: "ميت", s: "Blomman är död.", st: "الزهرة ميتة." }, { w: "LEVA", t: "يعيش", s: "Att leva är att lära.", st: "الحياة هي التعلم." }, { w: "VÄXA", t: "ينمو", s: "Barn växer fort.", st: "الأطفال ينمون بسرعة." }]),
+            createLevel([{ w: "KÄRLEK", t: "حب", s: "Kärlek är viktigt.", st: "الحب مهم." }, { w: "KRAM", t: "عناق", s: "Ge mig en kram.", st: "أعطني عناقاً." }, { w: "PUSS", t: "قبلة", s: "En puss på kinden.", st: "قبلة على الخد." }, { w: "BRÖLLOP", t: "زفاف", s: "Vi ska på bröllop.", st: "سنذهب إلى حفل زفاف." }, { w: "GIFT", t: "متزوج", s: "Är du gift?", st: "هل أنت متزوج؟" }]),
+            createLevel([{ w: "SKILJD", t: "مطلق", s: "De är skiljda nu.", st: "هما مطلقان الآن." }, { w: "ENSAM", t: "وحيد", s: "Han känner sig ensam.", st: "هو يشعر بالوحدة." }, { w: "TILLSAMMANS", t: "معاً", s: "Vi gör det tillsammans.", st: "نحن نفعل ذلك معاً." }, { w: "GRUPP", t: "مجموعة", s: "En grupp studenter.", st: "مجموعة طلاب." }, { w: "MEDLEM", t: "عضو", s: "Han är medlem i klubben.", st: "هو عضو في النادي." }]),
+            createLevel([{ w: "VUXEN", t: "بالغ", s: "En biljett för vuxen.", st: "تذكرة لشخص بالغ." }, { w: "TONÅRING", t: "مراهق", s: "Det är svårt att vara tonåring.", st: "من الصعب أن تكون مراهقاً." }, { w: "PENSIONÄR", t: "متقاعد", s: "Min mormor är pensionär.", st: "جدتي متقاعدة." }, { w: "BEKANT", t: "معرفة", s: "En gammal bekant.", st: "معرفة قديمة." }, { w: "FIENDE", t: "عدو", s: "Ingen vill ha fiender.", st: "لا أحد يريد أعداء." }])
+        ];
+
+        // Topic 2: Food & Drink
+        TOPICS[2].levels = [
+            createLevel([{ w: "MAT", t: "طعام", s: "Maten är klar.", st: "الطعام جاهز." }, { w: "DRYCK", t: "شراب", s: "Vill du ha dryck till maten?", st: "هل تريد شراباً مع الطعام؟" }, { w: "ÄTA", t: "يأكل", s: "Vi ska äta nu.", st: "سنأكل الآن." }, { w: "DRICKA", t: "يشرب", s: "Jag vill dricka vatten.", st: "أريد شرب الماء." }, { w: "HUNGRI", t: "جائع", s: "Är du hungrig?", st: "هل أنت جائع؟" }]),
+            createLevel([{ w: "TÖRSTIG", t: "عطشان", s: "Jag är törstig.", st: "أنا عطشان." }, { w: "FRUKOST", t: "فطور", s: "Jag äter frukost klockan sju.", st: "آكل الفطور في السابعة." }, { w: "LUNCH", t: "غداء", s: "Vad blir det till lunch?", st: "ماذا يوجد للغداء؟" }, { w: "MIDDAG", t: "عشاء", s: "Vi åt en god middag.", st: "أكلنا عشاء لذيذاً." }, { w: "MELLANMÅL", t: "وجبة خفيفة", s: "Ett äpple till mellanmål.", st: "تفاحة كوجبة خفيفة." }]),
+            createLevel([{ w: "BRÖD", t: "خبز", s: "Färskt bröd doftar gott.", st: "الخبز الطازج رائحته طيبة." }, { w: "SMÖR", t: "زبدة", s: "Kan du räcka mig smöret?", st: "هل يمكنك مناولتي الزبدة؟" }, { w: "OST", t: "جبن", s: "Jag gillar ost på mackan.", st: "أحب الجبن على الشطيرة." }, { w: "ÄGG", t: "بيض", s: "Kokt ägg till frukost.", st: "بيض مسلوق للفطور." }, { w: "MJÖLK", t: "حليب", s: "Ett glas kall mjölk.", st: "كوب حليب بارد." }]),
+            createLevel([{ w: "KAFFE", t: "قهوة", s: "En kopp kaffe, tack.", st: "فنجان قهوة، من فضلك." }, { w: "TE", t: "شاي", s: "Jag dricker helst te.", st: "أفضل شرب الشاي." }, { w: "SOCKER", t: "سكر", s: "Vill du ha socker i kaffet?", st: "هل تريد سكراً في القهوة؟" }, { w: "SALT", t: "ملح", s: "Soppan behöver lite salt.", st: "الحساء يحتاج قليلاً من الملح." }, { w: "PEPPAR", t: "فلفل", s: "Svartpeppar är starkt.", st: "الفلفل الأسود حار." }]),
+            createLevel([{ w: "KÖTT", t: "لحم", s: "Vi grillar kött.", st: "نحن نشوي اللحم." }, { w: "KYCKLING", t: "دجاج", s: "Kyckling med ris.", st: "دجاج مع أرز." }, { w: "FISK", t: "سمك", s: "Fisk är nyttigt.", st: "السمك صحي." }, { w: "KORV", t: "نقانق", s: "Korv med bröd.", st: "نقانق مع خبز." }, { w: "SOPPA", t: "حساء", s: "Varm soppa på vintern.", st: "حساء ساخن في الشتاء." }]),
+            createLevel([{ w: "GRÖNSAK", t: "خضار", s: "Ät dina grönsaker.", st: "كل خضرواتك." }, { w: "FRUKT", t: "فاكهة", s: "Frukt är bra godis.", st: "الفاكهة حلوى جيدة." }, { w: "ÄPPLE", t: "تفاحة", s: "Ett rött äpple.", st: "تفاحة حمراء." }, { w: "BANAN", t: "موزة", s: "Bananer är gula.", st: "الموز أصفر." }, { w: "APELSIN", t: "برتقal", s: "Apelsinjuice är gott.", st: "عصير البرتقال لذيذ." }]),
+            createLevel([{ w: "POTATIS", t: "بطاطس", s: "Svenskar äter mycket potatis.", st: "السويديون يأكلون الكثير من البطاطس." }, { w: "TOMAT", t: "طماطم", s: "Tomater i salladen.", st: "طماطم في السلطة." }, { w: "GURKA", t: "خيار", s: "Skivad gurka.", st: "خيار مقطع." }, { w: "LÖK", t: "بصل", s: "Hackad lök.", st: "بصل مفروم." }, { w: "MOROT", t: "جزرة", s: "Kaniner gillar morötter.", st: "الأرانب تحب الجزر." }]),
+            createLevel([{ w: "VATTEN", t: "ماء", s: "Vatten är livsviktigt.", st: "الماء ضروري للحياة." }, { w: "LÄSK", t: "مشروب غازي", s: "Ingen läsk på vardagar.", st: "لا مشروبات غازية في أيام الأسبوع." }, { w: "SAFT", t: "عصير مركز", s: "Barnen dricker saft.", st: "الأطفال يشربون العصير." }, { w: "ÖL", t: "بيرة", s: "En kall öl.", st: "بيرة باردة." }, { w: "VIN", t: "نبيذ", s: "Ett glas rött vin.", st: "كأس نبيذ أحمر." }]),
+            createLevel([{ w: "RESTAURANG", t: "مطعم", s: "Vi åt på restaurang.", st: "أكلنا في مطعم." }, { w: "CAFÉ", t: "مقهى", s: "Vi fikar på ett café.", st: "نحتسي القهوة في مقهى." }, { w: "NOTA", t: "فاتورة", s: "Kan vi få notan?", st: "هل يمكننا الحصول على الفاتورة؟" }, { w: "MENY", t: "قائمة طعام", s: "Här är menyn.", st: "ها هي قائمة الطعام." }, { w: "BESTÄLLA", t: "يطلب", s: "Jag vill beställa nu.", st: "أريد أن أطلب الآن." }]),
+            createLevel([{ w: "KNIV", t: "سكين", s: "Kniven är vass.", st: "السكين حاد." }, { w: "GAFFEL", t: "شوكة", s: "Ät med gaffel.", st: "كل بالشوكة." }, { w: "SKED", t: "ملعقة", s: "En sked för soppan.", st: "ملعقة للحساء." }, { w: "TALLRIK", t: "صحن", s: "En djup tallrik.", st: "صحن عميق." }, { w: "GLAS", t: "كوب", s: "Ett glas vatten.", st: "كوب ماء." }])
+        ];
+
+        // Topic 3: Housing & Home
+        TOPICS[3].levels = [
+            createLevel([{ w: "HUS", t: "منزل", s: "Vi bor i ett rött hus.", st: "نسكن في منزل أحمر." }, { w: "LÄGENHET", t: "شقة", s: "En trea lägenhet.", st: "شقة من ثلاث غرف." }, { w: "RUM", t: "غرفة", s: "Mitt rum är stökigt.", st: "غرفتي فوضوية." }, { w: "KÖK", t: "مطبخ", s: "Vi lagar mat i köket.", st: "نطبخ في المطبخ." }, { w: "BADRUM", t: "حمام", s: "Badrummet är nyrenoverat.", st: "الحمام تم تجديده حديثاً." }]),
+            createLevel([{ w: "VARDAGSRUM", t: "غرفة معيشة", s: "Vi ser på TV i vardagsrummet.", st: "نشاهد التلفاز في غرفة المعيشة." }, { w: "SOVRUM", t: "غرفة نوم", s: "Sovrummet är tyst.", st: "غرفة النوم هادئة." }, { w: "HALL", t: "مدخل", s: "Häng jackan i hallen.", st: "علق السترة في المدخل." }, { w: "BALKONG", t: "شرفة", s: "Vi sitter på balkongen.", st: "نجلس في الشرفة." }, { w: "TRÄDGÅRD", t: "حديقة", s: "Vi har en fin trädgård.", st: "لدينا حديقة جميلة." }]),
+            createLevel([{ w: "DÖRR", t: "باب", s: "Stäng dörren.", st: "أغلق الباب." }, { w: "FÖNSTER", t: "نافذة", s: "Öppna ett fönster.", st: "افتح نافذة." }, { w: "GOLV", t: "أرضية", s: "Golvet är kallt.", st: "الأرضية باردة." }, { w: "TAK", t: "سقف", s: "Taket läcker.", st: "السقف يسرب." }, { w: "VÄGG", t: "حائط", s: "Vi målar väggen vit.", st: "نطلي الحائط بالأبيض." }]),
+            createLevel([{ w: "MÖBEL", t: "أثاث", s: "Vi köper nya möbler.", st: "نشتري أثاثاً جديداً." }, { w: "BORD", t: "طاولة", s: "Maten står på bordet.", st: "الطعام على الطاولة." }, { w: "STOL", t: "كرسي", s: "Sitt på stolen.", st: "اجلس على الكرسي." }, { w: "SOFFA", t: "أريكة", s: "Soffan är skön.", st: "الأريكة مريحة." }, { w: "SÄNG", t: "سرير", s: "Jag vill ligga i min säng.", st: "أريد الاستلقاء في سريري." }]),
+            createLevel([{ w: "LAMPA", t: "مصباح", s: "Tänd lampan.", st: "أشعل المصباح." }, { w: "MATTA", t: "سجادة", s: "En mjuk matta.", st: "سجادة ناعمة." }, { w: "GARDIN", t: "ستارة", s: "Dra för gardinerna.", st: "أسدل الستائر." }, { w: "SPEGEL", t: "مرآة", s: "Titta i spegeln.", st: "انظر في المرآة." }, { w: "TAVLA", t: "لوحة", s: "En vacker tavla.", st: "لوحة جميلة." }]),
+            createLevel([{ w: "NYCKEL", t: "مفتاح", s: "Var är min nyckel?", st: "أين مفتاحي؟" }, { w: "LÅS", t: "قفل", s: "Låset är trasigt.", st: "القفل مكسور." }, { w: "TRAPPA", t: "درج", s: "Gå upp för trappan.", st: "اصعد الدرج." }, { w: "HISS", t: "مصعد", s: "Ta hissen upp.", st: "خذ المصعد للأعلى." }, { w: "GARAGE", t: "كراج", s: "Bilen står i garaget.", st: "السيارة في الكراج." }]),
+            createLevel([{ w: "HYRA", t: "إيجار", s: "Hyran är hög.", st: "الإيجار مرتفع." }, { w: "KÖPA", t: "يشتري", s: "Vi ska köpa hus.", st: "سنشتري منزلاً." }, { w: "SÄLJA", t: "يبيع", s: "De ska sälja lägenheten.", st: "سيبيعون الشقة." }, { w: "FLYTTA", t: "ينتقل", s: "Vi flyttar imorgon.", st: "سننتقل غداً." }, { w: "ADRESS", t: "عنوان", s: "Vad är din adress?", st: "ما هو عنوانك؟" }]),
+            createLevel([{ w: "STÄDA", t: "ينظف", s: "Jag måste städa idag.", st: "يجب أن أنظف اليوم." }, { w: "DISKA", t: "يغسل الصحون", s: "Vem ska diska?", st: "من سيغسل الصحون؟" }, { w: "TVÄTTA", t: "يغسل", s: "Jag ska tvätta kläder.", st: "سأغسل الملابس." }, { w: "LAGA", t: "يصلح/يطبخ", s: "Pappa lagar bilen.", st: "أبي يصلح السيارة." }, { w: "SOVA", t: "ينام", s: "Barnen sover.", st: "الأطفال نائمون." }]),
+            createLevel([{ w: "DUSCH", t: "دش", s: "Ta en dusch.", st: "خذ دشاً." }, { w: "TOALETT", t: "مرحاض", s: "Var är toaletten?", st: "أين المرحاض؟" }, { w: "KRAN", t: "صنبور", s: "Kranen droppar.", st: "الصنبور يقطر." }, { w: "KYL", t: "ثلاجة", s: "Mjölken står i kylen.", st: "الحليب في الثلاجة." }, { w: "SPIS", t: "موقد", s: "Spisen är varm.", st: "الموقد ساخن." }]),
+            createLevel([{ w: "HEM", t: "منزل/وطن", s: "Borta bra men hemma bäst.", st: "الغربة جيدة لكن الوطن أفضل." }, { w: "GRANNE", t: "جار", s: "Hälsa på grannen.", st: "سلم على الجار." }, { w: "OMRÅDE", t: "منطقة", s: "Ett lugnt område.", st: "منطقة هادئة." }, { w: "STAD", t: "مدينة", s: "Vi bor i staden.", st: "نسكن في المدينة." }, { w: "LAND", t: "ريف/بلد", s: "Vi har stuga på landet.", st: "لدينا كوخ في الريف." }])
+        ];
+
+        // Topic 4: Body & Health
+        TOPICS[4].levels = [
+            createLevel([{ w: "KROPP", t: "جسم", s: "Träna hela kroppen.", st: "مرن كل الجسم." }, { w: "HUVUD", t: "رأس", s: "Jag har ont i huvudet.", st: "لدي صداع." }, { w: "HÅR", t: "شعر", s: "Hon har långt hår.", st: "لديها شعر طويل." }, { w: "ÖGA", t: "عين", s: "Blå ögon.", st: "عيون زرقاء." }, { w: "ÖRA", t: "أذن", s: "Jag har ont i örat.", st: "أذني تؤلمني." }]),
+            createLevel([{ w: "NÄSA", t: "أنف", s: "En rinnande näsa.", st: "أنف سائل." }, { w: "MUN", t: "فم", s: "Öppna munnen.", st: "افتح فمك." }, { w: "TAND", t: "سن", s: "Borsta tänderna.", st: "فرش أسنانك." }, { w: "HALS", t: "رقبة/حلق", s: "Jag har ont i halsen.", st: "حلقي يؤلمني." }, { w: "AXEL", t: "كتف", s: "Han ryckte på axlarna.", st: "هز كتفيه." }]),
+            createLevel([{ w: "ARM", t: "ذراع", s: "Starka armar.", st: "أذرع قوية." }, { w: "HAND", t: "يد", s: "Tvätta händerna.", st: "اغسل يديك." }, { w: "FINGER", t: "إصبع", s: "Jag skar mig i fingret.", st: "جرحت إصبعي." }, { w: "MAGE", t: "بطن", s: "Jag är mätt i magen.", st: "بطني ممتلئ." }, { w: "RYGG", t: "ظهر", s: "Han har ont i ryggen.", st: "ظهره يؤلمه." }]),
+            createLevel([{ w: "BEN", t: "ساق/عظم", s: "Jag bröt benet.", st: "كسرت ساقي." }, { w: "KNÄ", t: "ركبة", s: "Skrubbsår på knät.", st: "خدش في الركبة." }, { w: "FOT", t: "قدم", s: "Jag har stora fötter.", st: "لدي أقدام كبيرة." }, { w: "TÅ", t: "إصبع قدم", s: "Jag slog i tån.", st: "صدمت إصبع قدمي." }, { w: "HJÄRTA", t: "قلب", s: "Hjärtat slår.", st: "القلب ينبض." }]),
+            createLevel([{ w: "SJUK", t: "مريض", s: "Jag är sjuk idag.", st: "أنا مريض اليوم." }, { w: "FRISK", t: "سليم/معافى", s: "Nu är jag frisk igen.", st: "الآن أنا معافى مجدداً." }, { w: "ONT", t: "ألم", s: "Det gör ont.", st: "إنه يؤلم." }, { w: "FEBER", t: "حمى", s: "Har du feber?", st: "هل لديك حمى؟" }, { w: "HOSTA", t: "سعال", s: "En envis hosta.", st: "سعال عنيد." }]),
+            createLevel([{ w: "LÄKARE", t: "طبيب", s: "Gå till läkaren.", st: "اذهب إلى الطبيب." }, { w: "SJUKHUS", t: "مستشفى", s: "Han ligger på sjukhus.", st: "هو يرقد في المستشفى." }, { w: "MEDICIN", t: "دواء", s: "Ta din medicin.", st: "تناول دواءك." }, { w: "APOTEK", t: "صيدلية", s: "Hämta medicin på apoteket.", st: "أحضر الدواء من الصيدلية." }, { w: "HJÄLP", t: "مساعدة", s: "Ring 112 för hjälp.", st: "اتصل بـ 112 للمساعدة." }]),
+            createLevel([{ w: "TRÄNA", t: "يتمرن", s: "Jag tränar på gym.", st: "أتدرب في النادي الرياضي." }, { w: "SPRINGA", t: "يركض", s: "Vi springer i skogen.", st: "نركض في الغابة." }, { w: "GÅ", t: "يمشي", s: "Vi går en promenad.", st: "نذهب في نزهة مشي." }, { w: "SIMMA", t: "يسبح", s: "Kan du simma?", st: "هل تجيد السباحة؟" }, { w: "VILA", t: "يرتاح", s: "Du måste vila.", st: "يجب أن ترتاح." }]),
+            createLevel([{ w: "SOVA", t: "ينام", s: "Sover du?", st: "هل أنت نائم؟" }, { w: "VAKNA", t: "يستيقظ", s: "Jag vaknar tidigt.", st: "أستيقظ باكراً." }, { w: "DRÖM", t: "حلم", s: "En konstig dröm.", st: "حلم غريب." }, { w: "TRÖTT", t: "متعب", s: "Jag är så trött.", st: "أنا متعب جداً." }, { w: "PIGG", t: "نشيط", s: "Kaffe gör mig pigg.", st: "القهوة تجعلني نشيطاً." }]),
+            createLevel([{ w: "GLASÖGON", t: "نظارات", s: "Jag behöver glasögon.", st: "أحتاج نظارات." }, { w: "HÖRA", t: "يسمع", s: "Hör du mig?", st: "هل تسمعني؟" }, { w: "SE", t: "يرى", s: "Jag ser dig.", st: "أنا أراك." }, { w: "LUKTA", t: "يشم", s: "Det luktar gott.", st: "الرائحة طيبة." }, { w: "KÄNNA", t: "يشعر/يلمس", s: "Känn på tyget.", st: "المس القماش." }]),
+            createLevel([{ w: "BLOD", t: "دم", s: "Det blöder.", st: "إنه ينزف." }, { w: "PLÅSTER", t: "لاصق جروح", s: "Sätt på ett plåster.", st: "ضع لاصق جروح." }, { w: "SÅR", t: "جرح", s: "Ett litet sår.", st: "جرح صغير." }, { w: "VÅRD", t: "رعاية", s: "Sjukvård.", st: "رعاية صحية." }, { w: "TANDLÄKARE", t: "طبيب أسنان", s: "Tandläkaren lagade tanden.", st: "طبيب الأسنان أصلح السن." }])
+        ];
+
+        // Topic 5: Clothes & Fashion
+        TOPICS[5].levels = [
+            createLevel([{ w: "KLÄDER", t: "ملابس", s: "Nya kläder.", st: "ملابس جديدة." }, { w: "TRÖJA", t: "كنزة", s: "En varm tröja.", st: "كنزة دافئة." }, { w: "BYXOR", t: "بنطال", s: "Svarta byxor.", st: "بنطال أسود." }, { w: "KJOL", t: "تنورة", s: "En kort kjol.", st: "تنورة قصيرة." }, { w: "KLÄNNING", t: "فستان", s: "En vacker klänning.", st: "فستان جميل." }]),
+            createLevel([{ w: "SKOR", t: "أحذية", s: "Ta av dig skorna.", st: "اخلع حذائك." }, { w: "STRUMPOR", t: "جوارب", s: "Hål i strumporna.", st: "ثقب في الجوارب." }, { w: "JACKA", t: "سترة", s: "Ta på dig jackan.", st: "ارتد السترة." }, { w: "KAPPA", t: "معطف", s: "En lång kappa.", st: "معطف طويل." }, { w: "MÖSSA", t: "قبعة شتوية", s: "Mössa på vintern.", st: "قبعة في الشتاء." }]),
+            createLevel([{ w: "VANTAR", t: "قفازات", s: "Varma vantar.", st: "قفازات دافئة." }, { w: "HALSDUK", t: "وشاح", s: "En röd halsduk.", st: "وشاح أحمر." }, { w: "SKJORTA", t: "قميص", s: "Stryk skjortan.", st: "اكو القميص." }, { w: "BLUS", t: "بلوزة", s: "En silkesblus.", st: "بلوزة حريرية." }, { w: "KOSTY", t: "بدلة", s: "Han bär kostym.", st: "هو يرتدي بدلة." }]),
+            createLevel([{ w: "SLIPS", t: "ربطة عنق", s: "Knyta slipsen.", st: "ربط ربطة العنق." }, { w: "BÄLTE", t: "حزام", s: "Ett läderbälte.", st: "حزام جلدي." }, { w: "VÄSKA", t: "حقيبة", s: "Packa väskan.", st: "حزم الحقيبة." }, { w: "PLÅNBOK", t: "محفظة", s: "Jag glömde plånboken.", st: "نسيت المحفظة." }, { w: "PARAPLY", t: "مظلة", s: "Det regnar, ta paraplyet.", st: "إنها تمطر، خذ المظلة." }]),
+            createLevel([{ w: "STORLEK", t: "مقاس", s: "Vilken storlek har du?", st: "ما هو مقاسك؟" }, { w: "PROVA", t: "يجرب", s: "Får jag prova den?", st: "هل يمكنني تجربتها؟" }, { w: "PASSA", t: "يناسب", s: "Den passar bra.", st: "إنها تناسب بشكل جيد." }, { w: "FÄRG", t: "لون", s: "Vilken färg vill du ha?", st: "أي لون تريد؟" }, { w: "MODE", t: "موضة", s: "Senaste modet.", st: "آخر موضة." }]),
+            createLevel([{ w: "RÖD", t: "أحمر", s: "En röd bil.", st: "سيارة حمراء." }, { w: "BLÅ", t: "أزرق", s: "Himlen är blå.", st: "السماء زرقاء." }, { w: "GUL", t: "أصفر", s: "Solen är gul.", st: "الشمس صفراء." }, { w: "GRÖN", t: "أخضر", s: "Gräset är grönt.", st: "العشب أخضر." }, { w: "SVART", t: "أسود", s: "Natten är svart.", st: "الليل أسود." }]),
+            createLevel([{ w: "VIT", t: "أبيض", s: "Snön är vit.", st: "الثلج أبيض." }, { w: "GRÅ", t: "رمادي", s: "En grå dag.", st: "يوم رمادي." }, { w: "BRUN", t: "بني", s: "Bruna ögon.", st: "عيون بنية." }, { w: "ROSA", t: "وردي", s: "En rosa gris.", st: "خنزير وردي." }, { w: "LILA", t: "أرجواني", s: "Lila blommor.", st: "زهور أرجوانية." }]),
+            createLevel([{ w: "TVÄTTA", t: "يغسل", s: "Tvätta i 40 grader.", st: "اغسل في 40 درجة." }, { w: "STRYKA", t: "يكوي", s: "Stryka kläder.", st: "كي الملابس." }, { w: "SY", t: "يخيط", s: "Kan du sy i en knapp?", st: "هل يمكنك خياطة زر؟" }, { w: "KNAPP", t: "زر", s: "Knappen lossnade.", st: "الزر انفك." }, { w: "DRAGKEDJA", t: "سحاب", s: "Dragkedjan fastnade.", st: "السحاب علق." }]),
+            createLevel([{ w: "MATERIAL", t: "مادة", s: "Vilket material är det?", st: "ما هي المادة؟" }, { w: "BOMULL", t: "قطن", s: "100% bomull.", st: "100% قطن." }, { w: "ULL", t: "صوف", s: "Ull värmer bra.", st: "الصوف يدفئ جيداً." }, { w: "LÄDER", t: "جلد", s: "Skor av läder.", st: "أحذية من الجلد." }, { w: "SIDEN", t: "حرير", s: "Mjukt som siden.", st: "ناعم كالحرير." }]),
+            createLevel([{ w: "PYJAMAS", t: "بيجاما", s: "Sov i pyjamas.", st: "نم في البيجاما." }, { w: "BADKLÄDER", t: "ملابس سباحة", s: "Glöm inte badkläder.", st: "لا تنس ملابس السباحة." }, { w: "REGNKLÄDER", t: "ملابس مطر", s: "Bra regnkläder.", st: "ملابس مطر جيدة." }, { w: "UNDERKLÄDER", t: "ملابس داخلية", s: "Rena underkläder.", st: "ملابس داخلية نظيفة." }, { w: "TRÄNINGSKLÄDER", t: "ملابس رياضة", s: "Snygga träningskläder.", st: "ملابس رياضة أنيقة." }])
+        ];
+
+        // Topic 6: Weather & Nature
+        TOPICS[6].levels = [
+            createLevel([{ w: "VÄDER", t: "طقس", s: "Vädret är fint.", st: "الطقس جميل." }, { w: "SOL", t: "شمس", s: "Solen skiner.", st: "الشمس تشرق." }, { w: "MOLN", t: "سحاب", s: "Det är molnigt.", st: "الجو غائم." }, { w: "REGN", t: "مطر", s: "Det regnar ute.", st: "إنها تمطر في الخارج." }, { w: "SNÖ", t: "ثلج", s: "Snön faller.", st: "الثلج يتساقط." }]),
+            createLevel([{ w: "VIND", t: "رياح", s: "Vinden blåser.", st: "الرياح تهب." }, { w: "STORM", t: "عاصفة", s: "En kraftig storm.", st: "عاصفة قوية." }, { w: "DIMMA", t: "ضباب", s: "Tät dimma.", st: "ضباب كثيف." }, { w: "ÅSKA", t: "رعد", s: "Jag är rädd för åska.", st: "أنا خائف من الرعد." }, { w: "BLIXT", t: "برق", s: "Blixten slog ner.", st: "البرق ضرب." }]),
+            createLevel([{ w: "TEMPERATUR", t: "درجة حرارة", s: "Hög temperatur.", st: "درجة حرارة مرتفعة." }, { w: "VARM", t: "حار/دافئ", s: "Det är varmt idag.", st: "الجو حار اليوم." }, { w: "KALL", t: "بارد", s: "Vattnet är kallt.", st: "الماء بارد." }, { w: "GRAD", t: "درجة", s: "Tio grader varmt.", st: "عشر درجات حرارة." }, { w: "KLIMAT", t: "مناخ", s: "Klimatet ändras.", st: "المناخ يتغير." }]),
+            createLevel([{ w: "ÅRSTID", t: "فصل", s: "Fyra årstider.", st: "أربعة فصول." }, { w: "VÅR", t: "ربيع", s: "Våren är här.", st: "الربيع هنا." }, { w: "SOMMAR", t: "صيف", s: "Jag älskar sommaren.", st: "أحب الصيف." }, { w: "HÖST", t: "خريف", s: "Löven faller på hösten.", st: "الأوراق تتساقط في الخريف." }, { w: "VINTER", t: "شتاء", s: "Vintern är lång.", st: "الشتاء طويل." }]),
+            createLevel([{ w: "NATUR", t: "طبيعة", s: "Vi älskar naturen.", st: "نحب الطبيعة." }, { w: "SKOG", t: "غابة", s: "Promenera i skogen.", st: "المشي في الغابة." }, { w: "TRÄD", t: "شجرة", s: "Ett högt träd.", st: "شجرة عالية." }, { w: "BLOMMA", t: "زهرة", s: "En vacker blomma.", st: "زهرة جميلة." }, { w: "GRÄS", t: "عشب", s: "Gräset är grönt.", st: "العشب أخضر." }]),
+            createLevel([{ w: "BERG", t: "جبل", s: "Bestiga ett berg.", st: "تسلق جبل." }, { w: "HAV", t: "بحر", s: "Bada i havet.", st: "السباحة في البحر." }, { w: "SJÖ", t: "بحيرة", s: "En stilla sjö.", st: "بحيرة هادئة." }, { w: "FLOD", t: "نهر", s: "Floden rinner.", st: "النهر يجري." }, { w: "STRAND", t: "شاطئ", s: "Leka på stranden.", st: "اللعب على الشاطئ." }]),
+            createLevel([{ w: "Ö", t: "جزيرة", s: "En öde ö.", st: "جزيرة مهجورة." }, { w: "STEN", t: "حجر", s: "Kasta sten.", st: "رمي الحجر." }, { w: "SAND", t: "رمل", s: "Sand mellan tårna.", st: "رمل بين أصابع القدم." }, { w: "JORD", t: "تربة/أرض", s: "Plantera i jorden.", st: "الزراعة في التربة." }, { w: "HIMMEL", t: "سماء", s: "Stjärnor på himlen.", st: "نجوم في السماء." }]),
+            createLevel([{ w: "MÅNE", t: "قمر", s: "Fullmåne inatt.", st: "بدر الليلة." }, { w: "STJÄRNA", t: "نجمة", s: "Titta på stjärnorna.", st: "انظر إلى النجوم." }, { w: "SOLUPPGÅNG", t: "شروق الشمس", s: "Vacker soluppgång.", st: "شروق شمس جميل." }, { w: "SOLNEDGÅNG", t: "غروب الشمس", s: "Röd solnedgång.", st: "غروب شمس أحمر." }, { w: "REGNBÅGE", t: "قوس قزح", s: "Färger i regnbågen.", st: "ألوان في قوس قزح." }]),
+            createLevel([{ w: "MILJÖ", t: "بيئة", s: "Tänk på miljön.", st: "فكر في البيئة." }, { w: "SOPOR", t: "قمامة", s: "Släng soporna.", st: "ارم القمامة." }, { w: "ÅTERVINNA", t: "يعيد تدوير", s: "Vi återvinner papper.", st: "نحن نعيد تدوير الورق." }, { w: "LUFT", t: "هواء", s: "Frisk luft.", st: "هواء نقي." }, { w: "ELD", t: "نار", s: "Göra upp eld.", st: "إشعال نار." }]),
+            createLevel([{ w: "PARK", t: "حديقة عامة", s: "Leka i parken.", st: "اللعب في الحديقة." }, { w: "VÄXT", t: "نبات", s: "Vattna växterna.", st: "سقي النباتات." }, { w: "DJUNGEL", t: "أدغال", s: "Farlig djungel.", st: "أدغال خطيرة." }, { w: "ÖKEN", t: "صحراء", s: "Varm öken.", st: "صحراء حارة." }, { w: "IS", t: "جليد", s: "Halkig is.", st: "جليد زلق." }])
+        ];
+
+        // Topic 7: Time & Calendar
+        TOPICS[7].levels = [
+            createLevel([{ w: "TID", t: "وقت", s: "Vad är tiden?", st: "ما هو الوقت؟" }, { w: "KLOCKA", t: "ساعة", s: "Klockan är tolv.", st: "الساعة الثانية عشرة." }, { w: "TIMME", t: "ساعة (مدة)", s: "En timme.", st: "ساعة واحدة." }, { w: "MINUT", t: "دقيقة", s: "Vänta en minut.", st: "انتظر دقيقة." }, { w: "SEKUND", t: "ثانية", s: "Bara en sekund.", st: "ثانية فقط." }]),
+            createLevel([{ w: "DAG", t: "يوم", s: "Vilken dag är det?", st: "أي يوم هذا؟" }, { w: "NATT", t: "ليل", s: "God natt.", st: "تصبح على خير." }, { w: "MORGON", t: "صباح", s: "Tidig morgon.", st: "صباح باكر." }, { w: "KVÄLL", t: "مساء", s: "Sen kväll.", st: "مساء متأخر." }, { w: "MIDDAG", t: "ظهر", s: "Klockan tolv på middagen.", st: "الساعة الثانية عشرة ظهراً." }]),
+            createLevel([{ w: "VECKA", t: "أسبوع", s: "Nästa vecka.", st: "الأسبوع القادم." }, { w: "MÅNDAG", t: "الاثنين", s: "Måndag morgon.", st: "صباح الاثنين." }, { w: "TISDAG", t: "الثلاثاء", s: "Vi ses på tisdag.", st: "نراك يوم الثلاثاء." }, { w: "ONSDAG", t: "الأربعاء", s: "Lill-lördag är onsdag.", st: "الأربعاء هو السبت الصغير." }, { w: "TORSDAG", t: "الخميس", s: "Torsdag kväll.", st: "مساء الخميس." }]),
+            createLevel([{ w: "FREDAG", t: "الجمعة", s: "Äntligen fredag.", st: "أخيراً الجمعة." }, { w: "LÖRDAG", t: "السبت", s: "Fest på lördag.", st: "حفلة يوم السبت." }, { w: "SÖNDAG", t: "الأحد", s: "Vila på söndag.", st: "راحة يوم الأحد." }, { w: "HELG", t: "عطلة نهاية أسبوع", s: "Trevlig helg!", st: "عطلة نهاية أسبوع سعيدة!" }, { w: "VARDAG", t: "يوم عمل", s: "Tillbaka till vardagen.", st: "عودة إلى الحياة اليومية." }]),
+            createLevel([{ w: "MÅNAD", t: "شهر", s: "Vilken månad fyller du?", st: "في أي شهر عيد ميلادك؟" }, { w: "JANUARI", t: "يناير", s: "Januari är kall.", st: "يناير بارد." }, { w: "FEBRUARI", t: "فبراير", s: "Kort månad.", st: "شهر قصير." }, { w: "MARS", t: "مارس", s: "Våren kommer i mars.", st: "الربيع يأتي في مارس." }, { w: "APRIL", t: "أبريل", s: "Aprilväder.", st: "طقس أبريل." }]),
+            createLevel([{ w: "MAJ", t: "مايو", s: "Sköna maj.", st: "مايو الجميل." }, { w: "JUNI", t: "يونيو", s: "Sommarlov i juni.", st: "عطلة الصيف في يونيو." }, { w: "JULI", t: "يوليو", s: "Semester i juli.", st: "إجازة في يوليو." }, { w: "AUGUSTI", t: "أغسطس", s: "Kräftskiva i augusti.", st: "حفلة جراد البحر في أغسطس." }, { w: "SEPTEMBER", t: "سبتمبر", s: "Skolan börjar i september.", st: "المدرسة تبدأ في سبتمبر." }]),
+            createLevel([{ w: "OKTOBER", t: "أكتوبر", s: "Löven faller i oktober.", st: "الأوراق تتساقط في أكتوبر." }, { w: "NOVEMBER", t: "نوفمبر", s: "Mörka november.", st: "نوفمبر المظلم." }, { w: "DECEMBER", t: "ديسمبر", s: "Jul i december.", st: "عيد الميلاد في ديسمبر." }, { w: "ÅR", t: "سنة", s: "Gott nytt år!", st: "سنة جديدة سعيدة!" }, { w: "DATUM", t: "تاريخ", s: "Vilket datum är det?", st: "ما هو التاريخ؟" }]),
+            createLevel([{ w: "NU", t: "الآن", s: "Gör det nu.", st: "افعلها الآن." }, { w: "SEDAN", t: "لاحقاً/منذ", s: "Vi ses sedan.", st: "نراك لاحقاً." }, { w: "IDAG", t: "اليوم", s: "Idag är jag ledig.", st: "أنا في إجازة اليوم." }, { w: "IGÅR", t: "أمس", s: "Igår regnade det.", st: "أمطرت البارحة." }, { w: "IMORGON", t: "غداً", s: "Imorgon är en annan dag.", st: "غداً يوم آخر." }]),
+            createLevel([{ w: "ALLTID", t: "دائماً", s: "Jag älskar dig alltid.", st: "أحبك دائماً." }, { w: "ALDRIG", t: "أبداً", s: "Säg aldrig aldrig.", st: "لا تقل أبداً أبداً." }, { w: "OFTA", t: "غالباً", s: "Jag tränar ofta.", st: "أتدرب غالباً." }, { w: "SÄLLAN", t: "نادراً", s: "Vi ses sällan.", st: "نلتقي نادراً." }, { w: "IBLAND", t: "أحياناً", s: "Ibland är jag trött.", st: "أحياناً أكون متعباً." }]),
+            createLevel([{ w: "TIDIG", t: "باكر", s: "En tidig morgon.", st: "صباح باكر." }, { w: "SEN", t: "متأخر", s: "Du är sen.", st: "أنت متأخر." }, { w: "SNART", t: "قريباً", s: "Vi kommer snart.", st: "سنأتي قريباً." }, { w: "FÖRR", t: "سابقاً", s: "Förr i tiden.", st: "في الزمن السابق." }, { w: "FRAMTID", t: "مستقبل", s: "Se ljust på framtiden.", st: "انظر بتفاؤل للمستقبل." }])
+        ];
+
+        // Topic 8: City & Traffic
+        TOPICS[8].levels = [
+            createLevel([{ w: "STAD", t: "مدينة", s: "En stor stad.", st: "مدينة كبيرة." }, { w: "GATA", t: "شارع", s: "Gå över gatan.", st: "اعبر الشارع." }, { w: "VÄG", t: "طريق", s: "Följ vägen.", st: "اتبع الطريق." }, { w: "TORG", t: "ساحة", s: "Möts på torget.", st: "نلتقي في الساحة." }, { w: "BRO", t: "جسر", s: "Bron över floden.", st: "الجسر فوق النهر." }]),
+            createLevel([{ w: "BIL", t: "سيارة", s: "Köra bil.", st: "قيادة سيارة." }, { w: "BUSS", t: "حافلة", s: "Åka buss.", st: "ركوب الحافلة." }, { w: "TÅG", t: "قطار", s: "Tåget är sent.", st: "القطار متأخر." }, { w: "CYKEL", t: "دراجة", s: "Cykla till jobbet.", st: "ركوب الدراجة للعمل." }, { w: "BÅT", t: "قارب", s: "Båten gungar.", st: "القارب يتمايل." }]),
+            createLevel([{ w: "STATION", t: "محطة", s: "Tågstationen.", st: "محطة القطار." }, { w: "HÅLLPLATS", t: "موقف", s: "Busshållplatsen.", st: "موقف الحافلة." }, { w: "FLYGPLATS", t: "مطار", s: "Vi åker till flygplatsen.", st: "نذهب للمطار." }, { w: "HAMN", t: "ميناء", s: "Båtar i hamnen.", st: "قوارب في الميناء." }, { w: "PARKERING", t: "موقف سيارات", s: "Ingen parkering.", st: "ممنوع الوقوف." }]),
+            createLevel([{ w: "TRAFIK", t: "مرور", s: "Mycket trafik.", st: "حركة مرور كثيفة." }, { w: "KÖRA", t: "يقود", s: "Köra försiktigt.", st: "القيادة بحذر." }, { w: "ÅKA", t: "يركب/يذهب", s: "Åka tåg.", st: "ركوب القطار." }, { w: "GÅ", t: "يمشي", s: "Gå till fots.", st: "المشي على الأقدام." }, { w: "STANNA", t: "يتوقف", s: "Bussen stannar här.", st: "الحافلة تتوقف هنا." }]),
+            createLevel([{ w: "HÖGER", t: "يمين", s: "Sväng höger.", st: "انعطف يميناً." }, { w: "VÄNSTER", t: "يسار", s: "Titta åt vänster.", st: "انظر لليسار." }, { w: "RAKT", t: "مستقيم", s: "Kör rakt fram.", st: "قد للأمام مباشرة." }, { w: "KARTA", t: "خريطة", s: "Titta på kartan.", st: "انظر للخريطة." }, { w: "VILSE", t: "تائه", s: "Vi har gått vilse.", st: "لقد تهنا." }]),
+            createLevel([{ w: "AFFÄR", t: "متجر", s: "Handla i affären.", st: "التسوق في المتجر." }, { w: "CENTRUM", t: "مركز", s: "Stadens centrum.", st: "مركز المدينة." }, { w: "KYRKA", t: "كنيسة", s: "En gammal kyrka.", st: "كنيسة قديمة." }, { w: "BIBLIOTEK", t: "مكتبة", s: "Låna böcker på biblioteket.", st: "استعارة كتب من المكتبة." }, { w: "SKOLA", t: "مدرسة", s: "Barnen går i skolan.", st: "الأطفال يذهبون للمدرسة." }]),
+            createLevel([{ w: "BANK", t: "بنك", s: "Ta ut pengar på banken.", st: "سحب نقود من البنك." }, { w: "POST", t: "بريد", s: "Skicka post.", st: "إرسال بريد." }, { w: "OTELL", t: "فندق", s: "Bo på hotell.", st: "الإقامة في فندق." }, { w: "BIO", t: "سينما", s: "Gå på bio.", st: "الذهاب للسينما." }, { w: "MUSEUM", t: "متحف", s: "Besöka ett museum.", st: "زيارة متحف." }]),
+            createLevel([{ w: "POLIS", t: "شرطة", s: "Ring polisen.", st: "اتصل بالشرطة." }, { w: "BRANDKÅR", t: "إطفاء", s: "Brandkåren kom snabbt.", st: "الإطفاء وصل بسرعة." }, { w: "AMBULANS", t: "إسعاف", s: "Ambulansen tjuter.", st: "الإسعاف تطلق صفارتها." }, { w: "SJUKHUS", t: "مستشفى", s: "Akuten på sjukhuset.", st: "الطوارئ في المستشفى." }, { w: "APOTEK", t: "صيدلية", s: "Öppet apotek.", st: "صيدلية مفتوحة." }]),
+            createLevel([{ w: "BILJETT", t: "تذكرة", s: "En biljett tack.", st: "تذكرة من فضلك." }, { w: "KORT", t: "بطاقة", s: "Betala med kort.", st: "الدفع بالبطاقة." }, { w: "PENGAR", t: "نقود", s: "Inga pengar.", st: "لا نقود." }, { w: "PASS", t: "جواز سفر", s: "Visa passet.", st: "أظهر الجواز." }, { w: "RESA", t: "رحلة/يسافر", s: "Trevlig resa.", st: "رحلة سعيدة." }]),
+            createLevel([{ w: "LASTBIL", t: "شاحنة", s: "En stor lastbil.", st: "شاحنة كبيرة." }, { w: "MOPED", t: "دراجة نارية صغيرة", s: "Köra moped.", st: "قيادة موبيد." }, { w: "MOTORVÄG", t: "طريق سريع", s: "Kör på motorvägen.", st: "القيادة على الطريق السريع." }, { w: "KORSNING", t: "تقاطع", s: "Farlig korsning.", st: "تقاطع خطير." }, { w: "TROTTOAR", t: "رصيف", s: "Gå på trottoaren.", st: "المشي على الرصيف." }])
+        ];
+
+        // Topic 9: Work & Professions
+        TOPICS[9].levels = [
+            createLevel([{ w: "ARBETE", t: "عمل", s: "Jag söker arbete.", st: "أبحث عن عمل." }, { w: "JOBB", t: "وظيفة", s: "Nytt jobb.", st: "وظيفة جديدة." }, { w: "YRKE", t: "مهنة", s: "Vilket yrke har du?", st: "ما هي مهنتك؟" }, { w: "CHEF", t: "مدير", s: "Prata med chefen.", st: "تحدث مع المدير." }, { w: "KOLLEGA", t: "زميل", s: "Mina kollegor är snälla.", st: "زملائي لطفاء." }]),
+            createLevel([{ w: "LÄKARE", t: "طبيب", s: "Läkaren undersöker.", st: "الطبيب يفحص." }, { w: "SJUKSKÖTERSKA", t: "ممرضة", s: "Sjuksköterskan hjälper till.", st: "الممرضة تساعد." }, { w: "LÄRARE", t: "معلم", s: "Läraren undervisar.", st: "المعلم يدرس." }, { w: "POLIS", t: "شرطي", s: "Polisen skyddar.", st: "الشرطي يحمي." }, { w: "BRANDMAN", t: "رجل إطفاء", s: "Brandmannen släcker elden.", st: "رجل الإطفاء يطفئ النار." }]),
+            createLevel([{ w: "KOCK", t: "طباخ", s: "Kocken lagar mat.", st: "الطباخ يطهو." }, { w: "SERVITÖR", t: "نادل", s: "Servitören serverar.", st: "النادل يقدم الطعام." }, { w: "BAGARE", t: "خباز", s: "Bagaren bakar bröd.", st: "الخباز يخبز الخبز." }, { w: "FRISÖR", t: "حلاق", s: "Frisören klipper hår.", st: "الحلاق يقص الشعر." }, { w: "SÄLJARE", t: "بائع", s: "Säljaren säljer varor.", st: "البائع يبيع البضائع." }]),
+            createLevel([{ w: "CHAUFFÖR", t: "سائق", s: "Busschaufför.", st: "سائق حافلة." }, { w: "PILOT", t: "طيار", s: "Piloten flyger planet.", st: "الطيار يقود الطائرة." }, { w: "MEKANIKER", t: "ميكانيكي", s: "Mekanikern lagar bilen.", st: "الميكانيكي يصلح السيارة." }, { w: "SNICKARE", t: "نجار", s: "Snickaren bygger hus.", st: "النجار يبني المنازل." }, { w: "MÅLARE", t: "دهان", s: "Målaren målar.", st: "الدهان يدهن." }]),
+            createLevel([{ w: "KONTOR", t: "مكتب", s: "Jobba på kontor.", st: "العمل في مكتب." }, { w: "DATOR", t: "حاسوب", s: "Sitta vid datorn.", st: "الجلوس أمام الحاسوب." }, { w: "MÖTE", t: "اجتماع", s: "Vi har ett möte.", st: "لدينا اجتماع." }, { w: "TELEFON", t: "هاتف", s: "Svara i telefonen.", st: "أجب على الهاتف." }, { w: "EPOST", t: "بريد إلكتروني", s: "Skicka e-post.", st: "أرسل بريداً إلكترونياً." }]),
+            createLevel([{ w: "LÖN", t: "راتب", s: "Hög lön.", st: "راتب مرتفع." }, { w: "SKATT", t: "ضريبة", s: "Betala skatt.", st: "دفع الضرائب." }, { w: "PENSION", t: "تقاعد", s: "Gå i pension.", st: "التقاعد." }, { w: "SEMESTER", t: "إجازة", s: "Fyra veckors semester.", st: "أربعة أسابيع إجازة." }, { w: "LEDIG", t: "حر/متاح", s: "Är du ledig imorgon?", st: "هل أنت متفرغ غداً؟" }]),
+            createLevel([{ w: "FÖRETAG", t: "شركة", s: "Ett stort företag.", st: "شركة كبيرة." }, { w: "EGEN", t: "خاص", s: "Eget företag.", st: "عمل خاص." }, { w: "ANSTÄLLD", t: "موظف", s: "Han är anställd.", st: "هو موظف." }, { w: "ARBETSLÖS", t: "عاطل", s: "Hon är arbetslös.", st: "هي عاطلة عن العمل." }, { w: "SÖKA", t: "يبحث", s: "Söka jobb.", st: "البحث عن عمل." }]),
+            createLevel([{ w: "INTERVJU", t: "مقابلة", s: "Jobbintervju.", st: "مقابلة عمل." }, { w: "CV", t: "سيرة ذاتية", s: "Skriv ett bra CV.", st: "اكتب سيرة ذاتية جيدة." }, { w: "ERFARENHET", t: "خبرة", s: "Lång erfarenhet.", st: "خبرة طويلة." }, { w: "UTBILDNING", t: "تعليم", s: "Hög utbildning.", st: "تعليم عال." }, { w: "KUNSKAP", t: "معرفة", s: "Kunskap är makt.", st: "المعرفة قوة." }]),
+            createLevel([{ w: "BONDE", t: "مزارع", s: "Bonden kör traktor.", st: "المزارع يقود الجرار." }, { w: "FISKARE", t: "صياد سمك", s: "Fiskaren fångar fisk.", st: "الصياد يصطاد السمك." }, { w: "ARTIST", t: "فنان", s: "Känd artist.", st: "فنان مشهور." }, { w: "FÖRFATTARE", t: "كاتب", s: "Författaren skriver böcker.", st: "الكاتب يؤلف كتباً." }, { w: "JOURNALIST", t: "صحفي", s: "Journalisten intervjuar.", st: "الصحفي يجري مقابلة." }]),
+            createLevel([{ w: "ADVOKAT", t: "محامي", s: "Advokaten hjälper dig.", st: "المحامي يساعدك." }, { w: "DOMARE", t: "قاضي", s: "Domaren dömer.", st: "القاضي يحكم." }, { w: "PRÄST", t: "كاهن", s: "Prästen i kyrkan.", st: "الكاهن في الكنيسة." }, { w: "POLITIKER", t: "سياسي", s: "Politikern talar.", st: "السياسي يتحدث." }, { w: "VETENSKAPSMAN", t: "عالم", s: "Vetenskapsmannen forskar.", st: "العالم يبحث." }])
+        ];
+
+        // Topic 10: School & Education
+        TOPICS[10].levels = [
+            createLevel([{ w: "SKOLA", t: "مدرسة", s: "Gå i skolan.", st: "الذهاب للمدرسة." }, { w: "ELEV", t: "تلميذ", s: "En duktig elev.", st: "تلميذ مجتهد." }, { w: "LÄRARE", t: "معلم", s: "Lyssna på läraren.", st: "استمع للمعلم." }, { w: "KLASS", t: "صف", s: "Hela klassen.", st: "كل الصف." }, { w: "LEKTION", t: "درس", s: "Lektionen börjar.", st: "الدرس يبدأ." }]),
+            createLevel([{ w: "BOK", t: "كتاب", s: "Läs boken.", st: "اقرأ الكتاب." }, { w: "PENNA", t: "قلم", s: "Skriv med penna.", st: "اكتب بالقلم." }, { w: "SUDD", t: "ممحاة", s: "Använd suddgummi.", st: "استخدم الممحاة." }, { w: "PAPPER", t: "ورق", s: "Ett vitt papper.", st: "ورقة بيضاء." }, { w: "VÄSKA", t: "حقيبة", s: "Skolväska.", st: "حقيبة مدرسية." }]),
+            createLevel([{ w: "LÄXA", t: "واجب منزلي", s: "Göra läxan.", st: "حل الواجب." }, { w: "PROV", t: "امتحان", s: "Svårt prov.", st: "امتحان صعب." }, { w: "RAST", t: "استراحة", s: "Rast på gården.", st: "استراحة في الساحة." }, { w: "LOV", t: "عطلة", s: "Sommarlov.", st: "عطلة الصيف." }, { w: "SCHEMA", t: "جدول", s: "Titta på schemat.", st: "انظر للجدول." }]),
+            createLevel([{ w: "ÄMNE", t: "مادة", s: "Favoritämne.", st: "المادة المفضلة." }, { w: "SVENSKA", t: "سويدية", s: "Jag lär mig svenska.", st: "أتعلم السويدية." }, { w: "ENGELSKA", t: "إنجليزية", s: "Talar du engelska?", st: "هل تتحدث الإنجليزية؟" }, { w: "MATTE", t: "رياضيات", s: "Matte är svårt.", st: "الرياضيات صعبة." }, { w: "IDROTT", t: "رياضة", s: "Idrott i hallen.", st: "رياضة في الصالة." }]),
+            createLevel([{ w: "LÄRA", t: "يتعلم", s: "Att lära för livet.", st: "التعلم للحياة." }, { w: "STUDERA", t: "يدرس", s: "Studera på universitetet.", st: "الدراسة في الجامعة." }, { w: "KURS", t: "دورة", s: "Gå en kurs.", st: "حضور دورة." }, { w: "SFI", t: "SFI", s: "Svenska för invandrare.", st: "السويدية للمهاجرين." }, { w: "SPRÅK", t: "لغة", s: "Många språk.", st: "لغات عديدة." }]),
+            createLevel([{ w: "UNIVERSITET", t: "جامعة", s: "Lunds universitet.", st: "جامعة لوند." }, { w: "HÖGSKOLA", t: "كلية", s: "Malmö högskola.", st: "كلية مالمو." }, { w: "STUDENT", t: "طالب", s: "Fattig student.", st: "طالب فقير." }, { w: "EXAMEN", t: "تخرج/شهادة", s: "Ta examen.", st: "التخرج." }, { w: "BETYG", t: "درجات", s: "Bra betyg.", st: "درجات جيدة." }]),
+            createLevel([{ w: "SKRIVA", t: "يكتب", s: "Skriva en text.", st: "كتابة نص." }, { w: "LÄSA", t: "يقرأ", s: "Läsa högt.", st: "القراءة بصوت عال." }, { w: "LYSSNA", t: "يستمع", s: "Lyssna noga.", st: "استمع جيداً." }, { w: "TALA", t: "يتحدث", s: "Tala tydligt.", st: "تحدث بوضوح." }, { w: "FÖRSTÅ", t: "يفهم", s: "Jag förstår inte.", st: "لا أفهم." }]),
+            createLevel([{ w: "FRÅGA", t: "سؤال/يسأل", s: "Ställ en fråga.", st: "اطرح سؤالاً." }, { w: "SVAR", t: "جواب", s: "Rätt svar.", st: "جواب صحيح." }, { w: "FEL", t: "خطأ", s: "Göra fel.", st: "ارتكاب خطأ." }, { w: "RÄTT", t: "صح", s: "Det är rätt.", st: "هذا صحيح." }, { w: "VETA", t: "يعرف", s: "Jag vet inte.", st: "لا أعرف." }]),
+            createLevel([{ w: "TAVLA", t: "سبورة/لوحة", s: "Skriv på tavlan.", st: "اكتب على السبورة." }, { w: "DATOR", t: "حاسوب", s: "Skoldator.", st: "حاسوب مدرسي." }, { w: "BÄNK", t: "مقعد", s: "Sitt i bänken.", st: "اجلس في المقعد." }, { w: "MATSAL", t: "قاعة طعام", s: "Äta i matsalen.", st: "الأكل في قاعة الطعام." }, { w: "BIBLIOTEK", t: "مكتبة", s: "Tyst i biblioteket.", st: "هدوء في المكتبة." }]),
+            createLevel([{ w: "FÖRSKOLA", t: "روضة", s: "Barnen på förskolan.", st: "الأطفال في الروضة." }, { w: "GRUNDSKOLA", t: "مدرسة ابتدائية", s: "Nio år i grundskolan.", st: "تسع سنوات في المدرسة الابتدائية." }, { w: "GYMNASIUM", t: "ثانوية", s: "Börja gymnasiet.", st: "بدء الثانوية." }, { w: "REKTOR", t: "مدير مدرسة", s: "Rektorn bestämmer.", st: "المدير يقرر." }, { w: "VAKTMÄSTARE", t: "حارس/بواب", s: "Vaktmästaren lagar.", st: "الحارس يصلح." }])
+        ];
+
+        // Topic 11: Hobbies & Leisure
+        TOPICS[11].levels = [
+            createLevel([{ w: "HOBBY", t: "هواية", s: "Min hobby är att måla.", st: "هوايتي هي الرسم." }, { w: "FRITID", t: "وقت فراغ", s: "Vad gör du på din fritid?", st: "ماذا تفعل في وقت فراغك؟" }, { w: "LÄSA", t: "يقرأ", s: "Läsa böcker.", st: "قراءة الكتب." }, { w: "SPELA", t: "يلعب/يعزف", s: "Spela gitarr.", st: "عزف الجيتار." }, { w: "MÅLA", t: "يرسم", s: "Måla en tavla.", st: "رسم لوحة." }]),
+            createLevel([{ w: "MUSIK", t: "موسيقى", s: "Lyssna på musik.", st: "الاستماع للموسيقى." }, { w: "DANS", t: "رقص", s: "Gå på dans.", st: "الذهاب للرقص." }, { w: "SÅNG", t: "غناء", s: "Sjunga i kör.", st: "الغناء في جوقة." }, { w: "TEATER", t: "مسرح", s: "Spela teater.", st: "التمثيل المسرحي." }, { w: "FILM", t: "فيلم", s: "Se en bra film.", st: "مشاهدة فيلم جيد." }]),
+            createLevel([{ w: "SPORT", t: "رياضة", s: "Gillar du sport?", st: "هل تحب الرياضة؟" }, { w: "FOTBOLL", t: "كرة قدم", s: "Spela fotboll.", st: "لعب كرة القدم." }, { w: "TENNIS", t: "تنس", s: "Spela tennis.", st: "لعب التنس." }, { w: "SIMNING", t: "سباحة", s: "Gå på simning.", st: "الذهاب للسباحة." }, { w: "CYKLING", t: "ركوب دراجات", s: "Cykling är bra motion.", st: "ركوب الدراجات تمرين جيد." }]),
+            createLevel([{ w: "FISKE", t: "صيد سمك", s: "Fiske är avkopplande.", st: "صيد السمك مريح للأعصاب." }, { w: "JAKT", t: "صيد", s: "Gå på jakt.", st: "الذهاب للصيد." }, { w: "SCHACK", t: "شطرنج", s: "Spela schack.", st: "لعب الشطرنج." }, { w: "KORT", t: "ورق لعب", s: "Spela kort.", st: "لعب الورق." }, { w: "SPEL", t: "لعبة", s: "Datorspel.", st: "ألعاب حاسوب." }]),
+            createLevel([{ w: "RESA", t: "سفر", s: "Att resa är kul.", st: "السفر ممتع." }, { w: "FOTO", t: "تصوير", s: "Ta foto.", st: "التقاط صور." }, { w: "TRÄDGÅRD", t: "حديقة", s: "Arbeta i trädgården.", st: "العمل في الحديقة." }, { w: "MATLAGNING", t: "طبخ", s: "Gillar matlagning.", st: "أحب الطبخ." }, { w: "BAKA", t: "خبز", s: "Baka kakor.", st: "خبز الكعك." }]),
+            createLevel([{ w: "SY", t: "خياطة", s: "Sy kläder.", st: "خياطة الملابس." }, { w: "STICKA", t: "حياكة", s: "Sticka en tröja.", st: "حياكة كنزة." }, { w: "VIRKA", t: "كروشيه", s: "Virka en duk.", st: "عمل مفرش كروشيه." }, { w: "SNICKRA", t: "نجارة", s: "Snickra i boden.", st: "النجارة في الكوخ." }, { w: "MEKA", t: "إصلاح ميكانيكي", s: "Meka med bilen.", st: "إصلاح السيارة." }]),
+            createLevel([{ w: "SAMLA", t: "يجمع", s: "Samla frimärken.", st: "جمع الطوابع." }, { w: "MYNT", t: "عملات", s: "Samla mynt.", st: "جمع العملات." }, { w: "FÅGEL", t: "طائر", s: "Fågelskådning.", st: "مراقبة الطيور." }, { w: "NATUR", t: "طبيعة", s: "Vara i naturen.", st: "التواجد في الطبيعة." }, { w: "PROMENAD", t: "نزهة مشي", s: "Gå en promenad.", st: "الذهاب في نزهة مشي." }]),
+            createLevel([{ w: "GYM", t: "نادي رياضي", s: "Gå på gym.", st: "الذهاب للنادي الرياضي." }, { w: "YOGA", t: "يوغا", s: "Göra yoga.", st: "ممارسة اليوغا." }, { w: "LÖPNING", t: "ركض", s: "Löpning i spåret.", st: "الركض في المسار." }, { w: "RIDNING", t: "ركوب خيل", s: "Ridning på häst.", st: "ركوب الخيل." }, { w: "SKIDOR", t: "تزلج", s: "Åka skidor.", st: "التزلج." }]),
+            createLevel([{ w: "KONST", t: "فن", s: "Titta på konst.", st: "مشاهدة الفن." }, { w: "MUSEUM", t: "متحف", s: "Gå på museum.", st: "الذهاب للمتحف." }, { w: "KONSERT", t: "حفلة موسيقية", s: "Gå på konsert.", st: "الذهاب لحفلة موسيقية." }, { w: "OPERA", t: "أوبرا", s: "Gå på opera.", st: "الذهاب للأوبرا." }, { w: "CIRKUS", t: "سيرك", s: "Gå på cirkus.", st: "الذهاب للسيرك." }]),
+            createLevel([{ w: "VÄNNER", t: "أصدقاء", s: "Träffa vänner.", st: "مقابلة الأصدقاء." }, { w: "FEST", t: "حفلة", s: "Gå på fest.", st: "الذهاب لحفلة." }, { w: "MIDDAG", t: "عشاء", s: "Bjuda på middag.", st: "الدعوة للعشاء." }, { w: "FIKA", t: "استراحة قهوة", s: "Ta en fika.", st: "أخذ استراحة قهوة." }, { w: "PRATA", t: "يتحدث", s: "Prata och umgås.", st: "التحدث والاختلاط." }])
+        ];
+
+        // Topic 12: Travel & Transport
+        TOPICS[12].levels = [
+            createLevel([{ w: "RESA", t: "سفر/رحلة", s: "En lång resa.", st: "رحلة طويلة." }, { w: "SEMESTER", t: "إجازة", s: "Åka på semester.", st: "الذهاب في إجازة." }, { w: "UTLANDET", t: "خارج البلاد", s: "Resa utomlands.", st: "السفر للخارج." }, { w: "SVERIGE", t: "السويد", s: "Resa i Sverige.", st: "السفر في السويد." }, { w: "VÄRLDEN", t: "العالم", s: "Se världen.", st: "رؤية العالم." }]),
+            createLevel([{ w: "BILJETT", t: "تذكرة", s: "Boka biljett.", st: "حجز تذكرة." }, { w: "PASS", t: "جواز سفر", s: "Giltigt pass.", st: "جواز سفر ساري." }, { w: "VISUM", t: "تأشيرة", s: "Söka visum.", st: "طلب تأشيرة." }, { w: "VÄSKA", t: "حقيبة", s: "Packa väskan.", st: "حزم الحقيبة." }, { w: "BAGAGE", t: "أمتعة", s: "Tungt bagage.", st: "أمتعة ثقيلة." }]),
+            createLevel([{ w: "FLYG", t: "طيران", s: "Flygplan.", st: "طائرة." }, { w: "TÅG", t: "قطار", s: "Tågresa.", st: "رحلة قطار." }, { w: "BUSS", t: "حافلة", s: "Långfärdsbuss.", st: "حافلة مسافات طويلة." }, { w: "BÅT", t: "قارب/سفينة", s: "Kryssningsbåt.", st: "سفينة سياحية." }, { w: "BIL", t: "سيارة", s: "Hyrbil.", st: "سيارة مستأجرة." }]),
+            createLevel([{ w: "HOTELL", t: "فندق", s: "Boka hotell.", st: "حجز فندق." }, { w: "RUM", t: "غرفة", s: "Enkelrum.", st: "غرفة مفردة." }, { w: "SÄNG", t: "سرير", s: "Dubbelsäng.", st: "سرير مزدوج." }, { w: "FRUKOST", t: "فطور", s: "Frukost ingår.", st: "الفطور مشمول." }, { w: "RECEPTION", t: "استقبال", s: "Nyckeln i receptionen.", st: "المفتاح في الاستقبال." }]),
+            createLevel([{ w: "KARTA", t: "خريطة", s: "Karta över staden.", st: "خريطة المدينة." }, { w: "GUIDE", t: "دليل", s: "En bra guide.", st: "دليل جيد." }, { w: "SEVÄRD", t: "يستحق المشاهدة", s: "Sevärdheter.", st: "معالم سياحية." }, { w: "TURIST", t: "سائح", s: "Många turister.", st: "كثير من السياح." }, { w: "KAMERA", t: "كاميرا", s: "Ta med kameran.", st: "أحضر الكاميرا." }]),
+            createLevel([{ w: "STRAND", t: "شاطئ", s: "Sola på stranden.", st: "التشمس على الشاطئ." }, { w: "HAV", t: "بحر", s: "Bada i havet.", st: "السباحة في البحر." }, { w: "POOL", t: "مسبح", s: "Simma i poolen.", st: "السباحة في المسبح." }, { w: "SOL", t: "شمس", s: "Sol och värme.", st: "شمس ودفء." }, { w: "GLASS", t: "آيس كريم", s: "Äta glass.", st: "أكل الآيس كريم." }]),
+            createLevel([{ w: "BERG", t: "جبل", s: "Vandra i bergen.", st: "المشي في الجبال." }, { w: "SKIDOR", t: "تزلج", s: "Skidsemester.", st: "إجازة تزلج." }, { w: "SNÖ", t: "ثلج", s: "Mycket snö.", st: "كثير من الثلج." }, { w: "LIFT", t: "مصعد تزلج", s: "Ta liften upp.", st: "خذ المصعد للأعلى." }, { w: "STUGA", t: "كوخ", s: "Hyra en stuga.", st: "استئجار كوخ." }]),
+            createLevel([{ w: "CAMPING", t: "تخييم", s: "Bo på camping.", st: "الإقامة في مخيم." }, { w: "TÄLT", t: "خيمة", s: "Sova i tält.", st: "النوم في خيمة." }, { w: "HUSVAGN", t: "كرفان", s: "Köra husvagn.", st: "قيادة كرفان." }, { w: "GRILLA", t: "شوي", s: "Grilla på kvällen.", st: "الشواء في المساء." }, { w: "NATUR", t: "طبيعة", s: "Nära naturen.", st: "قريب من الطبيعة." }]),
+            createLevel([{ w: "SPRÅK", t: "لغة", s: "Tala engelska.", st: "تحدث الإنجليزية." }, { w: "PENGAR", t: "نقود", s: "Växla pengar.", st: "صرف العملة." }, { w: "VALUTA", t: "عملة", s: "Utländsk valuta.", st: "عملة أجنبية." }, { w: "PRIS", t: "سعر", s: "Vad är priset?", st: "ما هو السعر؟" }, { w: "DYRT", t: "غالي", s: "Det är för dyrt.", st: "هذا غالي جداً." }]),
+            createLevel([{ w: "HEM", t: "منزل/وطن", s: "Resa hem.", st: "السفر للوطن." }, { w: "MINNE", t: "ذكرى", s: "Fina minnen.", st: "ذكريات جميلة." }, { w: "SOUVENIR", t: "تذكار", s: "Köpa souvenirer.", st: "شراء تذكارات." }, { w: "VYKORT", t: "بطاقة بريدية", s: "Skicka vykort.", st: "إرسال بطاقة بريدية." }, { w: "BERÄTTA", t: "يحكي", s: "Berätta om resan.", st: "احك عن الرحلة." }])
+        ];
+
+        // Topic 13: Shopping & Business
+        TOPICS[13].levels = [
+            createLevel([{ w: "HANDLA", t: "يتسوق", s: "Handla mat.", st: "تسوق الطعام." }, { w: "KÖPA", t: "يشتري", s: "Köpa kläder.", st: "شراء ملابس." }, { w: "SÄLJA", t: "يبيع", s: "Sälja bilen.", st: "بيع السيارة." }, { w: "AFFÄR", t: "متجر", s: "Gå i affärer.", st: "الذهاب للمتاجر." }, { w: "BUTIK", t: "محلات", s: "En liten butik.", st: "متجر صغير." }]),
+            createLevel([{ w: "VARUHUS", t: "متجر كبير", s: "Stort varuhus.", st: "متجر كبير متعدد الأقسام." }, { w: "TORG", t: "سوق", s: "Handla på torget.", st: "التسوق في السوق." }, { w: "KASSA", t: "صندوق محاسبة", s: "Betala i kassan.", st: "الدفع في الصندوق." }, { w: "KÖ", t: "طابور", s: "Stå i kö.", st: "الوقوف في الطابور." }, { w: "PÅSE", t: "كيس", s: "Vill du ha en påse?", st: "هل تريد كيساً؟" }]),
+            createLevel([{ w: "PRIS", t: "سعر", s: "Bra pris.", st: "سعر جيد." }, { w: "REA", t: "تخفيضات", s: "Det är rea nu.", st: "هناك تخفيضات الآن." }, { w: "BILLIG", t: "رخيص", s: "Billiga varor.", st: "بضائع رخيصة." }, { w: "DYR", t: "غالي", s: "Dyra märken.", st: "ماركات غالية." }, { w: "RABATT", t: "خصم", s: "Få rabatt.", st: "الحصول على خصم." }]),
+            createLevel([{ w: "PENGAR", t: "نقود", s: "Inga pengar.", st: "لا نقود." }, { w: "KONTANT", t: "نقداً", s: "Betala kontant.", st: "الدفع نقداً." }, { w: "KORT", t: "بطاقة", s: "Betala med kort.", st: "الدفع بالبطاقة." }, { w: "KVITTO", t: "إيصال", s: "Spara kvittot.", st: "احفظ الإيصال." }, { w: "VÄXEL", t: "فكة/باقي", s: "Behåll växeln.", st: "احتفظ بالباقي." }]),
+            createLevel([{ w: "PROVA", t: "يجرب", s: "Prova skor.", st: "تجربة أحذية." }, { w: "STORLEK", t: "مقاس", s: "Rätt storlek.", st: "المقاس الصحيح." }, { w: "FÄRG", t: "لون", s: "Annan färg.", st: "لون آخر." }, { w: "ÖPPET", t: "مفتوح", s: "När är det öppet?", st: "متى يكون مفتوحاً؟" }, { w: "STÄNGT", t: "مغلق", s: "Det är stängt.", st: "إنه مغلق." }]),
+            createLevel([{ w: "MAT", t: "طعام", s: "Mataffär.", st: "متجر بقالة." }, { w: "KLÄDER", t: "ملابس", s: "Klädaffär.", st: "متجر ملابس." }, { w: "SKOR", t: "أحذية", s: "Skoaffär.", st: "متجر أحذية." }, { w: "BÖCKER", t: "كتب", s: "Bokhandel.", st: "مكتبة بيع كتب." }, { w: "BLOMMOR", t: "زهور", s: "Blomsteraffär.", st: "متجر زهور." }]),
+            createLevel([{ w: "APOTEK", t: "صيدلية", s: "Gå till apoteket.", st: "الذهاب للصيدلية." }, { w: "SYSTEM", t: "متجر كحول", s: "Systembolaget.", st: "متجر الكحول الحكومي." }, { w: "KIOSK", t: "كشك", s: "Köpa tidning i kiosken.", st: "شراء جريدة من الكشك." }, { w: "BAGERI", t: "مخبز", s: "Färskt bröd i bageriet.", st: "خبز طازج في المخبز." }, { w: "SALUHALL", t: "سوق مغطى", s: "Saluhallen.", st: "السوق المغطى." }]),
+            createLevel([{ w: "LISTA", t: "قائمة", s: "Inköpslista.", st: "قائمة مشتريات." }, { w: "VAGN", t: "عربة", s: "Kundvagn.", st: "عربة تسوق." }, { w: "KORG", t: "سلة", s: "Varukorg.", st: "سلة مشتريات." }, { w: "HYLLA", t: "رف", s: "På hyllan.", st: "على الرف." }, { w: "FRYS", t: "مجمد", s: "Frysdisken.", st: "ثلاجة التجميد." }]),
+            createLevel([{ w: "MJÖLK", t: "حليب", s: "En liter mjölk.", st: "لتر حليب." }, { w: "BRÖD", t: "خبز", s: "En limpa bröd.", st: "رغيف خبز." }, { w: "ÄGG", t: "بيض", s: "Ett paket ägg.", st: "عبوة بيض." }, { w: "SMÖR", t: "زبدة", s: "Ett paket smör.", st: "عبوة زبدة." }, { w: "OST", t: "جبن", s: "En bit ost.", st: "قطعة جبن." }]),
+            createLevel([{ w: "PRESENT", t: "هدية", s: "Köpa present.", st: "شراء هدية." }, { w: "PAKET", t: "طرد/حزمة", s: "Slå in paket.", st: "تغليف هدية." }, { w: "JULKLAPP", t: "هدية عيد الميلاد", s: "Julklappar.", st: "هدايا عيد الميلاد." }, { w: "BLOMMA", t: "زهرة", s: "Ge en blomma.", st: "إعطاء زهرة." }, { w: "KORT", t: "بطاقة تهنئة", s: "Skriva kort.", st: "كتابة بطاقة." }])
+        ];
+
+        // Topic 14: Feelings & Characteristics
+        TOPICS[14].levels = [
+            createLevel([{ w: "GLAD", t: "سعيد", s: "Jag är glad.", st: "أنا سعيد." }, { w: "LEDSEN", t: "حزين", s: "Han är ledsen.", st: "هو حزين." }, { w: "ARG", t: "غاضب", s: "Hon är arg.", st: "هي غاضبة." }, { w: "RÄDD", t: "خائف", s: "Jag är rädd.", st: "أنا خائف." }, { w: "TRÖTT", t: "متعب", s: "Vi är trötta.", st: "نحن متعبون." }]),
+            createLevel([{ w: "PIGG", t: "نشيط", s: "Känner mig pigg.", st: "أشعر بالنشاط." }, { w: "SJU", t: "مريض", s: "Känner mig sjuk.", st: "أشعر بالمرض." }, { w: "FRISK", t: "معافى", s: "Är du frisk?", st: "هل أنت معافى؟" }, { w: "STARK", t: "قوي", s: "Han är stark.", st: "هو قوي." }, { w: "SVAG", t: "ضعيف", s: "Känner mig svag.", st: "أشعر بالضعف." }]),
+            createLevel([{ w: "SNÄLL", t: "لطيف", s: "Du är snäll.", st: "أنت لطيف." }, { w: "ELAK", t: "لئيم", s: "Var inte elak.", st: "لا تكن لئيماً." }, { w: "TREVLIG", t: "ممتع/ودود", s: "En trevlig kväll.", st: "أمسية ممتعة." }, { w: "TRÅKIG", t: "ممل", s: "En tråkig film.", st: "فيلم ممل." }, { w: "ROLIG", t: "مضحك/ممتع", s: "Ett roligt skämt.", st: "نكتة مضحكة." }]),
+            createLevel([{ w: "VACKER", t: "جميل", s: "En vacker dag.", st: "يوم جميل." }, { w: "FUL", t: "قبيح", s: "En ful byggnad.", st: "مبنى قبيح." }, { w: "SÖT", t: "حلو/كيوت", s: "En söt katt.", st: "قطة لطيفة." }, { w: "FIN", t: "جميل/جيد", s: "Fina kläder.", st: "ملابس جميلة." }, { w: "BRA", t: "جيد", s: "Det är bra.", st: "هذا جيد." }]),
+            createLevel([{ w: "DÅLIG", t: "سيء", s: "Dåligt väder.", st: "طقس سيء." }, { w: "LUGN", t: "هادئ", s: "Ta det lugnt.", st: "هدئ أعصابك." }, { w: "STRESS", t: "توتر", s: "Ingen stress.", st: "بلا توتر." }, { w: "NERVÖS", t: "متوتر", s: "Jag är nervös.", st: "أنا متوتر." }, { w: "BLYG", t: "خجول", s: "Han är blyg.", st: "هو خجول." }]),
+            createLevel([{ w: "MODIG", t: "شجاع", s: "Var modig.", st: "كن شجاعاً." }, { w: "FEG", t: "جبان", s: "Var inte feg.", st: "لا تكن جباناً." }, { w: "KLOK", t: "حكيم", s: "En klok uggla.", st: "بومة حكيمة." }, { w: "DUM", t: "غبي", s: "Det var dumt.", st: "كان ذلك غبياً." }, { w: "SMART", t: "ذكي", s: "Du är smart.", st: "أنت ذكي." }]),
+            createLevel([{ w: "KÄR", t: "عاشق", s: "Jag är kär.", st: "أنا مغرم." }, { w: "LYCKLIG", t: "سعيد جداً", s: "Ett lyckligt slut.", st: "نهاية سعيدة." }, { w: "NÖJD", t: "راض", s: "Är du nöjd?", st: "هل أنت راض؟" }, { w: "STOLT", t: "فخور", s: "Jag är stolt.", st: "أنا فخور." }, { w: "AVUNDS", t: "حاسد", s: "Avundsjuk.", st: "حاسد/غيور." }]),
+            createLevel([{ w: "NYFIKEN", t: "فضولي", s: "Jag är nyfiken.", st: "أنا فضولي." }, { w: "INTRESS", t: "مهتم", s: "Intresserad.", st: "مهتم." }, { w: "UTTRÅK", t: "ضجر", s: "Uttråkad.", st: "ضجر." }, { w: "ENSAM", t: "وحيد", s: "Känna sig ensam.", st: "الشعور بالوحدة." }, { w: "TRYGG", t: "آمن", s: "Känna sig trygg.", st: "الشعور بالأمان." }]),
+            createLevel([{ w: "VÄNLIG", t: "ودود", s: "En vänlig man.", st: "رجل ودود." }, { w: "HJÄLP", t: "مساعد", s: "Hjälpsam.", st: "محب للمساعدة." }, { w: "ÄRLIG", t: "صادق", s: "Var ärlig.", st: "كن صادقاً." }, { w: "PÅLIT", t: "موثوق", s: "Pålitlig.", st: "موثوق به." }, { w: "TROGEN", t: "مخلص", s: "En trogen vän.", st: "صديق مخلص." }]),
+            createLevel([{ w: "KÄNSLA", t: "شعور", s: "En bra känsla.", st: "شعور جيد." }, { w: "HUMÖR", t: "مزاج", s: "Gott humör.", st: "مزاج جيد." }, { w: "SKRATT", t: "ضحك", s: "Ett gott skratt.", st: "ضحكة جيدة." }, { w: "GRÅT", t: "بکاء", s: "Gråt inte.", st: "لا تبك." }, { w: "LEENDE", t: "ابتسامة", s: "Ett vackert leende.", st: "ابتسامة جميلة." }])
+        ];
+
+        // Topic 15: Animals & Nature
+        TOPICS[15].levels = [
+            createLevel([{ w: "DJUR", t: "حيوان", s: "Vilda djur.", st: "حيوانات برية." }, { w: "HUND", t: "كلب", s: "Hunden skäller.", st: "الكلب ينبح." }, { w: "KATT", t: "قطة", s: "Katten jamar.", st: "القطة تموء." }, { w: "HÄST", t: "حصان", s: "Rida häst.", st: "ركوب الحصان." }, { w: "KO", t: "بقرة", s: "Kon ger mjölk.", st: "البقرة تعطي الحليب." }]),
+            createLevel([{ w: "GRIS", t: "خنزير", s: "Grisen är rosa.", st: "الخنزير وردي." }, { w: "FÅR", t: "خروف", s: "Fåret har ull.", st: "الخروف لديه صوف." }, { w: "HÖNA", t: "دجاجة", s: "Hönan lägger ägg.", st: "الدجاجة تبيض." }, { w: "TUPP", t: "ديك", s: "Tuppen gal.", st: "الديك يصيح." }, { w: "KYCKLING", t: "صوص", s: "Små kycklingar.", st: "صيصان صغيرة." }]),
+            createLevel([{ w: "FÅGEL", t: "طائر", s: "Fågeln flyger.", st: "الطائر يطير." }, { w: "FISK", t: "سمكة", s: "Fisken simmar.", st: "السمكة تسبح." }, { w: "ORM", t: "ثعبان", s: "En lång orm.", st: "ثعبان طويل." }, { w: "GRODA", t: "ضفدع", s: "Grodan hoppar.", st: "الضفدع يقفز." }, { w: "SPINDEL", t: "عنكبوت", s: "Spindel i nätet.", st: "عنكبوت في الشبكة." }]),
+            createLevel([{ w: "MUS", t: "فأر", s: "Musen äter ost.", st: "الفأر يأكل الجبن." }, { w: "RÅTTA", t: "جرذ", s: "En stor råtta.", st: "جرذ كبير." }, { w: "KANIN", t: "أرنب", s: "Söt kanin.", st: "أرنب لطيف." }, { w: "EKORRE", t: "سنجاب", s: "Ekorren i trädet.", st: "السنجاب في الشجرة." }, { w: "IGELKOTT", t: "قنفذ", s: "Igelkotten sticks.", st: "القنفذ يغز." }]),
+            createLevel([{ w: "BJÖRN", t: "دب", s: "Björnen sover.", st: "الدب نائم." }, { w: "VARG", t: "ذئب", s: "Vargen ylar.", st: "الذئب يعوي." }, { w: "RÄV", t: "ثعلب", s: "Räven är listig.", st: "الثعلب ماكر." }, { w: "ÄLG", t: "حيوان الموظ", s: "Skogens konung.", st: "ملك الغابة." }, { w: "RÅDJUR", t: "يحمور", s: "Rådjur på ängen.", st: "يحمور في المرج." }]),
+            createLevel([{ w: "LEJON", t: "أسد", s: "Lejonet ryter.", st: "الأسد يزأر." }, { w: "TIGER", t: "نمر", s: "Randig tiger.", st: "نمر مخطط." }, { w: "ELEFANT", t: "فيل", s: "Stor elefant.", st: "فيل كبير." }, { w: "APA", t: "قرد", s: "Apan klättrar.", st: "القرد يتسلق." }, { w: "ZEBRA", t: "حمار وحشي", s: "Randig zebra.", st: "حمار وحشي مخطط." }]),
+            createLevel([{ w: "SKOG", t: "غابة", s: "Mörk skog.", st: "غابة مظلمة." }, { w: "TRÄD", t: "شجرة", s: "Gamla träd.", st: "أشجار قديمة." }, { w: "BLOMMA", t: "زهرة", s: "Plocka blommor.", st: "قطف الزهور." }, { w: "GRÄS", t: "عشب", s: "Grönt gräs.", st: "عشب أخضر." }, { w: "STEN", t: "حجر", s: "Hård sten.", st: "حجر قاسي." }]),
+            createLevel([{ w: "HAV", t: "بحر", s: "Blått hav.", st: "بحر أزرق." }, { w: "SJÖ", t: "بحيرة", s: "Bada i sjön.", st: "السباحة في البحيرة." }, { w: "FLOD", t: "نهر", s: "Lång flod.", st: "نهر طويل." }, { w: "STRAND", t: "شاطئ", s: "Sandstrand.", st: "شاطئ رملي." }, { w: "Ö", t: "جزيرة", s: "En ö i havet.", st: "جزيرة في البحر." }]),
+            createLevel([{ w: "HUSDJUR", t: "حيوان أليف", s: "Har du husdjur?", st: "هل لديك حيوانات أليفة؟" }, { w: "VETERINÄR", t: "طبيب بيطري", s: "Gå till veterinären.", st: "الذهاب للطبيب البيطري." }, { w: "ZOO", t: "حديقة حيوان", s: "Besöka zoo.", st: "زيارة حديقة الحيوان." }, { w: "BONDGÅRD", t: "مزرعة", s: "Djur på bondgården.", st: "حيوانات في المزرعة." }, { w: "NATUR", t: "طبيعة", s: "Svensk natur.", st: "الطبيعة السويدية." }]),
+            createLevel([{ w: "MYGGA", t: "بعوضة", s: "Myggan sticks.", st: "البعوضة تلسع." }, { w: "FLUGA", t: "ذبابة", s: "En envis fluga.", st: "ذبابة عنيدة." }, { w: "BI", t: "نحلة", s: "Biet ger honung.", st: "النحلة تعطي العسل." }, { w: "FJÄRIL", t: "فراشة", s: "Vacker fjäril.", st: "فراشة جميلة." }, { w: "MYRA", t: "نملة", s: "Flitig myra.", st: "نملة مجتهدة." }])
+        ];
+
+        // Topic 16: Technology & Media
+        TOPICS[16].levels = [
+            createLevel([{ w: "TEKNIK", t: "تكنولوجيا", s: "Ny teknik.", st: "تكنولوجيا جديدة." }, { w: "DATOR", t: "حاسوب", s: "Snabb dator.", st: "حاسوب سريع." }, { w: "MOBIL", t: "جوال", s: "Ring med mobilen.", st: "اتصل بالجوال." }, { w: "PLATTA", t: "جهاز لوحي", s: "Spela på plattan.", st: "اللعب على الجهاز اللوحي." }, { w: "SKÄRM", t: "شاشة", s: "Stor skärm.", st: "شاشة كبيرة." }]),
+            createLevel([{ w: "INTERNET", t: "إنترنت", s: "Surfa på internet.", st: "تصفح الإنترنت." }, { w: "WIFI", t: "واي فاي", s: "Gratis wifi.", st: "واي فاي مجاني." }, { w: "LÄNK", t: "رابط", s: "Klicka på länken.", st: "اضغط على الرابط." }, { w: "SIDA", t: "صفحة", s: "Hemsida.", st: "صفحة رئيسية." }, { w: "APP", t: "تطبيق", s: "Ladda ner appen.", st: "حمل التطبيق." }]),
+            createLevel([{ w: "TV", t: "تلفاز", s: "Titta på TV.", st: "مشاهدة التلفاز." }, { w: "RADIO", t: "راديو", s: "Lyssna på radio.", st: "الاستماع للراديو." }, { w: "NYHETER", t: "أخبار", s: "Senaste nyheterna.", st: "آخر الأخبار." }, { w: "TIDNING", t: "جريدة", s: "Läsa tidningen.", st: "قراءة الجريدة." }, { w: "REKLAM", t: "إعلان", s: "Ingen reklam tack.", st: "لا إعلانات من فضلك." }]),
+            createLevel([{ w: "FILM", t: "فيلم", s: "Se en film.", st: "مشاهدة فيلم." }, { w: "SERIE", t: "مسلسل", s: "Följa en serie.", st: "متابعة مسلسل." }, { w: "SPEL", t: "لعبة", s: "TV-spel.", st: "ألعاب فيديو." }, { w: "VIDEO", t: "فيديو", s: "Spela in video.", st: "تسجيل فيديو." }, { w: "BILD", t: "صورة", s: "Ta en bild.", st: "التقاط صورة." }]),
+            createLevel([{ w: "KAMERA", t: "كاميرا", s: "Digital kamera.", st: "كاميرا رقمية." }, { w: "LJUD", t: "صوت", s: "Högt ljud.", st: "صوت عال." }, { w: "HÖRLURAR", t: "سماعات", s: "Ta på hörlurarna.", st: "ضع السماعات." }, { w: "MIKROFON", t: "ميكروفون", s: "Prata i mikrofonen.", st: "تحدث في الميكروفون." }, { w: "BATTERI", t: "بطارية", s: "Ladda batteriet.", st: "اشحن البطارية." }]),
+            createLevel([{ w: "KOD", t: "كود/رمز", s: "Skriva kod.", st: "كتابة كود." }, { w: "PROGRAM", t: "برنامج", s: "Datorprogram.", st: "برنامج حاسوب." }, { w: "FIL", t: "ملف", s: "Spara filen.", st: "حفظ الملف." }, { w: "MAPP", t: "مجلد", s: "Ny mapp.", st: "مجلد جديد." }, { w: "VIRUS", t: "فيروس", s: "Datorvirus.", st: "فيروس حاسوب." }]),
+            createLevel([{ w: "ROBOT", t: "روبوت", s: "Smart robot.", st: "روبوت ذكي." }, { w: "AI", t: "ذكاء اصطناعي", s: "AI är framtiden.", st: "الذكاء الاصطناعي هو المستقبل." }, { w: "DATA", t: "بيانات", s: "Samla data.", st: "جمع بيانات." }, { w: "MOLN", t: "سحابة", s: "Spara i molnet.", st: "الحفظ في السحابة." }, { w: "NÄTVERK", t: "شبكة", s: "Socialt nätverk.", st: "شبكة اجتماعية." }]),
+            createLevel([{ w: "CHATT", t: "دردشة", s: "Chatta med vänner.", st: "الدردشة مع الأصدقاء." }, { w: "MEJL", t: "إيميل", s: "Skicka mejl.", st: "إرسال إيميل." }, { w: "SMS", t: "رسالة نصية", s: "Få ett sms.", st: "تلقي رسالة نصية." }, { w: "SAMTAL", t: "مكالمة", s: "Ringa ett samtal.", st: "إجراء مكالمة." }, { w: "KONTAKT", t: "جهة اتصال", s: "Spara kontakten.", st: "حفظ جهة الاتصال." }]),
+            createLevel([{ w: "LÖSENORD", t: "كلمة مرور", s: "Glömt lösenordet.", st: "نسيت كلمة المرور." }, { w: "KONTO", t: "حساب", s: "Logga in på kontot.", st: "تسجيل الدخول للحساب." }, { w: "SÄKERHET", t: "أمان", s: "Hög säkerhet.", st: "أمان عال." }, { w: "UPPDATERA", t: "تحديث", s: "Uppdatera nu.", st: "حدث الآن." }, { w: "INSTALLERA", t: "تثبيت", s: "Installera programmet.", st: "تثبيت البرنامج." }]),
+            createLevel([{ w: "SKRIVARE", t: "طابعة", s: "Skriv ut papper.", st: "اطبع الورق." }, { w: "MUS", t: "فأرة", s: "Datormus.", st: "فأرة حاسوب." }, { w: "TANGENT", t: "مفتاح", s: "Tangentbord.", st: "لوحة مفاتيح." }, { w: "SLADD", t: "سلك", s: "Dra ur sladden.", st: "اسحب السلك." }, { w: "STRÖM", t: "كهرباء", s: "Ingen ström.", st: "لا توجد كهرباء." }])
+        ];
+
+        // Topic 17: Society & Politics
+        TOPICS[17].levels = [
+            createLevel([{ w: "SAMHÄLLE", t: "مجتمع", s: "Ett öppet samhälle.", st: "مجتمع منفتح." }, { w: "POLITIK", t: "سياسة", s: "Diskutera politik.", st: "مناقشة السياسة." }, { w: "PARTI", t: "حزب", s: "Rösta på ett parti.", st: "التصويت لحزب." }, { w: "VAL", t: "انتخابات", s: "Allmänna val.", st: "انتخابات عامة." }, { w: "RÖSTA", t: "يصوت", s: "Gå och rösta.", st: "اذهب وصوت." }]),
+            createLevel([{ w: "LAG", t: "قانون", s: "Följa lagen.", st: "اتباع القانون." }, { w: "REGLER", t: "قواعد", s: "Skolans regler.", st: "قواعد المدرسة." }, { w: "RÄTT", t: "حق", s: "Mänskliga rättigheter.", st: "حقوق الإنسان." }, { w: "PLIKT", t: "واجب", s: "Rättighet och plikt.", st: "حق وواجب." }, { w: "DOMSTOL", t: "محكمة", s: "Gå till domstol.", st: "الذهاب للمحكمة." }]),
+            createLevel([{ w: "STAT", t: "دولة", s: "Svenska staten.", st: "الدولة السويدية." }, { w: "KOMMUN", t: "بلدية", s: "Malmö kommun.", st: "بلدية مالمو." }, { w: "LANDSTING", t: "مجلس محافظة", s: "Regionen.", st: "الإقليم." }, { w: "REGERING", t: "حكومة", s: "Ny regering.", st: "حكومة جديدة." }, { w: "RIKSDAG", t: "برلمان", s: "Sveriges riksdag.", st: "البرلمان السويدي." }]),
+            createLevel([{ w: "DEMOKRATI", t: "ديمقراطية", s: "Vi har demokrati.", st: "لدينا ديمقراطية." }, { w: "FRIHET", t: "حرية", s: "Yttrandefrihet.", st: "حرية التعبير." }, { w: "JÄMLIK", t: "مساواة", s: "Alla är jämlika.", st: "الجميع متساوون." }, { w: "RÄTTVISA", t: "عدالة", s: "Vi vill ha rättvisa.", st: "نريد العدالة." }, { w: "FRED", t: "سلام", s: "Fred på jorden.", st: "سلام على الأرض." }]),
+            createLevel([{ w: "EKONOMI", t: "اقتصاد", s: "Bra ekonomi.", st: "اقتصاد جيد." }, { w: "SKATT", t: "ضريبة", s: "Betala skatt.", st: "دفع الضرائب." }, { w: "BIDRAG", t: "إعانة", s: "Söka bidrag.", st: "طلب إعانة." }, { w: "LÖN", t: "راتب", s: "Få lön.", st: "الحصول على راتب." }, { w: "ARBETE", t: "عمل", s: "Rätt till arbete.", st: "الحق في العمل." }]),
+            createLevel([{ w: "MILJÖ", t: "بيئة", s: "Skydda miljön.", st: "حماية البيئة." }, { w: "KLIMAT", t: "مناخ", s: "Klimathotet.", st: "التهديد المناخي." }, { w: "HÅLLBAR", t: "مستدام", s: "Hållbar utveckling.", st: "تنمية مستدامة." }, { w: "ENERGI", t: "طاقة", s: "Grön energi.", st: "طاقة خضراء." }, { w: "SOPOR", t: "نفايات", s: "Sopsortering.", st: "فرز النفايات." }]),
+            createLevel([{ w: "KULTUR", t: "ثقافة", s: "Svensk kultur.", st: "ثقافة سويدية." }, { w: "RELIGION", t: "دين", s: "Religionsfrihet.", st: "حرية الدين." }, { w: "HISTORIA", t: "تاريخ", s: "Lära av historien.", st: "التعلم من التاريخ." }, { w: "TRADITION", t: "تقليد", s: "Gamla traditioner.", st: "تقاليد قديمة." }, { w: "HÖGTID", t: "عيد/مناسبة", s: "Fira högtid.", st: "الاحتفال بمناسبة." }]),
+            createLevel([{ w: "NYHETER", t: "أخبار", s: "Se på nyheterna.", st: "مشاهدة الأخبار." }, { w: "MEDIA", t: "إعلام", s: "Sociala medier.", st: "وسائل التواصل الاجتماعي." }, { w: "PRESS", t: "صحافة", s: "Fri press.", st: "صحافة حرة." }, { w: "DEBATT", t: "مناظرة", s: "Politisk debatt.", st: "مناظرة سياسية." }, { w: "ÅSIKT", t: "رأي", s: "Vad är din åsikt?", st: "ما هو رأيك؟" }]),
+            createLevel([{ w: "VÄRLDEN", t: "العالم", s: "Hela världen.", st: "كل العالم." }, { w: "EUROPA", t: "أوروبا", s: "Vi bor i Europa.", st: "نعيش في أوروبا." }, { w: "FN", t: "الأمم المتحدة", s: "Förenta Nationerna.", st: "الأمم المتحدة." }, { w: "EU", t: "الاتحاد الأوروبي", s: "Europeiska Unionen.", st: "الاتحاد الأوروبي." }, { w: "GRÄNS", t: "حدود", s: "Öppna gränser.", st: "حدود مفتوحة." }]),
+            createLevel([{ w: "KRIG", t: "حرب", s: "Krig och fred.", st: "حرب وسلام." }, { w: "FLYKTING", t: "لاجئ", s: "Ta emot flyktingar.", st: "استقبال اللاجئين." }, { w: "ASYL", t: "لجوء", s: "Söka asyl.", st: "طلب اللجوء." }, { w: "INTEGRATION", t: "اندماج", s: "Bra integration.", st: "اندماج جيد." }, { w: "MÅNGFALD", t: "تنوع", s: "Mångfald berikar.", st: "التنوع يغني." }])
+        ];
+
+        // Topic 18: Culture & Traditions
+        TOPICS[18].levels = [
+            createLevel([{ w: "KULTUR", t: "ثقافة", s: "Kulturkrock.", st: "صدمة ثقافية." }, { w: "TRADITION", t: "تقليد", s: "Svenska traditioner.", st: "تقاليد سويدية." }, { w: "FIRANDE", t: "احتفال", s: "Stort firande.", st: "احتفال كبير." }, { w: "FEST", t: "عيد/حفلة", s: "Folkfest.", st: "مهرجان شعبي." }, { w: "HELGDAG", t: "يوم عطلة رسمية", s: "Röd dag.", st: "يوم أحمر (عطلة)." }]),
+            createLevel([{ w: "JUL", t: "عيد الميلاد", s: "God Jul!", st: "عيد ميلاد مجيد!" }, { w: "TOMTE", t: "بابا نويل", s: "Jultomten kommer.", st: "بابا نويل قادم." }, { w: "GRAN", t: "شجرة", s: "Julgran.", st: "شجرة عيد الميلاد." }, { w: "KLAPP", t: "هدية", s: "Julklappar.", st: "هدايا عيد الميلاد." }, { w: "LUCIA", t: "لوسيا", s: "Luciatåg.", st: "موكب لوسيا." }]),
+            createLevel([{ w: "PÅSK", t: "عيد الفصح", s: "Glad Påsk!", st: "فصح سعيد!" }, { w: "ÄGG", t: "بيض", s: "Påskägg.", st: "بيض الفصح." }, { w: "HÄXA", t: "ساحرة", s: "Påskkärring.", st: "ساحرة الفصح." }, { w: "GODIS", t: "حلوى", s: "Mycket godis.", st: "كثير من الحلوى." }, { w: "MAT", t: "طعام", s: "Påskmat.", st: "طعام الفصح." }]),
+            createLevel([{ w: "MIDSOMMAR", t: "منتصف الصيف", s: "Glad Midsommar!", st: "منتصف صيف سعيد!" }, { w: "STÅNG", t: "عمود", s: "Midsommarstång.", st: "عمود منتصف الصيف." }, { w: "DANS", t: "رقص", s: "Dans runt stången.", st: "الرقص حول العمود." }, { w: "SILL", t: "رنجة", s: "Sill och potatis.", st: "رنجة وبطاطس." }, { w: "JORDGUBBE", t: "فراولة", s: "Svenska jordgubbar.", st: "فراولة سويدية." }]),
+            createLevel([{ w: "FÖDELSEDAG", t: "عيد ميلاد", s: "Grattis på födelsedagen!", st: "عيد ميلاد سعيد!" }, { w: "TÅRTA", t: "كعكة", s: "Äta tårta.", st: "أكل الكعكة." }, { w: "LJU", t: "شموع", s: "Blåsa ut ljusen.", st: "إطفاء الشموع." }, { w: "SÅNG", t: "أغنية", s: "Ja må han leva.", st: "أغنية عيد الميلاد السويدية." }, { w: "KALAS", t: "حفلة أطفال", s: "Barnkalas.", st: "حفلة أطفال." }]),
+            createLevel([{ w: "NAMNSDAG", t: "يوم الاسم", s: "Grattis på namnsdagen.", st: "مبارك يوم الاسم." }, { w: "FLAGGA", t: "علم", s: "Svenska flaggan.", st: "العلم السويدي." }, { w: "SÅNG", t: "نشيد", s: "Nationalsången.", st: "النشيد الوطني." }, { w: "KUNG", t: "ملك", s: "Sveriges kung.", st: "ملك السويد." }, { w: "DROTTNING", t: "ملكة", s: "Drottning Silvia.", st: "الملكة سيلفيا." }]),
+            createLevel([{ w: "FIKA", t: "فيكا", s: "Svensk fika.", st: "استراحة قهوة سويدية." }, { w: "KANELBULLE", t: "لفافة قرفة", s: "Kanelbullens dag.", st: "يوم لفافة القرفة." }, { w: "SEMLA", t: "سيملا", s: "Äta semla.", st: "أكل السيملا (حلوى)." }, { w: "KRÄFTSKIVA", t: "حفلة جراد البحر", s: "Kräftskiva i augusti.", st: "حفلة جراد البحر في أغسطس." }, { w: "SURSTRÖMMING", t: "رنجة مخمرة", s: "Luktar illa.", st: "رائحتها كريهة." }]),
+            createLevel([{ w: "LITTERATUR", t: "أدب", s: "Svensk litteratur.", st: "أدب سويدي." }, { w: "MUSIK", t: "موسيقى", s: "Svensk popmusik.", st: "موسيقى البوب السويدية." }, { w: "FILM", t: "فيلم", s: "Svensk film.", st: "فيلم سويدي." }, { w: "KONST", t: "فن", s: "Svensk design.", st: "تصميم سويدي." }, { w: "NOBEL", t: "نوبل", s: "Nobelpriset.", st: "جائزة نوبل." }]),
+            createLevel([{ w: "BRÖLLOP", t: "زفاف", s: "Gå på bröllop.", st: "الذهاب لحفل زفاف." }, { w: "DOP", t: "تعميد", s: "Barnet döps.", st: "الطفل يعمد." }, { w: "BEGRAVNING", t: "جنازة", s: "En sorglig begravning.", st: "جنازة حزينة." }, { w: "STUDENT", t: "تخرج ثانوية", s: "Ta studenten.", st: "التخرج من الثانوية." }, { w: "FEST", t: "حفلة", s: "Kräftskiva.", st: "حفلة جراد البحر." }]),
+            createLevel([{ w: "RELIGION", t: "دين", s: "Olika religioner.", st: "أديان مختلفة." }, { w: "KYRKA", t: "كنيسة", s: "Svenska kyrkan.", st: "الكنيسة السويدية." }, { w: "MOSKÉ", t: "مسجد", s: "Gå till moskén.", st: "الذهاب للمسجد." }, { w: "SYNAGOGA", t: "كنيس", s: "Judisk synagoga.", st: "كنيس يهودي." }, { w: "TEMPEL", t: "معبد", s: "Buddhistiskt tempel.", st: "معبد بوذي." }])
+        ];
+
+        // Topic 19: Sports & Activities
+        TOPICS[19].levels = [
+            createLevel([{ w: "SPORT", t: "رياضة", s: "Elitsport.", st: "رياضة النخبة." }, { w: "IDROTT", t: "تربية بدنية", s: "Skolidrott.", st: "رياضة مدرسية." }, { w: "TRÄNING", t: "تمرين", s: "Hård träning.", st: "تمرين شاق." }, { w: "MATCH", t: "مباراة", s: "Vinna matchen.", st: "الفوز بالمباراة." }, { w: "TÄVLING", t: "مسابقة", s: "Delta i tävling.", st: "المشاركة في مسابقة." }]),
+            createLevel([{ w: "FOTBOLL", t: "كرة قدم", s: "Zlatan spelar fotboll.", st: "زلاتان يلعب كرة القدم." }, { w: "MÅL", t: "هدف", s: "Göra mål.", st: "تسجيل هدف." }, { w: "BOLL", t: "كرة", s: "Sparkar bollen.", st: "يركل الكرة." }, { w: "DOMARE", t: "حكم", s: "Domaren blåser.", st: "الحكم يصفر." }, { w: "LAG", t: "فريق", s: "Bästa laget.", st: "أفضل فريق." }]),
+            createLevel([{ w: "ISHOCKEY", t: "هوري جليد", s: "Tre Kronor.", st: "التيجان الثلاثة (منتخب السويد)." }, { w: "PUCK", t: "قرص", s: "Slå pucken.", st: "ضرب القرص." }, { w: "KLUBBA", t: "عصا", s: "Hockeyklubba.", st: "عصا الهوكي." }, { w: "SKRIDSKOR", t: "زلاجات", s: "Vassa skridskor.", st: "زلاجات حادة." }, { w: "HJÄLM", t: "خوذة", s: "Använd hjälm.", st: "استخدم خوذة." }]),
+            createLevel([{ w: "INNEBANDY", t: "فلوربول", s: "Spela innebandy.", st: "لعب الفلوربول." }, { w: "HANDBOLL", t: "كرة يد", s: "Sverige är bra på handboll.", st: "السويد جيدة في كرة اليد." }, { w: "BASKET", t: "كرة سلة", s: "Kasta i korgen.", st: "الرمي في السلة." }, { w: "TENNIS", t: "تنس", s: "Björn Borg.", st: "بيورن بورغ." }, { w: "GOLF", t: "غولف", s: "Spela golf.", st: "لعب الغولف." }]),
+            createLevel([{ w: "SIMNING", t: "سباحة", s: "Simma bröstsim.", st: "سباحة الصدر." }, { w: "BADHUS", t: "مسبح داخلي", s: "Gå till badhuset.", st: "الذهاب للمسبح الداخلي." }, { w: "DYKA", t: "يغوص", s: "Dyka från kanten.", st: "الغوص من الحافة." }, { w: "BASÄNG", t: "حوض سباحة", s: "25 meters bassäng.", st: "حوض 25 متر." }, { w: "BASTU", t: "ساونا", s: "Bada bastu.", st: "الاستحمام في الساونا." }]),
+            createLevel([{ w: "SKIDOR", t: "تزلج", s: "Längdskidor.", st: "تزلج ريفي." }, { w: "SLALOM", t: "تزلج متعرج", s: "Åka slalom.", st: "تزلج متعرج." }, { w: "SNÖ", t: "ثلج", s: "Snö och kyla.", st: "ثلج وبرد." }, { w: "FJÄLL", t: "جبال", s: "Svenska fjällen.", st: "الجبال السويدية." }, { w: "STAVAR", t: "عصي تزلج", s: "Glöm inte stavarna.", st: "لا تنس العصي." }]),
+            createLevel([{ w: "LÖPNING", t: "ركض", s: "Jogga i skogen.", st: "الهرولة في الغابة." }, { w: "MARATON", t: "ماراثون", s: "Springa maraton.", st: "ركض الماراثون." }, { w: "ORIENTERING", t: "توجيه", s: "Karta och kompass.", st: "خريطة وبوصلة." }, { w: "FRIIDROTT", t: "ألعاب قوى", s: "Hoppa höjdhopp.", st: "القفز العالي." }, { w: "GYMNASTIK", t: "جمباز", s: "Göra kullerbytta.", st: "القيام بشقلبة." }]),
+            createLevel([{ w: "RIDNING", t: "ركوب خيل", s: "Hoppning.", st: "قفز الحواجز." }, { w: "HÄST", t: "حصان", s: "Borsta hästen.", st: "تمشيط الحصان." }, { w: "STALL", t: "إسطبل", s: "Mocka i stallet.", st: "تنظيف الإسطبل." }, { w: "SADEL", t: "سرج", s: "Sitta i sadeln.", st: "الجلوس في السرج." }, { w: "TRAV", t: "سباق خيل", s: "Gå på trav.", st: "الذهاب لسباق الخيل." }]),
+            createLevel([{ w: "CYKLING", t: "ركوب دراجات", s: "Cykla Vätternrundan.", st: "دورة بحيرة فاترن." }, { w: "CYKEL", t: "دراجة", s: "Punktering på cykeln.", st: "ثقب في الدراجة." }, { w: "HJÄLM", t: "خوذة", s: "Cykelhjälm.", st: "خوذة دراجة." }, { w: "VÄG", t: "طريق", s: "Cykelväg.", st: "طريق دراجات." }, { w: "TRAMPA", t: "يدوس", s: "Trampa på.", st: "دوس بقوة." }]),
+            createLevel([{ w: "VINNA", t: "يفوز", s: "Vi vann!", st: "لقد فزنا!" }, { w: "FÖRLORA", t: "يخسر", s: "Vi förlorade matchen.", st: "خسرنا المباراة." }, { w: "GULD", t: "ذهب", s: "Guldmedalj.", st: "ميدالية ذهبية." }, { w: "SILVER", t: "فضة", s: "Silvermedalj.", st: "ميدالية فضية." }, { w: "BRONS", t: "برونز", s: "Bronsmedalj.", st: "ميدالية برونزية." }])
         ];
 
         /**
@@ -730,6 +1062,7 @@
          */
         class WordSearchGame {
             constructor() {
+                this.currentTopicIndex = 0;
                 this.currentLevelIndex = 0;
                 this.gridSize = { rows: 10, cols: 8 };
                 this.grid = [];
@@ -742,6 +1075,11 @@
                 this.timerInterval = null;
                 this.shiftInterval = null;
 
+                // Persistence
+                this.progress = this.loadProgress();
+                this.currentTopicIndex = this.progress.lastTopic || 0;
+                this.currentLevelIndex = this.progress.lastLevel || 0;
+
                 // DOM Elements
                 this.gridEl = document.getElementById('grid');
                 this.wordBankEl = document.getElementById('word-bank');
@@ -752,12 +1090,15 @@
                 this.timerEl = document.getElementById('timer-display');
                 this.mysteryHintEl = document.getElementById('mystery-hint');
                 this.mysteryTextEl = document.getElementById('mystery-text');
+                this.levelBadgeContainer = document.getElementById('level-badge-container');
+                this.headerTitle = document.getElementById('header-title');
 
                 // Modals
                 this.levelModal = document.getElementById('level-modal');
                 this.gameCompleteModal = document.getElementById('game-complete-modal');
                 this.mainMenu = document.getElementById('main-menu');
                 this.gameOverModal = document.getElementById('game-over-modal');
+                this.navModal = document.getElementById('nav-modal');
 
                 // State
                 this.isDragging = false;
@@ -774,55 +1115,197 @@
                 window.addEventListener('touchstart', this.handleInteraction);
                 window.addEventListener('mousedown', this.handleInteraction);
                 window.addEventListener('keydown', this.handleInteraction);
+
+                // Initial State: Show Menu
+                this.showMenu();
             }
 
-            startMode(mode) {
-                this.mode = mode;
-                this.mysteryEnabled = document.getElementById('mystery-toggle').checked;
-                this.mainMenu.classList.remove('active');
-                this.currentLevelIndex = 0;
+            // --- Persistence ---
+            loadProgress() {
+                const saved = localStorage.getItem('neonSearch_progress');
+                let progress = saved ? JSON.parse(saved) : {
+                    unlockedTopics: [],
+                    unlockedLevels: {},
+                    lastTopic: 0,
+                    lastLevel: 0
+                };
 
-                // Reset UI
-                this.flashlightEl.style.display = mode === 'flashlight' ? 'block' : 'none';
-                this.timerEl.style.display = mode === 'timerush' ? 'block' : 'none';
+                // Ensure all topics are unlocked and level 0 of each is unlocked
+                // This fulfills the user request to have the first level of every chapter open
+                for (let i = 0; i < TOPICS.length; i++) {
+                    if (!progress.unlockedTopics.includes(i)) {
+                        progress.unlockedTopics.push(i);
+                    }
+                    if (!progress.unlockedLevels[`${i}-0`]) {
+                        progress.unlockedLevels[`${i}-0`] = true;
+                    }
+                }
 
-                if (mode === 'flashlight') this.initFlashlight();
-
-                this.initLevel(this.currentLevelIndex);
+                return progress;
             }
 
-            showMenu() {
+            saveProgress() {
+                this.progress.lastTopic = this.currentTopicIndex;
+                this.progress.lastLevel = this.currentLevelIndex;
+                localStorage.setItem('neonSearch_progress', JSON.stringify(this.progress));
+            }
+
+            unlockNextLevel() {
+                const nextLevelIdx = this.currentLevelIndex + 1;
+                if (nextLevelIdx < 10) {
+                    this.progress.unlockedLevels[`${this.currentTopicIndex}-${nextLevelIdx}`] = true;
+                } else {
+                    // Unlock next topic
+                    const nextTopicIdx = this.currentTopicIndex + 1;
+                    if (nextTopicIdx < TOPICS.length) {
+                        if (!this.progress.unlockedTopics.includes(nextTopicIdx)) {
+                            this.progress.unlockedTopics.push(nextTopicIdx);
+                        }
+                        this.progress.unlockedLevels[`${nextTopicIdx}-0`] = true;
+                    }
+                }
+                this.saveProgress();
+            }
+
+            // --- Navigation ---
+            showNavigation() {
                 this.stopTimer();
                 this.stopShifting();
                 this.levelModal.classList.remove('active');
                 this.gameOverModal.classList.remove('active');
+                this.gameCompleteModal.classList.remove('active');
+
+                this.navModal.classList.add('active');
+                this.showTopicsInNav();
+            }
+
+            closeNavigation() {
+                this.navModal.classList.remove('active');
+                // Resume logic if needed, or just stay on current level
+            }
+
+            showTopicsInNav() {
+                document.getElementById('nav-topics-container').style.display = 'block';
+                document.getElementById('nav-levels-container').style.display = 'none';
+                document.getElementById('nav-back-btn').style.display = 'none';
+                document.getElementById('nav-title').textContent = "Topics";
+                this.renderTopics();
+            }
+
+            showLevelsInNav(topicIndex) {
+                document.getElementById('nav-topics-container').style.display = 'none';
+                document.getElementById('nav-levels-container').style.display = 'block';
+                document.getElementById('nav-back-btn').style.display = 'block';
+                document.getElementById('nav-title').textContent = TOPICS[topicIndex].title;
+                this.renderLevels(topicIndex);
+            }
+
+            // --- Rendering Menus ---
+            renderTopics() {
+                const container = document.getElementById('topics-list');
+                container.innerHTML = '';
+
+                TOPICS.forEach((topic, index) => {
+                    const isUnlocked = this.progress.unlockedTopics.includes(index);
+                    const el = document.createElement('div');
+                    el.className = 'topic-card';
+                    el.style.opacity = isUnlocked ? '1' : '0.5';
+                    el.style.pointerEvents = isUnlocked ? 'auto' : 'none';
+
+                    el.innerHTML = `
+                        <div class="topic-info">
+                            <h3>${topic.title}</h3>
+                            <p>${topic.titleAr}</p>
+                        </div>
+                        <div class="topic-progress">
+                            ${isUnlocked ? '▶' : '🔒'}
+                        </div>
+                    `;
+                    el.onclick = () => {
+                        this.showLevelsInNav(index);
+                    };
+                    container.appendChild(el);
+                });
+            }
+
+            renderLevels(topicIndex) {
+                const container = document.getElementById('levels-list');
+                container.innerHTML = '';
+
+                for (let i = 0; i < 10; i++) {
+                    const isUnlocked = this.progress.unlockedLevels[`${topicIndex}-${i}`];
+                    const btn = document.createElement('div');
+                    let className = 'level-btn';
+                    if (!isUnlocked) className += ' locked';
+                    if (topicIndex === this.currentTopicIndex && i === this.currentLevelIndex) className += ' current';
+
+                    btn.className = className;
+                    btn.textContent = i + 1;
+
+                    if (isUnlocked) {
+                        btn.onclick = () => {
+                            this.currentTopicIndex = topicIndex;
+                            this.currentLevelIndex = i;
+                            this.closeNavigation();
+                            this.initLevel();
+                        };
+                    }
+
+                    container.appendChild(btn);
+                }
+            }
+
+            // --- Game Logic ---
+            showMenu() {
+                this.stopTimer();
+                this.stopShifting();
                 this.mainMenu.classList.add('active');
             }
 
-            initLevel(levelIndex) {
-                if (levelIndex >= LEVELS_DATA.length) {
-                    this.gameCompleteModal.classList.add('active');
-                    this.soundManager.playLevelComplete();
-                    return;
-                }
+            closeMenu() {
+                this.mainMenu.classList.remove('active');
+                // Start/Resume Game
+                this.initLevel();
+            }
 
-                this.currentLevelData = LEVELS_DATA[levelIndex];
-                this.words = this.currentLevelData.words.map(item => item.w.toUpperCase());
+            setMode(mode) {
+                this.mode = mode;
+                this.closeMenu();
+            }
+
+            toggleMystery(enabled) {
+                this.mysteryEnabled = enabled;
+            }
+
+            initLevel() {
+                const topic = TOPICS[this.currentTopicIndex];
+                const levelData = topic.levels[this.currentLevelIndex];
+
+                if (!levelData) return;
+
+                // Update Header
+                this.headerTitle.textContent = topic.title;
+                this.levelDisplay.textContent = this.currentLevelIndex + 1;
+                this.saveProgress(); // Save that we are playing this level
+
+                this.words = levelData.words.map(item => item.w.toUpperCase());
                 this.foundWords.clear();
-                this.levelDisplay.textContent = this.currentLevelData.level;
                 this.bottomInfoPanel.classList.remove('active');
                 this.mysteryWord = null;
                 this.mysteryHintEl.style.display = 'none';
 
+                // Reset UI
+                this.flashlightEl.style.display = this.mode === 'flashlight' ? 'block' : 'none';
+                this.timerEl.style.display = this.mode === 'timerush' ? 'block' : 'none';
+                if (this.mode === 'flashlight') this.initFlashlight();
+
                 // Mystery Word Logic
                 if (this.mysteryEnabled) {
-                    // Pick a word from next level or previous level as mystery
-                    const otherLevel = LEVELS_DATA[(levelIndex + 1) % LEVELS_DATA.length];
+                    const otherLevel = topic.levels[(this.currentLevelIndex + 1) % 10];
                     const mw = otherLevel.words[Math.floor(Math.random() * otherLevel.words.length)];
                     this.mysteryWord = mw.w.toUpperCase();
                     this.mysteryHintEl.style.display = 'block';
-                    this.mysteryTextEl.textContent = mw.t; // Show translation as hint
-                    // Add to words list for placement but NOT for word bank
+                    this.mysteryTextEl.textContent = mw.t;
                     this.words.push(this.mysteryWord);
                 }
 
@@ -864,7 +1347,7 @@
 
             restartLevel() {
                 this.gameOverModal.classList.remove('active');
-                this.initLevel(this.currentLevelIndex);
+                this.initLevel();
             }
 
             stopTimer() { if (this.timerInterval) clearInterval(this.timerInterval); }
@@ -968,7 +1451,6 @@
                         cell.textContent = this.grid[r][c];
                         cell.dataset.row = r;
                         cell.dataset.col = c;
-                        // Check if part of found word (needs logic if shifting, but for now simple)
                         this.gridEl.appendChild(cell);
                     }
                 }
@@ -977,13 +1459,29 @@
             renderWordBank() {
                 this.wordBankEl.innerHTML = '';
                 this.words.forEach(word => {
-                    if (word === this.mysteryWord) return; // Don't show mystery word in bank
+                    if (word === this.mysteryWord) return;
                     const el = document.createElement('div');
                     el.className = 'word-item';
                     el.textContent = word;
                     el.dataset.word = word;
                     this.wordBankEl.appendChild(el);
                 });
+            }
+
+            showWordInfo(word) {
+                const topic = TOPICS[this.currentTopicIndex];
+                const levelData = topic.levels[this.currentLevelIndex];
+
+                const wordData = levelData.words.find(w => w.w.toUpperCase() === word) ||
+                    (this.mysteryWord === word ? { w: word, t: this.mysteryTextEl.textContent, s: "Mystery Word!", st: "!" } : null);
+
+                if (wordData) {
+                    document.getElementById('panel-word').textContent = wordData.w;
+                    document.getElementById('panel-translation').textContent = wordData.t;
+                    document.getElementById('panel-sentence-sv').textContent = wordData.s;
+                    document.getElementById('panel-sentence-ar').textContent = wordData.st;
+                    this.bottomInfoPanel.classList.add('active');
+                }
             }
 
             attachEvents() {
@@ -1033,13 +1531,11 @@
             }
 
             updateSelection(currentCell) {
-                // Simple line algorithm
                 if (!this.startCell) return;
 
                 const dr = currentCell.row - this.startCell.row;
                 const dc = currentCell.col - this.startCell.col;
 
-                // Check if diagonal, horizontal or vertical
                 if (dr === 0 || dc === 0 || Math.abs(dr) === Math.abs(dc)) {
                     this.clearSelectionVisuals();
                     this.currentSelection = [];
@@ -1061,7 +1557,6 @@
                         }
                     }
 
-                    // Update Floating Label
                     const rect = currentCell.el.getBoundingClientRect();
                     this.floatingLabel.style.display = 'block';
                     this.floatingLabel.style.left = `${rect.left}px`;
@@ -1096,44 +1591,32 @@
                 this.foundWords.add(word);
                 this.soundManager.playSuccess();
 
-                // Mark grid cells
                 this.currentSelection.forEach(el => el.classList.add('found'));
 
-                // Mark word bank
                 if (word === this.mysteryWord) {
                     this.mysteryHintEl.innerHTML = `🎉 Mystery Found: <b>${word}</b>`;
                     this.mysteryHintEl.style.background = 'rgba(0, 255, 0, 0.2)';
-                    this.soundManager.playLevelComplete(); // Extra fanfare
+                    this.soundManager.playLevelComplete();
                 } else {
                     const bankItem = this.wordBankEl.querySelector(`.word-item[data-word="${word}"]`);
-                    if (bankItem) bankItem.classList.add('found');
+                    if (bankItem) {
+                        bankItem.classList.add('found');
+                        bankItem.onclick = () => this.showWordInfo(word);
+                    }
                 }
 
-                // Show Info Panel
-                const wordData = this.currentLevelData.words.find(w => w.w.toUpperCase() === word) ||
-                    (this.mysteryWord === word ? { w: word, t: this.mysteryTextEl.textContent, s: "Mystery Word!", st: "!" } : null);
+                this.showWordInfo(word);
 
-                if (wordData) {
-                    document.getElementById('panel-word').textContent = wordData.w;
-                    document.getElementById('panel-translation').textContent = wordData.t;
-                    document.getElementById('panel-sentence-sv').textContent = wordData.s;
-                    document.getElementById('panel-sentence-ar').textContent = wordData.st;
-                    this.bottomInfoPanel.classList.add('active');
-                }
-
-                // Time Rush Bonus
                 if (this.mode === 'timerush') {
                     this.timer += 10;
                     this.updateTimerDisplay();
                 }
 
-                // Check Level Complete
-                // Note: Mystery word is optional for level completion unless we want to force it.
-                // Let's say you need to find all visible words. Mystery is bonus.
                 const visibleWords = this.words.filter(w => w !== this.mysteryWord);
                 const foundVisible = visibleWords.every(w => this.foundWords.has(w));
 
                 if (foundVisible) {
+                    this.unlockNextLevel();
                     setTimeout(() => {
                         this.soundManager.playLevelComplete();
                         this.levelModal.classList.add('active');
@@ -1144,14 +1627,17 @@
             nextLevel() {
                 this.currentLevelIndex++;
                 this.levelModal.classList.remove('active');
-                this.initLevel(this.currentLevelIndex);
+                if (this.currentLevelIndex >= 10) {
+                    this.gameCompleteModal.classList.add('active');
+                } else {
+                    this.initLevel();
+                }
             }
         }
 
         // Start Game
-        let game;
         window.onload = () => {
-            game = new WordSearchGame();
+            window.game = new WordSearchGame();
         };
     </script>
 </body>

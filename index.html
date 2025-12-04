@@ -364,21 +364,45 @@
     <!-- Quiz Modal -->
     <div id="quizModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>Snabbtest / اختبار سريع</h2>
-                <button id="closeQuiz" class="close-btn">&times;</button>
+            <div class="modal-header quiz-header-compact">
+                <h2>Snabbtest</h2>
+                <div class="quiz-header-right">
+                    <div class="quiz-score-inline" id="quizScore">0</div>
+                    <button id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                            </polygon>
+                        </svg>
+                    </button>
+                    <button id="closeQuiz" class="close-btn">&times;</button>
+                </div>
             </div>
             <div class="quiz-body">
-                <div class="score-display" id="quizScore">Score: 0</div>
+                <!-- Question Card -->
                 <div class="question-card">
                     <h3 id="quizQuestion">...</h3>
+                    <p id="quizExample" class="quiz-example"></p>
                 </div>
                 <div id="quizOptions" class="quiz-options">
                     <!-- Options will be injected here -->
                 </div>
                 <div id="quizFeedback" class="quiz-feedback"></div>
                 <button id="nextQuestion" class="action-btn primary"
-                    style="display: none; margin-top: 1rem; width: 100%;">Nästa / التالي</button>
+                    style="display: none; margin-top: 0.5rem; width: 100%;">Nästa</button>
+
+                <!-- End Screen (hidden by default) -->
+                <div id="quizEndScreen" class="quiz-end-screen" style="display: none;">
+                    <div class="end-icon">🎉</div>
+                    <h3 class="end-title">Testet avslutat!</h3>
+                    <div class="end-score">
+                        <span class="end-score-value" id="endScoreValue">0</span>
+                        <span class="end-score-total">/ 10</span>
+                    </div>
+                    <p class="end-message" id="endMessage">Bra jobbat!</p>
+                    <button id="restartQuiz" class="action-btn primary">Spela igen</button>
+                </div>
             </div>
         </div>
     </div>

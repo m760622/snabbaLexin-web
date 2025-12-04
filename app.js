@@ -1154,11 +1154,23 @@ function initQuiz() {
 
 function startQuiz() {
     const quizModal = document.getElementById('quizModal');
+    const quizEndScreen = document.getElementById('quizEndScreen');
+    const questionCard = document.querySelector('.question-card');
+    const quizOptions = document.getElementById('quizOptions');
+    const nextQuestionBtn = document.getElementById('nextQuestion');
+
     quizScore = 0;
     comboCount = 0; // Reset combo
     currentQuestionIndex = 0; // Reset question index
-    document.getElementById('quizScore').textContent = `Score: 0`;
+    document.getElementById('quizScore').textContent = '0';
     quizModal.classList.remove('streak-3', 'streak-5', 'streak-10'); // Reset styles
+
+    // Hide end screen, show quiz elements
+    if (quizEndScreen) quizEndScreen.style.display = 'none';
+    if (questionCard) questionCard.style.display = 'block';
+    if (quizOptions) quizOptions.style.display = 'flex';
+    if (nextQuestionBtn) nextQuestionBtn.style.display = 'none';
+
     quizModal.style.display = 'flex';
 
     // Populate quizQuestions with a random subset of dictionaryData
@@ -1175,18 +1187,52 @@ function startQuiz() {
 let comboCount = 0;
 
 function loadQuestion() {
+    const quizEndScreen = document.getElementById('quizEndScreen');
+    const questionCard = document.querySelector('.question-card');
+    const quizOptions = document.getElementById('quizOptions');
+
     if (currentQuestionIndex >= quizQuestions.length) {
-        // Quiz finished
-        alert(`Quiz avslutat! / انتهى الاختبار!\nDitt resultat / نتيجتك: ${quizScore}/${quizQuestions.length}`);
-        document.getElementById('quizModal').style.display = 'none';
+        // Quiz finished - show end screen instead of alert
+        if (questionCard) questionCard.style.display = 'none';
+        if (quizOptions) quizOptions.style.display = 'none';
+        document.getElementById('nextQuestion').style.display = 'none';
+
+        // Show end screen
+        if (quizEndScreen) {
+            quizEndScreen.style.display = 'flex';
+            document.getElementById('endScoreValue').textContent = quizScore;
+            document.querySelector('.end-score-total').textContent = `/ ${quizQuestions.length}`;
+
+            // Set message based on score
+            const percentage = (quizScore / quizQuestions.length) * 100;
+            let message = 'Bra jobbat!';
+            if (percentage === 100) {
+                message = 'Perfekt! 🌟';
+            } else if (percentage >= 80) {
+                message = 'Utmärkt! 👏';
+            } else if (percentage >= 60) {
+                message = 'Bra jobbat! 💪';
+            } else if (percentage >= 40) {
+                message = 'Fortsätt öva! 📚';
+            } else {
+                message = 'Ge inte upp! 💡';
+            }
+            document.getElementById('endMessage').textContent = message;
+
+            // Restart button
+            document.getElementById('restartQuiz').onclick = () => {
+                startQuiz();
+            };
+        }
         return;
     }
 
     currentQuestion = quizQuestions[currentQuestionIndex];
     const quizQuestion = document.getElementById('quizQuestion');
-    const quizOptions = document.getElementById('quizOptions');
+    const quizExample = document.getElementById('quizExample');
     const quizFeedback = document.getElementById('quizFeedback');
     const nextQuestionBtn = document.getElementById('nextQuestion');
+    const quizFavBtn = document.getElementById('quizFavBtn');
 
     // Reset UI
     quizOptions.innerHTML = '';
@@ -1196,6 +1242,43 @@ function loadQuestion() {
     // Display question (Swedish word)
     const questionText = currentQuestion[COL_SWE];
     quizQuestion.textContent = questionText;
+
+    // Display example sentence if available
+    if (quizExample) {
+        const exampleText = currentQuestion[COL_EX] || '';
+        if (exampleText) {
+            quizExample.textContent = exampleText;
+            quizExample.style.display = 'block';
+        } else {
+            quizExample.style.display = 'none';
+        }
+    }
+
+    // Handle favorite button
+    if (quizFavBtn) {
+        const isFav = favorites.has(currentQuestion[COL_ID]);
+        quizFavBtn.classList.toggle('is-favorite', isFav);
+        if (isFav) {
+            quizFavBtn.querySelector('svg').setAttribute('fill', '#F59E0B');
+        } else {
+            quizFavBtn.querySelector('svg').setAttribute('fill', 'none');
+        }
+
+        quizFavBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (favorites.has(currentQuestion[COL_ID])) {
+                favorites.delete(currentQuestion[COL_ID]);
+                quizFavBtn.classList.remove('is-favorite');
+                quizFavBtn.querySelector('svg').setAttribute('fill', 'none');
+            } else {
+                favorites.add(currentQuestion[COL_ID]);
+                quizFavBtn.classList.add('is-favorite');
+                quizFavBtn.querySelector('svg').setAttribute('fill', '#F59E0B');
+                createParticles(e.clientX, e.clientY, '#F59E0B');
+            }
+            localStorage.setItem('favorites', JSON.stringify([...favorites]));
+        };
+    }
 
     // Apply dynamic font sizing based on text length
     quizQuestion.classList.remove('long-text', 'very-long-text', 'extra-long-text');
@@ -1247,7 +1330,7 @@ function checkAnswer(selectedOptionText, btn) {
     const nextQuestionBtn = document.getElementById('nextQuestion');
     const options = document.querySelectorAll('.quiz-option');
 
-    // Disable all options
+    // Disable all options from answering
     options.forEach(opt => opt.style.pointerEvents = 'none');
 
     // Compare with correct answer (Arabic text)
@@ -1275,7 +1358,7 @@ function checkAnswer(selectedOptionText, btn) {
         let feedbackText = '';
         // Don't show success message - just update score
 
-        document.getElementById('quizScore').textContent = `Score: ${quizScore}`;
+        document.getElementById('quizScore').textContent = quizScore;
         quizFeedback.textContent = '';
 
         // Particles for fun
@@ -1298,7 +1381,76 @@ function checkAnswer(selectedOptionText, btn) {
         });
     }
 
+    // After answering, make options clickable to show word info
+    options.forEach(opt => {
+        opt.style.pointerEvents = 'auto';
+        opt.style.cursor = 'pointer';
+
+        // Find the word data for this Arabic text
+        const arabicText = opt.textContent;
+        const wordData = dictionaryData.find(w => w[COL_ARB] === arabicText);
+
+        if (wordData) {
+            opt.onclick = (e) => {
+                e.stopPropagation();
+                showWordInfoTooltip(opt, wordData);
+            };
+        }
+    });
+
     nextQuestionBtn.style.display = 'block';
+}
+
+// Show word info tooltip
+function showWordInfoTooltip(element, wordData) {
+    // Remove any existing tooltip
+    const existingTooltip = document.querySelector('.quiz-word-tooltip');
+    if (existingTooltip) existingTooltip.remove();
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'quiz-word-tooltip';
+
+    const swedishWord = wordData[COL_SWE] || '';
+    const arabicWord = wordData[COL_ARB] || '';
+    const arabicDef = wordData[COL_ARB_DEF] || '';
+    const swedishExample = wordData[COL_EX] || '';
+
+    tooltip.innerHTML = `
+        <div class="tooltip-header">${swedishWord}</div>
+        <div class="tooltip-arabic-word">${arabicWord}</div>
+        ${arabicDef ? `<div class="tooltip-arabic-def"><span class="def-label">المعنى:</span> ${arabicDef}</div>` : ''}
+        ${swedishExample ? `<div class="tooltip-example"><span class="example-label">🇸🇪</span> "${swedishExample}"</div>` : ''}
+        <div class="tooltip-close">×</div>
+    `;
+
+    document.body.appendChild(tooltip);
+
+    // Position tooltip
+    const rect = element.getBoundingClientRect();
+    tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
+    tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+
+    // If tooltip goes off screen top, show below
+    if (parseFloat(tooltip.style.top) < 10) {
+        tooltip.style.top = `${rect.bottom + 10}px`;
+    }
+
+    // Close on click
+    tooltip.querySelector('.tooltip-close').onclick = () => tooltip.remove();
+
+    // Close on clicking anywhere else
+    const closeOnClick = (e) => {
+        if (!tooltip.contains(e.target) && e.target !== element) {
+            tooltip.remove();
+            document.removeEventListener('click', closeOnClick);
+        }
+    };
+    setTimeout(() => document.addEventListener('click', closeOnClick), 100);
+
+    // Auto close after 8 seconds
+    setTimeout(() => {
+        if (tooltip.parentNode) tooltip.remove();
+    }, 8000);
 }
 
 // Initialize Quiz

@@ -969,31 +969,31 @@ h1 {
     /* Smaller radius */
     padding: 0.75rem;
     /* Even smaller padding */
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-    /* Dazzling base */
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+    /* Lighter base shadow */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
     position: relative;
     border: 1px solid var(--border-subtle);
     content-visibility: auto;
     contain: layout paint style;
-    animation: dazzle-pulse 6s infinite alternate;
-    /* Slower animation */
+    animation: dazzle-pulse 10s infinite alternate;
+    /* Slower animation (was 6s) */
 }
 
 @keyframes dazzle-pulse {
     0% {
-        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+        border-color: rgba(99, 102, 241, 0.1);
     }
 
     50% {
-        box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
-        border-color: rgba(99, 102, 241, 0.6);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+        border-color: rgba(99, 102, 241, 0.3);
     }
 
     100% {
-        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
-        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+        border-color: rgba(99, 102, 241, 0.1);
     }
 }
 
@@ -1009,7 +1009,8 @@ h1 {
 }
 
 .result-number {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    /* Increased from 0.75rem */
     color: var(--text-secondary);
     opacity: 0.5;
     font-family: var(--body-font);
@@ -1031,8 +1032,8 @@ h1 {
 }
 
 .word-swe {
-    font-size: 1rem;
-    /* Even smaller */
+    font-size: 1.25rem;
+    /* Increased from 1rem */
     font-weight: 700;
     color: var(--text-main);
     line-height: 1.2;
@@ -1040,7 +1041,8 @@ h1 {
 }
 
 .word-type {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
+    /* Increased from 0.7rem */
     text-transform: capitalize;
     letter-spacing: 0.03em;
     color: var(--primary);
@@ -1053,8 +1055,8 @@ h1 {
 
 .word-arb {
     font-family: var(--arabic-font);
-    font-size: 0.9rem;
-    /* Even smaller */
+    font-size: 1.1rem;
+    /* Increased from 0.9rem */
     color: var(--text-secondary);
     text-align: right;
     margin: 0.25rem 0 0.25rem 0;
@@ -1097,7 +1099,8 @@ h1 {
 
 .ex-label {
     display: block;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    /* Increased from 0.7rem */
     text-transform: uppercase;
     color: var(--text-secondary);
     margin-bottom: 0.75rem;
@@ -1116,12 +1119,16 @@ h1 {
 .ex-swe {
     color: var(--text-main);
     margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+    /* Added explicit size */
 }
 
 .ex-arb {
     font-family: var(--arabic-font);
     color: var(--text-secondary);
     text-align: right;
+    font-size: 0.95rem;
+    /* Added explicit size */
 }
 
 .placeholder-message {

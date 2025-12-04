@@ -1,13 +1,20 @@
 :root {
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --background: #f3f4f6;
-    /* Fallback */
+    --primary: #005B96;
+    /* Synonymer Deep Blue */
+    --primary-hover: #004a7a;
+    --accent: #33A1FD;
+    /* Synonymer Bright Blue (Card Border) */
+    --background: #F9FAFB;
+    /* Clean White/Gray from image */
     --surface: #ffffff;
-    --text-main: #1f2937;
-    --text-secondary: #6b7280;
+    --surface-secondary: #EDF7FF;
+    /* Very faint blue for secondary */
+    --text-main: #2C3E50;
+    /* Dark Blue-Gray */
+    --text-secondary: #586e82;
     --border: #e5e7eb;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow: 0 2px 8px rgba(0, 91, 150, 0.1);
+    /* Subtle blue shadow */
     --radius: 1rem;
     --header-font: 'Inter', sans-serif;
     --body-font: 'Inter', sans-serif;
@@ -52,7 +59,8 @@
 
 body {
     font-family: var(--body-font);
-    background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
+    background: var(--background);
+    /* Solid color from image */
     /* Light blue gradient */
     color: var(--text-main);
     line-height: 1.6;
@@ -576,16 +584,19 @@ header {
     width: 100%;
     padding: 0.6rem 1rem;
     font-size: 0.9rem;
-    border: 1px solid var(--border);
+    border: 1px solid transparent;
+    /* Cleaner look */
     border-radius: 0.5rem;
-    background-color: var(--background);
+    background-color: var(--surface-secondary);
+    /* Ice Blue */
     color: var(--text-main);
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23205E8E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 1em;
+    transition: background-color 0.2s;
 }
 
 .menu-select:focus {
@@ -594,8 +605,10 @@ header {
 }
 
 [data-theme="dark"] .menu-select {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(30, 41, 59, 0.8);
     border-color: var(--border);
+    color: var(--text-main);
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
 
 /* Sticky Header for Search */
@@ -697,37 +710,45 @@ h1 {
 
 .search-icon {
     position: absolute;
-    right: 1.5rem;
+    right: 1.2rem;
     /* Moved to right */
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-secondary);
+    color: var(--primary);
+    /* Deep Blue Icon */
     pointer-events: none;
-    width: 1.5rem;
-    height: 1.5rem;
+    transition: color 0.3s ease;
 }
 
 #searchInput {
     width: 100%;
-    padding: 1rem 3.5rem 1rem 1.5rem;
-    font-size: 1.2rem;
-    border: 2px solid rgba(99, 102, 241, 0.3);
+    padding: 1rem 4rem 1rem 1.5rem;
+    /* More padding on right for icon */
+    font-size: 1.1rem;
+    border: 2px solid var(--accent);
+    /* Swapped: Bright Blue Border */
     border-radius: 50px;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
+    background-color: #FFFFFF;
     color: var(--text-main);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 91, 150, 0.1);
 }
 
 #searchInput:focus {
     outline: none;
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 6px 20px rgba(0, 91, 150, 0.2);
+    transform: translateY(-1px);
 }
 
 [data-theme="dark"] #searchInput {
-    background-color: rgba(31, 41, 55, 0.9);
-    border-color: rgba(129, 140, 248, 0.3);
+    background-color: var(--surface);
+    border-color: var(--border-focus);
+    color: var(--text-main);
+    box-shadow: var(--shadow);
+}
+
+[data-theme="dark"] .search-icon {
+    color: var(--text-secondary);
 }
 
 /* Removed sort-wrapper from here as it is moved to top-nav */
@@ -966,18 +987,16 @@ h1 {
 .card {
     background: var(--surface);
     border-radius: 0.75rem;
-    /* Smaller radius */
-    padding: 0.75rem;
-    /* Even smaller padding */
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
-    /* Lighter base shadow */
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    padding: 1rem;
+    /* Increased padding slightly */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
-    border: 1px solid var(--border-subtle);
+    border: 2px solid var(--primary);
+    /* Swapped: Deep Blue Border */
     content-visibility: auto;
     contain: layout paint style;
-    animation: dazzle-pulse 10s infinite alternate;
-    /* Slower animation (was 6s) */
+    /* Removed dazzle animation for cleaner look */
 }
 
 @keyframes dazzle-pulse {
@@ -1020,7 +1039,8 @@ h1 {
 .card:hover {
     transform: translateY(-4px) scale(1.01);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    border-color: var(--primary);
+    border-color: #33A1FD;
+    /* Bright Sky Blue on Hover */
 }
 
 .card-header {

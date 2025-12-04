@@ -1,19 +1,19 @@
 // Game Logic for Snabba Lexin Games
 console.log("games.js LOADED and EXECUTING");
 
-// Constants (matching app.js)
-// Constants (matching app.js)
+// Constants (matching app.js exactly)
 const COL_ID = 0;
 const COL_TYPE = 1;
 const COL_SWE = 2;
 const COL_ARB = 3;
 const COL_ARB_DEF = 4;
-const COL_SWE_DEF = 5;
+const COL_DEF = 5;      // Swedish Definition (was COL_SWE_DEF)
 const COL_FORMS = 6;
-const COL_EX_SWE = 7;
+const COL_EX = 7;       // Swedish Example (was COL_EX_SWE)
 const COL_EX_ARB = 8;
-const COL_IDIOM_SWE = 9;
+const COL_IDIOM = 9;    // Swedish Idiom (was COL_IDIOM_SWE)
 const COL_IDIOM_ARB = 10;
+
 
 // State
 let gameScore = 0;

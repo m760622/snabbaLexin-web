@@ -7,6 +7,11 @@ let renderedCount = 0; // Track how many are currently shown
 let favorites = new Set(); // Store favorite IDs
 const BATCH_SIZE = 50; // Number of items to load per batch
 
+// Quiz State
+let quizQuestions = [];
+let currentQuestionIndex = 0;
+let currentQuestion = null;
+
 // DOM Elements
 const searchInput = document.getElementById('searchInput');
 const sortSelect = document.getElementById('sortSelect');
@@ -21,11 +26,11 @@ const COL_TYPE = 1;
 const COL_SWE = 2;
 const COL_ARB = 3;
 const COL_ARB_DEF = 4;
-const COL_SWE_DEF = 5;
+const COL_DEF = 5; // Swedish Definition
 const COL_FORMS = 6;
-const COL_EX_SWE = 7;
+const COL_EX = 7; // Swedish Example
 const COL_EX_ARB = 8;
-const COL_IDIOM_SWE = 9;
+const COL_IDIOM = 9; // Swedish Idiom
 const COL_IDIOM_ARB = 10;
 
 // Helper: Normalize Arabic (Remove Tashkeel)
@@ -68,11 +73,12 @@ async function init() {
         }
     }
 
-    // PWA Install Prompt Logic
+    // PWA Install Prompt Logic (consolidated)
     let deferredPrompt;
     const pwaPrompt = document.getElementById('pwa-install-prompt');
-    const installBtn = document.getElementById('pwa-install-btn');
+    const pwaInstallBtn = document.getElementById('pwa-install-btn');
     const laterBtn = document.getElementById('pwa-later-btn');
+    const installAppBtn = document.getElementById('installApp');
 
     window.addEventListener('beforeinstallprompt', (e) => {
         // Prevent Chrome 67 and earlier from automatically showing the prompt
@@ -83,21 +89,38 @@ async function init() {
         if (pwaPrompt) {
             pwaPrompt.style.display = 'block';
         }
+        if (installAppBtn) {
+            installAppBtn.style.display = 'flex';
+        }
     });
 
-    if (installBtn) {
-        installBtn.addEventListener('click', async () => {
+    // PWA Install Button Handler
+    if (pwaInstallBtn) {
+        pwaInstallBtn.addEventListener('click', async () => {
             if (pwaPrompt) {
                 pwaPrompt.style.display = 'none';
             }
-            // Show the install prompt
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                // Wait for the user to respond to the prompt
                 const { outcome } = await deferredPrompt.userChoice;
                 console.log(`User response to the install prompt: ${outcome}`);
-                // We've used the prompt, and can't use it again, throw it away
                 deferredPrompt = null;
+                if (installAppBtn) {
+                    installAppBtn.style.display = 'none';
+                }
+            }
+        });
+    }
+
+    // Alternative install button (for header)
+    if (installAppBtn) {
+        installAppBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log(`User response to the install prompt: ${outcome}`);
+                deferredPrompt = null;
+                installAppBtn.style.display = 'none';
             }
         });
     }
@@ -247,12 +270,36 @@ async function init() {
         setTimeout(() => {
             searchInput.classList.add('pulse-on-load');
         }, 500);
-        sortSelect.addEventListener('change', () => handleSearch({ target: searchInput }));
-        typeSelect.addEventListener('change', () => handleSearch({ target: searchInput }));
-        document.getElementById('searchMode').addEventListener('change', () => handleSearch({ target: searchInput }));
 
-        // Load data first
-        await loadDictionaryData();
+        // Clear Button Logic
+        const clearSearch = document.getElementById('clearSearch');
+        if (clearSearch) {
+            searchInput.addEventListener('input', () => {
+                clearSearch.style.display = searchInput.value ? 'flex' : 'none';
+            });
+
+            clearSearch.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInput.focus();
+                clearSearch.style.display = 'none';
+                updateResults();
+            });
+        }
+
+        // Search Listener
+        searchInput.addEventListener('input', debounce(() => {
+            updateResults();
+        }, 300));
+
+        // Sort Listener
+        sortSelect.addEventListener('change', () => {
+            updateResults();
+        });
+
+        // Type Filter Listener
+        typeSelect.addEventListener('change', () => {
+            updateResults();
+        });
 
         // Initialize Word of the Day
         initWordOfTheDay();
@@ -263,6 +310,11 @@ async function init() {
                 renderNextBatch();
             }
         });
+
+        // Save scroll position (debounced)
+        window.addEventListener('scroll', debounce(() => {
+            sessionStorage.setItem('scrollPosition', window.scrollY);
+        }, 100));
 
         // Restore state
         const savedQuery = sessionStorage.getItem('searchQuery');
@@ -281,41 +333,10 @@ async function init() {
             }, 100);
         }
 
-        // Load data
-
-
-        // Initialize Word of the Day
-
-
-        // Setup Infinite Scroll
-        window.addEventListener('scroll', debounce(() => {
-            sessionStorage.setItem('scrollPosition', window.scrollY);
-        }, 100));
-
-        // PWA Install Logic
-        let deferredPrompt;
-        const installBtn = document.getElementById('installApp');
+        // iOS Install Prompt
         const iosPrompt = document.getElementById('iosInstallPrompt');
         const closeIosPrompt = document.getElementById('closeIosPrompt');
 
-        // Android/Desktop Install Prompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.style.display = 'flex';
-        });
-
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                console.log(`User response to the install prompt: ${outcome}`);
-                deferredPrompt = null;
-                installBtn.style.display = 'none';
-            }
-        });
-
-        // iOS Install Prompt
         // Detects if device is on iOS
         const isIos = () => {
             const userAgent = window.navigator.userAgent.toLowerCase();
@@ -339,19 +360,19 @@ async function init() {
         }
 
         // Checks if should display install popup notification:
-        if (isIos() && !isInStandaloneMode()) {
+        if (iosPrompt && closeIosPrompt && isIos() && !isInStandaloneMode()) {
             // Show prompt after a delay
             setTimeout(() => {
                 iosPrompt.style.display = 'block';
                 // Small delay to allow display:block to apply before adding class for animation
                 setTimeout(() => iosPrompt.classList.add('visible'), 10);
             }, 2000);
-        }
 
-        closeIosPrompt.addEventListener('click', () => {
-            iosPrompt.classList.remove('visible');
-            setTimeout(() => iosPrompt.style.display = 'none', 400);
-        });
+            closeIosPrompt.addEventListener('click', () => {
+                iosPrompt.classList.remove('visible');
+                setTimeout(() => iosPrompt.style.display = 'none', 400);
+            });
+        }
 
     } catch (error) {
         console.error(error);
@@ -412,11 +433,11 @@ async function buildSearchIndex() {
                 (item[COL_SWE] || '') + ' ' +
                 (item[COL_ARB] || '') + ' ' +
                 (item[COL_FORMS] || '') + ' ' +
-                (item[COL_SWE_DEF] || '') + ' ' +
+                (item[COL_DEF] || '') + ' ' +
                 (item[COL_ARB_DEF] || '') + ' ' +
-                (item[COL_EX_SWE] || '') + ' ' +
+                (item[COL_EX] || '') + ' ' +
                 (item[COL_EX_ARB] || '') + ' ' +
-                (item[COL_IDIOM_SWE] || '') + ' ' +
+                (item[COL_IDIOM] || '') + ' ' +
                 (item[COL_IDIOM_ARB] || '')
             );
         }
@@ -493,11 +514,11 @@ function handleSearch(e) {
                     (item[COL_SWE] || '') + ' ' +
                     (item[COL_ARB] || '') + ' ' +
                     (item[COL_FORMS] || '') + ' ' +
-                    (item[COL_SWE_DEF] || '') + ' ' +
+                    (item[COL_DEF] || '') + ' ' +
                     (item[COL_ARB_DEF] || '') + ' ' +
-                    (item[COL_EX_SWE] || '') + ' ' +
+                    (item[COL_EX] || '') + ' ' +
                     (item[COL_EX_ARB] || '') + ' ' +
-                    (item[COL_IDIOM_SWE] || '') + ' ' +
+                    (item[COL_IDIOM] || '') + ' ' +
                     (item[COL_IDIOM_ARB] || '')
                 );
                 if (content.includes(query)) {
@@ -552,7 +573,89 @@ function handleSearch(e) {
     updateResults(results, sortMethod, query);
 }
 
-function updateResults(results, sortMethod, query) {
+function updateResults(results = null, sortMethod = null, query = null) {
+    // If no results provided, perform search based on current state
+    if (results === null) {
+        const rawQuery = searchInput.value.trim();
+        query = normalizeArabic(rawQuery);
+        sortMethod = sortSelect.value;
+        const searchMode = document.getElementById('searchMode').value;
+        const selectedType = typeSelect.value;
+
+        // Perform search
+        if (rawQuery.length < 2 && selectedType === 'all' && searchMode !== 'favorites') {
+            resultsArea.innerHTML = `
+                <div class="placeholder-message">
+                    Börja skriva för att söka / ابدأ الكتابة للبحث
+                </div>
+            `;
+            currentResults = [];
+            statsElement.textContent = `${dictionaryData.length.toLocaleString()} ord laddade / كلمة تم تحميلها`;
+            return;
+        }
+
+        // Use handleSearch logic to get results
+        results = [];
+        if (searchMode === 'favorites') {
+            results = dictionaryData.filter(item => favorites.has(String(item[COL_ID])));
+            if (rawQuery.length > 0) {
+                const lowerQuery = query.toLowerCase();
+                results = results.filter(item => {
+                    const content = normalizeArabic(
+                        (item[COL_SWE] || '') + ' ' +
+                        (item[COL_ARB] || '')
+                    );
+                    return content.includes(lowerQuery);
+                });
+            }
+        } else if (rawQuery.length === 0) {
+            results = dictionaryData.slice();
+        } else if (searchMode === 'general') {
+            for (let i = 0; i < dictionaryData.length; i++) {
+                const item = dictionaryData[i];
+                if (!item) continue;
+                if (searchIndex[i] && searchIndex[i].includes(query)) {
+                    results.push(item);
+                }
+            }
+        } else if (searchMode === 'exact') {
+            const exactQuery = rawQuery.toLowerCase();
+            for (let i = 0; i < dictionaryData.length; i++) {
+                const item = dictionaryData[i];
+                if (!item) continue;
+                const content = (
+                    (item[COL_SWE] || '') + ' ' +
+                    (item[COL_ARB] || '') + ' ' +
+                    (item[COL_FORMS] || '')
+                ).toLowerCase();
+                if (content.includes(exactQuery)) {
+                    results.push(item);
+                }
+            }
+        } else {
+            for (let i = 0; i < dictionaryData.length; i++) {
+                const item = dictionaryData[i];
+                if (!item) continue;
+                const swe = normalizeArabic(item[COL_SWE] || '');
+                const arb = normalizeArabic(item[COL_ARB] || '');
+                if (searchMode === 'start') {
+                    if (swe.startsWith(query) || arb.startsWith(query)) {
+                        results.push(item);
+                    }
+                } else if (searchMode === 'end') {
+                    if (swe.endsWith(query) || arb.endsWith(query)) {
+                        results.push(item);
+                    }
+                }
+            }
+        }
+
+        // Filter by Type
+        if (selectedType !== 'all') {
+            results = results.filter(item => item[COL_TYPE] === selectedType);
+        }
+    }
+
     // Update Stats with Result Count
     statsElement.textContent = `Hittade ${results.length.toLocaleString()} resultat / تم العثور على ${results.length.toLocaleString()} نتيجة`;
 
@@ -579,12 +682,12 @@ function updateResults(results, sortMethod, query) {
             // Richness: Sort by number of non-empty fields
             const countFields = (item) => {
                 let count = 0;
-                if (item[COL_SWE_DEF]) count++;
+                if (item[COL_DEF]) count++;
                 if (item[COL_ARB_DEF]) count++;
                 if (item[COL_FORMS]) count++;
-                if (item[COL_EX_SWE]) count++;
+                if (item[COL_EX]) count++;
                 if (item[COL_EX_ARB]) count++;
-                if (item[COL_IDIOM_SWE]) count++;
+                if (item[COL_IDIOM]) count++;
                 if (item[COL_IDIOM_ARB]) count++;
                 return count;
             };
@@ -646,12 +749,12 @@ function createCard(item, index = 0) {
     const swe = item[COL_SWE] || '';
     const arb = item[COL_ARB] || '';
     const type = item[COL_TYPE] ? item[COL_TYPE].replace('.', '') : '';
-    const sweDef = item[COL_SWE_DEF] || '';
+    const sweDef = item[COL_DEF] || '';
     const arbDef = item[COL_ARB_DEF] || '';
     const forms = item[COL_FORMS] || '';
-    const exSwe = item[COL_EX_SWE] || '';
+    const exSwe = item[COL_EX] || '';
     const exArb = item[COL_EX_ARB] || '';
-    const idiomSwe = item[COL_IDIOM_SWE] || '';
+    const idiomSwe = item[COL_IDIOM] || '';
     const idiomArb = item[COL_IDIOM_ARB] || '';
 
     // Examples
@@ -692,7 +795,7 @@ function createCard(item, index = 0) {
             <div class="card" style="view-transition-name: card-${id}">
                 <div class="card-header">
                     <h2 class="word-swe" dir="ltr">${swe}</h2>
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this)" aria-label="Spara som favorit">
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this, event)" aria-label="Spara som favorit">
                         ${starIcon}
                     </button>
                 </div>
@@ -756,23 +859,14 @@ function showToast(message) {
 
 // --- GAME LOGIC MOVED TO games.js ---
 
-// Register Service Worker
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(registration => {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            })
-            .catch(err => {
-                console.log('ServiceWorker registration failed: ', err);
-            });
-    });
-}
+
 // Toggle Favorite
-window.toggleFavorite = function (id, btn) {
+window.toggleFavorite = function (id, btn, event) {
     // Prevent card click
-    event.preventDefault();
-    event.stopPropagation();
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
 
     if (favorites.has(id)) {
         favorites.delete(id);
@@ -848,31 +942,46 @@ function initWordOfTheDay() {
         console.warn('Word of the Day element not found');
         return;
     }
+
+    // Get all elements
     const wodSwe = wodCard.querySelector('.wod-swe');
     const wodArb = wodCard.querySelector('.wod-arb');
     const wodAction = wodCard.querySelector('.wod-action');
+    const wodTypeBadge = wodCard.querySelector('.wod-type-badge');
 
-    // Check if closed today (Logic removed as close button is gone)
-    const today = new Date().toISOString().split('T')[0];
-    // const lastClosed = localStorage.getItem('wodClosedDate');
+    // Forms elements
+    const wodFormsPreview = wodCard.querySelector('.wod-forms-preview');
+    const wodFormsChips = wodCard.querySelector('.wod-forms-chips');
 
+    // Definition elements - Bilingual
+    const wodDefPreview = wodCard.querySelector('.wod-def-preview');
+    const wodDefSwe = wodCard.querySelector('.wod-def-swe');
+    const wodDefArbPreview = wodCard.querySelector('.wod-def-arb-preview');
+    const wodDefArbText = wodCard.querySelector('.wod-def-arb-text');
 
+    // Example elements - Bilingual
+    const wodExamplePreview = wodCard.querySelector('.wod-example-preview');
+    const wodExSwe = wodCard.querySelector('.wod-ex-swe');
+    const wodExampleArbPreview = wodCard.querySelector('.wod-example-arb-preview');
+    const wodExArb = wodCard.querySelector('.wod-ex-arb');
 
-    // Pick a word based on date seed
-    // Simple hash of date string to get index
-    console.log('WOD: Calculating hash for date:', today);
-    let hash = 0;
-    for (let i = 0; i < today.length; i++) {
-        hash = ((hash << 5) - hash) + today.charCodeAt(i);
-        hash |= 0;
-    }
+    // Idiom elements
+    const wodIdiomPreview = wodCard.querySelector('.wod-idiom-preview');
+    const wodIdiomSwe = wodCard.querySelector('.wod-idiom-swe');
+    const wodIdiomArb = wodCard.querySelector('.wod-idiom-arb');
+
+    // Pick a NEW random word every time (not daily)
+    // Use timestamp for randomness
+    const timestamp = Date.now();
+    console.log('WOD: Generating random word for timestamp:', timestamp);
 
     if (!dictionaryData || dictionaryData.length === 0) {
         console.error('WOD: dictionaryData is empty!');
         return;
     }
 
-    const index = Math.abs(hash) % dictionaryData.length;
+    // Random index based on current timestamp
+    const index = Math.floor(Math.random() * dictionaryData.length);
     const word = dictionaryData[index];
     console.log('WOD: Selected word index:', index, word);
 
@@ -881,9 +990,89 @@ function initWordOfTheDay() {
         return;
     }
 
-    // Render
+    // Render main words
     wodSwe.textContent = word[COL_SWE];
     wodArb.textContent = word[COL_ARB];
+
+    // Apply dynamic font sizing based on Swedish word length (same as Snabbtest)
+    wodSwe.classList.remove('long-text', 'very-long-text', 'extra-long-text');
+    const sweText = word[COL_SWE] || '';
+    if (sweText.length > 12) {
+        wodSwe.classList.add('extra-long-text');
+    } else if (sweText.length > 9) {
+        wodSwe.classList.add('very-long-text');
+    } else if (sweText.length > 5) {
+        wodSwe.classList.add('long-text');
+    }
+
+    // Render word type badge
+    if (word[COL_TYPE] && wodTypeBadge) {
+        wodTypeBadge.textContent = word[COL_TYPE].replace('.', '');
+    }
+
+    // Render forms preview with chips
+    if (word[COL_FORMS] && wodFormsPreview && wodFormsChips) {
+        const formsArray = word[COL_FORMS].split(',').map(f => f.trim()).filter(f => f);
+        if (formsArray.length > 0) {
+            // Show max 5 forms in preview
+            const previewForms = formsArray.slice(0, 5);
+            wodFormsChips.innerHTML = previewForms.map(form =>
+                `<span class="wod-form-chip">${form}</span>`
+            ).join('');
+            if (formsArray.length > 5) {
+                wodFormsChips.innerHTML += `<span class="wod-form-chip">+${formsArray.length - 5}</span>`;
+            }
+            wodFormsPreview.style.display = 'block';
+        }
+    }
+
+    // Show Swedish definition preview if available
+    if (word[COL_DEF] && wodDefPreview && wodDefSwe) {
+        const defText = word[COL_DEF];
+        const truncated = defText.length > 150 ? defText.substring(0, 150) + '...' : defText;
+        wodDefSwe.textContent = truncated;
+        wodDefPreview.style.display = 'block';
+    }
+
+    // Show Arabic definition preview if available
+    if (word[COL_ARB_DEF] && wodDefArbPreview && wodDefArbText) {
+        const defText = word[COL_ARB_DEF];
+        const truncated = defText.length > 150 ? defText.substring(0, 150) + '...' : defText;
+        wodDefArbText.textContent = truncated;
+        wodDefArbPreview.style.display = 'block';
+    }
+
+    // Show Swedish example preview if available
+    if (word[COL_EX] && wodExamplePreview && wodExSwe) {
+        const exText = word[COL_EX];
+        const truncated = exText.length > 120 ? exText.substring(0, 120) + '...' : exText;
+        wodExSwe.textContent = truncated;
+        wodExamplePreview.style.display = 'block';
+    }
+
+    // Show Arabic example preview if available
+    if (word[COL_EX_ARB] && wodExampleArbPreview && wodExArb) {
+        const exText = word[COL_EX_ARB];
+        const truncated = exText.length > 120 ? exText.substring(0, 120) + '...' : exText;
+        wodExArb.textContent = truncated;
+        wodExampleArbPreview.style.display = 'block';
+    }
+
+    // Show idioms preview if available
+    if ((word[COL_IDIOM] || word[COL_IDIOM_ARB]) && wodIdiomPreview) {
+        if (word[COL_IDIOM] && wodIdiomSwe) {
+            const idiomText = word[COL_IDIOM];
+            const truncated = idiomText.length > 100 ? idiomText.substring(0, 100) + '...' : idiomText;
+            wodIdiomSwe.textContent = truncated;
+        }
+        if (word[COL_IDIOM_ARB] && wodIdiomArb) {
+            const idiomText = word[COL_IDIOM_ARB];
+            const truncated = idiomText.length > 100 ? idiomText.substring(0, 100) + '...' : idiomText;
+            wodIdiomArb.textContent = truncated;
+        }
+        wodIdiomPreview.style.display = 'block';
+    }
+
 
     // Add Save Button if not already there
     let saveBtn = wodCard.querySelector('.wod-save-btn');
@@ -919,45 +1108,11 @@ function initWordOfTheDay() {
     wodCard.style.display = 'block';
 
     // Actions
-    const wodModal = document.getElementById('wodModal');
-    const closeWod = document.getElementById('closeWod');
-    const wodModalContent = document.getElementById('wodModalContent');
-
-    if (wodModal && closeWod && wodModalContent) {
+    // Direct navigation to details page
+    if (wodAction) {
         wodAction.onclick = (e) => {
             e.preventDefault();
-
-            // Render content (reuse createCard logic but without the link wrapper)
-            // We want the card look but inside the modal
-            const cardHtml = createCard(word);
-            // Strip the outer <a> tag to make it static
-            const contentHtml = cardHtml.replace(/^<a[^>]*>|<\/a>$/g, '');
-
-            wodModalContent.innerHTML = contentHtml;
-
-            // Remove the hover effect class or style if needed
-            const card = wodModalContent.querySelector('.card');
-            if (card) {
-                card.style.transform = 'none';
-                card.style.boxShadow = 'none';
-                card.style.border = 'none'; // Clean look inside modal
-            }
-
-            wodModal.style.display = 'flex';
-        };
-
-        closeWod.onclick = () => {
-            wodModal.style.display = 'none';
-        };
-
-        window.addEventListener('click', (e) => {
-            if (e.target === wodModal) {
-                wodModal.style.display = 'none';
-            }
-        });
-    } else {
-        // Fallback
-        wodAction.onclick = () => {
+            // Navigate directly to the details page
             window.location.href = `details.html?id=${word[COL_ID]}`;
         };
     }
@@ -965,7 +1120,6 @@ function initWordOfTheDay() {
 
 // Quiz Mode Logic
 let quizScore = 0;
-let currentQuestion = null;
 
 function initQuiz() {
     const quizBtn = document.getElementById('quizBtn');
@@ -991,7 +1145,10 @@ function initQuiz() {
     }
 
     if (nextQuestionBtn) {
-        nextQuestionBtn.addEventListener('click', loadQuestion);
+        nextQuestionBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            loadQuestion();
+        });
     }
 }
 
@@ -999,15 +1156,33 @@ function startQuiz() {
     const quizModal = document.getElementById('quizModal');
     quizScore = 0;
     comboCount = 0; // Reset combo
+    currentQuestionIndex = 0; // Reset question index
     document.getElementById('quizScore').textContent = `Score: 0`;
     quizModal.classList.remove('streak-3', 'streak-5', 'streak-10'); // Reset styles
     quizModal.style.display = 'flex';
+
+    // Populate quizQuestions with a random subset of dictionaryData
+    quizQuestions = [];
+    const numQuestions = Math.min(10, dictionaryData.length); // Max 10 questions or less if dictionary is small
+    const shuffledData = [...dictionaryData].sort(() => Math.random() - 0.5);
+    for (let i = 0; i < numQuestions; i++) {
+        quizQuestions.push(shuffledData[i]);
+    }
+
     loadQuestion();
 }
 
 let comboCount = 0;
 
 function loadQuestion() {
+    if (currentQuestionIndex >= quizQuestions.length) {
+        // Quiz finished
+        alert(`Quiz avslutat! / انتهى الاختبار!\nDitt resultat / نتيجتك: ${quizScore}/${quizQuestions.length}`);
+        document.getElementById('quizModal').style.display = 'none';
+        return;
+    }
+
+    currentQuestion = quizQuestions[currentQuestionIndex];
     const quizQuestion = document.getElementById('quizQuestion');
     const quizOptions = document.getElementById('quizOptions');
     const quizFeedback = document.getElementById('quizFeedback');
@@ -1018,38 +1193,56 @@ function loadQuestion() {
     quizFeedback.textContent = '';
     nextQuestionBtn.style.display = 'none';
 
-    // Pick random word
-    const correctIndex = Math.floor(Math.random() * dictionaryData.length);
-    const correctWord = dictionaryData[correctIndex];
-    currentQuestion = correctWord;
+    // Display question (Swedish word)
+    const questionText = currentQuestion[COL_SWE];
+    quizQuestion.textContent = questionText;
 
-    // Pick 3 distractors
-    const options = [correctWord];
-    while (options.length < 4) {
+    // Apply dynamic font sizing based on text length
+    quizQuestion.classList.remove('long-text', 'very-long-text', 'extra-long-text');
+    if (questionText.length > 12) {
+        quizQuestion.classList.add('extra-long-text');
+    } else if (questionText.length > 9) {
+        quizQuestion.classList.add('very-long-text');
+    } else if (questionText.length > 5) {
+        quizQuestion.classList.add('long-text');
+    }
+
+    // Generate 4 Arabic options (1 correct + 3 random wrong)
+    const correctAnswer = currentQuestion[COL_ARB];
+    const wrongAnswers = [];
+
+    // Get 3 random wrong answers
+    while (wrongAnswers.length < 3) {
         const randomIdx = Math.floor(Math.random() * dictionaryData.length);
         const randomWord = dictionaryData[randomIdx];
-        if (randomWord[COL_ID] !== correctWord[COL_ID] && !options.includes(randomWord)) {
-            options.push(randomWord);
+        // Ensure wrong answer is not the correct one and not already in wrongAnswers
+        if (randomWord[COL_ID] !== currentQuestion[COL_ID] && !wrongAnswers.includes(randomWord[COL_ARB])) {
+            wrongAnswers.push(randomWord[COL_ARB]);
         }
     }
 
-    // Shuffle options
-    options.sort(() => Math.random() - 0.5);
+    // Shuffle and display options
+    const allOptions = [correctAnswer, ...wrongAnswers].sort(() => Math.random() - 0.5);
+    quizOptions.innerHTML = '';
 
-    // Render Question (Swedish)
-    quizQuestion.textContent = correctWord[COL_SWE];
-
-    // Render Options (Arabic)
-    options.forEach(option => {
+    allOptions.forEach((option, index) => {
         const btn = document.createElement('button');
         btn.className = 'quiz-option';
-        btn.textContent = option[COL_ARB];
+        btn.textContent = option;
+
+        // Apply dynamic font sizing based on text length
+        if (option.length > 60) {
+            btn.classList.add('very-long-text');
+        } else if (option.length > 40) {
+            btn.classList.add('long-text');
+        }
+
         btn.onclick = () => checkAnswer(option, btn);
         quizOptions.appendChild(btn);
     });
 }
 
-function checkAnswer(selectedOption, btn) {
+function checkAnswer(selectedOptionText, btn) {
     const quizFeedback = document.getElementById('quizFeedback');
     const nextQuestionBtn = document.getElementById('nextQuestion');
     const options = document.querySelectorAll('.quiz-option');
@@ -1057,7 +1250,10 @@ function checkAnswer(selectedOption, btn) {
     // Disable all options
     options.forEach(opt => opt.style.pointerEvents = 'none');
 
-    if (selectedOption[COL_ID] === currentQuestion[COL_ID]) {
+    // Compare with correct answer (Arabic text)
+    const correctAnswer = currentQuestion[COL_ARB];
+
+    if (selectedOptionText === correctAnswer) {
         // Correct
         btn.classList.add('correct', 'correct-shake'); // Add shake animation
         quizScore++;
@@ -1076,11 +1272,11 @@ function checkAnswer(selectedOption, btn) {
             modal.classList.add('streak-3');
         }
 
-        let feedbackText = 'Rätt! / صحيح! 🎉';
-        if (comboCount > 1) feedbackText += ` (Combo x${comboCount} 🔥)`;
+        let feedbackText = '';
+        // Don't show success message - just update score
 
         document.getElementById('quizScore').textContent = `Score: ${quizScore}`;
-        quizFeedback.innerHTML = `<span style="color: #10B981; font-weight: bold;">${feedbackText}</span>`;
+        quizFeedback.textContent = '';
 
         // Particles for fun
         const rect = btn.getBoundingClientRect();
@@ -1091,11 +1287,12 @@ function checkAnswer(selectedOption, btn) {
         comboCount = 0; // Reset combo
         document.getElementById('quizModal').classList.remove('streak-3', 'streak-5', 'streak-10');
 
-        quizFeedback.innerHTML = `<span style="color: #EF4444; font-weight: bold;">Fel! Rätt svar var: ${currentQuestion[COL_ARB]}</span>`;
+        // Don't show the wrong answer - just clear feedback
+        quizFeedback.textContent = '';
 
-        // Highlight correct answer
+        // Highlight correct answer silently
         options.forEach(opt => {
-            if (opt.textContent === currentQuestion[COL_ARB]) {
+            if (opt.textContent === correctAnswer) {
                 opt.classList.add('correct');
             }
         });
@@ -1147,6 +1344,11 @@ function initPhysicsLogo() {
 
     const chars = title.querySelectorAll('.physics-char');
 
+    // Only enable on desktop (to avoid issues on mobile)
+    if (window.innerWidth < 768) return;
+
+    let resetTimeout;
+
     document.addEventListener('mousemove', (e) => {
         const mouseX = e.clientX;
         const mouseY = e.clientY;
@@ -1167,12 +1369,26 @@ function initPhysicsLogo() {
                 const moveX = Math.cos(angle) * force * -20; // Move away
                 const moveY = Math.sin(angle) * force * -20;
 
+                char.style.transition = 'transform 0.1s ease-out, color 0.2s';
                 char.style.transform = `translate(${moveX}px, ${moveY}px)`;
                 char.style.color = '#F59E0B'; // Highlight color
             } else {
+                char.style.transition = 'transform 0.3s ease-out, color 0.3s';
                 char.style.transform = 'translate(0, 0)';
                 char.style.color = ''; // Reset color
             }
         });
+
+        // Clear any existing timeout
+        clearTimeout(resetTimeout);
+
+        // Reset all characters after 2 seconds of no mouse movement
+        resetTimeout = setTimeout(() => {
+            chars.forEach(char => {
+                char.style.transition = 'transform 0.5s ease-out, color 0.5s';
+                char.style.transform = 'translate(0, 0)';
+                char.style.color = '';
+            });
+        }, 2000);
     });
 }

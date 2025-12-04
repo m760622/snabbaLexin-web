@@ -83,66 +83,98 @@ function renderDetails(item) {
     const idiomSwe = item[COL_IDIOM_SWE] || '';
     const idiomArb = item[COL_IDIOM_ARB] || '';
 
-    // Examples
+    // Hero Section
+    const heroHtml = `
+        <div class="details-hero">
+            <div class="details-hero-content">
+                <div class="word-display-main">
+                    <h1 class="word-swe-hero">${swe}</h1>
+                    ${arb ? `<div class="word-arb-hero">${arb}</div>` : ''}
+                    ${type ? `<span class="word-type-badge">${type}</span>` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Definitions Section
+    let definitionsHtml = '';
+    if (sweDef || arbDef) {
+        definitionsHtml = `
+            <div class="details-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📖</span>
+                    Definition / تعريف
+                </h2>
+                <div class="def-content">
+                    <div class="def-item">
+                        ${sweDef ? `<div class="def-swe-detail">${sweDef}</div>` : ''}
+                        ${arbDef ? `<div class="def-arb-detail">${arbDef}</div>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Forms Section
+    let formsHtml = '';
+    if (forms) {
+        const formsArray = forms.split(',').map(f => f.trim()).filter(f => f);
+        if (formsArray.length > 0) {
+            const formsChips = formsArray.map(form => `<span class="form-chip">${form}</span>`).join('');
+            formsHtml = `
+                <div class="details-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🔤</span>
+                        Böjningar / تصريفات
+                    </h2>
+                    <div class="forms-grid">
+                        ${formsChips}
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // Examples Section
     let examplesHtml = '';
     if (exSwe || exArb) {
         examplesHtml = `
-            <div class="examples">
-                <span class="ex-label">Exempel / أمثلة</span>
-                <div class="ex-item">
-                    ${exSwe ? `<div class="ex-swe" style="font-size: 1.1rem;">${exSwe}</div>` : ''}
-                    ${exArb ? `<div class="ex-arb" style="font-size: 1.1rem;">${exArb}</div>` : ''}
+            <div class="details-section">
+                <h2 class="section-title">
+                    <span class="section-icon">💡</span>
+                    Exempel / أمثلة
+                </h2>
+                <div class="example-card">
+                    ${exSwe ? `<div class="ex-swe-detail">${exSwe}</div>` : ''}
+                    ${exArb ? `<div class="ex-arb-detail">${exArb}</div>` : ''}
                 </div>
             </div>
         `;
     }
 
-    // Idioms
+    // Idioms Section
     let idiomsHtml = '';
     if (idiomSwe || idiomArb) {
         idiomsHtml = `
-            <div class="examples" style="margin-top: 1rem; background: var(--background);">
-                <span class="ex-label">Uttryck / تعبير</span>
-                <div class="ex-item">
-                    ${idiomSwe ? `<div class="ex-swe" style="font-size: 1.1rem;">${idiomSwe}</div>` : ''}
-                    ${idiomArb ? `<div class="ex-arb" style="font-size: 1.1rem;">${idiomArb}</div>` : ''}
+            <div class="details-section">
+                <h2 class="section-title">
+                    <span class="section-icon">💬</span>
+                    Uttryck / تعبير
+                </h2>
+                <div class="example-card">
+                    ${idiomSwe ? `<div class="ex-swe-detail">${idiomSwe}</div>` : ''}
+                    ${idiomArb ? `<div class="ex-arb-detail">${idiomArb}</div>` : ''}
                 </div>
-            </div>
-        `;
-    }
-
-    // Forms
-    let formsHtml = '';
-    if (forms) {
-        formsHtml = `
-            <div style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">
-                <strong>Böjningar / تصريفات:</strong> ${forms}
             </div>
         `;
     }
 
     const html = `
-        <div class="card" style="padding: 2rem;">
-            <div class="card-header">
-                <div class="word-swe" style="font-size: 2rem;">${swe}</div>
-                ${type ? `<div class="word-type" style="font-size: 1rem;">${type}</div>` : ''}
-            </div>
-            
-            ${arb ? `<div class="word-arb" style="font-size: 1.5rem; margin: 1rem 0;">${arb}</div>` : ''}
-            
-            <div class="definitions" style="margin: 1.5rem 0;">
-                ${sweDef || arbDef ? `
-                    <div class="def-row">
-                        ${sweDef ? `<div class="def-swe" style="font-size: 1.2rem;">${sweDef}</div>` : ''}
-                        ${arbDef ? `<div class="def-arb" style="font-size: 1.2rem; margin-top: 0.5rem;">${arbDef}</div>` : ''}
-                    </div>
-                ` : ''}
-            </div>
-
-            ${formsHtml}
-            ${examplesHtml}
-            ${idiomsHtml}
-        </div>
+        ${heroHtml}
+        ${definitionsHtml}
+        ${formsHtml}
+        ${examplesHtml}
+        ${idiomsHtml}
     `;
 
     detailsArea.innerHTML = html;
@@ -270,10 +302,9 @@ function setupFlashcardMode() {
         if (!document.body.classList.contains('flashcard-active')) return;
 
         const target = e.target;
-        if (target.classList.contains('word-arb') ||
-            target.classList.contains('def-arb') ||
-            target.classList.contains('ex-arb') ||
-            target.classList.contains('idiom-arb')) {
+        if (target.classList.contains('word-arb-hero') ||
+            target.classList.contains('def-arb-detail') ||
+            target.classList.contains('ex-arb-detail')) {
 
             target.classList.toggle('revealed');
         }

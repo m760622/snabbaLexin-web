@@ -11,38 +11,24 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="details-premium.css">
 </head>
 
 <body>
     <div id="toast" class="toast-notification"></div>
-    <div class="container">
-        <header>
-            <div class="header-top">
-                <a href="index.html" class="back-btn-top" aria-label="Tillbaka / رجوع">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
-                </a>
-            </div>
-            <a href="index.html" style="text-decoration: none;">
-                <!-- <h1>Snabba Lexin</h1> -->
-                <h4 class="main-title-text details-anim">Svensk-Arabiskt Lexikon</h4>
-                <h4 class="main-title-text subtitle-delay details-anim">القاموس العربي السويدي </h4>
 
-
-            </a>
-            <p class="subtitle subtitle-anim">Detaljerad vy / عرض تفصيلي</p>
-            <button id="flashcardBtn" class="share-btn" aria-label="Flashcard Mode / وضع الاختبار"
-                style="margin-right: 0.5rem; margin-left: 50px;">
+    <div class="container details-page-container">
+        <!-- Floating Action Buttons - Top Right -->
+        <div class="details-fab-container">
+            <button id="flashcardBtn" class="details-fab" aria-label="Flashcard Mode / وضع الاختبار">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                 </svg>
+                <span class="fab-tooltip">اختبار البطاقات</span>
             </button>
-            <button id="shareBtn" class="share-btn" aria-label="Dela / مشاركة" style="display: none;">
+            <button id="shareBtn" class="details-fab fab-share" aria-label="Dela / مشاركة" style="display: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="18" cy="5" r="3"></circle>
@@ -51,7 +37,26 @@
                     <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
                     <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                 </svg>
+                <span class="fab-tooltip">مشاركة</span>
             </button>
+        </div>
+
+        <header class="details-header">
+            <div class="header-top">
+                <a href="index.html" class="back-btn-premium" aria-label="Tillbaka / رجوع">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>رجوع</span>
+                </a>
+            </div>
+            <a href="index.html" class="details-logo-link">
+                <h4 class="main-title-text details-anim">Svensk-Arabiskt Lexikon</h4>
+                <h4 class="main-title-text subtitle-delay details-anim">القاموس العربي السويدي</h4>
+            </a>
+            <p class="subtitle subtitle-anim details-subtitle">Detaljerad vy / عرض تفصيلي</p>
         </header>
 
         <div id="customActions" class="custom-actions" style="display: none;">

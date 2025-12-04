@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Tajawal:wght@300;400;500;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
@@ -76,21 +76,18 @@
                             </svg></span>
                         <span>Mobilvy / جوال</span>
                     </button>
-                    <a href="games.html" id="gameBtn" class="menu-item" aria-label="Spela / العب">
+
+                    <div class="menu-divider"></div>
+                    <button id="showFavoritesBtn" class="menu-item" aria-label="Visa favoriter / عرض المفضلة">
                         <span class="icon-box" style="color: #F59E0B;"><svg xmlns="http://www.w3.org/2000/svg"
                                 width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M6 11h4a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1z"></path>
-                                <path d="M18 11h-4a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1z">
-                                </path>
-                                <path d="M6 15h4a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1z">
-                                </path>
-                                <path d="M18 15h-4a1 1 0 0 0-1 1v-1a1 1 0 0 0 1-1h4a1 1 0 0 0 1 1v1a1 1 0 0 0-1 1z">
-                                </path>
-                                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                </polygon>
                             </svg></span>
-                        <span>Spela / العب</span>
-                    </a>
+                        <span>Mina ord / مفضلتي</span>
+                    </button>
                     <div class="menu-divider"></div>
                     <div class="menu-section-label">Filter / تصفية</div>
                     <div class="sort-wrapper-menu">
@@ -99,6 +96,7 @@
                             <option value="start">Börjar med / يبدأ بـ</option>
                             <option value="end">Slutar med / ينتهي بـ</option>
                             <option value="exact">Med diakritiska / بالحركات</option>
+                            <option value="favorites">⭐ Mina ord / مفضلتي</option>
                         </select>
                         <select id="sortSelect" class="menu-select" aria-label="Sortera resultat / ترتيب النتائج">
                             <option value="relevance">Relevans / الأفضل</option>
@@ -148,8 +146,41 @@
 
         <div class="nav-center">
             <!-- Header controls moved to main-actions below -->
-            <h3 class="main-title-text">Svensk-Arabiskt Lexikon</h3>
+            <h3 class="main-title-text" id="physicsTitle">
+                <span class="physics-char">S</span><span class="physics-char">v</span><span
+                    class="physics-char">e</span><span class="physics-char">n</span><span
+                    class="physics-char">s</span><span class="physics-char">k</span>-<span
+                    class="physics-char">A</span><span class="physics-char">r</span><span
+                    class="physics-char">a</span><span class="physics-char">b</span><span
+                    class="physics-char">i</span><span class="physics-char">s</span><span
+                    class="physics-char">k</span><span class="physics-char">t</span> <span
+                    class="physics-char">L</span><span class="physics-char">e</span><span
+                    class="physics-char">x</span><span class="physics-char">i</span><span
+                    class="physics-char">k</span><span class="physics-char">o</span><span class="physics-char">n</span>
+            </h3>
             <h3 class="main-title-text subtitle-delay">القاموس العربي السويدي </h3>
+        </div>
+
+        <div class="nav-right">
+            <button id="quizBtn" class="game-btn" aria-label="Quiz / تحدي">
+                <span class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg></span>
+            </button>
+            <a href="games.html" id="gameBtn" class="game-btn" aria-label="Spel / ألعاب">
+                <span class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                        <path d="M6 12h4"></path>
+                        <path d="M8 10v4"></path>
+                        <circle cx="17" cy="12" r="1"></circle>
+                    </svg></span>
+            </a>
         </div>
 
         <!-- Hidden elements kept for functionality -->
@@ -202,6 +233,17 @@
     </header>
 
     <main id="resultsArea">
+        <!-- Word of the Day -->
+        <div id="wordOfTheDay" class="word-of-day-card" style="display: none;">
+            <div class="wod-header">
+                <span>📅 Dagens Ord / كلمة اليوم</span>
+            </div>
+            <div class="wod-content">
+                <div class="wod-swe"></div>
+                <div class="wod-arb"></div>
+            </div>
+            <a href="#" class="wod-action">Mer info / المزيد</a>
+        </div>
         <!-- Results will appear here -->
         <div class="placeholder-message">
             Börja skriva för att söka / ابدأ الكتابة للبحث
@@ -246,6 +288,28 @@
                     alt="Share" style="width: 20px; vertical-align: middle;"> واختر <strong>"إضافة إلى الشاشة
                     الرئيسية"</strong></p>
             <button id="closeIosPrompt">OK</button>
+        </div>
+    </div>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Snabbtest / اختبار سريع</h2>
+                <button id="closeQuiz" class="close-btn">&times;</button>
+            </div>
+            <div class="quiz-body">
+                <div class="score-display" id="quizScore">Score: 0</div>
+                <div class="question-card">
+                    <h3 id="quizQuestion">...</h3>
+                </div>
+                <div id="quizOptions" class="quiz-options">
+                    <!-- Options will be injected here -->
+                </div>
+                <div id="quizFeedback" class="quiz-feedback"></div>
+                <button id="nextQuestion" class="action-btn primary"
+                    style="display: none; margin-top: 1rem; width: 100%;">Nästa / التالي</button>
+            </div>
         </div>
     </div>
 </body>

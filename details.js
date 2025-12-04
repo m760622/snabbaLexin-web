@@ -4,6 +4,7 @@
 
 // DOM Elements
 const detailsArea = document.getElementById('detailsArea');
+const flashcardBtn = document.getElementById('flashcardBtn');
 const shareBtn = document.getElementById('shareBtn');
 const customActions = document.getElementById('customActions');
 const editBtn = document.getElementById('editBtn');
@@ -55,6 +56,7 @@ async function init() {
                 renderDetails(item);
                 checkCustomWord(id);
                 setupShare(item);
+                setupFlashcardMode();
             } else {
                 detailsArea.innerHTML = '<div class="placeholder-message">Ord hittades inte / لم يتم العثور على الكلمة</div>';
             }
@@ -122,11 +124,11 @@ function renderDetails(item) {
     const html = `
         <div class="card" style="padding: 2rem;">
             <div class="card-header">
-                <div class="word-swe" style="font-size: 2.5rem;">${swe}</div>
+                <div class="word-swe" style="font-size: 2rem;">${swe}</div>
                 ${type ? `<div class="word-type" style="font-size: 1rem;">${type}</div>` : ''}
             </div>
             
-            ${arb ? `<div class="word-arb" style="font-size: 2rem; margin: 1rem 0;">${arb}</div>` : ''}
+            ${arb ? `<div class="word-arb" style="font-size: 1.5rem; margin: 1rem 0;">${arb}</div>` : ''}
             
             <div class="definitions" style="margin: 1.5rem 0;">
                 ${sweDef || arbDef ? `
@@ -248,6 +250,34 @@ function setupShare(item) {
             console.error('Error sharing:', err);
         }
     };
+}
+
+function setupFlashcardMode() {
+    if (!flashcardBtn) return;
+
+    // Toggle Mode
+    flashcardBtn.onclick = () => {
+        document.body.classList.toggle('flashcard-active');
+        flashcardBtn.classList.toggle('active');
+
+        // Show toast
+        const isActive = document.body.classList.contains('flashcard-active');
+        showToast(isActive ? 'Flashcard-läge: PÅ / وضع الاختبار: مفعل' : 'Flashcard-läge: AV / وضع الاختبار: معطل');
+    };
+
+    // Event Delegation for revealing items
+    detailsArea.addEventListener('click', (e) => {
+        if (!document.body.classList.contains('flashcard-active')) return;
+
+        const target = e.target;
+        if (target.classList.contains('word-arb') ||
+            target.classList.contains('def-arb') ||
+            target.classList.contains('ex-arb') ||
+            target.classList.contains('idiom-arb')) {
+
+            target.classList.toggle('revealed');
+        }
+    });
 }
 
 function showToast(message) {

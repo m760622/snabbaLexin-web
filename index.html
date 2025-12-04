@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snabba Lexin</title>
+    <title>Svensk-Arabiskt Lexikon</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -309,6 +309,19 @@
                 <div id="quizFeedback" class="quiz-feedback"></div>
                 <button id="nextQuestion" class="action-btn primary"
                     style="display: none; margin-top: 1rem; width: 100%;">Nästa / التالي</button>
+            </div>
+        </div>
+    </div>
+    <!-- Word of the Day Modal -->
+    <div id="wodModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Dagens Ord / كلمة اليوم</h2>
+                <button id="closeWod" class="close-btn">&times;</button>
+            </div>
+            <div class="wod-modal-body">
+                <!-- Content injected via JS -->
+                <div id="wodModalContent"></div>
             </div>
         </div>
     </div>

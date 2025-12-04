@@ -242,6 +242,11 @@ async function init() {
         // Enable search and sort
         const debouncedSearch = debounce(handleSearch, 150);
         searchInput.addEventListener('input', debouncedSearch);
+
+        // Delight: Pulse Search Bar on Load
+        setTimeout(() => {
+            searchInput.classList.add('pulse-on-load');
+        }, 500);
         sortSelect.addEventListener('change', () => handleSearch({ target: searchInput }));
         typeSelect.addEventListener('change', () => handleSearch({ target: searchInput }));
         document.getElementById('searchMode').addEventListener('change', () => handleSearch({ target: searchInput }));
@@ -914,9 +919,48 @@ function initWordOfTheDay() {
     wodCard.style.display = 'block';
 
     // Actions
-    wodAction.onclick = () => {
-        window.location.href = `details.html?id=${word[COL_ID]}`;
-    };
+    const wodModal = document.getElementById('wodModal');
+    const closeWod = document.getElementById('closeWod');
+    const wodModalContent = document.getElementById('wodModalContent');
+
+    if (wodModal && closeWod && wodModalContent) {
+        wodAction.onclick = (e) => {
+            e.preventDefault();
+
+            // Render content (reuse createCard logic but without the link wrapper)
+            // We want the card look but inside the modal
+            const cardHtml = createCard(word);
+            // Strip the outer <a> tag to make it static
+            const contentHtml = cardHtml.replace(/^<a[^>]*>|<\/a>$/g, '');
+
+            wodModalContent.innerHTML = contentHtml;
+
+            // Remove the hover effect class or style if needed
+            const card = wodModalContent.querySelector('.card');
+            if (card) {
+                card.style.transform = 'none';
+                card.style.boxShadow = 'none';
+                card.style.border = 'none'; // Clean look inside modal
+            }
+
+            wodModal.style.display = 'flex';
+        };
+
+        closeWod.onclick = () => {
+            wodModal.style.display = 'none';
+        };
+
+        window.addEventListener('click', (e) => {
+            if (e.target === wodModal) {
+                wodModal.style.display = 'none';
+            }
+        });
+    } else {
+        // Fallback
+        wodAction.onclick = () => {
+            window.location.href = `details.html?id=${word[COL_ID]}`;
+        };
+    }
 }
 
 // Quiz Mode Logic

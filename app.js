@@ -485,6 +485,22 @@ function updateResults(results, sortMethod, query) {
 
             // Fallback to alphabetical if relevance is equal
             return aSwe.localeCompare(bSwe, 'sv');
+        } else if (sortMethod === 'richness') {
+            // Richness: Sort by number of non-empty fields
+            const countFields = (item) => {
+                let count = 0;
+                if (item[COL_SWE_DEF]) count++;
+                if (item[COL_ARB_DEF]) count++;
+                if (item[COL_FORMS]) count++;
+                if (item[COL_EX_SWE]) count++;
+                if (item[COL_EX_ARB]) count++;
+                if (item[COL_IDIOM_SWE]) count++;
+                if (item[COL_IDIOM_ARB]) count++;
+                return count;
+            };
+            const countA = countFields(a);
+            const countB = countFields(b);
+            return countB - countA; // Descending
         } else if (sortMethod === 'alpha_asc') {
             return aSwe.localeCompare(bSwe, 'sv');
         } else if (sortMethod === 'alpha_desc') {

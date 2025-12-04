@@ -24,83 +24,132 @@
     <div id="toast" class="toast-notification"></div>
     <div class="container">
         <header>
-            <div class="header-center">
-                <!-- Header controls moved to main-actions below -->
-                <h3 class="main-title-text">Svensk-Arabiskt Lexikon</h3>
-                <h3 class="main-title-text subtitle-delay">القاموس العربي السويدي </h3>
-            </div>
-
+            <!-- The header-center content has been moved to nav-center -->
             <div id="stats" class="stats">
                 Hittade 0 resultat / تم العثور على 0 نتيجة
             </div>
-
+        </header>
     </div>
 
     <nav class="top-nav">
         <div class="nav-left">
-            <button id="themeToggle" class="theme-toggle" aria-label="Växla tema / تبديل المظهر">
-                <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="5"></circle>
-                    <line x1="12" y1="1" x2="12" y2="3"></line>
-                    <line x1="12" y1="21" x2="12" y2="23"></line>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                    <line x1="1" y1="12" x2="3" y2="12"></line>
-                    <line x1="21" y1="12" x2="23" y2="12"></line>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                </svg>
-                <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
-            </button>
-            <button id="mobileViewToggle" class="theme-toggle" aria-label="Mobilvy / عرض الجوال">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                </svg>
-            </button>
+            <div class="settings-dropdown">
+                <button id="settingsBtn" class="theme-toggle" aria-label="Inställningar / الإعدادات">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
+                <div id="settingsMenu" class="settings-menu" style="display: none;">
+                    <button id="themeToggle" class="menu-item" aria-label="Växla tema / تبديل المظهر">
+                        <span class="icon-box">
+                            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5"></circle>
+                                <line x1="12" y1="1" x2="12" y2="3"></line>
+                                <line x1="12" y1="21" x2="12" y2="23"></line>
+                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                <line x1="1" y1="12" x2="3" y2="12"></line>
+                                <line x1="21" y1="12" x2="23" y2="12"></line>
+                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                            </svg>
+                            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </span>
+                        <span>Tema / المظهر</span>
+                    </button>
+                    <button id="mobileViewToggle" class="menu-item" aria-label="Mobilvy / عرض الجوال">
+                        <span class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg></span>
+                        <span>Mobilvy / جوال</span>
+                    </button>
+                    <a href="games.html" id="gameBtn" class="menu-item" aria-label="Spela / العب">
+                        <span class="icon-box" style="color: #F59E0B;"><svg xmlns="http://www.w3.org/2000/svg"
+                                width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 11h4a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1z"></path>
+                                <path d="M18 11h-4a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1z">
+                                </path>
+                                <path d="M6 15h4a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1z">
+                                </path>
+                                <path d="M18 15h-4a1 1 0 0 0-1 1v-1a1 1 0 0 0 1-1h4a1 1 0 0 0 1 1v1a1 1 0 0 0-1 1z">
+                                </path>
+                                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                            </svg></span>
+                        <span>Spela / العب</span>
+                    </a>
+                    <div class="menu-divider"></div>
+                    <div class="menu-section-label">Filter / تصفية</div>
+                    <div class="sort-wrapper-menu">
+                        <select id="searchMode" class="menu-select" aria-label="Sökläge / نوع البحث">
+                            <option value="general">Sök överallt / بحث عام</option>
+                            <option value="start">Börjar med / يبدأ بـ</option>
+                            <option value="end">Slutar med / ينتهي بـ</option>
+                            <option value="exact">Med diakritiska / بالحركات</option>
+                        </select>
+                        <select id="sortSelect" class="menu-select" aria-label="Sortera resultat / ترتيب النتائج">
+                            <option value="relevance">Relevans / الأفضل</option>
+                            <option value="richness">Mest info / الأكثر تفصilاً</option>
+                            <option value="alpha_asc">A-Ö / أ-ي</option>
+                            <option value="alpha_desc">Ö-A / ي-أ</option>
+                            <option value="last_char">Sista / الأخير</option>
+                        </select>
+                        <select id="typeSelect" class="menu-select"
+                            aria-label="Filtrera på ordklass / تصفية حسب نوع الكلمة">
+                            <option value="all">Alla / الكل</option>
+                        </select>
+                    </div>
+                    <div class="menu-divider"></div>
+                    <a href="add.html" class="menu-item" aria-label="Lägg till ord / إضافة كلمة">
+                        <span class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg></span>
+                        <span>Lägg till / إضافة</span>
+                    </a>
+                    <button id="exportCustom" class="menu-item" aria-label="Exportera">
+                        <span class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg></span>
+                        <span>Exportera / تصدير</span>
+                    </button>
+                    <button id="importCustom" class="menu-item" aria-label="Importera">
+                        <span class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg></span>
+                        <span>Importera / استيراد</span>
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <div class="nav-right">
-            <a href="add.html" class="action-btn" aria-label="Lägg till ord / إضافة كلمة">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-            </a>
-            <button id="exportCustom" class="action-btn export-custom-btn"
-                aria-label="Exportera egna ord / تصدير كلماتي">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-            </button>
-            <button id="importCustom" class="action-btn import-custom-btn"
-                aria-label="Importera egna ord / استيراد كلماتي">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-            </button>
-            <a href="games.html" id="gameBtn" class="action-btn" aria-label="Spela / العب" style="color: #F59E0B;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 11h4a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1z"></path>
-                    <path d="M18 11h-4a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1z"></path>
-                    <path d="M6 15h4a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H6a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1z"></path>
-                    <path d="M18 15h-4a1 1 0 0 0-1 1v-1a1 1 0 0 0 1-1h4a1 1 0 0 0 1 1v1a1 1 0 0 0-1 1z"></path>
-                    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-                </svg>
-            </a>
+        <div class="nav-center">
+            <!-- Header controls moved to main-actions below -->
+            <h3 class="main-title-text">Svensk-Arabiskt Lexikon</h3>
+            <h3 class="main-title-text subtitle-delay">القاموس العربي السويدي </h3>
         </div>
 
         <!-- Hidden elements kept for functionality -->
@@ -108,6 +157,28 @@
         <input type="file" id="importCustomFile" accept=".json" style="display: none;">
         <input type="file" id="importFile" accept=".json" style="display: none;">
     </nav>
+
+    <script>
+        // Simple script to toggle settings menu
+        document.addEventListener('DOMContentLoaded', () => {
+            const settingsBtn = document.getElementById('settingsBtn');
+            const settingsMenu = document.getElementById('settingsMenu');
+
+            if (settingsBtn && settingsMenu) {
+                settingsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isHidden = settingsMenu.style.display === 'none';
+                    settingsMenu.style.display = isHidden ? 'flex' : 'none';
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!settingsMenu.contains(e.target) && e.target !== settingsBtn) {
+                        settingsMenu.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 
 
     </div>
@@ -124,24 +195,7 @@
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
             </div>
-            <div class="sort-wrapper">
-                <select id="searchMode" aria-label="Sökläge / نوع البحث">
-                    <option value="general">Sök överallt / بحث عام</option>
-                    <option value="start">Börjar med / يبدأ بـ</option>
-                    <option value="end">Slutar med / ينتهي بـ</option>
-                    <option value="exact">Med diakritiska / بالحركات</option>
-                </select>
-                <select id="sortSelect" aria-label="Sortera resultat / ترتيب النتائج">
-                    <option value="relevance">Relevans / الأفضل</option>
-                    <option value="alpha_asc">Första bokstaven (A-Ö) / الحرف الأول</option>
-                    <option value="alpha_desc">Första bokstaven (Ö-A) / الحرف الأول (معكوس)</option>
-                    <option value="last_char">Sista bokstaven / الحرف الأخير</option>
-                </select>
 
-                <select id="typeSelect" aria-label="Filtrera på ordklass / تصفية حسب نوع الكلمة">
-                    <option value="all">Alla typer / كل الأنواع</option>
-                </select>
-            </div>
         </div>
     </div>
 

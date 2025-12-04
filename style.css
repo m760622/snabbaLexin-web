@@ -100,11 +100,11 @@ body.iphone-view::before {
 /* Header & Search */
 header {
     text-align: center;
-    margin-bottom: 1rem;
-    /* Reduced from 2rem */
+    margin-bottom: 0.5rem;
+    /* Reduced further */
     animation: fadeIn 0.8s ease-out;
     position: relative;
-    padding-top: 3.5rem;
+    padding-top: 4rem;
     /* Space for top nav */
 }
 
@@ -416,72 +416,86 @@ header {
     background-color: rgba(16, 185, 129, 0.2);
 }
 
-.export-custom-btn,
-.import-custom-btn,
-.export-btn,
-.import-btn {
-    border-radius: 50%;
-    /* Circular */
-    background-color: var(--surface);
-    border: 2px solid transparent;
+/* Settings Dropdown */
+.settings-dropdown {
+    position: relative;
+}
+
+.settings-menu {
+    position: absolute;
+    top: 120%;
+    left: 0;
+    width: 220px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1rem;
+    padding: 0.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    z-index: 100;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    animation: slideDown 0.2s ease-out;
+}
+
+[data-theme="dark"] .settings-menu {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
     color: var(--text-main);
-    width: 45px;
-    height: 45px;
-    padding: 0;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    width: 100%;
+    text-align: left;
+}
+
+.menu-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .menu-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.icon-box {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow);
+    width: 24px;
+    height: 24px;
+    color: var(--primary);
 }
 
-.export-custom-btn {
-    color: #ef4444;
-    /* Red */
-    border-color: rgba(239, 68, 68, 0.2);
-    background-color: rgba(239, 68, 68, 0.05);
-}
-
-.import-custom-btn {
-    color: #10b981;
-    /* Green */
-    border-color: rgba(16, 185, 129, 0.2);
-    background-color: rgba(16, 185, 129, 0.05);
-}
-
-.export-custom-btn:hover {
-    background-color: #ef4444;
-    color: white;
-    border-color: #ef4444;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
-}
-
-.import-custom-btn:hover {
-    background-color: #10b981;
-    color: white;
-    border-color: #10b981;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-}
-
-[data-theme="dark"] .export-custom-btn {
-    background-color: rgba(239, 68, 68, 0.1);
-    border-color: rgba(239, 68, 68, 0.4);
-}
-
-[data-theme="dark"] .import-custom-btn {
-    background-color: rgba(16, 185, 129, 0.1);
-    border-color: rgba(16, 185, 129, 0.4);
-}
-
-[data-theme="dark"] .export-custom-btn:hover {
-    background-color: #ef4444;
-    color: white;
-}
-
-[data-theme="dark"] .import-custom-btn:hover {
-    background-color: #10b981;
-    color: white;
+.menu-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.25rem 0.5rem;
 }
 
 /* Top Navigation Bar */
@@ -499,12 +513,89 @@ header {
     /* Let clicks pass through empty space */
 }
 
-.nav-left,
-.nav-right {
+.nav-left {
     display: flex;
     gap: 0.5rem;
     pointer-events: auto;
-    /* Re-enable clicks for buttons */
+    flex-shrink: 0;
+}
+
+.nav-center {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    /* Let clicks pass */
+    text-align: center;
+}
+
+.nav-center .main-title-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.nav-center .subtitle-delay {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    display: block;
+    /* Stack on mobile */
+}
+
+/* Hide subtitle on very small screens if needed, or keep stacked */
+@media (max-width: 360px) {
+    .nav-center .subtitle-delay {
+        display: none;
+    }
+}
+
+.menu-section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem 0.25rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sort-wrapper-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+.menu-select {
+    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background-color: var(--background);
+    color: var(--text-main);
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1em;
+}
+
+.menu-select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+[data-theme="dark"] .menu-select {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: var(--border);
 }
 
 /* Sticky Header for Search */
@@ -639,36 +730,9 @@ h1 {
     border-color: rgba(129, 140, 248, 0.3);
 }
 
-.sort-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    width: 100%;
-}
+/* Removed sort-wrapper from here as it is moved to top-nav */
 
-#sortSelect,
-#searchMode,
-#typeSelect {
-    flex: 1;
-    /* Make dropdowns share available width */
-    padding: 0.65rem 2rem 0.65rem 0.75rem;
-    /* Compact padding */
-    font-size: 0.85rem;
-    border: 2px solid var(--border);
-    border-radius: 50px;
-    background-color: var(--surface);
-    color: var(--text-main);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: var(--shadow);
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.5rem center;
-    background-size: 0.9em;
-    height: 100%;
-    font-weight: 500;
-}
+/* Select styles moved to generic block above */
 
 #sortSelect:focus,
 #searchMode:focus,
@@ -728,8 +792,16 @@ h1 {
     }
 
     .sort-wrapper {
-        flex-direction: row !important;
-        gap: 0.5rem;
+        gap: 0.25rem;
+    }
+
+    #sortSelect,
+    #searchMode,
+    #typeSelect {
+        font-size: 0.75rem;
+        padding: 0.3rem 1.2rem 0.3rem 0.5rem;
+        max-width: 100px;
+        /* Force compact on mobile */
     }
 
     .search-wrapper,

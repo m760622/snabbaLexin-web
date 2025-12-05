@@ -5,7 +5,8 @@
 /* Hero Section - Word Display */
 .details-hero {
     background: linear-gradient(135deg, #005B96 0%, #0284c7 50%, #0ea5e9 100%);
-    padding: 3rem 2rem;
+    padding: 2.5rem 2rem 1.5rem 2rem;
+    /* Reduced bottom padding from 3rem to 1.5rem */
     border-radius: 2rem;
     margin-bottom: 2rem;
     position: relative;
@@ -14,6 +15,24 @@
         0 20px 60px rgba(0, 91, 150, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     animation: hero-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ... (keep animation unchanged) ... */
+
+/* Word Type Badge (The main one) */
+.word-type-badge {
+    background: rgba(255, 255, 255, 0.85);
+    /* Slightly more transparent */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #005B96;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 @keyframes hero-entrance {
@@ -71,13 +90,23 @@
     margin-bottom: 2rem;
 }
 
+.details-subtitle {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
 .word-swe-hero {
     font-size: 3.5rem;
     font-weight: 900;
     color: white;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 255, 255, 0.2);
-    margin: 0 0 1rem 0;
-    line-height: 1.2;
+    margin: 0 0 0.25rem 0;
+    /* Reduced margin-bottom drastically */
+    line-height: 1.1;
     animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -88,7 +117,8 @@
     text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
     font-family: var(--arabic-font);
     direction: rtl;
-    margin: 1rem 0;
+    margin: 0.25rem 0 0.75rem 0;
+    /* Reduced margins */
     animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
 }
 
@@ -98,12 +128,15 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 0.75rem;
-    /* Slightly more space */
+    margin-top: 0.5rem;
+    /* Reduced margin top */
+    margin-bottom: 0;
+    /* Ensure no bottom margin */
     animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 0;
+    /* Removed padding */
 }
 
 /* Unified Base Style for all Items in Row */

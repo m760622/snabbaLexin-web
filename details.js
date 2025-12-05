@@ -367,8 +367,22 @@ function parseAdjectiveForms(formsArray) {
 
 // Initialize
 async function init() {
-    // Theme is now managed globally from index.html via localStorage
-    // No need for local theme toggle
+    // Theme Logic - Global
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Optional hint
+            showToast(newTheme === 'dark' ? 'Mörkt läge aktiverat / الوضع الليلي' : 'Ljust läge aktiverat / الوضع النهاري');
+        });
+    }
 
     // Check saved mobile view preference from main app
     if (localStorage.getItem('mobileView') === 'true') {

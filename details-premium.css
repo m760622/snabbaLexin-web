@@ -5,7 +5,8 @@
 /* Hero Section - Word Display */
 .details-hero {
     background: linear-gradient(135deg, #005B96 0%, #0284c7 50%, #0ea5e9 100%);
-    padding: 2.5rem 2rem 1.5rem 2rem;
+    padding: 2.5rem 2rem 1rem 2rem;
+    /* Reduced bottom padding to 1rem */
     /* Reduced bottom padding from 3rem to 1.5rem */
     border-radius: 2rem;
     margin-bottom: 2rem;
@@ -20,19 +21,123 @@
 /* ... (keep animation unchanged) ... */
 
 /* Word Type Badge (The main one) */
+/* Word Type Badge (The main one) */
+/* Word Type Badge (The main one) */
+/* Word Type Badge (The main one) */
 .word-type-badge {
-    background: rgba(255, 255, 255, 0.85);
-    /* Slightly more transparent */
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 2px solid rgba(255, 255, 255, 0.6);
-    padding: 0 1rem;
-    font-size: 0.8rem;
-    font-weight: 700;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(240, 249, 255, 0.9) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+        0 4px 15px rgba(0, 91, 150, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+
+    /* Perfect Centering with Flexbox */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 0 1.25rem;
+    /* No top/bottom padding needed with flex */
+
+    font-size: 0.85rem;
+    font-weight: 800;
     color: #005B96;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px;
     white-space: nowrap;
+    transform-style: preserve-3d;
+    line-height: 1;
+    /* Force line-height to match font-size for centering */
+}
+
+@keyframes hero-entrance {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ... existing code ... */
+
+.details-title-swedish {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 0;
+    display: inline-block;
+    /* Essential for transform/scale to work */
+    color: #ef4444;
+    /* Fallback */
+
+    /* Magical Aurora Gradient + Premium Heartbeat */
+    background: linear-gradient(to right,
+            #ef4444 0%,
+            #ec4899 25%,
+            /* Pink */
+            #f59e0b 50%,
+            /* Gold */
+            #ef4444 75%,
+            #8b5cf6 100%
+            /* Violet */
+        );
+    background-size: 300% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: magic-flow 3s linear infinite, premium-heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes magic-flow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes premium-heartbeat {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 rgba(239, 68, 68, 0));
+    }
+
+    15% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.6));
+    }
+
+    30% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 rgba(239, 68, 68, 0));
+    }
+
+    45% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6));
+    }
+
+    60% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 @keyframes hero-entrance {
@@ -87,7 +192,8 @@
 
 .word-display-main {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 0;
+    /* REMOVED MARGIN for tight fit */
 }
 
 .details-subtitle {
@@ -97,6 +203,43 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     font-weight: 600;
+    display: inline-block;
+    /* Required for transform */
+    animation: gentle-heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes gentle-heartbeat {
+    0% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    15% {
+        transform: scale(1.05);
+        opacity: 1;
+        text-shadow: 0 0 5px rgba(236, 72, 153, 0.4);
+    }
+
+    30% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    45% {
+        transform: scale(1.05);
+        opacity: 1;
+        text-shadow: 0 0 5px rgba(236, 72, 153, 0.4);
+    }
+
+    60% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.7;
+    }
 }
 
 .word-swe-hero {
@@ -130,13 +273,23 @@
     gap: 0.5rem;
     margin-top: 0.5rem;
     /* Reduced margin top */
-    margin-bottom: 0;
     /* Ensure no bottom margin */
     animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-bottom: 0;
     /* Removed padding */
+
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.word-type-row::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Webkit */
 }
 
 /* Unified Base Style for all Items in Row */
@@ -560,14 +713,73 @@
 }
 
 .details-title-swedish {
-    font-size: 0.9rem;
-    /* Smaller title as in image */
-    font-weight: 700;
-    color: var(--text-secondary);
-    letter-spacing: 1.5px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
     text-transform: uppercase;
     margin: 0;
-    opacity: 0.7;
+
+    /* Shimmering Gradient Animation */
+    background: linear-gradient(to right,
+            #475569 20%,
+            #005B96 40%,
+            #0ea5e9 60%,
+            #475569 80%);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
+}
+
+.details-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: -0.5rem;
+    /* Pull closer to title */
+
+    /* Matching Shimmer */
+    background: linear-gradient(to right,
+            #64748b 20%,
+            #94a3b8 40%,
+            #64748b 60%,
+            #94a3b8 80%);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 6s linear infinite reverse;
+    /* Slower and reverse for contrast */
+}
+
+.word-display-main {
+    text-align: center;
+    margin-bottom: 0;
+    /* REMOVED MARGIN for tight fit */
+}
+
+/* Hero Section - Word Display */
+.details-hero {
+    background: linear-gradient(135deg, #005B96 0%, #0284c7 50%, #0ea5e9 100%);
+    padding: 2.5rem 2rem 1rem 2rem;
+    /* Reduce bottom padding to 1rem */
+    border-radius: 2rem;
+    margin-bottom: 2rem;
+    /* ... rest unchanged ... */
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 20px 60px rgba(0, 91, 150, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    animation: hero-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* The Premium Pill Container */

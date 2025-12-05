@@ -1182,14 +1182,26 @@ h1 {
 .stats {
     margin-top: 1rem;
     font-size: 0.95rem;
-    color: var(--text-tertiary);
+    color: var(--text-main);
     font-family: 'Inter', 'Noto Sans Arabic', sans-serif;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .stats {
+    background: rgba(30, 41, 59, 0.8);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Results Area */
 #resultsArea {
     display: grid;
-    gap: 1.5rem;
+    gap: 1rem;
     animation: slideUp 0.5s ease-out;
 }
 
@@ -1303,15 +1315,15 @@ h1 {
 
 .word-arb {
     font-family: var(--arabic-font);
-    font-size: 1.1rem;
-    /* Increased from 0.9rem */
+    font-size: 1.25rem;
+    /* Increased for better visual balance */
     color: #111827;
     /* Darker Arabic Text */
     text-align: right;
     margin: 0;
     /* No margin */
-    font-weight: 700;
-    /* Bolder */
+    font-weight: 800;
+    /* Bolder for visual balance */
     line-height: 1.4;
     direction: rtl;
 }
@@ -1319,6 +1331,120 @@ h1 {
 [data-theme="dark"] .word-arb {
     color: var(--accent);
 }
+
+/* ========================================
+   UX ENHANCEMENTS - Grammar Badges & Colors
+   ======================================== */
+
+/* Word Header Group - contains word and grammar badge */
+.word-header-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Grammar Badges - En/Ett for nouns, Groups for verbs */
+.grammar-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.grammar-en {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.grammar-ett {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.grammar-verb {
+    background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);
+}
+
+/* Card Actions Container */
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Copy Button Styling */
+.copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0.4rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+}
+
+.copy-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.copy-btn:active {
+    transform: scale(0.95);
+}
+
+[data-theme="dark"] .copy-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+/* Color-coded Left Border Strips by Word Type */
+.card[data-type="verb"] {
+    border-left: 4px solid #3B82F6;
+    /* Blue for verbs */
+}
+
+.card[data-type="noun"] {
+    border-left: 4px solid #10B981;
+    /* Green for nouns */
+}
+
+.card[data-type="adj"] {
+    border-left: 4px solid #F59E0B;
+    /* Amber for adjectives */
+}
+
+.card[data-type="adv"] {
+    border-left: 4px solid #8B5CF6;
+    /* Purple for adverbs */
+}
+
+.card[data-type="prep"] {
+    border-left: 4px solid #EC4899;
+    /* Pink for prepositions */
+}
+
+.card[data-type="conj"] {
+    border-left: 4px solid #06B6D4;
+    /* Cyan for conjunctions */
+}
+
+.card[data-type="other"] {
+    border-left: 4px solid var(--border);
+    /* Default border color */
+}
+
 
 .definitions {
     margin-bottom: 0.5rem;

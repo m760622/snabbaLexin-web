@@ -38,7 +38,76 @@ function normalizeArabic(text) {
     return text.replace(/[\u064B-\u065F]/g, '').toLowerCase();
 }
 
+// Helper: Get Grammar Badge for Swedish words
+function getGrammarBadge(type, forms) {
+    const normalizedType = (type || '').toLowerCase().replace('.', '');
+
+    // For nouns (Substantiv) - detect En/Ett gender
+    if (normalizedType === 'subst' || normalizedType === 'substantiv') {
+        const formsLower = (forms || '').toLowerCase();
+        if (formsLower.match(/\ben\s+\w+/i) || formsLower.startsWith('en ') || formsLower.includes(', en ')) {
+            return '<span class="grammar-badge grammar-en">En</span>';
+        } else if (formsLower.match(/\bett\s+\w+/i) || formsLower.startsWith('ett ') || formsLower.includes(', ett ')) {
+            return '<span class="grammar-badge grammar-ett">Ett</span>';
+        }
+        if (formsLower.includes('en,') || formsLower.match(/\w+en[,\s]/)) {
+            return '<span class="grammar-badge grammar-en">En</span>';
+        }
+        if (formsLower.includes('et,') || formsLower.match(/\w+et[,\s]/)) {
+            return '<span class="grammar-badge grammar-ett">Ett</span>';
+        }
+    }
+
+    // For verbs - show verb conjugation pattern
+    if (normalizedType === 'verb') {
+        const formsLower = (forms || '').toLowerCase();
+        if (formsLower.match(/\w+ar[,\s]/i) && formsLower.match(/\w+ade[,\s]/i)) {
+            return '<span class="grammar-badge grammar-verb">Gr. 1</span>';
+        }
+        if (formsLower.match(/\w+er[,\s]/i) && formsLower.match(/\w+de[,\s]/i)) {
+            return '<span class="grammar-badge grammar-verb">Gr. 2</span>';
+        }
+        if (formsLower.match(/\w+dde[,\s]/i)) {
+            return '<span class="grammar-badge grammar-verb">Gr. 3</span>';
+        }
+        if (formsLower.match(/\w+it[,\s]|it$/i)) {
+            return '<span class="grammar-badge grammar-verb">Gr. 4</span>';
+        }
+    }
+
+    return '';
+}
+
+// Helper: Get word type category for color-coding
+function getWordTypeCategory(type) {
+    const normalizedType = (type || '').toLowerCase().replace('.', '');
+
+    if (normalizedType === 'verb') return 'verb';
+    if (normalizedType === 'subst' || normalizedType === 'substantiv') return 'noun';
+    if (normalizedType === 'adj' || normalizedType === 'adjektiv') return 'adj';
+    if (normalizedType === 'adv' || normalizedType === 'adverb') return 'adv';
+    if (normalizedType === 'prep' || normalizedType === 'preposition') return 'prep';
+    if (normalizedType === 'konj' || normalizedType === 'konjunktion') return 'conj';
+
+    return 'other';
+}
+
+// Copy Word Function
+window.copyWord = function (word, event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    navigator.clipboard.writeText(word).then(() => {
+        showToast('Kopierad! / تم النسخ! 📋');
+    }).catch(() => {
+        showToast('Kunde inte kopiera / فشل النسخ');
+    });
+};
+
 // Initialize
+
 async function init() {
     // Theme Logic
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -757,6 +826,10 @@ function createCard(item, index = 0) {
     const idiomSwe = item[COL_IDIOM] || '';
     const idiomArb = item[COL_IDIOM_ARB] || '';
 
+    // Get grammar badge and word type category for color-coding
+    const grammarBadge = getGrammarBadge(item[COL_TYPE], forms);
+    const wordTypeCategory = getWordTypeCategory(item[COL_TYPE]);
+
     // Examples
     let examplesHtml = '';
     if (exSwe || exArb) {
@@ -790,20 +863,32 @@ function createCard(item, index = 0) {
         ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#F59E0B" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`
         : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
 
+    // Copy button icon
+    const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+
     return `
         <a href="details.html?id=${id}" class="card-link" onclick="handleCardClick(event, '${id}', this)">
-            <div class="card" style="view-transition-name: card-${id}">
+            <div class="card" data-type="${wordTypeCategory}" style="view-transition-name: card-${id}">
                 <div class="card-header">
-                    <h2 class="word-swe" dir="ltr">${swe}</h2>
-                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this, event)" aria-label="Spara som favorit">
-                        ${starIcon}
-                    </button>
+                    <div class="word-header-group">
+                        <h2 class="word-swe" dir="ltr">${swe}</h2>
+                        ${grammarBadge}
+                    </div>
+                    <div class="card-actions">
+                        <button class="copy-btn" onclick="copyWord('${swe.replace(/'/g, "\\'")}', event)" aria-label="Kopiera / نسخ">
+                            ${copyIcon}
+                        </button>
+                        <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this, event)" aria-label="Spara som favorit">
+                            ${starIcon}
+                        </button>
+                    </div>
                 </div>
                 ${arb ? `<p class="word-arb" dir="rtl">${arb}</p>` : ''}
             </div>
         </a>
     `;
 }
+
 
 // View Transition Handler
 window.handleCardClick = function (e, id, link) {

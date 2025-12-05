@@ -18,49 +18,35 @@
     <div id="toast" class="toast-notification"></div>
 
     <div class="container details-page-container">
-        <!-- Floating Action Buttons - Top Right -->
-        <div class="details-fab-container">
-            <button id="flashcardBtn" class="details-fab" aria-label="Flashcard Mode / وضع الاختبار">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-                <span class="fab-tooltip">اختبار البطاقات</span>
-            </button>
-            <button id="shareBtn" class="details-fab fab-share" aria-label="Dela / مشاركة" style="display: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="18" cy="5" r="3"></circle>
-                    <circle cx="6" cy="12" r="3"></circle>
-                    <circle cx="18" cy="19" r="3"></circle>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                </svg>
-                <span class="fab-tooltip">مشاركة</span>
-            </button>
-        </div>
-
         <header class="details-header details-header-clean">
             <div class="header-top">
-                <a href="index.html" class="back-btn-icon" aria-label="Tillbaka">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                <a href="index.html" class="back-btn-icon" aria-label="Tillbaka / رجوع">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
+                        <path d="M19 12H5"></path>
+                        <polyline points="12 19 5 12 12 5"></polyline>
                     </svg>
                 </a>
-                <h1 class="details-title-swedish">SVENSK-ARABISKT LEXIKON</h1>
+                <h1 class="details-title-swedish">Orddetaljer</h1>
                 <div class="header-actions">
-                    <button id="smartCopyBtn" class="header-action-btn" aria-label="Kopiera / نسخ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button id="smartCopyBtn" class="header-action-btn" aria-label="Kopiera / نسخ" title="نسخ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                         </svg>
                     </button>
-                    <button id="headerShareBtn" class="header-action-btn" aria-label="Dela / مشاركة">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button id="headerFlashcardBtn" class="header-action-btn" aria-label="Flashcard Mode / وضع الاختبار"
+                        title="وضع الاختبار">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                    <button id="headerShareBtn" class="header-action-btn" aria-label="Dela / مشاركة" title="مشاركة">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="18" cy="5" r="3"></circle>
                             <circle cx="6" cy="12" r="3"></circle>
                             <circle cx="18" cy="19" r="3"></circle>

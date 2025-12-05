@@ -59,7 +59,7 @@ if ('speechSynthesis' in window) {
 // ========================================
 function toggleFavorite(id) {
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const btn = document.querySelector('.favorite-btn-hero');
+    const btn = document.querySelector('.favorite-btn-badge');
     const svg = btn ? btn.querySelector('svg') : null;
 
     if (favorites.includes(id)) {
@@ -319,31 +319,36 @@ function renderDetails(item) {
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const isFavorite = favorites.includes(item[COL_ID]);
 
-    // Hero Section with Favorite Button and Inline Audio
+    // Hero Section - Restructured Layout
+    // Word Type Badge in center with Audio on left, Favorite on right
     const heroHtml = `
         <div class="details-hero">
-            <button class="favorite-btn-hero ${isFavorite ? 'active' : ''}" 
-                    onclick="toggleFavorite('${item[COL_ID]}')" 
-                    aria-label="Favorit / مفضلة">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" 
-                     fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" 
-                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-            </button>
             <div class="details-hero-content">
                 <div class="word-display-main">
                     <div class="word-with-audio">
                         <h1 class="word-swe-hero">${swe}</h1>
-                        <button class="audio-btn-inline" onclick="speakWord('${swe.replace(/'/g, "\\'")}')" aria-label="Lyssna / استمع">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    </div>
+                    ${arb ? `<div class="word-arb-hero">${arb}</div>` : ''}
+                    ${type ? `
+                    <div class="word-type-row">
+                        <button class="audio-btn-badge" onclick="speakWord('${swe.replace(/'/g, "\\'")}')" aria-label="Lyssna / استمع">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
                                 <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                             </svg>
                         </button>
+                        <span class="word-type-badge">${type}</span>
+                        <button class="favorite-btn-badge ${isFavorite ? 'active' : ''}" 
+                                onclick="toggleFavorite('${item[COL_ID]}')" 
+                                aria-label="Favorit / مفضلة">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
+                                 fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" 
+                                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
                     </div>
-                    ${arb ? `<div class="word-arb-hero">${arb}</div>` : ''}
-                    ${type ? `<span class="word-type-badge">${type}</span>` : ''}
+                    ` : ''}
                 </div>
             </div>
         </div>
@@ -558,17 +563,28 @@ function setupShare(item, headerShareBtn) {
 }
 
 function setupFlashcardMode() {
-    if (!flashcardBtn) return;
+    const headerFlashcardBtn = document.getElementById('headerFlashcardBtn');
 
-    // Toggle Mode
-    flashcardBtn.onclick = () => {
+    // Toggle function that syncs both buttons
+    const toggleFlashcard = () => {
         document.body.classList.toggle('flashcard-active');
-        flashcardBtn.classList.toggle('active');
+        const isActive = document.body.classList.contains('flashcard-active');
+
+        // Sync both buttons' active states
+        if (flashcardBtn) flashcardBtn.classList.toggle('active', isActive);
+        if (headerFlashcardBtn) headerFlashcardBtn.classList.toggle('active', isActive);
 
         // Show toast
-        const isActive = document.body.classList.contains('flashcard-active');
         showToast(isActive ? 'Flashcard-läge: PÅ / وضع الاختبار: مفعل' : 'Flashcard-läge: AV / وضع الاختبار: معطل');
     };
+
+    // Wire up both buttons
+    if (flashcardBtn) {
+        flashcardBtn.onclick = toggleFlashcard;
+    }
+    if (headerFlashcardBtn) {
+        headerFlashcardBtn.onclick = toggleFlashcard;
+    }
 
     // Event Delegation for revealing items
     detailsArea.addEventListener('click', (e) => {

@@ -1,0 +1,1299 @@
+{
+  "generatedAt": "2025-12-05T09:36:01.508Z",
+  "foodTerms": {
+    "needsBetterExplanation": [
+      {
+        "word": "Pytteliten",
+        "arabic": "صغير جداً",
+        "arbDef": "دقيق",
+        "sweDef": "mycket liten",
+        "hasExample": false
+      },
+      {
+        "word": "Signifikativ",
+        "arabic": "ذو معنى",
+        "arbDef": "",
+        "sweDef": "utmärkande",
+        "hasExample": false
+      },
+      {
+        "word": "Armeringsspecifikation",
+        "arabic": "جدول التسليح",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bulleremission",
+        "arabic": "انبعاث الضوضاء",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullerfortplantning",
+        "arabic": "انتقال الضوضاء",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullermätare",
+        "arabic": "مقياس مستوى الصوت",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullermätning",
+        "arabic": "قياس الضجيج",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullernivå",
+        "arabic": "مستوى الضجيج",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullernorm",
+        "arabic": "مقياس الضوضاء",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullerskydd",
+        "arabic": "الحماية من الضوضاء",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullerskärm",
+        "arabic": "حاجز الضوضاء",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Bullerskada",
+        "arabic": "فقد السمع المحدث بالضوضاء, إصابة من الضجيج",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Passar mina kvalifikationer",
+        "arabic": "يناسب مؤهلاتي",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Kvalifikationstid",
+        "arabic": "زمن التأهيل",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Äktenskapscertifikat",
+        "arabic": "شهادة زواج - تصريح زواج ( شهادة لا مانع من زواج إذا كان المواطن السويدي يريد استخدامها أمام سلطات أجنبية )",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Gomspalta",
+        "arabic": "حنك مشروم",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Halsfluss, tonsillitis",
+        "arabic": "التهاب اللوزتين",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Slemmig soppa",
+        "arabic": "حساء رغوي",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Lönespecifikation",
+        "arabic": "قسيمة الراتب",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Lönespecifikationer",
+        "arabic": "كشوفات مفصلة للرواتب",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Brännvin",
+        "arabic": "كحول مقطرة",
+        "arbDef": "مشروب كحولي سويدي",
+        "sweDef": "en spritdryck",
+        "hasExample": false
+      },
+      {
+        "word": "Bulla",
+        "arabic": "أمر بابوي, إرادة ملكية",
+        "arbDef": "",
+        "sweDef": "påvlig skrivelse",
+        "hasExample": false
+      },
+      {
+        "word": "Bulldogg",
+        "arabic": "بلدغ, نوع من الكلاب",
+        "arbDef": "",
+        "sweDef": "en hundras",
+        "hasExample": false
+      },
+      {
+        "word": "Falukorv",
+        "arabic": "فالو كورف",
+        "arbDef": "سُجق فالو",
+        "sweDef": "ett slags korv som brukar stekas - bräckkorv",
+        "hasExample": false
+      },
+      {
+        "word": "Fastlagsbulle",
+        "arabic": "كعكة السِملا",
+        "arbDef": "",
+        "sweDef": "ett slags vetebulle med grädde och mandelmassa ( som äts under fastlagen ) - semla",
+        "hasExample": false
+      },
+      {
+        "word": "Knäckebröd",
+        "arabic": "خبز مجفف",
+        "arbDef": "خبز رقيق يابس",
+        "sweDef": "ett slags hårt och tunt bröd",
+        "hasExample": false
+      },
+      {
+        "word": "Palt",
+        "arabic": "عجينة بالدم",
+        "arbDef": "",
+        "sweDef": "maträtt av deg ( med blod ) kokad i vatten",
+        "hasExample": false
+      },
+      {
+        "word": "Slarvsylta",
+        "arabic": "سلارف سيلتا",
+        "arbDef": "طبق سويديّ",
+        "sweDef": "ett slags maträtt",
+        "hasExample": false
+      },
+      {
+        "word": "Spettkaka",
+        "arabic": "سبِت كاكا",
+        "arbDef": "ضرب من كعك سكونة",
+        "sweDef": "ett slags torr äggkaka gräddad på spett",
+        "hasExample": false
+      },
+      {
+        "word": "Sylta",
+        "arabic": "لحم مُقَطّع بالمَرَق الجامِد",
+        "arbDef": "",
+        "sweDef": "maträtt av finhackat kött i stelnat spad",
+        "hasExample": false
+      },
+      {
+        "word": "Sylta",
+        "arabic": "مطعم مُتَواضِع",
+        "arbDef": "",
+        "sweDef": "sämre restaurang",
+        "hasExample": false
+      },
+      {
+        "word": "Wienerbröd",
+        "arabic": "كعكة الدانمارك",
+        "arbDef": "",
+        "sweDef": "ett slags kaffebröd",
+        "hasExample": false
+      },
+      {
+        "word": "Wienerkorv",
+        "arabic": "سجق وينر",
+        "arbDef": "",
+        "sweDef": "en sorts lång smal korv ( som grillas el. kokas )",
+        "hasExample": false
+      },
+      {
+        "word": "Äktenskapscertifikat",
+        "arabic": "شهادة زواج",
+        "arbDef": "",
+        "sweDef": "intyg ( begärt av utländsk myndighet ) som visar att en svensk medborgare har rätt att ingå äktenskap enligt svensk lag",
+        "hasExample": false
+      },
+      {
+        "word": "Fikar",
+        "arabic": "يشرب قهوة",
+        "arbDef": "",
+        "sweDef": "dricka kaffe",
+        "hasExample": false
+      }
+    ],
+    "hasGoodExplanation": [
+      {
+        "word": "Bullrig",
+        "arabic": "صاخب",
+        "arbDef": "ضاجّ",
+        "sweDef": "bullersam, skrällig",
+        "hasExample": true
+      },
+      {
+        "word": "Desillusionerad",
+        "arabic": "خائب الأمل",
+        "arbDef": "",
+        "sweDef": "besviken, illusionslös",
+        "hasExample": false
+      },
+      {
+        "word": "Signifikant",
+        "arabic": "ذو مَغزى",
+        "arbDef": "",
+        "sweDef": "som är ett mycket tydligt tecken ( på något )",
+        "hasExample": false
+      },
+      {
+        "word": "Huller om buller",
+        "arabic": "بِفَوْضى",
+        "arbDef": "اختلط الحابل بالنابل",
+        "sweDef": "i oordning, om vartannat",
+        "hasExample": true
+      },
+      {
+        "word": "Bannbulla",
+        "arabic": "خطاب حرمان",
+        "arbDef": "",
+        "sweDef": "påvebrev som bannlyser någon",
+        "hasExample": false
+      },
+      {
+        "word": "Blåbär",
+        "arabic": "عنبية",
+        "arbDef": "",
+        "sweDef": "bär av växten Vaccinium myrtillus",
+        "hasExample": false
+      },
+      {
+        "word": "Bröd",
+        "arabic": "خبز",
+        "arbDef": "",
+        "sweDef": "mat av mjöl som bakas i ugn",
+        "hasExample": true
+      },
+      {
+        "word": "Bulle",
+        "arabic": "كعكة محلاة",
+        "arbDef": "",
+        "sweDef": "litet runt ( vete ) bröd",
+        "hasExample": true
+      },
+      {
+        "word": "Buller",
+        "arabic": "ضجيج - صخب - ضوضاء",
+        "arbDef": "",
+        "sweDef": "störande ljud, oväsen",
+        "hasExample": true
+      },
+      {
+        "word": "Bullermatta",
+        "arabic": "منطقة ضجيج",
+        "arbDef": "",
+        "sweDef": "störande ljud från flygplan över ett område",
+        "hasExample": false
+      },
+      {
+        "word": "Bulletin",
+        "arabic": "بلاغ",
+        "arbDef": "نشرة",
+        "sweDef": "återkommande rapport",
+        "hasExample": false
+      },
+      {
+        "word": "Certifikat",
+        "arabic": "شهادة",
+        "arbDef": "رخصة, تصريح",
+        "sweDef": "intyg, tillståndsbevis",
+        "hasExample": false
+      },
+      {
+        "word": "Fläskpannkaka",
+        "arabic": "فطيرة لحم الخنزير",
+        "arbDef": "",
+        "sweDef": "pannkaka med stekta fläsk tärningar i degen",
+        "hasExample": false
+      },
+      {
+        "word": "Franskbröd",
+        "arabic": "خبز فرنسي",
+        "arbDef": "",
+        "sweDef": "bulle eller limpa av ljust bröd",
+        "hasExample": false
+      },
+      {
+        "word": "Gratifikation",
+        "arabic": "مُكافأة مالية",
+        "arbDef": "",
+        "sweDef": "penninggåva som belöning",
+        "hasExample": false
+      },
+      {
+        "word": "Hjortron",
+        "arabic": "فريز السحاب",
+        "arbDef": "فراولة السحاب",
+        "sweDef": "( bär av ) växten Rubus chamaemorus",
+        "hasExample": false
+      },
+      {
+        "word": "Kaka",
+        "arabic": "كوكي",
+        "arbDef": "حبيبة تعريف",
+        "sweDef": "liten datamängd med information om tidigare besök som en webbserver skickar till en webbläsare och senare kan hämta därifrån",
+        "hasExample": false
+      },
+      {
+        "word": "Korv",
+        "arabic": "سجق",
+        "arbDef": "",
+        "sweDef": "hackat och malet kött stoppat i ett avlångt skinn",
+        "hasExample": false
+      },
+      {
+        "word": "Korvstoppning",
+        "arabic": "حشو المعلومات",
+        "arbDef": "",
+        "sweDef": "undervisning som leder till inlärning utan förståelse",
+        "hasExample": false
+      },
+      {
+        "word": "Kroppkaka",
+        "arabic": "كروب ـ كاكا, عجينة من بوريه البطاطس تحشى بمكعبات من لحم الخنزير",
+        "arbDef": "",
+        "sweDef": "kokt bulle av riven potatis fylld med fläsktärningar",
+        "hasExample": false
+      },
+      {
+        "word": "Kvalifikation",
+        "arabic": "أهلية, كفاءة",
+        "arbDef": "",
+        "sweDef": "förmåga som gör en kompetent till något",
+        "hasExample": true
+      },
+      {
+        "word": "Kvalifikationsår",
+        "arabic": "سنة التأهيل",
+        "arbDef": "",
+        "sweDef": "det år under vilket semesterrätt förvärvas",
+        "hasExample": false
+      },
+      {
+        "word": "Levebröd",
+        "arabic": "قوت",
+        "arbDef": "",
+        "sweDef": "förutsättning för att leva",
+        "hasExample": false
+      },
+      {
+        "word": "Lingon",
+        "arabic": "لينجون",
+        "arbDef": "أُوَيسْة, عِنَبِيَّة جَبَلِيَّة, عِنَب الجبل",
+        "sweDef": "( bär av ) växten Vaccinium vitis idaea",
+        "hasExample": true
+      },
+      {
+        "word": "Lipsill",
+        "arabic": "شخص بكّاء",
+        "arbDef": "شخص سريع البُكاء",
+        "sweDef": "person som gråter lätt",
+        "hasExample": false
+      },
+      {
+        "word": "Lussekatt",
+        "arabic": "كعكة لوسيا",
+        "arbDef": "",
+        "sweDef": "en slags vetebulle som äts på luciadagen",
+        "hasExample": false
+      },
+      {
+        "word": "Matjessill",
+        "arabic": "رنكة ماتييس",
+        "arbDef": "رنكة مملحة ومبهرة",
+        "sweDef": "saltad och kryddad benfri sill ( i bitar el. filé )",
+        "hasExample": false
+      },
+      {
+        "word": "Medisterkorv",
+        "arabic": "سجق ميدستر, نوع من السجق المصنوع من لحم العجل والخنزير",
+        "arbDef": "",
+        "sweDef": "en slags korv av kalvkött och fläsk",
+        "hasExample": false
+      },
+      {
+        "word": "Moralkaka",
+        "arabic": "تفسير خلقي",
+        "arbDef": "",
+        "sweDef": "moraliserande uttalande",
+        "hasExample": false
+      },
+      {
+        "word": "Paltbröd",
+        "arabic": "خبز بالدم",
+        "arbDef": "",
+        "sweDef": "bröd av rågmjöl med blod som degvätska och svagdricka",
+        "hasExample": false
+      },
+      {
+        "word": "Paltor",
+        "arabic": "ملابس مهترئة",
+        "arbDef": "",
+        "sweDef": "gamla och slitna kläder",
+        "hasExample": false
+      },
+      {
+        "word": "Pepparkaka",
+        "arabic": "كعكة الزنجبيل",
+        "arbDef": "",
+        "sweDef": "brun starkt kryddad kaka",
+        "hasExample": false
+      },
+      {
+        "word": "Prinskorv",
+        "arabic": "برنس كورف",
+        "arbDef": "نقانق, سجق صغير",
+        "sweDef": "slags liten korv",
+        "hasExample": false
+      },
+      {
+        "word": "Semla",
+        "arabic": "سملا",
+        "arbDef": "كعكة بالقشطة وعجينة اللوز",
+        "sweDef": "slags bulle med grädde och mandelmassa, fastlagsbulle",
+        "hasExample": false
+      },
+      {
+        "word": "Sill",
+        "arabic": "سمكة الرنكة",
+        "arbDef": "",
+        "sweDef": "matfisk av släktet Clupea ( särskilt C. harengus )",
+        "hasExample": true
+      },
+      {
+        "word": "Skorv",
+        "arabic": "سفينة عتيقة",
+        "arbDef": "",
+        "sweDef": "gammalt dåligt fartyg",
+        "hasExample": false
+      },
+      {
+        "word": "Skådebröd",
+        "arabic": "خبز منظر",
+        "arbDef": "",
+        "sweDef": "bröd som inte skall ätas utan bara ses på",
+        "hasExample": false
+      },
+      {
+        "word": "Smörgås",
+        "arabic": "سندويشة",
+        "arbDef": "شطيرة",
+        "sweDef": "en brödskiva med matfett och ofta med pålägg",
+        "hasExample": false
+      },
+      {
+        "word": "Smörgåsbord",
+        "arabic": "بوفيه سويدي",
+        "arbDef": "",
+        "sweDef": "bord dukat med olika smårätter för självservering",
+        "hasExample": false
+      },
+      {
+        "word": "Smörgåstårta",
+        "arabic": "سمورجوس تورتا",
+        "arbDef": "كعكة من طبقات الخبز بينها شرائح لحم أو سمك بالمايونيز",
+        "sweDef": "tårta av bröd och pålägg",
+        "hasExample": false
+      },
+      {
+        "word": "Snaps",
+        "arabic": "سنابس",
+        "arbDef": "خمر يُشْرَب بسرعة من قدح صغير",
+        "sweDef": "litet glas brännvin, sup",
+        "hasExample": false
+      },
+      {
+        "word": "Sockerkaka",
+        "arabic": "الكعكة الاسفنجية",
+        "arbDef": "كعكة مُحَلاّة",
+        "sweDef": "mjuk kaka gjord på ägg och socker",
+        "hasExample": false
+      },
+      {
+        "word": "Spalt",
+        "arabic": "عَمود",
+        "arbDef": "",
+        "sweDef": "lodrät avdelning av trycksida, kolumn",
+        "hasExample": false
+      },
+      {
+        "word": "Specifikation",
+        "arabic": "مُواصَفات",
+        "arbDef": "تفاصيل",
+        "sweDef": "noggrann och detaljerad förteckning eller uppräkning",
+        "hasExample": false
+      },
+      {
+        "word": "Stenkaka",
+        "arabic": "اسطوانة غرامافون",
+        "arbDef": "",
+        "sweDef": "78 - varvs gammal grammofonskiva",
+        "hasExample": false
+      },
+      {
+        "word": "Ströbröd",
+        "arabic": "خبز جافّ مدقوق",
+        "arbDef": "",
+        "sweDef": "rivet bröd som används vid matlagning",
+        "hasExample": false
+      },
+      {
+        "word": "Surströmming",
+        "arabic": "سردين متخمّر",
+        "arbDef": "",
+        "sweDef": "strömming som konserverats genom saltning och jäsning",
+        "hasExample": false
+      },
+      {
+        "word": "Sölkorv",
+        "arabic": "مُتَلَكِّئ",
+        "arbDef": "كَسول",
+        "sweDef": "person som sölar 1",
+        "hasExample": false
+      },
+      {
+        "word": "Tonsill",
+        "arabic": "لوزة الحلق",
+        "arbDef": "",
+        "sweDef": "en av de två körtlarna i svalget",
+        "hasExample": false
+      },
+      {
+        "word": "Trafikant",
+        "arabic": "راكب",
+        "arbDef": "",
+        "sweDef": "person som färdas i trafiken, resande, resenär",
+        "hasExample": false
+      },
+      {
+        "word": "Tunnbröd",
+        "arabic": "تُنْ بْرود",
+        "arbDef": "خبز رقيق",
+        "sweDef": "en norrländsk brödspecialitet",
+        "hasExample": false
+      },
+      {
+        "word": "Verifikation",
+        "arabic": "وَصْل",
+        "arbDef": "شهادة",
+        "sweDef": "dokument som intygar att något är sant ( t ex kvitto på en utgift )",
+        "hasExample": false
+      },
+      {
+        "word": "Ärtsoppa",
+        "arabic": "شوربة البازلاء",
+        "arbDef": "",
+        "sweDef": "soppa på gula ärter ( samt vanligen fläsk )",
+        "hasExample": true
+      },
+      {
+        "word": "Bullrar",
+        "arabic": "يُقَرقع",
+        "arbDef": "يضج, يصخب",
+        "sweDef": "skapa buller, väsnas",
+        "hasExample": true
+      }
+    ],
+    "missingArabic": [],
+    "phoneticOnly": [
+      {
+        "word": "Bulldozer",
+        "arabic": "جرافة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Certifikat",
+        "arabic": "شهادة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Halsmandel, tonsill",
+        "arabic": "لوزة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Halsmandlar, tonsillerna",
+        "arabic": "لوزتين",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Fika",
+        "arabic": "قهوة",
+        "arbDef": "",
+        "sweDef": "kaffe",
+        "hasExample": false
+      },
+      {
+        "word": "Glögg",
+        "arabic": "جلوج",
+        "arbDef": "نبيذ مُحَلّى ساخن",
+        "sweDef": "dryck av glödgat vin, socker och kryddor",
+        "hasExample": false
+      },
+      {
+        "word": "Gryta",
+        "arabic": "قِدْر",
+        "arbDef": "",
+        "sweDef": "ett slags kokkärl, kittel, kastrull",
+        "hasExample": false
+      },
+      {
+        "word": "Gångtrafikant",
+        "arabic": "ماشٍ",
+        "arbDef": "",
+        "sweDef": "en gående",
+        "hasExample": false
+      },
+      {
+        "word": "Kaka",
+        "arabic": "رغيف",
+        "arbDef": "",
+        "sweDef": "runt platt matbröd",
+        "hasExample": false
+      },
+      {
+        "word": "Kaka",
+        "arabic": "كعكة",
+        "arbDef": "",
+        "sweDef": "sött bakverk, småbröd",
+        "hasExample": true
+      },
+      {
+        "word": "Köttbullar",
+        "arabic": "كفتة",
+        "arbDef": "طبق سويدي من كتل مقلية من اللحم المفروم",
+        "sweDef": "maträtt av stekta bollar av köttfärs",
+        "hasExample": false
+      },
+      {
+        "word": "Modifikation",
+        "arabic": "تعديل",
+        "arbDef": "",
+        "sweDef": "mindre ändring",
+        "hasExample": false
+      },
+      {
+        "word": "Nubbe",
+        "arabic": "سْنابْس",
+        "arbDef": "",
+        "sweDef": "snaps",
+        "hasExample": false
+      },
+      {
+        "word": "Pannkaka",
+        "arabic": "فطيرة",
+        "arbDef": "",
+        "sweDef": "en maträtt av ägg, mjöl och mjölk ( som gräddas i stekpanna )",
+        "hasExample": true
+      },
+      {
+        "word": "Pyttipanna",
+        "arabic": "بيتيبانّا",
+        "arbDef": "",
+        "sweDef": "maträtt med stekt potatis, lök, kött mm i bitar",
+        "hasExample": false
+      },
+      {
+        "word": "Skorv",
+        "arabic": "هَبَرية",
+        "arbDef": "تَقَشُّر البشرة",
+        "sweDef": "ett slags hudsjukdom",
+        "hasExample": false
+      },
+      {
+        "word": "Småbröd",
+        "arabic": "كعك",
+        "arbDef": "",
+        "sweDef": "kakor",
+        "hasExample": false
+      },
+      {
+        "word": "Snubbe",
+        "arabic": "رَجُل",
+        "arbDef": "",
+        "sweDef": "( manlig ) person",
+        "hasExample": false
+      },
+      {
+        "word": "Soppa",
+        "arabic": "شوربة",
+        "arbDef": "حِساء",
+        "sweDef": "flytande maträtt kokad på frukt, grönsaker, kött el dyl",
+        "hasExample": true
+      },
+      {
+        "word": "Våffla",
+        "arabic": "فوفلا",
+        "arbDef": "ضرب من الفطائر",
+        "sweDef": "bakverk som gräddas i ett rutmönstrat järn",
+        "hasExample": false
+      },
+      {
+        "word": "Soppa",
+        "arabic": "وقود",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      }
+    ]
+  },
+  "culturalTerms": {
+    "needsBetterExplanation": [
+      {
+        "word": "Signifikativ",
+        "arabic": "ذو معنى",
+        "arbDef": "",
+        "sweDef": "utmärkande",
+        "hasExample": false
+      },
+      {
+        "word": "Armeringsspecifikation",
+        "arabic": "جدول التسليح",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Certifikat",
+        "arabic": "شهادة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Passar mina kvalifikationer",
+        "arabic": "يناسب مؤهلاتي",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Homosexuella sambor",
+        "arabic": "تعايش مثلي",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Allemansrätt - Allemansrätten",
+        "arabic": "الحق العام وسط الطبيعة - حق الإنسان في الطبيعة - الحق العام في التمتع بالطبيعة - وسط الطبيعة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Faderskapsbekräftelse",
+        "arabic": "تثبيت الأُبُوة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Faderskapsbekräftelse",
+        "arabic": "تأكيد الأبوة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Kvalifikationstid",
+        "arabic": "زمن التأهيل",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Sambo",
+        "arabic": "رفيق التعايش - متعايش",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Samboavtal",
+        "arabic": "عقد المساكنة - عقد تعايش, اتفاقية تساكن",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Sambolagen",
+        "arabic": "قانون المساكنة - قانون التعايش",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Äktenskapscertifikat",
+        "arabic": "شهادة زواج - تصريح زواج ( شهادة لا مانع من زواج إذا كان المواطن السويدي يريد استخدامها أمام سلطات أجنبية )",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Smultrontunga",
+        "arabic": "إحمرار اللسان - لسان الفراولة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Hemangiom, smultronmärke",
+        "arabic": "ورم وعائي دموي, وحمة وعائية",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Vattenloppor, Hinnkräftor, Cladocera",
+        "arabic": "كلادوسيران ( نوع قشريات صغيرة شفافة في المياه العذبة ), متفرعات القرون",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Lönespecifikation",
+        "arabic": "قسيمة الراتب",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Lönespecifikationer",
+        "arabic": "كشوفات مفصلة للرواتب",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Valborg",
+        "arabic": "أمسية القديسة فالبورجا, ليلة الأول من مايو ( أيار )",
+        "arbDef": "",
+        "sweDef": "valborgsmässoafton",
+        "hasExample": false
+      },
+      {
+        "word": "Valborgsmässoafton",
+        "arabic": "عيد القديسة فالبورجا, ليلة الأول من مايو ( أيار )",
+        "arbDef": "",
+        "sweDef": "den 30 april",
+        "hasExample": false
+      },
+      {
+        "word": "Samboegendom",
+        "arabic": "التعايش أو التساكن ( بدون زواج ) - ملكية ضمن علاقة تعايش",
+        "arbDef": "ممتلكات المتساكنين",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Sambor",
+        "arabic": "المساكنة",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Lekstuga",
+        "arabic": "مبنى صغير للأطفال يلعبون به",
+        "arbDef": "",
+        "sweDef": "",
+        "hasExample": false
+      },
+      {
+        "word": "Fika",
+        "arabic": "قهوة",
+        "arbDef": "",
+        "sweDef": "kaffe",
+        "hasExample": false
+      },
+      {
+        "word": "Gångtrafikant",
+        "arabic": "ماشٍ",
+        "arbDef": "",
+        "sweDef": "en gående",
+        "hasExample": false
+      },
+      {
+        "word": "Kräfta",
+        "arabic": "داء السرطان",
+        "arbDef": "",
+        "sweDef": "cancer",
+        "hasExample": false
+      },
+      {
+        "word": "Modifikation",
+        "arabic": "تعديل",
+        "arbDef": "",
+        "sweDef": "mindre ändring",
+        "hasExample": false
+      },
+      {
+        "word": "Morfar",
+        "arabic": "جدّ ( والد الأم )",
+        "arbDef": "",
+        "sweDef": "mammas pappa",
+        "hasExample": false
+      },
+      {
+        "word": "Sambo",
+        "arabic": "مُتَعايش, متعايش",
+        "arbDef": "",
+        "sweDef": "sammanboende",
+        "hasExample": false
+      },
+      {
+        "word": "Äktenskapscertifikat",
+        "arabic": "شهادة زواج",
+        "arbDef": "",
+        "sweDef": "intyg ( begärt av utländsk myndighet ) som visar att en svensk medborgare har rätt att ingå äktenskap enligt svensk lag",
+        "hasExample": false
+      },
+      {
+        "word": "Fikar",
+        "arabic": "يشرب قهوة",
+        "arbDef": "",
+        "sweDef": "dricka kaffe",
+        "hasExample": false
+      },
+      {
+        "word": "Påskina",
+        "arabic": "يَتظاهر ب",
+        "arbDef": "يَدّعي",
+        "sweDef": "",
+        "hasExample": false
+      }
+    ],
+    "hasGoodExplanation": [
+      {
+        "word": "Signifikant",
+        "arabic": "ذو مَغزى",
+        "arbDef": "",
+        "sweDef": "som är ett mycket tydligt tecken ( på något )",
+        "hasExample": false
+      },
+      {
+        "word": "Lagom",
+        "arabic": "وَسَط",
+        "arbDef": "مُناسب, مُعتدل",
+        "sweDef": "inte för mycket och inte för lite, passande, lämpligt",
+        "hasExample": true
+      },
+      {
+        "word": "Lucia",
+        "arabic": "لوسيّا",
+        "arbDef": "",
+        "sweDef": "luciadagen den 13 december",
+        "hasExample": false
+      },
+      {
+        "word": "Allemansrätt",
+        "arabic": "الحق العام, الحق في التجول",
+        "arbDef": "",
+        "sweDef": "sedvanerätt inskriven i Naturskyddslagen",
+        "hasExample": false
+      },
+      {
+        "word": "Barnstuga",
+        "arabic": "روضة",
+        "arbDef": "",
+        "sweDef": "gemensamt namn för daghem, familjedaghem, deltidsförskola och fritidshem",
+        "hasExample": false
+      },
+      {
+        "word": "Bekräftelse",
+        "arabic": "تأكيد",
+        "arbDef": "شهادة",
+        "sweDef": "bevis på att något är sant, intyg",
+        "hasExample": false
+      },
+      {
+        "word": "Certifikat",
+        "arabic": "شهادة",
+        "arbDef": "رخصة, تصريح",
+        "sweDef": "intyg, tillståndsbevis",
+        "hasExample": false
+      },
+      {
+        "word": "Farfar",
+        "arabic": "جدّ",
+        "arbDef": "والد الأب",
+        "sweDef": "pappas pappa",
+        "hasExample": false
+      },
+      {
+        "word": "Farmor",
+        "arabic": "جدّة",
+        "arbDef": "والدة الأب",
+        "sweDef": "pappas mamma",
+        "hasExample": false
+      },
+      {
+        "word": "Gille ( s ) stuga",
+        "arabic": "غرفة المعيشة اليومية",
+        "arbDef": "",
+        "sweDef": "rustikare sällskapsrum ( i villa )",
+        "hasExample": false
+      },
+      {
+        "word": "Gratifikation",
+        "arabic": "مُكافأة مالية",
+        "arbDef": "",
+        "sweDef": "penninggåva som belöning",
+        "hasExample": false
+      },
+      {
+        "word": "Jantelag",
+        "arabic": "قانون جانتي",
+        "arbDef": "ضغط اجتماعي في مجتمع بأنّه من غير المحمود التَفاخُر بالنفس",
+        "sweDef": "det sociala trycket i ett samhälle att ingen skall utmärka sig",
+        "hasExample": false
+      },
+      {
+        "word": "Klagomur",
+        "arabic": "حائِط المَبْكى",
+        "arbDef": "",
+        "sweDef": "Sveriges Radios programupplysning, där man kan lämna klagomål",
+        "hasExample": false
+      },
+      {
+        "word": "Klagomål",
+        "arabic": "شَكْوى, نَقْد, اتّهام, تَذَمّر",
+        "arbDef": "شكوى, تذمر",
+        "sweDef": "anklagelse, kritik",
+        "hasExample": true
+      },
+      {
+        "word": "Kolonistuga",
+        "arabic": "كوخ زراعي",
+        "arbDef": "",
+        "sweDef": "liten stuga på en kolonilott",
+        "hasExample": false
+      },
+      {
+        "word": "Kräfta",
+        "arabic": "سرطان النهر",
+        "arbDef": "",
+        "sweDef": "kräftdjuret Potamobius astacus",
+        "hasExample": true
+      },
+      {
+        "word": "Kräftgång",
+        "arabic": "تراجع",
+        "arbDef": "",
+        "sweDef": "det att gå baklänges",
+        "hasExample": false
+      },
+      {
+        "word": "Kräftskiva",
+        "arabic": "حفل أكل سرطان النهر",
+        "arbDef": "",
+        "sweDef": "fest då man äter kokta kräftor",
+        "hasExample": false
+      },
+      {
+        "word": "Kvalifikation",
+        "arabic": "أهلية, كفاءة",
+        "arbDef": "",
+        "sweDef": "förmåga som gör en kompetent till något",
+        "hasExample": true
+      },
+      {
+        "word": "Kvalifikationsår",
+        "arabic": "سنة التأهيل",
+        "arbDef": "",
+        "sweDef": "det år under vilket semesterrätt förvärvas",
+        "hasExample": false
+      },
+      {
+        "word": "Lucia",
+        "arabic": "فتاة تمثل دور القدّيسة لوسيا",
+        "arbDef": "",
+        "sweDef": "flicka ( klädd i vita kläder och med ljus i håret ) som uppträder på luciadagen",
+        "hasExample": false
+      },
+      {
+        "word": "Midsommar",
+        "arabic": "عيد مُنْتَصف الصيف",
+        "arbDef": "",
+        "sweDef": "helg omkring den 24 juni",
+        "hasExample": false
+      },
+      {
+        "word": "Mormor",
+        "arabic": "جدّة",
+        "arbDef": "والدة الأم",
+        "sweDef": "mammas mamma",
+        "hasExample": false
+      },
+      {
+        "word": "Påsk",
+        "arabic": "عيد الفصح",
+        "arbDef": "عيد القيامة",
+        "sweDef": "en högtid med religiös betydelse som firas i mars eller april",
+        "hasExample": true
+      },
+      {
+        "word": "Påskkäring",
+        "arabic": "ساحرة عيد الفصح",
+        "arbDef": "",
+        "sweDef": "häxa som rider på en kvast på påsknatten",
+        "hasExample": false
+      },
+      {
+        "word": "Påsklilja",
+        "arabic": "نرجس أصفر",
+        "arbDef": "",
+        "sweDef": "växt av släktet Narcissus",
+        "hasExample": false
+      },
+      {
+        "word": "Påskrift",
+        "arabic": "توقيع",
+        "arbDef": "",
+        "sweDef": "något som står skrivet på något",
+        "hasExample": false
+      },
+      {
+        "word": "Påskris",
+        "arabic": "أغصان عيد الفصح",
+        "arbDef": "",
+        "sweDef": "knippe ( björk ) ris med färgade fjädrar",
+        "hasExample": false
+      },
+      {
+        "word": "Sjukstuga",
+        "arabic": "مستشفى ريفي",
+        "arbDef": "",
+        "sweDef": "mindre sjukhus på landsbygden",
+        "hasExample": false
+      },
+      {
+        "word": "Smultron",
+        "arabic": "الفراولة البريّ",
+        "arbDef": "",
+        "sweDef": "( bär av ) växten Fragaria vesca",
+        "hasExample": false
+      },
+      {
+        "word": "Smultronställe",
+        "arabic": "مكان الاستجمام",
+        "arbDef": "مكان جميل",
+        "sweDef": "ovanligt fin plats",
+        "hasExample": false
+      },
+      {
+        "word": "Sommarstuga",
+        "arabic": "كوخ الصيف",
+        "arbDef": "منزل الصيف",
+        "sweDef": "sommarhus",
+        "hasExample": false
+      },
+      {
+        "word": "Specifikation",
+        "arabic": "مُواصَفات",
+        "arbDef": "تفاصيل",
+        "sweDef": "noggrann och detaljerad förteckning eller uppräkning",
+        "hasExample": false
+      },
+      {
+        "word": "Stuga",
+        "arabic": "كوخ",
+        "arbDef": "بيت صغير للعطلات",
+        "sweDef": "litet hus - sommarstuga",
+        "hasExample": true
+      },
+      {
+        "word": "Surströmming",
+        "arabic": "سردين متخمّر",
+        "arbDef": "",
+        "sweDef": "strömming som konserverats genom saltning och jäsning",
+        "hasExample": false
+      },
+      {
+        "word": "Systuga",
+        "arabic": "كوخ الخياطة",
+        "arbDef": "",
+        "sweDef": "lokal med sykunnig personal som till en låg kostnad hjälper till med olika sömnadsarbeten",
+        "hasExample": false
+      },
+      {
+        "word": "Trafikant",
+        "arabic": "راكب",
+        "arbDef": "",
+        "sweDef": "person som färdas i trafiken, resande, resenär",
+        "hasExample": false
+      },
+      {
+        "word": "Tvättstuga",
+        "arabic": "غرفة غسيل الملابس",
+        "arbDef": "",
+        "sweDef": "lokal ( i bostadshus ) där man kan tvätta kläder ( i tvättmaskin )",
+        "hasExample": false
+      },
+      {
+        "word": "Verifikation",
+        "arabic": "وَصْل",
+        "arbDef": "شهادة",
+        "sweDef": "dokument som intygar att något är sant ( t ex kvitto på en utgift )",
+        "hasExample": false
+      },
+      {
+        "word": "Bekräftar",
+        "arabic": "يؤكّد",
+        "arbDef": "يثبت, يعزز",
+        "sweDef": "intyga, styrka, försäkra",
+        "hasExample": true
+      },
+      {
+        "word": "Påskyndar",
+        "arabic": "يُعَجّل",
+        "arbDef": "يُسَرّع",
+        "sweDef": "få att öka takten",
+        "hasExample": true
+      }
+    ]
+  }
+}

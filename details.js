@@ -164,6 +164,71 @@ function getLabeledForms(formsArray, wordType) {
     return formsArray.map(word => ({ word, label: null }));
 }
 
+// ========================================
+// Detect Noun Gender (En/Ett) from Forms
+// ========================================
+function detectNounGender(forms) {
+    if (!forms || forms.trim() === '') return null;
+
+    // Split and clean forms
+    const formsArray = forms.split(',').map(f => f.trim()).filter(f => f);
+    if (formsArray.length < 2) return null;
+
+    const baseWord = formsArray[0].toLowerCase();
+
+    // Scan all forms to find the definite singular
+    // We look for forms that start with the base word and end in specific suffixes
+    for (const form of formsArray) {
+        const lower = form.toLowerCase();
+
+        // Skip the base word itself and any compound words that are just longer variations at the start
+        // We want a form that is baseWord + suffix
+        if (lower === baseWord) continue;
+
+        // Check for Ett-word patterns (strongest signals first)
+        // 1. Ends in 'et' (huset, kärlet) - most common ett-signal
+        if (lower.endsWith('et') && !lower.endsWith('het')) {
+            // 'het' is usually en-word (svårighet -> svårigheten), but check if it matches base + et
+            if (lower === baseWord + 'et' || lower === baseWord + 't') {
+                return 'ett';
+            }
+            // If the form is just ...et without matching base length, be careful, but high likely ett
+            if (lower.length > baseWord.length && (lower.endsWith('et') || lower.endsWith('t'))) {
+                // Double check it's not a plural like "äpplen" (ends in n) -> wait, we check 'et' here.
+                // If it ends in 'et', it's almost certainly definite singular neutrum
+                return 'ett';
+            }
+        }
+
+        // 2. Ends in 't' (bordet -> bordet?, no, bord -> bordet). 
+        // Some words end in vowel + t (äpple -> äpplet)
+        if (lower.endsWith('t') && lower.length === baseWord.length + 1) {
+            return 'ett';
+        }
+    }
+
+    // If no 'ett' pattern found, scan for 'en' patterns
+    for (const form of formsArray) {
+        const lower = form.toLowerCase();
+        if (lower === baseWord) continue;
+
+        // En-word patterns
+        if (lower.endsWith('en') || lower.endsWith('an') || lower.endsWith('n')) {
+            // Check if it's likely definite form
+            if (lower.length >= baseWord.length) {
+                return 'en';
+            }
+        }
+    }
+
+    // Fallback: Check specific forms by index if scanning failed (standard clean data)
+    // But since we had "Kärl, ..., kärlet", the scan above should catch it.
+
+    // Default to en if uncertain but we have forms? 
+    // Better to return null if we really can't tell, but 'en' is safe 75% bet.
+    return 'en';
+}
+
 function parseVerbForms(formsArray) {
     // Swedish verb pattern: presens, (optional nouns), preteritum (-de/-te/-dde), supinum (-t/-tt/-it), infinitiv (-a)
     const result = [];
@@ -223,11 +288,12 @@ function parseVerbForms(formsArray) {
 }
 
 function parseNounForms(formsArray) {
+    // Swedish noun declension: obestämd singular, bestämd singular, obestämd plural, bestämd plural
     const labels = [
-        'Obestämd sing. / مفرد نكرة',
-        'Bestämd sing. / مفرد معرفة',
-        'Obestämd pl. / جمع نكرة',
-        'Bestämd pl. / جمع معرفة'
+        'Obestämd / نكرة',           // en bok
+        'Bestämd / معرفة',            // boken
+        'Plural obestämd / جمع نكرة', // böcker
+        'Plural bestämd / جمع معرفة'  // böckerna
     ];
 
     return formsArray.map((word, i) => ({
@@ -319,8 +385,13 @@ function renderDetails(item) {
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const isFavorite = favorites.includes(item[COL_ID]);
 
+    // Detect noun gender for substantiv
+    const isNoun = type.toLowerCase().includes('subst');
+    const nounGender = isNoun ? detectNounGender(forms) : null;
+
     // Hero Section - Restructured Layout
     // Word Type Badge in center with Audio on left, Favorite on right
+    // For nouns, show gender (en/ett) badge
     const heroHtml = `
         <div class="details-hero">
             <div class="details-hero-content">
@@ -337,6 +408,7 @@ function renderDetails(item) {
                                 <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
                             </svg>
                         </button>
+                        ${nounGender ? `<span class="gender-badge gender-${nounGender}">${nounGender}</span>` : ''}
                         <span class="word-type-badge">${type}</span>
                         <button class="favorite-btn-badge ${isFavorite ? 'active' : ''}" 
                                 onclick="toggleFavorite('${item[COL_ID]}')" 
@@ -436,12 +508,38 @@ function renderDetails(item) {
         `;
     }
 
+    // Check for missing data and show quality indicator
+    const missingData = [];
+    if (!forms && (isNoun || type.toLowerCase().includes('verb'))) {
+        missingData.push('تصريفات / Böjningar');
+    }
+    if (!exSwe && !exArb) {
+        missingData.push('أمثلة / Exempel');
+    }
+    if (!sweDef && !arbDef) {
+        missingData.push('تعريف / Definition');
+    }
+
+    let dataQualityHtml = '';
+    if (missingData.length > 0) {
+        dataQualityHtml = `
+            <div class="data-quality-notice">
+                <div class="notice-icon">ℹ️</div>
+                <div class="notice-content">
+                    <strong>Saknas / معلومات ناقصة:</strong>
+                    <span>${missingData.join(' • ')}</span>
+                </div>
+            </div>
+        `;
+    }
+
     const html = `
         ${heroHtml}
         ${definitionsHtml}
         ${formsHtml}
         ${examplesHtml}
         ${idiomsHtml}
+        ${dataQualityHtml}
     `;
 
     detailsArea.innerHTML = html;

@@ -1,29 +1,61 @@
 {
-  "name": "Snabba Lexin",
+  "name": "Snabba Lexin - القاموس السويدي",
   "short_name": "SnabbaLexin",
+  "description": "Svensk-Arabiskt Lexikon / القاموس السويدي العربي - Offline Dictionary",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f3f4f6",
   "theme_color": "#6366f1",
-  "description": "Svensk-Arabiskt Lexikon / القاموس السويدي العربي",
+  "lang": "sv",
+  "dir": "ltr",
+  "categories": [
+    "education",
+    "reference",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "icon.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
     }
-  ]
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Spela / ألعاب",
+      "short_name": "Games",
+      "description": "Öppna spelzonen / افتح منطقة الألعاب",
+      "url": "./games.html",
+      "icons": [
+        {
+          "src": "icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
 }

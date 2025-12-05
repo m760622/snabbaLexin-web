@@ -229,6 +229,59 @@ function detectNounGender(forms) {
     return 'en';
 }
 
+// ========================================
+// Detect Verb Group (1-4) from Forms
+// ========================================
+function detectVerbGroup(forms) {
+    if (!forms || forms.trim() === '') return null;
+
+    const formsArray = forms.split(',').map(f => f.trim()).filter(f => f);
+    if (formsArray.length < 1) return null;
+
+    // Find Presens form (usually ends in -ar, -er, -r)
+    // In our data, presens is often the first form for verbs
+    // Standard order: presens, preteritum, supinum, infinitiv
+
+    let presens = formsArray[0];
+    let preteritum = formsArray[1];
+    let supinum = formsArray[2];
+
+    if (!presens) return null;
+
+    // Group 1: Presens ends in -ar (talar, jobbar)
+    if (presens.endsWith('ar')) {
+        return 'Gr. 1';
+    }
+
+    // Group 2: Presens ends in -er (stänger, läser, ringer)
+    if (presens.endsWith('er')) {
+        // Group 2a: Preteritum ends in -de (ringde)
+        // Group 2b: Preteritum ends in -te (köpte, läste)
+        // Distinguishing 2a/2b is nice but just "Gr. 2" is often enough.
+        // Let's try to be precise if we have preteritum
+        if (preteritum) {
+            if (preteritum.endsWith('te')) return 'Gr. 2b';
+            if (preteritum.endsWith('de')) return 'Gr. 2a';
+        }
+        return 'Gr. 2';
+    }
+
+    // Group 3: Short verbs, Presens ends in -r (bor, syr, ror)
+    // Often monosyllabic base (bo, sy, ro)
+    if (presens.endsWith('r') && !presens.endsWith('ar') && !presens.endsWith('er')) {
+        return 'Gr. 3';
+    }
+
+    // Group 4: Strong verbs (irregular vowel change) - dricker, skriver
+    // Presens often ends in -er (but not always weak conjugation)
+    // Preteritum is key: strong verbs change vowel and NO ending (drack, skrev)
+    if (preteritum && !preteritum.endsWith('de') && !preteritum.endsWith('te') && !preteritum.endsWith('ade')) {
+        return 'Gr. 4'; // Strong verb
+    }
+
+    return null;
+}
+
 function parseVerbForms(formsArray) {
     // Swedish verb pattern: presens, (optional nouns), preteritum (-de/-te/-dde), supinum (-t/-tt/-it), infinitiv (-a)
     const result = [];
@@ -363,8 +416,26 @@ async function init() {
         }
 
     } catch (error) {
-        console.error(error);
-        detailsArea.innerHTML = '<div class="placeholder-message" style="color: red;">Fel vid laddning / خطأ في التحميل</div>';
+        console.error('Initial Load Error:', error);
+
+        // Debug info
+        const dataStatus = typeof dictionaryData === 'undefined' ? 'undefined' : 'loaded (' + dictionaryData.length + ')';
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+
+        detailsArea.innerHTML = `
+            <div class="placeholder-message" style="color: #ef4444; flex-direction: column; gap: 1rem;">
+                <div style="font-size: 1.2rem; font-weight: bold;">Fel vid laddning / خطأ في التحميل</div>
+                <div style="font-size: 0.9rem; opacity: 0.8; font-family: monospace; background: rgba(0,0,0,0.1); padding: 1rem; border-radius: 8px;">
+                    ${error.message}<br>
+                    Data Status: ${dataStatus}<br>
+                    ID: ${id}
+                </div>
+                <button onclick="window.location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--primary-color); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                    Försök igen / حاول مرة أخرى
+                </button>
+            </div>
+        `;
     }
 }
 
@@ -381,44 +452,88 @@ function renderDetails(item) {
     const idiomSwe = item[COL_IDIOM_SWE] || '';
     const idiomArb = item[COL_IDIOM_ARB] || '';
 
-    // Check if word is in favorites
+    // Check if word is in favorites (moved up for header buttons)
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
     const isFavorite = favorites.includes(item[COL_ID]);
 
-    // Detect noun gender for substantiv
+    // Detect verb group for verbs (moved up for heroHtml)
+    const isVerb = type.toLowerCase().includes('verb');
+    const verbGroup = isVerb ? detectVerbGroup(forms) : null;
+
+    // Detect noun gender for substantiv (moved up for heroHtml)
     const isNoun = type.toLowerCase().includes('subst');
     const nounGender = isNoun ? detectNounGender(forms) : null;
 
+    // Dynamic Font Size Calculation based on Word Length
+    const getDynamicFontSize = (text) => {
+        const len = text.length;
+        if (len < 7) return '3.5rem';
+        if (len < 9) return '3.0rem';
+        if (len < 11) return '2.5rem';
+        if (len < 13) return '2.0rem';
+        return '1.8rem';
+    };
+
+
+
+    // Initialize Header Buttons
+    const headerAudioBtn = document.getElementById('headerAudioBtn');
+    const headerFavoriteBtn = document.getElementById('headerFavoriteBtn');
+
+    // Update Header Audio Button
+    if (headerAudioBtn) {
+        headerAudioBtn.style.display = 'flex';
+        headerAudioBtn.onclick = () => speakWord(swe.replace(/'/g, "\\'"));
+    }
+
+    // Update Header Favorite Button
+    if (headerFavoriteBtn) {
+        headerFavoriteBtn.style.display = 'flex';
+        const svg = headerFavoriteBtn.querySelector('svg');
+        const isActive = isFavorite;
+
+        // Initial State
+        if (isActive) {
+            headerFavoriteBtn.classList.add('active');
+            if (svg) svg.setAttribute('fill', 'currentColor');
+            // Change icon to filled heart 
+            headerFavoriteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+        } else {
+            headerFavoriteBtn.classList.remove('active');
+            if (svg) svg.setAttribute('fill', 'none');
+            headerFavoriteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+        }
+
+        headerFavoriteBtn.onclick = () => {
+            toggleFavorite(item[COL_ID]);
+            // Re-check state after toggle (toggleFavorite updates localStorage)
+            const newFavs = JSON.parse(localStorage.getItem('favorites') || '[]');
+            const nowActive = newFavs.includes(item[COL_ID]);
+            if (nowActive) {
+                headerFavoriteBtn.classList.add('active');
+                headerFavoriteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+            } else {
+                headerFavoriteBtn.classList.remove('active');
+                headerFavoriteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+            }
+        };
+    }
+
     // Hero Section - Restructured Layout
-    // Word Type Badge in center with Audio on left, Favorite on right
-    // For nouns, show gender (en/ett) badge
+    // Word Type Badge and Gender/Group badges ONLY
     const heroHtml = `
         <div class="details-hero">
             <div class="details-hero-content">
                 <div class="word-display-main">
                     <div class="word-with-audio">
-                        <h1 class="word-swe-hero">${swe}</h1>
+                        <h1 class="word-swe-hero" style="font-size: ${getDynamicFontSize(swe)}">${swe}</h1>
                     </div>
                     ${arb ? `<div class="word-arb-hero">${arb}</div>` : ''}
                     ${type ? `
-                    <div class="word-type-row">
-                        <button class="audio-btn-badge" onclick="speakWord('${swe.replace(/'/g, "\\'")}')" aria-label="Lyssna / استمع">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                            </svg>
-                        </button>
+                    <div class="word-type-row" style="justify-content: center;">
                         ${nounGender ? `<span class="gender-badge gender-${nounGender}">${nounGender}</span>` : ''}
+                        ${verbGroup ? `<span class="verb-group-badge">${verbGroup}</span>` : ''}
                         <span class="word-type-badge">${type}</span>
-                        <button class="favorite-btn-badge ${isFavorite ? 'active' : ''}" 
-                                onclick="toggleFavorite('${item[COL_ID]}')" 
-                                aria-label="Favorit / مفضلة">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" 
-                                 fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" 
-                                 stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                            </svg>
-                        </button>
                     </div>
                     ` : ''}
                 </div>

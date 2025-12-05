@@ -98,68 +98,113 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
+    /* Slightly more space */
     animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
     flex-wrap: nowrap;
-    /* Prevent wrapping to keep strictly in one line */
     overflow-x: auto;
-    /* Allow scroll if screen is extremely tiny, better than wrapping ugly */
     padding-bottom: 4px;
-    /* Space for scrollbar if needed */
 }
 
-.word-type-badge {
-    display: inline-block;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    padding: 0.4rem 1rem;
-    /* Reduced padding */
+/* Unified Base Style for all Items in Row */
+.word-type-row>* {
+    height: 32px;
+    /* Unified fixed height */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Audio & Favorite Buttons */
+.audio-btn-badge,
+.favorite-btn-badge {
+    width: 32px;
+    /* Circle shape */
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    cursor: pointer;
+    padding: 0;
+}
+
+.audio-btn-badge:hover,
+.favorite-btn-badge:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.audio-btn-badge:active,
+.favorite-btn-badge:active {
+    transform: scale(0.95);
+}
+
+.favorite-btn-badge.active {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #ef4444;
+}
+
+/* Word Type Badge (The main one) */
+.word-type-badge {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 0 1rem;
     font-size: 0.8rem;
-    /* Reduced font size from 0.85rem */
     font-weight: 700;
     color: #005B96;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     white-space: nowrap;
 }
 
-/* Gender Badge (En/Ett) - Critical for Swedish learners */
-.gender-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+/* Gender Badge (En/Ett) & Verb Group */
+.gender-badge,
+.verb-group-badge {
     min-width: 36px;
-    /* Reduced min-width */
-    height: 28px;
-    /* Reduced height */
-    padding: 0 0.6rem;
-    /* Reduced padding */
-    border-radius: 50px;
+    padding: 0 0.75rem;
     font-size: 0.8rem;
-    /* Reduced font size from 0.9rem */
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.5);
     white-space: nowrap;
+    border-width: 2px;
+    border-style: solid;
 }
 
 /* En-words (utrum) - Green theme */
 .gender-badge.gender-en {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(22, 163, 74, 0.2) 100%);
+    color: #dcfce7;
+    /* Lighter text for contrast on blue bg */
+    border-color: rgba(34, 197, 94, 0.4);
 }
 
 /* Ett-words (neutrum) - Purple theme */
 .gender-badge.gender-ett {
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(147, 51, 234, 0.2) 100%);
+    color: #f3e8ff;
+    /* Lighter text */
+    border-color: rgba(168, 85, 247, 0.4);
+}
+
+/* Verb Group Badge - Pink theme */
+.verb-group-badge {
+    background: linear-gradient(135deg, rgba(244, 114, 182, 0.15) 0%, rgba(236, 72, 153, 0.2) 100%);
+    color: #fce7f3;
+    /* Lighter text */
+    border-color: rgba(244, 114, 182, 0.4);
+    animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s backwards;
+}
+
+/* Dark mode word type badge */
+[data-theme="dark"] .word-type-badge {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #60a5fa;
 }
 
 /* Dark mode gender badges */
@@ -468,6 +513,119 @@
 }
 
 /* Audio Button */
+/* Revised Header Layout - Premium Pill Design */
+.details-header-clean {
+    position: relative;
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center everything */
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.details-title-swedish {
+    font-size: 0.9rem;
+    /* Smaller title as in image */
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 0;
+    opacity: 0.7;
+}
+
+/* The Premium Pill Container */
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: rgba(230, 240, 255, 0.6);
+    /* Very light blue tint */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 50px;
+    /* Fully rounded pill */
+    padding: 0.4rem 0.75rem;
+    /* Padding around buttons */
+    box-shadow: 0 4px 20px rgba(0, 91, 150, 0.08), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    width: auto;
+    /* Allow it to fit content */
+}
+
+.header-action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    /* Perfect circles */
+    border: none;
+    background: transparent;
+    /* Transparent inside the pill by default */
+    color: #4a6fa5;
+    /* Steel blue icon color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.header-action-btn:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    color: #005B96;
+    /* Darker blue on hover */
+    box-shadow: 0 4px 12px rgba(0, 91, 150, 0.1);
+}
+
+.header-action-btn:active {
+    transform: translateY(0);
+    transform: scale(0.95);
+}
+
+/* Specific button overrides */
+.back-btn-nav {
+    margin-right: 0;
+}
+
+/* Special active state for favorite/flashcard */
+.header-action-btn.active {
+    background: rgba(255, 255, 255, 0.5);
+    color: #005B96;
+}
+
+/* Dark mode adjustments for header pill */
+[data-theme="dark"] .header-actions {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .header-action-btn {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .header-action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 480px) {
+    .details-header-clean {
+        padding: 0.75rem 1rem;
+    }
+
+    .header-actions {
+        gap: 0.5rem;
+    }
+}
+
 .audio-btn {
     position: absolute;
     top: 1.5rem;

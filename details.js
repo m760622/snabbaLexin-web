@@ -55,6 +55,91 @@ if ('speechSynthesis' in window) {
 }
 
 // ========================================
+// Toggle Favorite with Pulse Animation
+// ========================================
+function toggleFavorite(id) {
+    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const btn = document.querySelector('.favorite-btn-hero');
+    const svg = btn ? btn.querySelector('svg') : null;
+
+    if (favorites.includes(id)) {
+        // Remove from favorites
+        favorites = favorites.filter(f => f !== id);
+        if (btn) {
+            btn.classList.remove('active');
+            if (svg) svg.setAttribute('fill', 'none');
+        }
+        showToast('Borttaget från favoriter / تمت الإزالة من المفضلة');
+    } else {
+        // Add to favorites
+        favorites.push(id);
+        if (btn) {
+            btn.classList.add('active', 'pulse');
+            if (svg) svg.setAttribute('fill', 'currentColor');
+            // Remove pulse after animation
+            setTimeout(() => btn.classList.remove('pulse'), 500);
+        }
+        showToast('Tillagt i favoriter / تمت الإضافة للمفضلة');
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+// ========================================
+// Smart Copy - Copy formatted content
+// ========================================
+let currentItem = null; // Store current item for copy function
+
+function handleSmartCopy() {
+    if (!currentItem) {
+        showToast('Inget att kopiera / لا يوجد شيء للنسخ');
+        return;
+    }
+
+    const swe = currentItem[COL_SWE] || '';
+    const arb = currentItem[COL_ARB] || '';
+    const type = currentItem[COL_TYPE] ? currentItem[COL_TYPE].replace('.', '') : '';
+    const sweDef = currentItem[COL_SWE_DEF] || '';
+    const arbDef = currentItem[COL_ARB_DEF] || '';
+    const exSwe = currentItem[COL_EX_SWE] || '';
+    const exArb = currentItem[COL_EX_ARB] || '';
+    const forms = currentItem[COL_FORMS] || '';
+
+    let content = `🇸🇪 ${swe}`;
+    if (type) content += `  (${type})`;
+    content += `\n`;
+
+    if (arb) content += `🇸🇦 ${arb}\n`;
+    content += `\n`;
+
+    if (sweDef || arbDef) {
+        content += `📖 Definition:\n`;
+        if (sweDef) content += `${sweDef}\n`;
+        if (arbDef) content += `${arbDef}\n`;
+        content += `\n`;
+    }
+
+    if (exSwe || exArb) {
+        content += `💡 Exempel:\n`;
+        if (exSwe) content += `- ${exSwe}\n`;
+        if (exArb) content += `  "${exArb}"\n`;
+        content += `\n`;
+    }
+
+    if (forms) {
+        content += `🔤 Former: ${forms}\n\n`;
+    }
+
+    content += `🔗 ${window.location.href}`;
+
+    navigator.clipboard.writeText(content).then(() => {
+        showToast('تم نسخ البطاقة بنجاح! / Kopierat!');
+    }).catch(() => {
+        showToast('Kunde inte kopiera / فشل النسخ');
+    });
+}
+
+// ========================================
 // Smart Grammar Labels for Conjugations
 // ========================================
 function getLabeledForms(formsArray, wordType) {
@@ -171,6 +256,14 @@ async function init() {
         document.body.classList.add('iphone-view');
     }
 
+    // Wire up header buttons
+    const smartCopyBtn = document.getElementById('smartCopyBtn');
+    const headerShareBtn = document.getElementById('headerShareBtn');
+
+    if (smartCopyBtn) {
+        smartCopyBtn.addEventListener('click', handleSmartCopy);
+    }
+
     // Load Data
     try {
         // Data is loaded via data.js as a global variable 'dictionaryData'
@@ -191,9 +284,10 @@ async function init() {
                 item = customWords.find(entry => entry[COL_ID] === id);
             }
             if (item) {
+                currentItem = item; // Store for smart copy
                 renderDetails(item);
                 checkCustomWord(id);
-                setupShare(item);
+                setupShare(item, headerShareBtn);
                 setupFlashcardMode();
             } else {
                 detailsArea.innerHTML = '<div class="placeholder-message">Ord hittades inte / لم يتم العثور على الكلمة</div>';
@@ -221,19 +315,33 @@ function renderDetails(item) {
     const idiomSwe = item[COL_IDIOM_SWE] || '';
     const idiomArb = item[COL_IDIOM_ARB] || '';
 
-    // Hero Section with Audio Button
+    // Check if word is in favorites
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const isFavorite = favorites.includes(item[COL_ID]);
+
+    // Hero Section with Favorite Button and Inline Audio
     const heroHtml = `
         <div class="details-hero">
+            <button class="favorite-btn-hero ${isFavorite ? 'active' : ''}" 
+                    onclick="toggleFavorite('${item[COL_ID]}')" 
+                    aria-label="Favorit / مفضلة">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" 
+                     fill="${isFavorite ? 'currentColor' : 'none'}" stroke="currentColor" 
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+            </button>
             <div class="details-hero-content">
                 <div class="word-display-main">
-                    <h1 class="word-swe-hero">${swe}</h1>
-                    <button class="audio-btn" onclick="speakWord('${swe.replace(/'/g, "\\'")}')" aria-label="Lyssna / استمع">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                        </svg>
-                    </button>
+                    <div class="word-with-audio">
+                        <h1 class="word-swe-hero">${swe}</h1>
+                        <button class="audio-btn-inline" onclick="speakWord('${swe.replace(/'/g, "\\'")}')" aria-label="Lyssna / استمع">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            </svg>
+                        </button>
+                    </div>
                     ${arb ? `<div class="word-arb-hero">${arb}</div>` : ''}
                     ${type ? `<span class="word-type-badge">${type}</span>` : ''}
                 </div>
@@ -357,10 +465,14 @@ function checkCustomWord(id) {
     }
 }
 
-function setupShare(item) {
-    shareBtn.style.display = 'flex';
+function setupShare(item, headerShareBtn) {
+    // Use header share button if provided, otherwise fallback to old shareBtn
+    const shareButton = headerShareBtn || shareBtn;
+    if (shareButton) {
+        shareButton.style.display = 'flex';
+    }
 
-    shareBtn.onclick = async () => {
+    const handleShare = async () => {
         // Extract Data
         const id = item[COL_ID];
         const swe = item[COL_SWE] || '';
@@ -436,6 +548,13 @@ function setupShare(item) {
             console.error('Error sharing:', err);
         }
     };
+
+    if (headerShareBtn) {
+        headerShareBtn.addEventListener('click', handleShare);
+    }
+    if (shareBtn) {
+        shareBtn.onclick = handleShare;
+    }
 }
 
 function setupFlashcardMode() {

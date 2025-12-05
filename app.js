@@ -1,4 +1,4 @@
-// State
+// Verified sort logical fix.
 // dictionaryData is global from data.js
 let isLoading = true;
 let searchIndex = []; // Pre-computed search strings
@@ -109,22 +109,15 @@ window.copyWord = function (word, event) {
 // Initialize
 
 async function init() {
-    // Theme Logic
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    // Theme Logic handled by utils.js (ThemeManager.init called on DOMContentLoaded)
 
-    // Load Favorites
-    const savedFavorites = localStorage.getItem('favorites');
-    if (savedFavorites) {
-        favorites = new Set(JSON.parse(savedFavorites));
-    }
-    document.documentElement.setAttribute('data-theme', savedTheme);
-
+    // Wire up Theme Toggle in Main Page
     themeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        ThemeManager.toggle();
     });
+
+    // Load Favorites using Manager
+    favorites = FavoritesManager.getFavorites();
 
     // Mobile View Toggle
     const mobileViewToggle = document.getElementById('mobileViewToggle');
@@ -514,238 +507,213 @@ async function buildSearchIndex() {
     console.log('Search index built completely.');
 }
 
+// Filter Logic
+const filterToggleBtn = document.getElementById('filterToggleBtn');
+const filterChipsContainer = document.getElementById('filterChipsContainer');
+const filterChips = document.querySelectorAll('.filter-chip');
+let activeFilterMode = 'start'; // Default mode
+
+if (filterToggleBtn && filterChipsContainer) {
+    // Toggle Filters
+    filterToggleBtn.addEventListener('click', () => {
+        const isHidden = filterChipsContainer.style.display === 'none';
+        filterChipsContainer.style.display = isHidden ? 'flex' : 'none';
+        filterToggleBtn.classList.toggle('active', isHidden);
+
+        // Focus first chip if opening
+        if (isHidden) {
+            // optional: filterChips[0].focus();
+        }
+    });
+
+    // Handle Chip Selection
+    filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            // Update active state
+            filterChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            // Update mode
+            activeFilterMode = chip.dataset.mode;
+
+            // Update search placeholder/hint
+            updateSearchPlaceholder(activeFilterMode);
+
+            // Re-run search
+            handleSearch({ target: searchInput });
+        });
+    });
+}
+
+function updateSearchPlaceholder(mode) {
+    const placeholders = {
+        'start': 'Sök ord (börjar med...) / ابحث (يبدأ بـ...)',
+        'exact': 'Sök exakt (känslig) / بحث دقيق (مع التشكيل)',
+        'synonym': 'Sök efter betydelse / ابحث في المعاني العربية',
+        'type': 'Sök efter ordklass (t.ex. verb) / ابحث بنوع الكلمة',
+        'end': 'Sök efter slut (t.ex. -ning) / ابحث بالنهايات',
+        'all': 'Sök i allt... / بحث شامل في الوصف والأمثلة'
+    };
+    searchInput.placeholder = placeholders[mode] || placeholders['start'];
+}
+
+// Search Handler
 // Search Handler
 function handleSearch(e) {
     const rawQuery = e.target.value.trim();
-    const query = normalizeArabic(rawQuery); // Normalize query for general search
-    const sortMethod = sortSelect.value;
-    const searchMode = document.getElementById('searchMode').value;
+    // Normalize for general search
+    const query = normalizeArabic(rawQuery);
+    const lowerQuery = rawQuery.toLowerCase(); // For exact/end
 
     sessionStorage.setItem('searchQuery', e.target.value);
 
+    // Get Filter Values (Restore missing vars)
     const selectedType = typeSelect.value;
+    const sortMethod = sortSelect.value;
 
-    // Check if we should proceed with search
-    // Proceed if:
-    // 1. Query length >= 2
-    // 2. OR a specific type is selected (not 'all')
-    // 1. Query length >= 2
-    // 2. OR a specific type is selected (not 'all')
-    // 3. OR search mode is 'favorites'
-    if (rawQuery.length < 2 && selectedType === 'all' && searchMode !== 'favorites') {
-        resultsArea.innerHTML = `
-            <div class="placeholder-message">
-                Börja skriva för att söka / ابدأ الكتابة للبحث
-            </div>
-        `;
-        currentResults = [];
-        statsElement.textContent = `${dictionaryData.length.toLocaleString()} ord laddade / كلمة تم تحميلها`;
+    // If query is empty -> show all (or limit?)
+    if (rawQuery.length === 0) {
+        // Show all (lazy load handled by render)
+        currentResults = dictionaryData.slice(); // Copy all
+
+        // Filter by Type even if query is empty
+        if (selectedType !== 'all') {
+            currentResults = currentResults.filter(item => {
+                const typeLower = (item[COL_TYPE] || '').toLowerCase();
+                if (selectedType === 'abbrev') return typeLower.includes('förk') || typeLower.includes('abbrev');
+                return typeLower.includes(selectedType);
+            });
+        }
+
+        currentPage = 1;
+        renderResults();
+        statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
         return;
     }
 
-    // Filter Data based on Search Mode
     let results = [];
+    const data = dictionaryData;
 
-    if (searchMode === 'favorites') {
-        // Favorites Mode: Start with ONLY favorites
-        results = dictionaryData.filter(item => favorites.has(String(item[COL_ID])));
+    // Filter Logic Switch
+    switch (activeFilterMode) {
+        case 'favorites':
+            results = data.filter(item => {
+                if (!favorites.has(String(item[COL_ID]))) return false;
+                if (query.length === 0) return true; // Show all favorites if no query
 
-        // If there is a query, filter the favorites
-        if (rawQuery.length > 0) {
-            const lowerQuery = query.toLowerCase(); // Normalized
-            results = results.filter(item => {
-                const content = normalizeArabic(
-                    (item[COL_SWE] || '') + ' ' +
-                    (item[COL_ARB] || '')
-                );
-                return content.includes(lowerQuery);
-            });
-        }
-    } else if (rawQuery.length === 0) {
-        // If query is empty (but type is selected), start with all data
-        // We will filter by type later
-        results = dictionaryData.slice(); // Shallow copy
-    } else if (searchMode === 'general') {
-        // General: Use pre-computed normalized index (Fastest)
-        // Fallback to raw search if index is not ready yet
-        for (let i = 0; i < dictionaryData.length; i++) {
-            const item = dictionaryData[i];
-            if (!item) continue;
-
-            // Use index if available, otherwise compute on the fly (slower but works)
-            if (searchIndex[i]) {
-                if (searchIndex[i].includes(query)) {
-                    results.push(item);
-                }
-            } else {
-                // Fallback for items not yet indexed
-                const content = normalizeArabic(
-                    (item[COL_SWE] || '') + ' ' +
-                    (item[COL_ARB] || '') + ' ' +
-                    (item[COL_FORMS] || '') + ' ' +
-                    (item[COL_DEF] || '') + ' ' +
-                    (item[COL_ARB_DEF] || '') + ' ' +
-                    (item[COL_EX] || '') + ' ' +
-                    (item[COL_EX_ARB] || '') + ' ' +
-                    (item[COL_IDIOM] || '') + ' ' +
-                    (item[COL_IDIOM_ARB] || '')
-                );
-                if (content.includes(query)) {
-                    results.push(item);
-                }
-            }
-        }
-    } else if (searchMode === 'exact') {
-        // Exact: Search in RAW data (Slowest, respects diacritics)
-        const exactQuery = rawQuery.toLowerCase();
-        for (let i = 0; i < dictionaryData.length; i++) {
-            const item = dictionaryData[i];
-            if (!item) continue;
-
-            const content = (
-                (item[COL_SWE] || '') + ' ' +
-                (item[COL_ARB] || '') + ' ' +
-                (item[COL_FORMS] || '')
-            ).toLowerCase();
-
-            if (content.includes(exactQuery)) {
-                results.push(item);
-            }
-        }
-    } else {
-        // Start/End: Check specific fields (Normalized)
-        for (let i = 0; i < dictionaryData.length; i++) {
-            const item = dictionaryData[i];
-            if (!item) continue;
-
-            const swe = normalizeArabic(item[COL_SWE] || '');
-            const arb = normalizeArabic(item[COL_ARB] || '');
-
-            if (searchMode === 'start') {
-                if (swe.startsWith(query) || arb.startsWith(query)) {
-                    results.push(item);
-                }
-            } else if (searchMode === 'end') {
-                if (swe.endsWith(query) || arb.endsWith(query)) {
-                    results.push(item);
-                }
-            }
-        }
-    }
-
-    // Filter by Type if selected
-    // selectedType is already declared above
-    if (selectedType !== 'all') {
-        results = results.filter(item => item[COL_TYPE] === selectedType);
-    }
-
-    updateResults(results, sortMethod, query);
-}
-
-function updateResults(results = null, sortMethod = null, query = null) {
-    // If no results provided, perform search based on current state
-    if (results === null) {
-        const rawQuery = searchInput.value.trim();
-        query = normalizeArabic(rawQuery);
-        sortMethod = sortSelect.value;
-        const searchMode = document.getElementById('searchMode').value;
-        const selectedType = typeSelect.value;
-
-        // Perform search
-        if (rawQuery.length < 2 && selectedType === 'all' && searchMode !== 'favorites') {
-            resultsArea.innerHTML = `
-                <div class="placeholder-message">
-                    Börja skriva för att söka / ابدأ الكتابة للبحث
-                </div>
-            `;
-            currentResults = [];
-            statsElement.textContent = `${dictionaryData.length.toLocaleString()} ord laddade / كلمة تم تحميلها`;
-            return;
-        }
-
-        // Use handleSearch logic to get results
-        results = [];
-        if (searchMode === 'favorites') {
-            results = dictionaryData.filter(item => favorites.has(String(item[COL_ID])));
-            if (rawQuery.length > 0) {
-                const lowerQuery = query.toLowerCase();
-                results = results.filter(item => {
-                    const content = normalizeArabic(
-                        (item[COL_SWE] || '') + ' ' +
-                        (item[COL_ARB] || '')
-                    );
-                    return content.includes(lowerQuery);
-                });
-            }
-        } else if (rawQuery.length === 0) {
-            results = dictionaryData.slice();
-        } else if (searchMode === 'general') {
-            for (let i = 0; i < dictionaryData.length; i++) {
-                const item = dictionaryData[i];
-                if (!item) continue;
-                if (searchIndex[i] && searchIndex[i].includes(query)) {
-                    results.push(item);
-                }
-            }
-        } else if (searchMode === 'exact') {
-            const exactQuery = rawQuery.toLowerCase();
-            for (let i = 0; i < dictionaryData.length; i++) {
-                const item = dictionaryData[i];
-                if (!item) continue;
-                const content = (
-                    (item[COL_SWE] || '') + ' ' +
-                    (item[COL_ARB] || '') + ' ' +
-                    (item[COL_FORMS] || '')
-                ).toLowerCase();
-                if (content.includes(exactQuery)) {
-                    results.push(item);
-                }
-            }
-        } else {
-            for (let i = 0; i < dictionaryData.length; i++) {
-                const item = dictionaryData[i];
-                if (!item) continue;
+                // Filter favorites by query
                 const swe = normalizeArabic(item[COL_SWE] || '');
                 const arb = normalizeArabic(item[COL_ARB] || '');
-                if (searchMode === 'start') {
-                    if (swe.startsWith(query) || arb.startsWith(query)) {
-                        results.push(item);
-                    }
-                } else if (searchMode === 'end') {
-                    if (swe.endsWith(query) || arb.endsWith(query)) {
-                        results.push(item);
-                    }
-                }
-            }
-        }
+                return swe.includes(query) || arb.includes(query);
+            });
+            break;
 
-        // Filter by Type
-        if (selectedType !== 'all') {
-            results = results.filter(item => item[COL_TYPE] === selectedType);
-        }
+        case 'start': // Default: Starts With (Normalized)
+            results = data.filter(item => {
+                const swe = normalizeArabic(item[COL_SWE] || '');
+                const arb = normalizeArabic(item[COL_ARB] || '');
+                return swe.startsWith(query) || arb.startsWith(query);
+            });
+            break;
+
+        case 'exact': // Case & Diacritic Sensitive Start
+            results = data.filter(item => {
+                const swe = item[COL_SWE] || '';
+                const arb = item[COL_ARB] || '';
+                // Check startsWith raw
+                return swe.startsWith(rawQuery) || arb.startsWith(rawQuery);
+            });
+            break;
+
+        case 'synonym': // Search in Arabic Meanings Only
+            results = data.filter(item => {
+                const arb = normalizeArabic(item[COL_ARB] || '');
+                return arb.includes(query);
+            });
+            break;
+
+        case 'type': // Search in Word Type
+            results = data.filter(item => {
+                const type = (item[COL_TYPE] || '').toLowerCase();
+                return type.includes(lowerQuery);
+            });
+            break;
+
+        case 'end': // Ends With
+            results = data.filter(item => {
+                const swe = (item[COL_SWE] || '').toLowerCase();
+                return swe.endsWith(lowerQuery);
+            });
+            break;
+
+        case 'all': // Deep Search
+            results = data.filter((item, index) => {
+                if (searchIndex[index]) {
+                    return searchIndex[index].includes(query);
+                } else {
+                    const content = normalizeArabic(
+                        (item[COL_SWE] || '') + ' ' +
+                        (item[COL_ARB] || '') + ' ' +
+                        (item[COL_FORMS] || '') + ' ' +
+                        (item[COL_DEF] || '') + ' ' +
+                        (item[COL_EX] || '')
+                    );
+                    return content.includes(query);
+                }
+            });
+            break;
+
+        default:
+            results = data.filter(item => {
+                const swe = normalizeArabic(item[COL_SWE] || '');
+                return swe.startsWith(query);
+            });
     }
 
-    // Update Stats with Result Count
-    statsElement.textContent = `Hittade ${results.length.toLocaleString()} resultat / تم العثور على ${results.length.toLocaleString()} نتيجة`;
+    // Update Type Dropdown Counts (Before applying type filter)
+    // Only update if we are NOT in 'type' search mode (to avoid confusion)
+    if (activeFilterMode !== 'type') {
+        updateTypeDropdown(results);
+    }
 
-    // Sort results
+    // Secondary Type Filter (if user used dropdown + another mode)
+    // Note: If mode is 'type', we already filtered by query as type.
+    // But if mode is 'start' and they ALSO selected a type from dropdown...
+    if (selectedType !== 'all' && activeFilterMode !== 'type') {
+        results = results.filter(item => {
+            const typeLower = (item[COL_TYPE] || '').toLowerCase();
+            if (activeFilterMode === 'start' && selectedType === 'abbrev') return typeLower.includes('förk') || typeLower.includes('abbrev');
+            // Exact match for common types to prevent "s" matching "subst" broadly if logic was loose,
+            // but here we use includes. Let's make it robust.
+            if (selectedType === 'subst') return typeLower.includes('subst');
+            if (selectedType === 'verb') return typeLower.includes('verb');
+            return typeLower.includes(selectedType);
+        });
+    }
+
+    currentResults = results;
+    currentPage = 1;
+
+    // Sort Results
     results.sort((a, b) => {
         const aSwe = (a[COL_SWE] || '').toLowerCase();
         const bSwe = (b[COL_SWE] || '').toLowerCase();
 
         if (sortMethod === 'relevance') {
             // Relevance: Exact match > Starts with > Contains
-            const aExact = aSwe === query;
-            const bExact = bSwe === query;
-            if (aExact && !bExact) return -1;
-            if (!aExact && bExact) return 1;
+            // (Only relevant if there is a query)
+            if (query.length > 0) {
+                const aExact = aSwe === query;
+                const bExact = bSwe === query;
+                if (aExact && !bExact) return -1;
+                if (!aExact && bExact) return 1;
 
-            const aStart = aSwe.startsWith(query);
-            const bStart = bSwe.startsWith(query);
-            if (aStart && !bStart) return -1;
-            if (!aStart && bStart) return 1;
-
-            // Fallback to alphabetical if relevance is equal
+                const aStart = aSwe.startsWith(query);
+                const bStart = bSwe.startsWith(query);
+                if (aStart && !bStart) return -1;
+                if (!aStart && bStart) return 1;
+            }
+            // Fallback to alphabetical
             return aSwe.localeCompare(bSwe, 'sv');
         } else if (sortMethod === 'richness') {
             // Richness: Sort by number of non-empty fields
@@ -755,33 +723,117 @@ function updateResults(results = null, sortMethod = null, query = null) {
                 if (item[COL_ARB_DEF]) count++;
                 if (item[COL_FORMS]) count++;
                 if (item[COL_EX]) count++;
-                if (item[COL_EX_ARB]) count++;
                 if (item[COL_IDIOM]) count++;
-                if (item[COL_IDIOM_ARB]) count++;
                 return count;
             };
-            const countA = countFields(a);
-            const countB = countFields(b);
-            return countB - countA; // Descending
-        } else if (sortMethod === 'alpha_asc') {
+            return countFields(b) - countFields(a); // Descending
+        } else if (sortMethod === 'alpha_asc' || sortMethod === 'az') { // Handle both just in case
             return aSwe.localeCompare(bSwe, 'sv');
-        } else if (sortMethod === 'alpha_desc') {
+        } else if (sortMethod === 'alpha_desc' || sortMethod === 'za') {
             return bSwe.localeCompare(aSwe, 'sv');
         } else if (sortMethod === 'last_char') {
             const charA = aSwe.slice(-1);
             const charB = bSwe.slice(-1);
             return charA.localeCompare(charB, 'sv');
         }
-
         return 0;
     });
 
+    renderResults();
+
+    // Update Stats
+    statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+}
+
+// Global variable to debounce dropdown updates slightly if needed, or just run sync
+// Helper to formatted type label
+const TYPE_LABELS = {
+    'subst': 'Substantiv',
+    'verb': 'Verb',
+    'adj': 'Adjektiv',
+    'adv': 'Adverb',
+    'prep': 'Preposition',
+    'konj': 'Konjunktion',
+    'pron': 'Pronomen',
+    'interj': 'Interjektion',
+    'räkne': 'Räkneord',
+    'part': 'Partikel'
+};
+
+function updateTypeDropdown(items) {
+    const counts = {};
+    const currentVal = typeSelect.value;
+
+    // 1. Count types
+    items.forEach(item => {
+        let t = (item[COL_TYPE] || 'Övrigt').toLowerCase().replace('.', '').trim();
+        // Normalize common abbreviations
+        if (t.startsWith('subst')) t = 'substantiv';
+        else if (t.startsWith('adj')) t = 'adjektiv';
+        // Group by cleaner keys
+
+        counts[t] = (counts[t] || 0) + 1;
+    });
+
+    // 2. Define standard types to always show (pinned)
+    const pinnedTypes = ['substantiv', 'verb', 'adjektiv', 'adverb', 'preposition'];
+
+    // 3. Build Options HTML
+    let html = `<option value="all">Alla (${items.length})</option>`;
+
+    // Function to generate option line
+    const createOption = (key, label, count) => {
+        // Find a raw value that matches this key for the value attribute?
+        // Actually the value attribute is used for filtering.
+        // My filtering logic uses `includes`. So 'subst' matches 'substantiv'.
+        // Let's use clean keys as values.
+        // Wait, my HTML had 'subst', 'verb'.
+        // Let's stick to standard keys: 'subst', 'verb', 'adj', 'adv', 'prep' for pinned.
+
+        // Map full key back to short code for value if it's a pinned one
+        let val = key;
+        if (key === 'substantiv') val = 'subst';
+        if (key === 'adjektiv') val = 'adj';
+        // verbs are just 'verb'
+
+        const isSelected = currentVal === val ? 'selected' : '';
+        return `<option value="${val}" ${isSelected}>${label} (${count})</option>`;
+    };
+
+    // Add Pinned Types
+    pinnedTypes.forEach(type => {
+        const key = type; // e.g. 'substantiv'
+        const count = counts[key] || 0;
+        // Also check for short code in counts if data is messy
+        // But I normalized to full names above?
+        // Let's robustly sum counts?
+        // Actually, let's keep it simple. Normalize `t` to `substantiv` if it is `subst`.
+
+        const label = type.charAt(0).toUpperCase() + type.slice(1);
+        html += createOption(key, label, count);
+        delete counts[key]; // Remove from pool so we don't duplicate
+    });
+
+    // Add Separator
+    html += `<option disabled>──────────</option>`;
+
+    // Add Remaining Types (Sorted by count desc)
+    const sortedRemaining = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+    sortedRemaining.forEach(([key, count]) => {
+        const label = (TYPE_LABELS[key] || key).charAt(0).toUpperCase() + (TYPE_LABELS[key] || key).slice(1);
+        html += `<option value="${key}" ${currentVal === key ? 'selected' : ''}>${label} (${count})</option>`;
+    });
+
+    typeSelect.innerHTML = html;
+}
+
+function renderResults() {
     // Reset Pagination
-    currentResults = results;
     renderedCount = 0;
     resultsArea.innerHTML = ''; // Clear previous results
 
-    if (results.length === 0) {
+    if (currentResults.length === 0) {
         resultsArea.innerHTML = `
             <div class="placeholder-message">
                 Inga resultat hittades / لم يتم العثور على نتائج
@@ -792,6 +844,10 @@ function updateResults(results = null, sortMethod = null, query = null) {
 
     // Render first batch
     renderNextBatch();
+}
+
+function updateResults() {
+    handleSearch({ target: searchInput });
 }
 
 // Render Next Batch (Infinite Scroll)
@@ -930,17 +986,8 @@ function debounce(func, wait) {
 // Start
 init();
 
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    if (toast) {
-        toast.textContent = message;
-        toast.classList.add('visible');
+// Toast Notification System moved to utils.js
 
-        setTimeout(() => {
-            toast.classList.remove('visible');
-        }, 2000);
-    }
-}
 
 // --- GAME LOGIC MOVED TO games.js ---
 
@@ -1028,179 +1075,212 @@ function initWordOfTheDay() {
         return;
     }
 
-    // Get all elements
+    // Elements
+    const wodTitle = wodCard.querySelector('.wod-title-col span'); // Title element
     const wodSwe = wodCard.querySelector('.wod-swe');
     const wodArb = wodCard.querySelector('.wod-arb');
-    const wodAction = wodCard.querySelector('.wod-action');
+    const wodDetailsBtn = wodCard.querySelector('#wodDetailsBtn');
+    const wodFavBtn = wodCard.querySelector('#wodFavBtn');
+    const wodLoopBtn = wodCard.querySelector('#wodLoopBtn'); // New Button
     const wodTypeBadge = wodCard.querySelector('.wod-type-badge');
 
-    // Forms elements
+    // Section Elements
     const wodFormsPreview = wodCard.querySelector('.wod-forms-preview');
     const wodFormsChips = wodCard.querySelector('.wod-forms-chips');
 
-    // Definition elements - Bilingual
     const wodDefPreview = wodCard.querySelector('.wod-def-preview');
     const wodDefSwe = wodCard.querySelector('.wod-def-swe');
+
     const wodDefArbPreview = wodCard.querySelector('.wod-def-arb-preview');
     const wodDefArbText = wodCard.querySelector('.wod-def-arb-text');
 
-    // Example elements - Bilingual
     const wodExamplePreview = wodCard.querySelector('.wod-example-preview');
     const wodExSwe = wodCard.querySelector('.wod-ex-swe');
+
     const wodExampleArbPreview = wodCard.querySelector('.wod-example-arb-preview');
     const wodExArb = wodCard.querySelector('.wod-ex-arb');
 
-    // Idiom elements
     const wodIdiomPreview = wodCard.querySelector('.wod-idiom-preview');
     const wodIdiomSwe = wodCard.querySelector('.wod-idiom-swe');
     const wodIdiomArb = wodCard.querySelector('.wod-idiom-arb');
 
-    // Pick a NEW random word every time (not daily)
-    // Use timestamp for randomness
-    const timestamp = Date.now();
-    console.log('WOD: Generating random word for timestamp:', timestamp);
+    // State
+    let currentWodWord = null;
 
     if (!dictionaryData || dictionaryData.length === 0) {
         console.error('WOD: dictionaryData is empty!');
         return;
     }
 
-    // Random index based on current timestamp
-    const index = Math.floor(Math.random() * dictionaryData.length);
-    const word = dictionaryData[index];
-    console.log('WOD: Selected word index:', index, word);
+    // Helper: Find a word with long example or idiom
+    const generateRandomSentenceWord = () => {
+        let attempts = 0;
+        let foundWord = null;
+        while (attempts < 500) { // Safety break
+            const idx = Math.floor(Math.random() * dictionaryData.length);
+            const w = dictionaryData[idx];
 
-    if (!word) {
-        console.error('WOD: No word found at index', index);
-        return;
-    }
+            const hasIdiom = (w[COL_IDIOM] && w[COL_IDIOM].length > 0) || (w[COL_IDIOM_ARB] && w[COL_IDIOM_ARB].length > 0);
 
-    // Render main words
-    wodSwe.textContent = word[COL_SWE];
-    wodArb.textContent = word[COL_ARB];
-
-    // Apply dynamic font sizing based on Swedish word length (same as Snabbtest)
-    wodSwe.classList.remove('long-text', 'very-long-text', 'extra-long-text');
-    const sweText = word[COL_SWE] || '';
-    if (sweText.length > 12) {
-        wodSwe.classList.add('extra-long-text');
-    } else if (sweText.length > 9) {
-        wodSwe.classList.add('very-long-text');
-    } else if (sweText.length > 5) {
-        wodSwe.classList.add('long-text');
-    }
-
-    // Render word type badge
-    if (word[COL_TYPE] && wodTypeBadge) {
-        wodTypeBadge.textContent = word[COL_TYPE].replace('.', '');
-    }
-
-    // Render forms preview with chips
-    if (word[COL_FORMS] && wodFormsPreview && wodFormsChips) {
-        const formsArray = word[COL_FORMS].split(',').map(f => f.trim()).filter(f => f);
-        if (formsArray.length > 0) {
-            // Show max 5 forms in preview
-            const previewForms = formsArray.slice(0, 5);
-            wodFormsChips.innerHTML = previewForms.map(form =>
-                `<span class="wod-form-chip">${form}</span>`
-            ).join('');
-            if (formsArray.length > 5) {
-                wodFormsChips.innerHTML += `<span class="wod-form-chip">+${formsArray.length - 5}</span>`;
+            let hasLongEx = false;
+            if (w[COL_EX]) {
+                const wordCount = w[COL_EX].split(' ').length;
+                if (wordCount > 5) hasLongEx = true;
             }
-            wodFormsPreview.style.display = 'block';
+
+            if (hasIdiom || hasLongEx) {
+                foundWord = w;
+                break;
+            }
+            attempts++;
         }
-    }
-
-    // Show Swedish definition preview if available
-    if (word[COL_DEF] && wodDefPreview && wodDefSwe) {
-        const defText = word[COL_DEF];
-        const truncated = defText.length > 150 ? defText.substring(0, 150) + '...' : defText;
-        wodDefSwe.textContent = truncated;
-        wodDefPreview.style.display = 'block';
-    }
-
-    // Show Arabic definition preview if available
-    if (word[COL_ARB_DEF] && wodDefArbPreview && wodDefArbText) {
-        const defText = word[COL_ARB_DEF];
-        const truncated = defText.length > 150 ? defText.substring(0, 150) + '...' : defText;
-        wodDefArbText.textContent = truncated;
-        wodDefArbPreview.style.display = 'block';
-    }
-
-    // Show Swedish example preview if available
-    if (word[COL_EX] && wodExamplePreview && wodExSwe) {
-        const exText = word[COL_EX];
-        const truncated = exText.length > 120 ? exText.substring(0, 120) + '...' : exText;
-        wodExSwe.textContent = truncated;
-        wodExamplePreview.style.display = 'block';
-    }
-
-    // Show Arabic example preview if available
-    if (word[COL_EX_ARB] && wodExampleArbPreview && wodExArb) {
-        const exText = word[COL_EX_ARB];
-        const truncated = exText.length > 120 ? exText.substring(0, 120) + '...' : exText;
-        wodExArb.textContent = truncated;
-        wodExampleArbPreview.style.display = 'block';
-    }
-
-    // Show idioms preview if available
-    if ((word[COL_IDIOM] || word[COL_IDIOM_ARB]) && wodIdiomPreview) {
-        if (word[COL_IDIOM] && wodIdiomSwe) {
-            const idiomText = word[COL_IDIOM];
-            const truncated = idiomText.length > 100 ? idiomText.substring(0, 100) + '...' : idiomText;
-            wodIdiomSwe.textContent = truncated;
-        }
-        if (word[COL_IDIOM_ARB] && wodIdiomArb) {
-            const idiomText = word[COL_IDIOM_ARB];
-            const truncated = idiomText.length > 100 ? idiomText.substring(0, 100) + '...' : idiomText;
-            wodIdiomArb.textContent = truncated;
-        }
-        wodIdiomPreview.style.display = 'block';
-    }
-
-
-    // Add Save Button if not already there
-    let saveBtn = wodCard.querySelector('.wod-save-btn');
-    if (!saveBtn) {
-        saveBtn = document.createElement('button');
-        saveBtn.className = 'wod-save-btn';
-        saveBtn.innerHTML = '💾 Spara / حفظ';
-        wodCard.querySelector('.wod-content').appendChild(saveBtn);
-    }
-
-    // Update Save Button State
-    const updateSaveBtn = () => {
-        const isFav = favorites.has(word[COL_ID]);
-        saveBtn.textContent = isFav ? '✅ Sparad / محفوظ' : '💾 Spara / حفظ';
-        saveBtn.classList.toggle('saved', isFav);
+        return foundWord || dictionaryData[Math.floor(Math.random() * dictionaryData.length)]; // Fallback
     };
-    updateSaveBtn();
 
-    saveBtn.onclick = (e) => {
-        e.stopPropagation();
-        if (favorites.has(word[COL_ID])) {
-            favorites.delete(word[COL_ID]);
-        } else {
-            favorites.add(word[COL_ID]);
-            createParticles(e.clientX, e.clientY, '#F59E0B');
+    // Helper: Update UI
+    const renderWod = (word, titleText = '📅 Dagens Ord') => {
+        currentWodWord = word;
+        if (wodTitle) wodTitle.textContent = titleText;
+
+        // Reset Displays
+        wodFormsPreview.style.display = 'none';
+        wodDefPreview.style.display = 'none';
+        wodDefArbPreview.style.display = 'none';
+        wodExamplePreview.style.display = 'none';
+        wodExampleArbPreview.style.display = 'none';
+        wodIdiomPreview.style.display = 'none';
+
+        // Main Words
+        wodSwe.textContent = word[COL_SWE];
+        wodArb.textContent = word[COL_ARB];
+
+        // Font Sizing
+        wodSwe.classList.remove('long-text', 'very-long-text', 'extra-long-text');
+        const sweText = word[COL_SWE] || '';
+        if (sweText.length > 12) wodSwe.classList.add('extra-long-text');
+        else if (sweText.length > 9) wodSwe.classList.add('very-long-text');
+        else if (sweText.length > 5) wodSwe.classList.add('long-text');
+
+        // Badge
+        if (word[COL_TYPE] && wodTypeBadge) {
+            wodTypeBadge.textContent = word[COL_TYPE].replace('.', '');
         }
-        localStorage.setItem('favorites', JSON.stringify([...favorites]));
-        updateSaveBtn();
-        if (document.getElementById('searchMode').value === 'favorites') updateResults();
+
+        // Forms
+        if (word[COL_FORMS] && wodFormsPreview && wodFormsChips) {
+            const formsArray = word[COL_FORMS].split(',').map(f => f.trim()).filter(f => f);
+            if (formsArray.length > 0) {
+                const previewForms = formsArray.slice(0, 5);
+                wodFormsChips.innerHTML = previewForms.map(form => `<span class="wod-form-chip">${form}</span>`).join('');
+                if (formsArray.length > 5) wodFormsChips.innerHTML += `<span class="wod-form-chip">+${formsArray.length - 5}</span>`;
+                wodFormsPreview.style.display = 'block';
+            }
+        }
+
+        // Definitions
+        if (word[COL_DEF] && wodDefPreview && wodDefSwe) {
+            let t = word[COL_DEF];
+            if (t.length > 150) t = t.substring(0, 150) + '...';
+            wodDefSwe.textContent = t;
+            wodDefPreview.style.display = 'block';
+        }
+        if (word[COL_ARB_DEF] && wodDefArbPreview && wodDefArbText) {
+            let t = word[COL_ARB_DEF];
+            if (t.length > 150) t = t.substring(0, 150) + '...';
+            wodDefArbText.textContent = t;
+            wodDefArbPreview.style.display = 'block';
+        }
+
+        // Examples
+        if (word[COL_EX] && wodExamplePreview && wodExSwe) {
+            let t = word[COL_EX];
+            if (t.length > 120) t = t.substring(0, 120) + '...';
+            wodExSwe.textContent = t;
+            wodExamplePreview.style.display = 'block';
+        }
+        if (word[COL_EX_ARB] && wodExampleArbPreview && wodExArb) {
+            let t = word[COL_EX_ARB];
+            if (t.length > 120) t = t.substring(0, 120) + '...';
+            wodExArb.textContent = t;
+            wodExampleArbPreview.style.display = 'block';
+        }
+
+        // Idioms
+        if ((word[COL_IDIOM] || word[COL_IDIOM_ARB]) && wodIdiomPreview) {
+            if (word[COL_IDIOM] && wodIdiomSwe) {
+                let t = word[COL_IDIOM];
+                if (t.length > 100) t = t.substring(0, 100) + '...';
+                wodIdiomSwe.textContent = t;
+            } else { wodIdiomSwe.textContent = ''; }
+
+            if (word[COL_IDIOM_ARB] && wodIdiomArb) {
+                let t = word[COL_IDIOM_ARB];
+                if (t.length > 100) t = t.substring(0, 100) + '...';
+                wodIdiomArb.textContent = t;
+            } else { wodIdiomArb.textContent = ''; }
+
+            wodIdiomPreview.style.display = 'block';
+        }
+
+        updateFavState();
     };
+
+    // Update Fav Button State
+    const updateFavState = () => {
+        if (!currentWodWord || !wodFavBtn) return;
+        const isFav = favorites.has(String(currentWodWord[COL_ID]));
+        wodFavBtn.classList.toggle('active', isFav);
+    };
+
+    // Event Listeners
+    if (wodFavBtn) {
+        wodFavBtn.onclick = (e) => {
+            e.stopPropagation();
+            if (!currentWodWord) return;
+            const idStr = String(currentWodWord[COL_ID]);
+
+            if (favorites.has(idStr)) {
+                favorites.delete(idStr);
+            } else {
+                favorites.add(idStr);
+                createParticles(e.clientX, e.clientY, '#ff4757');
+            }
+            localStorage.setItem('favorites', JSON.stringify([...favorites]));
+            updateFavState();
+            if (typeof activeFilterMode !== 'undefined' && activeFilterMode === 'favorites') updateResults();
+        };
+    }
+
+    if (wodDetailsBtn) {
+        wodDetailsBtn.onclick = (e) => {
+            e.preventDefault();
+            if (!currentWodWord) return;
+            window.location.href = `details.html?id=${currentWodWord[COL_ID]}`;
+        };
+    }
+
+    if (wodLoopBtn) {
+        wodLoopBtn.onclick = (e) => {
+            e.preventDefault();
+            // Animation/Spin Effect?
+            const newWord = generateRandomSentenceWord();
+            renderWod(newWord, '🎲 Slumpmässig');
+        };
+    }
+
+    // Initialize with Daily Word
+    // Use timestamp for randomness per session/day
+    // To make it truly Daily, we should use Today's Date hash.
+    // But current implementation was random per reload (Date.now()). 
+    // I'll stick to random per reload as before, but maybe seed it?
+    // "Date.now()" acts as random seed.
+    const initialIndex = Math.floor(Math.random() * dictionaryData.length);
+    const initialWord = dictionaryData[initialIndex];
+
+    renderWod(initialWord, '📅 Dagens Ord');
 
     console.log('WOD: Displaying card');
     wodCard.style.display = 'block';
-
-    // Actions
-    // Direct navigation to details page
-    if (wodAction) {
-        wodAction.onclick = (e) => {
-            e.preventDefault();
-            // Navigate directly to the details page
-            window.location.href = `details.html?id=${word[COL_ID]}`;
-        };
-    }
 }
 
 // Quiz Mode Logic

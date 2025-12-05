@@ -57,32 +57,26 @@ if ('speechSynthesis' in window) {
 // ========================================
 // Toggle Favorite with Pulse Animation
 // ========================================
+// Toggle Favorite with Pulse Animation
 function toggleFavorite(id) {
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const isAdded = FavoritesManager.toggle(id); // Handles storage and Toast
+
+    // UI Updates
     const btn = document.querySelector('.favorite-btn-badge');
     const svg = btn ? btn.querySelector('svg') : null;
 
-    if (favorites.includes(id)) {
-        // Remove from favorites
-        favorites = favorites.filter(f => f !== id);
+    if (isAdded) {
+        if (btn) {
+            btn.classList.add('active', 'pulse');
+            if (svg) svg.setAttribute('fill', 'currentColor');
+            setTimeout(() => btn.classList.remove('pulse'), 500);
+        }
+    } else {
         if (btn) {
             btn.classList.remove('active');
             if (svg) svg.setAttribute('fill', 'none');
         }
-        showToast('Borttaget från favoriter / تمت الإزالة من المفضلة');
-    } else {
-        // Add to favorites
-        favorites.push(id);
-        if (btn) {
-            btn.classList.add('active', 'pulse');
-            if (svg) svg.setAttribute('fill', 'currentColor');
-            // Remove pulse after animation
-            setTimeout(() => btn.classList.remove('pulse'), 500);
-        }
-        showToast('Tillagt i favoriter / تمت الإضافة للمفضلة');
     }
-
-    localStorage.setItem('favorites', JSON.stringify(favorites));
 }
 
 // ========================================
@@ -367,20 +361,12 @@ function parseAdjectiveForms(formsArray) {
 
 // Initialize
 async function init() {
-    // Theme Logic - Global
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Theme Logic handled by utils.js (ThemeManager.init called on DOMContentLoaded)
 
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            // Optional hint
-            showToast(newTheme === 'dark' ? 'Mörkt läge aktiverat / الوضع الليلي' : 'Ljust läge aktiverat / الوضع النهاري');
+            ThemeManager.toggle();
         });
     }
 

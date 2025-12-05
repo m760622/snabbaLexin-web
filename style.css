@@ -298,27 +298,239 @@ header {
 .main-title-text {
     font-size: 1.5rem;
     font-weight: 900;
-    margin: 0;
-    line-height: 1.5;
-    /* Gradient: Red, Green, White */
-    background: linear-gradient(to right, #EF4444 0%, #10B981 50%, #FFFFFF 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    color: var(--primary);
+    margin-bottom: 0.1rem;
+    letter-spacing: -0.5px;
+}
 
-    /* Gradient Flow Setup */
-    background-size: 200% auto;
+/* Physics Char Styling */
+.physics-char {
+    display: inline-block;
+    transition: transform 0.3s ease-out, color 0.3s;
+    cursor: default;
+}
 
-    /* Static Gradient for stability */
-    background: linear-gradient(to right, #EF4444, #10B981, #EF4444);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+.subtitle-delay {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-top: 0;
+    font-family: var(--arabic-font);
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.4s forwards;
+}
 
-    /* Shadow for Light Mode (Dark shadow) */
-    filter: drop-shadow(1px 1px 0px rgba(0, 0, 0, 0.5)) drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+.sticky-header {
+    position: sticky;
+    top: 4rem;
+    /* Adjusted for nav bar */
+    z-index: 100;
+    background: transparent;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+}
+
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.search-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.search-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-subtle);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Filter Toggle Button */
+.filter-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(51, 161, 253, 0.15);
+    /* Light blue bg */
+    color: var(--accent);
+    border: 1px solid rgba(51, 161, 253, 0.3);
+    padding: 0 1.25rem;
+    height: 54px;
+    /* Match search input height approx */
+    border-radius: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.filter-toggle-btn:hover,
+.filter-toggle-btn.active {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(51, 161, 253, 0.3);
+}
+
+/* Filter Chips Container */
+.filter-chips-container {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 0.25rem 0.25rem 1rem 0.25rem;
+    /* Bottom padding for shadow/scroll */
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+    margin-top: -0.25rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+.filter-chips-container::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar Chrome/Safari */
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Filter Chip */
+.filter-chip {
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    background: var(--surface);
+}
+
+[data-theme="dark"] .filter-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.filter-chip:hover {
+    background: var(--surface-hover);
+    transform: translateY(-1px);
+}
+
+.filter-chip.active {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(51, 161, 253, 0.4);
+}
+
+/* Select Chip Wrapper (The Pill) */
+.select-chip-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding-left: 1rem;
+    transition: all 0.2s ease;
+    height: 100%;
+    /* Context determines height */
+}
+
+.select-chip-wrapper:hover {
+    background: var(--surface-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.select-chip-wrapper:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(51, 161, 253, 0.2);
+}
+
+/* Label inside Pill */
+.chip-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    /* Muted label color */
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+/* Chip Styled Select (Transparent) */
+.chip-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.5rem 2rem 0.5rem 0.35rem;
+    /* Left padding small gap */
+    border-radius: 50px;
+    /* To match parents radius if clickable area hits edge */
+    background: transparent;
+    border: none;
+    color: var(--text-main);
+    /* Stronger color for value */
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    height: 100%;
+    font-family: inherit;
+    line-height: inherit;
+    outline: none;
+}
+
+.chip-select:hover {
+    background: transparent;
+    /* Wrapper handles hover */
+}
+
+.chip-select:focus {
+    box-shadow: none;
+    /* Wrapper handles focus */
+}
+
+/* Custom Arrow for Chip Select */
+.chip-arrow {
+    position: absolute;
+    right: 0.85rem;
+    pointer-events: none;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .select-chip-wrapper {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .chip-label {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* Dark Mode Shadow (Lighter shadow/glow for contrast) */
@@ -908,10 +1120,10 @@ header {
     position: sticky;
     top: 0;
     z-index: 40;
-    background: rgba(243, 244, 246, 0.85);
+    background: transparent;
     /* Matches light theme background */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     padding: 1rem 0 0.5rem 0;
     margin: 0 -2rem;
     /* Extend to edges */
@@ -2636,13 +2848,16 @@ body.flashcard-active .revealed {
 
 .wod-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    gap: 0.75rem;
     margin-bottom: 1.5rem;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-    padding-bottom: 0.75rem;
+    padding-bottom: 1rem;
     position: relative;
     z-index: 1;
+    text-align: center;
 }
 
 .wod-header span {
@@ -2654,42 +2869,59 @@ body.flashcard-active .revealed {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.wod-save-btn {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+/* Header Actions */
+.wod-header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+/* Unified Action Button Style */
+.wod-action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
     color: white;
-    padding: 0.6rem 1.5rem;
-    border-radius: 50px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-weight: 700;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    position: relative;
-    z-index: 1;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    margin-top: 1rem;
+    backdrop-filter: blur(5px);
 }
 
-.wod-save-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
+.wod-action-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.wod-save-btn.saved {
-    background: rgba(16, 185, 129, 0.9);
-    border-color: rgba(16, 185, 129, 1);
-    color: white;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+.wod-action-btn:active {
+    transform: scale(0.95);
 }
 
-.wod-save-btn.saved:hover {
-    background: rgba(16, 185, 129, 1);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+.wod-action-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2px;
+    transition: all 0.3s ease;
 }
+
+/* Specific: Favorites Active State */
+#wodFavBtn.active svg {
+    fill: #ff4757;
+    stroke: #ff4757;
+    transform: scale(1.1);
+    filter: drop-shadow(0 2px 8px rgba(255, 71, 87, 0.5));
+}
+
+/* Removed Footer Styles */
 
 /* Quiz Success Shake */
 @keyframes success-shake {

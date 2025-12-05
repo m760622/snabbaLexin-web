@@ -127,15 +127,8 @@
         </div>
     </div>
 
-    <script>
-        // Apply theme from localStorage (managed from index.html)
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-        }
-    </script>
     <script src="data.js"></script>
+    <script src="utils.js"></script>
     <script src="details.js"></script>
 </body>
 

@@ -1902,17 +1902,18 @@ function enableDeviceTilt() {
         const gamma = e.gamma || 0; // Left-to-right tilt (-90 to 90)
 
         // Smooth the values (reduce jitter)
-        lastBeta = lastBeta * 0.8 + beta * 0.2;
-        lastGamma = lastGamma * 0.8 + gamma * 0.2;
+        // Smooth the values (less smoothing = more responsive)
+        lastBeta = lastBeta * 0.5 + beta * 0.5;
+        lastGamma = lastGamma * 0.5 + gamma * 0.5;
 
         // Normalize values (device held at ~45 degrees is "neutral")
         const neutralBeta = 45;
-        const normalizedBeta = (lastBeta - neutralBeta) * 0.2;
-        const normalizedGamma = lastGamma * 0.2;
+        const normalizedBeta = (lastBeta - neutralBeta) * 0.6;  // Increased from 0.2
+        const normalizedGamma = lastGamma * 0.6;  // Increased from 0.2
 
-        // Clamp values
-        const xRot = Math.max(-12, Math.min(12, normalizedBeta));
-        const yRot = Math.max(-12, Math.min(12, normalizedGamma));
+        // Clamp values (increased range for more dramatic effect)
+        const xRot = Math.max(-25, Math.min(25, normalizedBeta));
+        const yRot = Math.max(-25, Math.min(25, normalizedGamma));
 
         // Debug display for iOS
         let debugEl = document.getElementById('tilt-debug');

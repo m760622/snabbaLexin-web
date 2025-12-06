@@ -1799,11 +1799,22 @@ function attachTiltListeners() {
             const xRot = (yPct - 0.5) * 20; // -10 to 10
             const yRot = (xPct - 0.5) * -20; // 10 to -10
 
+            // Calculate dynamic shadow - thin elegant cyan glow
+            const shadowX = yRot * 1.5;
+            const shadowY = xRot * 1.5;
+            const tiltIntensity = Math.abs(xRot) + Math.abs(yRot);
+            const shadowBlur = 8 + tiltIntensity * 0.8;
+            const shadowSpread = 1 + tiltIntensity * 0.15;
+            const shadowOpacity = 0.3 + tiltIntensity * 0.035;
+
             card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
+            card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(6, 182, 212, ${shadowOpacity})`;
+            card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
         });
 
         card.addEventListener('mouseleave', () => {
             card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            card.style.boxShadow = '';
         });
     });
 }
@@ -1941,7 +1952,7 @@ function enableDeviceTilt() {
 
             if (inViewport) {
                 card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
-                card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(15, 23, 42, ${shadowOpacity})`;
+                card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(6, 182, 212, ${shadowOpacity})`;
                 card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
             }
         });

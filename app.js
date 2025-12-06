@@ -1799,16 +1799,20 @@ function attachTiltListeners() {
             const xRot = (yPct - 0.5) * 20; // -10 to 10
             const yRot = (xPct - 0.5) * -20; // 10 to -10
 
-            // Calculate dynamic shadow - thin elegant cyan glow
-            const shadowX = yRot * 1.5;
-            const shadowY = xRot * 1.5;
+            // Calculate dynamic shadow - ultra thin elegant glow
+            const shadowX = yRot * 0.8;
+            const shadowY = xRot * 0.8;
             const tiltIntensity = Math.abs(xRot) + Math.abs(yRot);
-            const shadowBlur = 8 + tiltIntensity * 0.8;
-            const shadowSpread = 1 + tiltIntensity * 0.15;
-            const shadowOpacity = 0.3 + tiltIntensity * 0.035;
+            const shadowBlur = 1 + tiltIntensity * 0.1;  // 1 to 3
+            const shadowSpread = 0;   // No spread for thin line effect
+            const shadowOpacity = 0.15 + tiltIntensity * 0.015;  // 0.15 to 0.45
 
-            card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
-            card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(6, 182, 212, ${shadowOpacity})`;
+            // Check theme - dark navy for light mode, cyan for dark mode
+            const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
+            const shadowColor = isLightMode ? '15, 23, 42' : '6, 182, 212';  // Navy : Cyan
+
+            card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.01)`;
+            card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(${shadowColor}, ${shadowOpacity})`;
             card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
         });
 
@@ -1935,13 +1939,17 @@ function enableDeviceTilt() {
         const xRot = Math.max(-10, Math.min(10, normalizedBeta));
         const yRot = Math.max(-10, Math.min(10, normalizedGamma));
 
-        // Calculate dynamic shadow based on tilt - thin elegant navy glow
-        const shadowX = yRot * 1.5;  // Shadow moves opposite to tilt
-        const shadowY = xRot * 1.5;
+        // Calculate dynamic shadow based on tilt - ultra thin elegant glow
+        const shadowX = yRot * 0.8;  // Shadow moves opposite to tilt
+        const shadowY = xRot * 0.8;
         const tiltIntensity = Math.abs(xRot) + Math.abs(yRot);  // 0 to 20
-        const shadowBlur = 8 + tiltIntensity * 0.8;  // 8 to 24 (thinner)
-        const shadowSpread = 1 + tiltIntensity * 0.15;   // 1 to 4 (minimal spread)
-        const shadowOpacity = 0.3 + tiltIntensity * 0.035;  // 0.3 to 1.0
+        const shadowBlur = 1 + tiltIntensity * 0.1;  // 1 to 3
+        const shadowSpread = 0;   // No spread for thin line effect
+        const shadowOpacity = 0.15 + tiltIntensity * 0.015;  // 0.15 to 0.45
+
+        // Check theme - dark navy for light mode, cyan for dark mode
+        const isLightMode = document.documentElement.getAttribute('data-theme') === 'light';
+        const shadowColor = isLightMode ? '15, 23, 42' : '6, 182, 212';  // Navy : Cyan
 
         // Apply to all visible cards
         const cards = document.querySelectorAll('.card');
@@ -1951,8 +1959,8 @@ function enableDeviceTilt() {
             const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
 
             if (inViewport) {
-                card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
-                card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(6, 182, 212, ${shadowOpacity})`;
+                card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.01)`;
+                card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(${shadowColor}, ${shadowOpacity})`;
                 card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
             }
         });

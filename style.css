@@ -157,7 +157,7 @@ button:active,
 @media (hover: hover) {
     .card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        /* box-shadow controlled by JavaScript tilt effect */
     }
 
     .card:active {
@@ -2288,7 +2288,7 @@ h1 {
     .card {
         padding: 1rem;
         border-radius: 0.75rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        /* box-shadow controlled by JavaScript tilt effect */
     }
 
     .word-swe {
@@ -2436,7 +2436,7 @@ h1 {
     border-radius: 0.75rem;
     padding: 0.75rem;
     /* Reduced padding */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    /* box-shadow controlled by JavaScript tilt effect */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
     border: 2px solid var(--primary);
@@ -2485,7 +2485,7 @@ h1 {
 
 .card:hover {
     transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    /* box-shadow controlled by JavaScript tilt effect */
     border-color: #33A1FD;
     /* Bright Sky Blue on Hover */
 }

@@ -1745,6 +1745,109 @@ function attachTiltListeners() {
     });
 }
 
+// Mobile Device Orientation Tilt Effect
+let deviceTiltEnabled = false;
+let lastBeta = 0;
+let lastGamma = 0;
+
+function initDeviceTilt() {
+    // Check if device orientation is supported
+    if (!window.DeviceOrientationEvent) return;
+
+    // Check if we're on mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (!isMobile) return;
+
+    // Request permission for iOS 13+
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // Create a button to request permission (iOS requirement)
+        const permissionBtn = document.createElement('button');
+        permissionBtn.id = 'tiltPermissionBtn';
+        permissionBtn.innerHTML = '📱 تفعيل تأثير الإمالة';
+        permissionBtn.style.cssText = `
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            display: none;
+        `;
+        document.body.appendChild(permissionBtn);
+
+        // Show button only on first visit
+        if (!localStorage.getItem('tiltPermissionAsked')) {
+            setTimeout(() => {
+                permissionBtn.style.display = 'block';
+            }, 2000);
+        }
+
+        permissionBtn.addEventListener('click', async () => {
+            try {
+                const permission = await DeviceOrientationEvent.requestPermission();
+                if (permission === 'granted') {
+                    enableDeviceTilt();
+                    localStorage.setItem('tiltPermissionAsked', 'true');
+                    showToast('تم تفعيل تأثير الإمالة! ✨');
+                }
+            } catch (error) {
+                console.error('Device orientation permission error:', error);
+            }
+            permissionBtn.style.display = 'none';
+        });
+    } else {
+        // Android and older iOS - permission not needed
+        enableDeviceTilt();
+    }
+}
+
+function enableDeviceTilt() {
+    if (deviceTiltEnabled) return;
+    deviceTiltEnabled = true;
+
+    window.addEventListener('deviceorientation', (e) => {
+        // Get device orientation
+        const beta = e.beta || 0;   // Front-to-back tilt (-180 to 180)
+        const gamma = e.gamma || 0; // Left-to-right tilt (-90 to 90)
+
+        // Smooth the values (reduce jitter)
+        lastBeta = lastBeta * 0.8 + beta * 0.2;
+        lastGamma = lastGamma * 0.8 + gamma * 0.2;
+
+        // Normalize values (device held at ~45 degrees is "neutral")
+        const neutralBeta = 45;
+        const normalizedBeta = (lastBeta - neutralBeta) * 0.15; // -10 to 10 range
+        const normalizedGamma = lastGamma * 0.15; // -10 to 10 range
+
+        // Clamp values
+        const xRot = Math.max(-10, Math.min(10, normalizedBeta));
+        const yRot = Math.max(-10, Math.min(10, normalizedGamma));
+
+        // Apply to all visible cards
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            // Only apply if card is in viewport
+            const rect = card.getBoundingClientRect();
+            const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+
+            if (inViewport) {
+                card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.01)`;
+            }
+        });
+    }, { passive: true });
+}
+
+// Initialize device tilt on load
+document.addEventListener('DOMContentLoaded', initDeviceTilt);
+
 // Physics Logo Logic
 function initPhysicsLogo() {
     const title = document.getElementById('physicsTitle');

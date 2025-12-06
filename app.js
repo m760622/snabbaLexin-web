@@ -37,7 +37,7 @@ const COL_IDIOM_ARB = 10;
 // Fallback lists used until JSON loads
 let learnedSuffixes = {
     ett: ['rum', 'kar', 'hus', 'tak', 'golv', 'bord', 'berg', 'land', 'ljus', 'block', 'kort', 'slag', 'spel', 'verk', 'djur', 'krig', 'krön', 'prov', 'test', 'tryck', 'vatten', 'fönster', 'papper', 'system', 'arbete', 'centrum', 'museum', 'program', 'dokument', 'dråp', 'brott', 'mord', 'skap', 'äktenskap', 'partnerskap'],
-    en: ['gård', 'väg', 'gata', 'plats', 'dörr', 'bil', 'maskin', 'station', 'ventil', 'motor', 'pump', 'kabel', 'tid', 'dag', 'natt', 'stad', 'ning', 'tion', 'sion', 'het', 'else', 'ande', 'ende', 'ment', 'itet', 'dom', 'ism', 'ist', 'are', 'ler', 'rer', 'nar', 'mark', 'feber', 'handel', 'misshandel', 'konvention', 'habilitering', 'akut']
+    en: ['gård', 'väg', 'gata', 'plats', 'dörr', 'bil', 'maskin', 'station', 'ventil', 'motor', 'pump', 'kabel', 'tid', 'dag', 'natt', 'stad', 'ning', 'tion', 'sion', 'het', 'else', 'ande', 'ende', 'ment', 'itet', 'dom', 'ism', 'ist', 'are', 'ler', 'rer', 'nar', 'mark', 'feber', 'handel', 'misshandel', 'konvention', 'habilitering', 'akut', 'queen', 'plikt', 'hiss', 'nad', 'sjukdom']
 };
 fetch('learned_suffixes.json')
     .then(res => res.json())

@@ -1831,6 +1831,14 @@ function initDeviceTilt() {
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
         console.log('[DeviceTilt] iOS detected - needs permission');
 
+        // Check if permission was already granted
+        const permissionGranted = localStorage.getItem('tiltPermissionGranted');
+        if (permissionGranted === 'true') {
+            console.log('[DeviceTilt] Permission already granted, enabling directly');
+            enableDeviceTilt();
+            return;
+        }
+
         // Create a button to request permission (iOS requirement)
         const permissionBtn = document.createElement('button');
         permissionBtn.id = 'tiltPermissionBtn';
@@ -1866,6 +1874,7 @@ function initDeviceTilt() {
                 const permission = await DeviceOrientationEvent.requestPermission();
                 console.log('[DeviceTilt] Permission result:', permission);
                 if (permission === 'granted') {
+                    localStorage.setItem('tiltPermissionGranted', 'true');
                     enableDeviceTilt();
                     showToast('تم تفعيل تأثير الإمالة! 📱✨');
                 } else {
@@ -1915,33 +1924,7 @@ function enableDeviceTilt() {
         const xRot = Math.max(-25, Math.min(25, normalizedBeta));
         const yRot = Math.max(-25, Math.min(25, normalizedGamma));
 
-        // Debug display for iOS
-        let debugEl = document.getElementById('tilt-debug');
-        if (!debugEl) {
-            debugEl = document.createElement('div');
-            debugEl.id = 'tilt-debug';
-            debugEl.style.cssText = `
-                position: fixed;
-                top: 10px;
-                left: 10px;
-                background: rgba(0,0,0,0.8);
-                color: #00ff00;
-                padding: 10px 15px;
-                border-radius: 8px;
-                font-family: monospace;
-                font-size: 12px;
-                z-index: 99999;
-                direction: ltr;
-            `;
-            document.body.appendChild(debugEl);
-        }
-        debugEl.innerHTML = `
-            📱 Device Tilt Debug<br>
-            β (beta): ${beta.toFixed(1)}°<br>
-            γ (gamma): ${gamma.toFixed(1)}°<br>
-            xRot: ${xRot.toFixed(1)}°<br>
-            yRot: ${yRot.toFixed(1)}°
-        `;
+
 
         // Apply to all visible cards
         const cards = document.querySelectorAll('.card');

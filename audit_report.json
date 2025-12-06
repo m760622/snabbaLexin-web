@@ -1,0 +1,644 @@
+{
+  "summary": {
+    "totalEntries": 34008,
+    "issueCount": {
+      "missingArabic": 0,
+      "missingDefinition": 12397,
+      "veryShortTranslation": 1,
+      "duplicates": 3777,
+      "potentialTypos": 738,
+      "emptyForms": 42,
+      "falseFriends": 16,
+      "questionableTranslations": 1
+    }
+  },
+  "details": {
+    "missingArabic": [],
+    "missingDefinition": [
+      {
+        "id": "Lexin000739",
+        "swe": "Anabol",
+        "arb": "أنابول",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin003277",
+        "swe": "Bevänt",
+        "arb": "ضئيل",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin003348",
+        "swe": "Bildlig",
+        "arb": "مجاز",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin003592",
+        "swe": "Blockerad",
+        "arb": "مسدود",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin003614",
+        "swe": "Blodfattig",
+        "arb": "واهن",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin004372",
+        "swe": "Bräckt",
+        "arb": "مُوَيْلح",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin004553",
+        "swe": "Buskablyg",
+        "arb": "خجول",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin009014",
+        "swe": "Förbannad",
+        "arb": "يا ملعون",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin009019",
+        "swe": "Förbaskad",
+        "arb": "ملعون",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin009274",
+        "swe": "Förgjort",
+        "arb": "مستحيل",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin009627",
+        "swe": "Förspänt",
+        "arb": "ناجِح",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin009833",
+        "swe": "Förutfattad",
+        "arb": "مسبّق التصوّر",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin013869",
+        "swe": "Katalytisk",
+        "arb": "تَنْقِية حفّازة لغازات العادم",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin016256",
+        "swe": "Likvid",
+        "arb": "سُيولة",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin017014",
+        "swe": "Lönt",
+        "arb": "مُجدٍ",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin017378",
+        "swe": "Matt",
+        "arb": "شاهك مات",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin018611",
+        "swe": "Naturlig",
+        "arb": "طبيعي",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin018797",
+        "swe": "Nollställd",
+        "arb": "غير مبالٍ",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin019045",
+        "swe": "Närvarande",
+        "arb": "حضور",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin019427",
+        "swe": "Okrönt",
+        "arb": "غير مُتَوّج",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin019912",
+        "swe": "Osagd",
+        "arb": "غير مَنطوق",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin019960",
+        "swe": "Osvuren",
+        "arb": "غير متأكد",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin019968",
+        "swe": "Otalt",
+        "arb": "غير مَحسوم",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin020070",
+        "swe": "Oäven",
+        "arb": "سيّئ",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin020613",
+        "swe": "Pipande",
+        "arb": "صفير",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin020642",
+        "swe": "Pjåkig",
+        "arb": "سيّئ",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin021933",
+        "swe": "Reda",
+        "arb": "نقديّ",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin022734",
+        "swe": "Rund",
+        "arb": "تقريباً",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin023506",
+        "swe": "Sannspådd",
+        "arb": "تنبُّوئي",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin024151",
+        "swe": "Skadeslös",
+        "arb": "غير مُتَضَرِّر, بلا خَسارة",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin025839",
+        "swe": "Spikad",
+        "arb": "مُمْتَلئ",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin026578",
+        "swe": "Strykande",
+        "arb": "ضارّ",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin026815",
+        "swe": "Städad",
+        "arb": "مُهَنْدَم",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin030092",
+        "swe": "Urminnes",
+        "arb": "قديم",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin032106",
+        "swe": "Åtgången",
+        "arb": "مُصاب بصورة شديدة",
+        "type": "Adjektiv."
+      },
+      {
+        "id": "Lexin000237",
+        "swe": "Ad notam",
+        "arb": "يتذكر",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin000516",
+        "swe": "Allestädes",
+        "arb": "موجود",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin001456",
+        "swe": "Arla",
+        "arb": "صباح باكر",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin001746",
+        "swe": "Av",
+        "arb": "بـ",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin001747",
+        "swe": "Av",
+        "arb": "بـ",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin001748",
+        "swe": "Av",
+        "arb": "بـ",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin001749",
+        "swe": "Av",
+        "arb": "بـ",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin002229",
+        "swe": "Bakom",
+        "arb": "وراء",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin002369",
+        "swe": "Barbacka",
+        "arb": "بلا سرج",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin006733",
+        "swe": "Ens",
+        "arb": "حتى",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin007433",
+        "swe": "Fatt",
+        "arb": "حال",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin007469",
+        "swe": "Fel",
+        "arb": "خطأ",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin007889",
+        "swe": "Flux",
+        "arb": "فجأة",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin008971",
+        "swe": "För",
+        "arb": "أمام",
+        "type": "Adverb."
+      },
+      {
+        "id": "Lexin009016",
+        "swe": "Förbannat",
+        "arb": "مَلعون",
+        "type": "Adverb."
+      }
+    ],
+    "duplicates": [
+      {
+        "swe": "Absolut",
+        "count": 2
+      },
+      {
+        "swe": "Administrativ",
+        "count": 2
+      },
+      {
+        "swe": "Akut",
+        "count": 2
+      },
+      {
+        "swe": "Allena",
+        "count": 2
+      },
+      {
+        "swe": "Allmän",
+        "count": 3
+      },
+      {
+        "swe": "Allmännyttig",
+        "count": 2
+      },
+      {
+        "swe": "Allvarlig",
+        "count": 3
+      },
+      {
+        "swe": "Alternativ",
+        "count": 2
+      },
+      {
+        "swe": "Ampel",
+        "count": 2
+      },
+      {
+        "swe": "Analog",
+        "count": 2
+      },
+      {
+        "swe": "Andfådd",
+        "count": 2
+      },
+      {
+        "swe": "Androgyn",
+        "count": 2
+      },
+      {
+        "swe": "Angelägen",
+        "count": 2
+      },
+      {
+        "swe": "Angränsande",
+        "count": 2
+      },
+      {
+        "swe": "Annalkande",
+        "count": 2
+      },
+      {
+        "swe": "Annorlunda",
+        "count": 2
+      },
+      {
+        "swe": "Arbetsam",
+        "count": 2
+      },
+      {
+        "swe": "Arm",
+        "count": 2
+      },
+      {
+        "swe": "Avgörande",
+        "count": 2
+      },
+      {
+        "swe": "Bakom",
+        "count": 3
+      },
+      {
+        "swe": "Bankrutt",
+        "count": 2
+      },
+      {
+        "swe": "Bar",
+        "count": 3
+      },
+      {
+        "swe": "Barfota",
+        "count": 2
+      },
+      {
+        "swe": "Barock",
+        "count": 3
+      },
+      {
+        "swe": "Behörig",
+        "count": 2
+      },
+      {
+        "swe": "Bekant",
+        "count": 2
+      },
+      {
+        "swe": "Bekväm",
+        "count": 2
+      },
+      {
+        "swe": "Benig",
+        "count": 2
+      },
+      {
+        "swe": "Benägen",
+        "count": 2
+      },
+      {
+        "swe": "Beroende",
+        "count": 2
+      },
+      {
+        "swe": "Berättigad",
+        "count": 2
+      },
+      {
+        "swe": "Beslöjad",
+        "count": 2
+      },
+      {
+        "swe": "Bestående",
+        "count": 2
+      },
+      {
+        "swe": "Besvärlig",
+        "count": 3
+      },
+      {
+        "swe": "Betjänt",
+        "count": 2
+      },
+      {
+        "swe": "Binär",
+        "count": 2
+      },
+      {
+        "swe": "Bisexuell",
+        "count": 2
+      },
+      {
+        "swe": "Blåögd",
+        "count": 2
+      },
+      {
+        "swe": "Blöt",
+        "count": 2
+      },
+      {
+        "swe": "Bombsäker",
+        "count": 2
+      },
+      {
+        "swe": "Borgerlig",
+        "count": 3
+      },
+      {
+        "swe": "Bra",
+        "count": 2
+      },
+      {
+        "swe": "Brant",
+        "count": 2
+      },
+      {
+        "swe": "Briljant",
+        "count": 2
+      },
+      {
+        "swe": "Bråddjup",
+        "count": 2
+      },
+      {
+        "swe": "Brådskande",
+        "count": 2
+      },
+      {
+        "swe": "Brännande",
+        "count": 2
+      },
+      {
+        "swe": "Bördig",
+        "count": 2
+      },
+      {
+        "swe": "Central",
+        "count": 3
+      },
+      {
+        "swe": "Civil",
+        "count": 3
+      }
+    ],
+    "falseFriends": [
+      {
+        "id": "Lexin000405",
+        "swe": "Aktuell",
+        "arb": "موضوع الساعة",
+        "expected": "حالي",
+        "note": "Possible false friend - expected: حالي or فعلي"
+      },
+      {
+        "id": "Lexin010252",
+        "swe": "Gift",
+        "arb": "متزوّج",
+        "expected": "سم",
+        "note": "Possible false friend - expected: سم or زواج"
+      },
+      {
+        "id": "Lexin025041",
+        "swe": "Slut",
+        "arb": "مُنْتَهٍ",
+        "expected": "نهاية",
+        "note": "Possible false friend - expected: نهاية or عاهرة"
+      },
+      {
+        "id": "Lexin021106",
+        "swe": "Prick",
+        "arb": "تماماً",
+        "expected": "نقطة",
+        "note": "Possible false friend - expected: نقطة or قضيب"
+      },
+      {
+        "id": "Lexin002179",
+        "swe": "Bad",
+        "arb": "طلب, ناشد",
+        "expected": "حمام",
+        "note": "Possible false friend - expected: حمام or سيء"
+      },
+      {
+        "id": "Lexin007329",
+        "swe": "Fart",
+        "arb": "رحلة، طريق",
+        "expected": "سرعة",
+        "note": "Possible false friend - expected: سرعة or ريح البطن"
+      },
+      {
+        "id": "Lexin010253",
+        "swe": "Gift",
+        "arb": "سُمّ",
+        "expected": "سم",
+        "note": "Possible false friend - expected: سم or زواج"
+      },
+      {
+        "id": "Lexin017070",
+        "swe": "Magasin",
+        "arb": "مَخْزَن",
+        "expected": "مجلة/متجر",
+        "note": "Possible false friend - expected: مجلة/متجر or مخزن"
+      },
+      {
+        "id": "Lexin017071",
+        "swe": "Magasin",
+        "arb": "مَجَلة",
+        "expected": "مجلة/متجر",
+        "note": "Possible false friend - expected: مجلة/متجر or مخزن"
+      },
+      {
+        "id": "Lexin017578",
+        "swe": "Mening",
+        "arb": "رأي",
+        "expected": "معنى/جملة",
+        "note": "Possible false friend - expected: معنى/جملة or معنى فقط"
+      },
+      {
+        "id": "Lexin017579",
+        "swe": "Mening",
+        "arb": "معنى",
+        "expected": "معنى/جملة",
+        "note": "Possible false friend - expected: معنى/جملة or معنى فقط"
+      },
+      {
+        "id": "Lexin017580",
+        "swe": "Mening",
+        "arb": "قصد",
+        "expected": "معنى/جملة",
+        "note": "Possible false friend - expected: معنى/جملة or معنى فقط"
+      },
+      {
+        "id": "Lexin017581",
+        "swe": "Mening",
+        "arb": "جملة",
+        "expected": "معنى/جملة",
+        "note": "Possible false friend - expected: معنى/جملة or معنى فقط"
+      },
+      {
+        "id": "Lexin021108",
+        "swe": "Prick",
+        "arb": "شخص",
+        "expected": "نقطة",
+        "note": "Possible false friend - expected: نقطة or قضيب"
+      },
+      {
+        "id": "Lexin021109",
+        "swe": "Prick",
+        "arb": "ملاحظة صغيرة",
+        "expected": "نقطة",
+        "note": "Possible false friend - expected: نقطة or قضيب"
+      },
+      {
+        "id": "Lexin023798",
+        "swe": "Sex",
+        "arb": "جنْس",
+        "expected": "ستة",
+        "note": "Possible false friend - expected: ستة or جنس"
+      }
+    ],
+    "questionableTranslations": [
+      {
+        "id": "Lexin025092",
+        "swe": "SLV - Statens livsmedelsverk",
+        "arb": "إدارة الغذاء النرويجي ( SLV )",
+        "reason": "Contains Latin characters"
+      }
+    ]
+  }
+}

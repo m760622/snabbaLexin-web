@@ -33,6 +33,20 @@ const COL_EX_ARB = 8;
 const COL_IDIOM = 9; // Swedish Idiom
 const COL_IDIOM_ARB = 10;
 
+// Learned suffixes for smart word classification
+// Fallback lists used until JSON loads
+let learnedSuffixes = {
+    ett: ['rum', 'kar', 'hus', 'tak', 'golv', 'bord', 'berg', 'land', 'ljus', 'block', 'kort', 'slag', 'spel', 'verk', 'djur', 'krig', 'krön', 'prov', 'test', 'tryck', 'vatten', 'fönster', 'papper', 'system', 'arbete', 'centrum', 'museum', 'program', 'dokument', 'dråp', 'brott', 'mord', 'skap', 'äktenskap', 'partnerskap'],
+    en: ['gård', 'väg', 'gata', 'plats', 'dörr', 'bil', 'maskin', 'station', 'ventil', 'motor', 'pump', 'kabel', 'tid', 'dag', 'natt', 'stad', 'ning', 'tion', 'sion', 'het', 'else', 'ande', 'ende', 'ment', 'itet', 'dom', 'ism', 'ist', 'are', 'ler', 'rer', 'nar', 'mark', 'feber', 'handel', 'misshandel', 'konvention', 'habilitering', 'akut']
+};
+fetch('learned_suffixes.json')
+    .then(res => res.json())
+    .then(data => {
+        learnedSuffixes = data;
+        console.log(`[Suffixes] Loaded ${data.ett.length} Ett and ${data.en.length} En suffixes`);
+    })
+    .catch(err => console.warn('[Suffixes] Using fallback suffix lists'));
+
 // Helper: Normalize Arabic (Remove Tashkeel)
 function normalizeArabic(text) {
     return text.replace(/[\u064B-\u065F]/g, '').toLowerCase();
@@ -154,46 +168,20 @@ function getGrammarBadge(type, forms, word) {
         return '<span class="grammar-badge grammar-en">Subst</span>';
     }
 
-    // === NOUN DETECTION by Swedish compound word suffixes (when no forms available) ===
-    // Based on comprehensive Swedish morphology rules
+    // === NOUN DETECTION using learned suffixes ===
+    // Use dynamically learned suffixes from dictionary analysis
 
-    // Ett-words (Neuter) - comprehensive list
-    const ettSuffixes = [
-        'rum', 'kar', 'hus', 'tak', 'golv', 'bord', 'skåp', 'berg', 'land', 'ljus', 'block', 'kort', 'blad', 'bad', 'band', 'ben', 'blod', 'bröd', 'djur', 'drag', 'fack', 'fall', 'fält', 'gap', 'garn', 'glas', 'grepp', 'gräs', 'guld', 'hål', 'hav', 'hjul', 'horn', 'järn', 'kast', 'knä', 'kol', 'korn', 'krig', 'lack', 'lag', 'led', 'liv', 'ljud', 'lock', 'lopp', 'lyft', 'läge', 'lås', 'löv', 'märke', 'mål', 'nät', 'offer', 'ord', 'par', 'prov', 'regn', 'rep', 'ris', 'rör', 'salt', 'skal', 'skelett', 'skott', 'skrik', 'slag', 'slott', 'smör', 'snitt', 'spel', 'spår', 'stall', 'steg', 'sten', 'stick', 'stift', 'stop', 'straff', 'stycke', 'stål', 'ställe', 'svep', 'sår', 'sätt', 'test', 'tryck', 'tåg', 'utrymme', 'veck', 'verk', 'vin', 'väder', 'vatten', 'ägg', 'öga', 'öra',
-        'fönster', 'papper', 'system', 'arbete', 'centrum', 'problem', 'museum', 'program', 'element', 'dokument', 'moment', 'cement', 'experiment', 'instrument', 'argument', 'monument', 'fragment', 'segment',
-        'bageri', 'konditori', 'galleri', 'batteri', 'bryggeri', 'tryckeri', 'tvätteri', 'slakteri', 'mejeri', 'snickeri'
-    ];
-    for (const suffix of ettSuffixes) {
+    // Check Ett-words from learned suffixes
+    for (const suffix of learnedSuffixes.ett) {
         if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 1) {
             return '<span class="grammar-badge grammar-ett">Ett</span>';
         }
     }
 
-    // En-words (Common gender) - comprehensive list
-    const enSuffixes = [
-        'gård', 'väg', 'gata', 'plats', 'dörr', 'bil', 'maskin', 'station', 'byrå', 'lampa', 'stol', 'säng', 'vägg', 'trappa', 'kväll', 'tid', 'dag', 'natt', 'stad', 'bok', 'sak', 'del', 'jour', 'klåda', 'arm', 'axel', 'bild', 'bit', 'blick', 'blomma', 'boll', 'bro', 'bukt', 'buss', 'cykel', 'dal', 'dam', 'dator', 'dröm', 'dusch', 'fågel', 'film', 'fisk', 'flaska', 'flod', 'form', 'fot', 'fråga', 'gräns', 'grupp', 'hand', 'hund', 'karta', 'kedja', 'klocka', 'knapp', 'kraft', 'kurs', 'källa', 'lapp', 'larm', 'linje', 'lista', 'lucka', 'luft', 'lunch', 'lägenhet', 'längd', 'makt', 'mask', 'mat', 'metod', 'miljö', 'mun', 'musik', 'möjlighet', 'nivå', 'nos', 'nyhet', 'näsa', 'park', 'penna', 'pil', 'pinne', 'plan', 'pol', 'port', 'post', 'press', 'pris', 'punkt', 'ram', 'rapport', 'regel', 'resa', 'risk', 'roll', 'röst', 'scen', 'sida', 'signal', 'sits', 'sjö', 'sko', 'skola', 'slang', 'snö', 'sol', 'soppa', 'sort', 'sport', 'spricka', 'stjärna', 'strand', 'stress', 'ström', 'stund', 'svans', 'sång', 'tand', 'tank', 'tavla', 'text', 'topp', 'trakt', 'tro', 'tumme', 'tur', 'typ', 'uppgift', 'utgång', 'vecka', 'vik', 'våg', 'våning', 'yta', 'zon',
-        // Technical/mechanical
-        'ventil', 'motor', 'pump', 'kabel', 'apparat', 'generator', 'transformator', 'kompressor', 'sensor', 'detektor', 'reaktor', 'projektor', 'monitor', 'adapter', 'filter', 'koppling', 'ledning', 'behållare'
-    ];
-    for (const suffix of enSuffixes) {
+    // Check En-words from learned suffixes  
+    for (const suffix of learnedSuffixes.en) {
         if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 1) {
             return '<span class="grammar-badge grammar-en">En</span>';
-        }
-    }
-
-    // Abstract noun endings (mostly En-words)
-    const abstractEndings = ['ning', 'tion', 'sion', 'het', 'skap', 'else', 'ande', 'ende', 'ment', 'itet', 'lek', 'dom', 'nad', 'sel', 'ism'];
-    for (const suffix of abstractEndings) {
-        if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 2) {
-            return '<span class="grammar-badge grammar-en">Subst</span>';
-        }
-    }
-
-    // Plural forms (indicates noun) - like Bagateller
-    const pluralEndings = ['ller', 'rer', 'nar', 'sor', 'tor', 'ner', 'lar'];
-    for (const suffix of pluralEndings) {
-        if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 2) {
-            return '<span class="grammar-badge grammar-en">Subst</span>';
         }
     }
 
@@ -226,65 +214,18 @@ function getWordTypeCategory(type, word = '', forms = '') {
         }
     }
 
-    // Detect NOUNS by Swedish compound word suffixes (when no forms available)
-    // Comprehensive list based on Swedish morphology rules
+    // === Use dynamically learned suffixes for noun detection ===
 
-    // === ETT-WORDS (Neuter gender) ===
-    const ettSuffixes = [
-        // Common concrete nouns
-        'rum', 'kar', 'hus', 'tak', 'golv', 'bord', 'skåp', 'berg', 'land', 'ljus', 'block', 'kort', 'blad', 'bad', 'band', 'ben', 'berg', 'blod', 'bröd', 'djur', 'doft', 'drag', 'fack', 'fall', 'fält', 'fång', 'gap', 'garn', 'glas', 'grepp', 'gräs', 'guld', 'hål', 'hav', 'hjul', 'horn', 'järn', 'kast', 'kläde', 'knä', 'kol', 'korn', 'krig', 'lack', 'lag', 'led', 'liv', 'ljud', 'lock', 'lopp', 'lyft', 'läge', 'lås', 'löv', 'märke', 'mål', 'näbb', 'nät', 'nyp', 'offer', 'ord', 'par', 'prov', 'regn', 'rep', 'ris', 'rör', 'salt', 'sam', 'skal', 'skelett', 'skott', 'skrik', 'slag', 'slott', 'smör', 'snitt', 'spel', 'spår', 'stall', 'steg', 'sten', 'stick', 'stift', 'stop', 'straff', 'stryk', 'stycke', 'stål', 'ställe', 'svep', 'sår', 'sätt', 'test', 'tryck', 'tåg', 'utrymme', 'veck', 'verk', 'vin', 'vitt', 'väder', 'vatten', 'ägg', 'öga', 'öra',
-        // Technical/compound endings
-        'fönster', 'papper', 'system', 'arbete', 'centrum', 'problem', 'museum', 'program', 'element', 'dokument', 'moment', 'cement', 'experiment', 'instrument', 'argument', 'monument', 'fragment', 'segment',
-        // -eri endings (Ett-words)
-        'bageri', 'konditori', 'laboratori', 'galleri', 'batteri', 'inventari', 'bryggeri', 'tryckeri', 'tvätteri', 'slakteri', 'mejeri', 'snickeri', 'skomakeri', 'raffinaderi'
-    ];
-
-    // === EN-WORDS (Common gender) ===
-    const enSuffixes = [
-        // Common concrete nouns
-        'gård', 'väg', 'gata', 'plats', 'dörr', 'bil', 'maskin', 'station', 'byrå', 'lampa', 'stol', 'säng', 'vägg', 'trappa', 'kväll', 'tid', 'dag', 'natt', 'stad', 'bok', 'sak', 'del', 'jour', 'klåda', 'arm', 'axel', 'bild', 'bit', 'blick', 'blomma', 'boll', 'bro', 'bukt', 'buss', 'cykel', 'dal', 'dam', 'dator', 'doft', 'dröm', 'dusch', 'fågel', 'film', 'fisk', 'flaska', 'flod', 'form', 'fot', 'fråga', 'gräns', 'grupp', 'hand', 'hund', 'idé', 'karta', 'kedja', 'klocka', 'kläder', 'knapp', 'kraft', 'kurs', 'källa', 'laddning', 'lag', 'lapp', 'larm', 'linje', 'lista', 'lucka', 'luft', 'lunch', 'lägenhet', 'längd', 'läpp', 'makt', 'mask', 'mat', 'metod', 'miljö', 'mun', 'musik', 'möjlighet', 'nivå', 'nos', 'nyhet', 'näsa', 'oro', 'park', 'penna', 'pil', 'pinne', 'plan', 'pol', 'port', 'post', 'press', 'pris', 'punkt', 'ram', 'rapport', 'regel', 'resa', 'rest', 'risk', 'roll', 'röst', 'scen', 'sida', 'signal', 'sits', 'sjö', 'sko', 'skola', 'sky', 'slang', 'snö', 'sol', 'soppa', 'sort', 'sport', 'spricka', 'stjärna', 'strand', 'stress', 'ström', 'stund', 'svans', 'sylta', 'sång', 'tand', 'tank', 'tavla', 'text', 'topp', 'trakt', 'tro', 'tumme', 'tur', 'TV', 'typ', 'tärning', 'uppgift', 'utgång', 'valp', 'varm', 'vecka', 'vik', 'våg', 'våning', 'yta', 'zon', 'ö',
-        // Technical/mechanical endings
-        'ventil', 'motor', 'pump', 'kabel', 'apparat', 'generator', 'transformator', 'kondensator', 'kompressor', 'sensor', 'detektor', 'reaktor', 'projektor', 'monitor', 'adapter', 'konverter', 'filter', 'koppling', 'ledning', 'slang', 'tank', 'behållare',
-        // Person endings  
-        'ör', 'ör', 'ist', 'ant', 'ent', 'log', 'graf', 'iker', 'are', 'are'
-    ];
-
-    // === ABSTRACT NOUN ENDINGS (mostly En-words) ===
-    const abstractEndings = [
-        // Very productive endings
-        'ning', 'tion', 'sion', 'het', 'skap', 'else', 'ande', 'ende', 'ment', 'itet', 'lek', 'dom', 'nad', 'sel', 'an', 'ism', 'ist',
-        // Less common but productive
-        'ion', 'ans', 'ens', 'ur', 'yd', 'at'
-    ];
-
-    // === PLURAL ENDINGS (indicates noun, check for base form) ===
-    // Words ending with these are nouns in plural form
-    const pluralEndings = ['ller', 'rer', 'nar', 'sor', 'tor'];
-
-    // Check Ett-words
-    for (const suffix of ettSuffixes) {
+    // Check Ett-words from learned suffixes
+    for (const suffix of learnedSuffixes.ett) {
         if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 1) {
             return 'noun';
         }
     }
 
-    // Check En-words
-    for (const suffix of enSuffixes) {
+    // Check En-words from learned suffixes  
+    for (const suffix of learnedSuffixes.en) {
         if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 1) {
-            return 'noun';
-        }
-    }
-
-    // Check abstract endings
-    for (const suffix of abstractEndings) {
-        if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 2) {
-            return 'noun';
-        }
-    }
-
-    // Check plural forms (like Bagateller -> bagatell + er)
-    for (const suffix of pluralEndings) {
-        if (wordLower.endsWith(suffix) && wordLower.length > suffix.length + 2) {
             return 'noun';
         }
     }
@@ -1128,11 +1069,6 @@ function createCard(item, index = 0) {
     // Get grammar badge and word type category for color-coding
     const grammarBadge = getGrammarBadge(item[COL_TYPE], forms, swe);
     const wordTypeCategory = getWordTypeCategory(item[COL_TYPE], item[COL_SWE], forms);
-
-    // Debug log for first few cards
-    if (index < 5) {
-        console.log(`[WordType] ${swe}: type="${item[COL_TYPE]}", forms="${forms.substring(0, 30)}", result="${wordTypeCategory}"`);
-    }
 
     // Examples
     let examplesHtml = '';

@@ -16,7 +16,7 @@ let currentQuestion = null;
 const searchInput = document.getElementById('searchInput');
 const sortSelect = document.getElementById('sortSelect');
 const resultsArea = document.getElementById('resultsArea');
-const statsElement = document.getElementById('stats');
+const statsElement = document.getElementById('resultCount');
 const themeToggle = document.getElementById('themeToggle');
 const typeSelect = document.getElementById('typeSelect');
 
@@ -321,7 +321,7 @@ async function init() {
 
         isLoading = false;
 
-        statsElement.textContent = `${dictionaryData.length.toLocaleString()} ord laddade / كلمة تم تحميلها`;
+        statsElement.textContent = `${dictionaryData.length.toLocaleString()}`;
         statsElement.classList.add('fade-in');
 
         // Enable search and sort
@@ -438,7 +438,8 @@ async function init() {
 
     } catch (error) {
         console.error(error);
-        statsElement.innerHTML = `<div style="color: red;">Fel vid laddning av data: ${error.message} / خطأ: ${error.message}</div>`;
+        showToast(`Fel vid laddning av data: ${error.message}`, 'error');
+        statsElement.textContent = "Err";
     }
 }
 
@@ -462,7 +463,7 @@ async function loadDictionaryData() {
         await buildSearchIndex();
 
         isLoading = false;
-        statsElement.textContent = `${dictionaryData.length.toLocaleString()} ord laddade / كلمة تم تحميلها`;
+        statsElement.textContent = `${dictionaryData.length.toLocaleString()}`;
         statsElement.classList.add('fade-in');
 
         // Initial Search if query exists
@@ -506,6 +507,9 @@ async function buildSearchIndex() {
     }
     console.log('Search index built completely.');
 }
+
+// State
+let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || []; // [NEW]
 
 // Filter Logic
 const filterToggleBtn = document.getElementById('filterToggleBtn');
@@ -587,9 +591,36 @@ function handleSearch(e) {
 
         currentPage = 1;
         renderResults();
-        statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+
+        // [NEW] Toggle Empty State
+        const emptyState = document.getElementById('emptyState');
+        const resultsGrid = document.getElementById('searchResults');
+
+        if (currentResults.length === 0 && rawQuery.length === 0) {
+            // Show Empty State (Landing)
+            if (emptyState) {
+                renderHistory(); // Refresh history
+                emptyState.style.display = 'block';
+            }
+            if (resultsGrid) resultsGrid.style.display = 'none';
+            statsElement.textContent = ""; // Hide stats on empty
+            if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = "";
+        } else {
+            // Show Results
+            if (emptyState) emptyState.style.display = 'none';
+            if (resultsGrid) resultsGrid.style.display = 'grid';
+            statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+            if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = currentResults.length.toLocaleString();
+        }
+
         return;
     }
+
+    // Hide Empty State when searching
+    const emptyState = document.getElementById('emptyState');
+    const resultsGrid = document.getElementById('searchResults');
+    if (emptyState) emptyState.style.display = 'none';
+    if (resultsGrid) resultsGrid.style.display = 'grid';
 
     let results = [];
     const data = dictionaryData;
@@ -742,7 +773,7 @@ function handleSearch(e) {
     renderResults();
 
     // Update Stats
-    statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+    statsElement.textContent = `${currentResults.length.toLocaleString()}`;
 }
 
 // Global variable to debounce dropdown updates slightly if needed, or just run sync
@@ -923,7 +954,7 @@ function createCard(item, index = 0) {
     const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
 
     return `
-        <a href="details.html?id=${id}" class="card-link" onclick="handleCardClick(event, '${id}', this)">
+        <a href="details.html?id=${id}" class="card-link" onclick="handleCardClick(event, '${id}', '${swe.replace(/'/g, "\\'")}', this)">
             <div class="card" data-type="${wordTypeCategory}" style="view-transition-name: card-${id}">
                 <div class="card-header">
                     <div class="word-header-group">
@@ -947,7 +978,11 @@ function createCard(item, index = 0) {
 
 
 // View Transition Handler
-window.handleCardClick = function (e, id, link) {
+window.handleCardClick = function (e, id, word, link) {
+    if (word && typeof addToHistory === 'function') {
+        addToHistory(word);
+    }
+
     if (!document.startViewTransition) return; // Fallback for older browsers
 
     e.preventDefault();
@@ -1288,24 +1323,32 @@ let quizScore = 0;
 
 function initQuiz() {
     const quizBtn = document.getElementById('quizBtn');
-    const gameBtn = document.getElementById('gameBtn');
-    const quizModal = document.getElementById('quizModal');
+    // gameBtn is a link, no listener needed if href is set, but kept if we want analytics
+    const quizContainer = document.getElementById('quizInlineContainer');
     const closeQuiz = document.getElementById('closeQuiz');
     const nextQuestionBtn = document.getElementById('nextQuestion');
 
-    if (quizBtn) {
-        quizBtn.addEventListener('click', startQuiz);
-    }
+    if (quizBtn && quizContainer) {
+        quizBtn.addEventListener('click', (e) => {
+            // Close settings menu if open
+            const settingsMenu = document.getElementById('settingsMenu');
+            if (settingsMenu) settingsMenu.style.display = 'none';
 
-    if (gameBtn) {
-        gameBtn.addEventListener('click', () => {
-            window.location.href = 'games.html';
+            // Toggle Quiz
+            if (quizContainer.style.display === 'none') {
+                quizContainer.style.display = 'block';
+                startQuiz();
+                // Smooth scroll to quiz
+                quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                quizContainer.style.display = 'none';
+            }
         });
     }
 
-    if (closeQuiz) {
+    if (closeQuiz && quizContainer) {
         closeQuiz.addEventListener('click', () => {
-            quizModal.style.display = 'none';
+            quizContainer.style.display = 'none';
         });
     }
 
@@ -1318,7 +1361,8 @@ function initQuiz() {
 }
 
 function startQuiz() {
-    const quizModal = document.getElementById('quizModal');
+    // Modified: Target inline container
+    const quizContainer = document.getElementById('quizInlineContainer');
     const quizEndScreen = document.getElementById('quizEndScreen');
     const questionCard = document.querySelector('.question-card');
     const quizOptions = document.getElementById('quizOptions');
@@ -1327,8 +1371,11 @@ function startQuiz() {
     quizScore = 0;
     comboCount = 0; // Reset combo
     currentQuestionIndex = 0; // Reset question index
-    document.getElementById('quizScore').textContent = '0';
-    quizModal.classList.remove('streak-3', 'streak-5', 'streak-10'); // Reset styles
+    if (document.getElementById('quizScore')) document.getElementById('quizScore').textContent = '0';
+
+    if (quizContainer) {
+        quizContainer.classList.remove('streak-3', 'streak-5', 'streak-10'); // Reset styles
+    }
 
     // Hide end screen, show quiz elements
     if (quizEndScreen) quizEndScreen.style.display = 'none';
@@ -1336,7 +1383,7 @@ function startQuiz() {
     if (quizOptions) quizOptions.style.display = 'flex';
     if (nextQuestionBtn) nextQuestionBtn.style.display = 'none';
 
-    quizModal.style.display = 'flex';
+    // Core display logic is handled by initQuiz's toggle, so we don't force 'flex' here
 
     // Populate quizQuestions with a random subset of dictionaryData
     quizQuestions = [];
@@ -1508,16 +1555,18 @@ function checkAnswer(selectedOptionText, btn) {
         comboCount++;
 
         // Combo Effects
-        const modal = document.getElementById('quizModal');
-        modal.classList.remove('streak-3', 'streak-5', 'streak-10');
+        const quizContainer = document.getElementById('quizInlineContainer');
+        if (quizContainer) {
+            quizContainer.classList.remove('streak-3', 'streak-5', 'streak-10');
 
-        if (comboCount >= 10) {
-            modal.classList.add('streak-10');
-            createParticles(window.innerWidth / 2, window.innerHeight / 2); // Massive explosion
-        } else if (comboCount >= 5) {
-            modal.classList.add('streak-5');
-        } else if (comboCount >= 3) {
-            modal.classList.add('streak-3');
+            if (comboCount >= 10) {
+                quizContainer.classList.add('streak-10');
+                createParticles(window.innerWidth / 2, window.innerHeight / 2); // Massive explosion
+            } else if (comboCount >= 5) {
+                quizContainer.classList.add('streak-5');
+            } else if (comboCount >= 3) {
+                quizContainer.classList.add('streak-3');
+            }
         }
 
         let feedbackText = '';
@@ -1533,7 +1582,10 @@ function checkAnswer(selectedOptionText, btn) {
         // Wrong
         btn.classList.add('wrong');
         comboCount = 0; // Reset combo
-        document.getElementById('quizModal').classList.remove('streak-3', 'streak-5', 'streak-10');
+        const quizContainer = document.getElementById('quizInlineContainer');
+        if (quizContainer) {
+            quizContainer.classList.remove('streak-3', 'streak-5', 'streak-10');
+        }
 
         // Don't show the wrong answer - just clear feedback
         quizFeedback.textContent = '';
@@ -1618,10 +1670,49 @@ function showWordInfoTooltip(element, wordData) {
     }, 8000);
 }
 
+// --- Smart Empty State Logic ---
+
+function renderHistory() {
+    // History feature disabled by user request
+    return;
+}
+
+function addToHistory(term) {
+    if (!term || term.length < 2) return;
+    // Remove if exists (to move to top)
+    searchHistory = searchHistory.filter(t => t.toLowerCase() !== term.toLowerCase());
+    // Add to front
+    searchHistory.unshift(term);
+    // Limit to 10
+    if (searchHistory.length > 10) searchHistory.pop();
+
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+}
+
+// Global function for onclick
+window.setSearch = function (term) {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = term;
+        // Trigger generic input event
+        searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+        addToHistory(term); // Save this click
+    }
+};
+
 // Initialize Quiz
 document.addEventListener('DOMContentLoaded', () => {
     initQuiz();
     initPhysicsLogo();
+
+    // Init Empty State
+    renderHistory();
+    const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && searchInput.value.trim() === '' && emptyState) {
+        emptyState.style.display = 'block';
+        if (document.getElementById('searchResults')) document.getElementById('searchResults').style.display = 'none';
+    }
 });
 
 // 3D Tilt Logic

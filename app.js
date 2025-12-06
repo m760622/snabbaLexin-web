@@ -1927,8 +1927,10 @@ function enableDeviceTilt() {
         // Calculate dynamic shadow based on tilt
         const shadowX = yRot * 2;  // Shadow moves opposite to tilt
         const shadowY = xRot * 2;
-        const shadowBlur = 20 + Math.abs(xRot) + Math.abs(yRot);
-        const shadowOpacity = 0.15 + (Math.abs(xRot) + Math.abs(yRot)) * 0.02;
+        const tiltIntensity = Math.abs(xRot) + Math.abs(yRot);  // 0 to 20
+        const shadowBlur = 15 + tiltIntensity * 2;  // 15 to 55
+        const shadowSpread = tiltIntensity * 0.5;   // 0 to 10
+        const shadowOpacity = 0.2 + tiltIntensity * 0.04;  // 0.2 to 1.0
 
         // Apply to all visible cards
         const cards = document.querySelectorAll('.card');
@@ -1939,7 +1941,7 @@ function enableDeviceTilt() {
 
             if (inViewport) {
                 card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
-                card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px rgba(99, 102, 241, ${shadowOpacity})`;
+                card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px ${shadowSpread}px rgba(30, 64, 175, ${shadowOpacity})`;
                 card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
             }
         });

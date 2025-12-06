@@ -1917,14 +1917,18 @@ function enableDeviceTilt() {
 
         // Normalize values (device held at ~45 degrees is "neutral")
         const neutralBeta = 45;
-        const normalizedBeta = (lastBeta - neutralBeta) * 0.6;  // Increased from 0.2
-        const normalizedGamma = lastGamma * 0.6;  // Increased from 0.2
+        const normalizedBeta = (lastBeta - neutralBeta) * 0.3;  // Reduced for subtler effect
+        const normalizedGamma = lastGamma * 0.3;
 
-        // Clamp values (increased range for more dramatic effect)
-        const xRot = Math.max(-25, Math.min(25, normalizedBeta));
-        const yRot = Math.max(-25, Math.min(25, normalizedGamma));
+        // Clamp values (reduced range for subtler rotation)
+        const xRot = Math.max(-10, Math.min(10, normalizedBeta));
+        const yRot = Math.max(-10, Math.min(10, normalizedGamma));
 
-
+        // Calculate dynamic shadow based on tilt
+        const shadowX = yRot * 2;  // Shadow moves opposite to tilt
+        const shadowY = xRot * 2;
+        const shadowBlur = 20 + Math.abs(xRot) + Math.abs(yRot);
+        const shadowOpacity = 0.15 + (Math.abs(xRot) + Math.abs(yRot)) * 0.02;
 
         // Apply to all visible cards
         const cards = document.querySelectorAll('.card');
@@ -1935,7 +1939,8 @@ function enableDeviceTilt() {
 
             if (inViewport) {
                 card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
-                card.style.transition = 'transform 0.1s ease-out';
+                card.style.boxShadow = `${-shadowX}px ${shadowY}px ${shadowBlur}px rgba(99, 102, 241, ${shadowOpacity})`;
+                card.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
             }
         });
     }, { passive: true });

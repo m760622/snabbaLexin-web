@@ -72,12 +72,6 @@
     "example": "dela fifty - fifty"
   },
   {
-    "id": "Lexin007852",
-    "type": "Adjektiv.",
-    "word": "Flitig",
-    "example": "Flyget är försenat med två timmar."
-  },
-  {
     "id": "Lexin008292",
     "type": "Adjektiv.",
     "word": "Framliden",
@@ -106,12 +100,6 @@
     "type": "Adjektiv.",
     "word": "Förströdd",
     "example": "han ägnade mig bara ett förstrött intresse"
-  },
-  {
-    "id": "Lexin009900",
-    "type": "Adjektiv.",
-    "word": "Förvånad",
-    "example": "Vi förväntar oss besked imorgon."
   },
   {
     "id": "Lexin009977",
@@ -156,12 +144,6 @@
     "example": "hårdnackat motstånd"
   },
   {
-    "id": "Lexin012491",
-    "type": "Adjektiv.",
-    "word": "Idiotisk",
-    "example": "Brödet är hårt, det är gammalt."
-  },
-  {
     "id": "Lexin012955",
     "type": "Adjektiv.",
     "word": "Inrutad",
@@ -204,28 +186,10 @@
     "example": "kvalificerat arbete"
   },
   {
-    "id": "Lexin015462",
-    "type": "Adjektiv.",
-    "word": "Kvalitativ",
-    "example": "Spara kvittot för att kunna byta."
-  },
-  {
-    "id": "Lexin016752",
-    "type": "Adjektiv.",
-    "word": "Långvarig",
-    "example": "Vi letar efter en större lägenhet."
-  },
-  {
     "id": "Lexin016783",
     "type": "Adjektiv.",
     "word": "Läcker",
     "example": "läckra rätter"
-  },
-  {
-    "id": "Lexin017235",
-    "type": "Adjektiv.",
-    "word": "Marin",
-    "example": "Mamma, jag är hungrig!"
   },
   {
     "id": "Lexin017948",
@@ -244,12 +208,6 @@
     "type": "Adjektiv.",
     "word": "Målmedveten",
     "example": "ett målmedvetet arbete"
-  },
-  {
-    "id": "Lexin018341",
-    "type": "Adjektiv.",
-    "word": "Månatlig",
-    "example": "Affären ligger nära mitt hus."
   },
   {
     "id": "Lexin019142",
@@ -384,12 +342,6 @@
     "example": "räntabla investeringar"
   },
   {
-    "id": "Lexin023570",
-    "type": "Adjektiv.",
-    "word": "Schematisk",
-    "example": "Barnen börjar skolan klockan åtta."
-  },
-  {
     "id": "Lexin024209",
     "type": "Adjektiv.",
     "word": "Skamfilad",
@@ -426,18 +378,6 @@
     "example": "ett storartat försök"
   },
   {
-    "id": "Lexin026433",
-    "type": "Adjektiv.",
-    "word": "Storslagen",
-    "example": "Vi bor i ett stort hus med trädgård."
-  },
-  {
-    "id": "Lexin026522",
-    "type": "Adjektiv.",
-    "word": "Stridig",
-    "example": "Jag är stressad inför provet."
-  },
-  {
     "id": "Lexin027257",
     "type": "Adjektiv.",
     "word": "Svullen",
@@ -462,40 +402,16 @@
     "example": "säregna omständigheter"
   },
   {
-    "id": "Lexin027934",
-    "type": "Adjektiv.",
-    "word": "Tankspridd",
-    "example": "Mötet varar i en timme."
-  },
-  {
-    "id": "Lexin027937",
-    "type": "Adjektiv.",
-    "word": "Tantig",
-    "example": "Ta din jacka, det är kallt ute."
-  },
-  {
     "id": "Lexin028315",
     "type": "Adjektiv.",
     "word": "Tillgiven",
     "example": "Din tillgivne vän M ."
   },
   {
-    "id": "Lexin028357",
-    "type": "Adjektiv.",
-    "word": "Tillmötesgående",
-    "example": "Det tar tre timmar att köra dit."
-  },
-  {
     "id": "Lexin028446",
     "type": "Adjektiv.",
     "word": "Tillåten",
     "example": "lägsta tillåtna hastighet"
-  },
-  {
-    "id": "Lexin028701",
-    "type": "Adjektiv.",
-    "word": "Torrskodd",
-    "example": "Stockholm är en vacker stad."
   },
   {
     "id": "Lexin029159",
@@ -508,12 +424,6 @@
     "type": "Adjektiv.",
     "word": "Tunn",
     "example": "tunt hår"
-  },
-  {
-    "id": "Lexin029440",
-    "type": "Adjektiv.",
-    "word": "Tättbebyggd",
-    "example": "Vi har två barn."
   },
   {
     "id": "Lexin029610",
@@ -540,22 +450,10 @@
     "example": "med upphöjt förakt"
   },
   {
-    "id": "Lexin030148",
-    "type": "Adjektiv.",
-    "word": "Utblottad",
-    "example": "Jag vaknar klockan sex varje morgon."
-  },
-  {
     "id": "Lexin030198",
     "type": "Adjektiv.",
     "word": "Utflugen",
     "example": "barnen är utflugna"
-  },
-  {
-    "id": "Lexin030569",
-    "type": "Adjektiv.",
-    "word": "Valfri",
-    "example": "Jag vill vara med dig."
   },
   {
     "id": "Lexin030844",
@@ -580,12 +478,6 @@
     "type": "Adjektiv.",
     "word": "Värdeladdad",
     "example": "ett värdeladdat ord"
-  },
-  {
-    "id": "Lexin032064",
-    "type": "Adjektiv.",
-    "word": "Återhållsam",
-    "example": "Jag har studerat svenska i två år."
   },
   {
     "id": "Lexin032137",
@@ -648,12 +540,6 @@
     "example": "svaren kommer in efter hand"
   },
   {
-    "id": "Lexin008331",
-    "type": "Adverb.",
-    "word": "Framåt",
-    "example": "Läraren förklarar grammatiken tydligt."
-  },
-  {
     "id": "Lexin011779",
     "type": "Adverb.",
     "word": "Huller om buller",
@@ -664,18 +550,6 @@
     "type": "Adverb.",
     "word": "Härs och tvärs",
     "example": "musen sprang härs och tvärs över golvet"
-  },
-  {
-    "id": "Lexin012453",
-    "type": "Adverb.",
-    "word": "Icke",
-    "example": "Hur mår du idag?"
-  },
-  {
-    "id": "Lexin024091",
-    "type": "Adverb.",
-    "word": "Självmant",
-    "example": "Hon simmar varje dag på sommaren."
   },
   {
     "id": "Lexin030967",
@@ -690,328 +564,10 @@
     "example": "jag är ytterst tacksam för din hjälp"
   },
   {
-    "id": "Lexin002472",
-    "type": "Bygg.",
-    "word": "Basram",
-    "example": "Jag vill bara vila."
-  },
-  {
-    "id": "Lexin002859",
-    "type": "Bygg.",
-    "word": "Beredskapsarbete",
-    "example": "Vi besöker våra släktingar varje helg."
-  },
-  {
-    "id": "Lexin002861",
-    "type": "Bygg.",
-    "word": "Beredskapsåtgärd",
-    "example": "Ekonomen beräknar företagets vinst."
-  },
-  {
-    "id": "Lexin002915",
-    "type": "Bygg.",
-    "word": "Beräkningstryck",
-    "example": "Jag besöker mina föräldrar varje helg."
-  },
-  {
-    "id": "Lexin003792",
-    "type": "Bygg.",
-    "word": "Board",
-    "example": "Jag bjuder dig på middag."
-  },
-  {
-    "id": "Lexin004028",
-    "type": "Bygg.",
-    "word": "Bottenvåning",
-    "example": "Jag bor i en lägenhet i centrum."
-  },
-  {
-    "id": "Lexin004080",
-    "type": "Bygg.",
-    "word": "Brandskyddsklass",
-    "example": "Jag tar bussen till jobbet."
-  },
-  {
-    "id": "Lexin005990",
-    "type": "Bygg.",
-    "word": "Dränering",
-    "example": "Jag duschar varje morgon innan jobbet."
-  },
-  {
-    "id": "Lexin006779",
-    "type": "Bygg.",
-    "word": "Entreprenadingenjör",
-    "example": "Hon känner sig ensam i den nya staden."
-  },
-  {
-    "id": "Lexin007376",
-    "type": "Bygg.",
-    "word": "Fast skydd",
-    "example": "Bilen fastnade i snön."
-  },
-  {
-    "id": "Lexin008966",
-    "type": "Bygg.",
-    "word": "Fönster",
-    "example": "Kan du öppna fönstret? Det är varmt inne."
-  },
-  {
-    "id": "Lexin010078",
-    "type": "Bygg.",
-    "word": "Gatlykta",
-    "example": "Mamma ger mig pengar varje vecka."
-  },
-  {
-    "id": "Lexin010301",
-    "type": "Bygg.",
-    "word": "GIS ( Geografic information",
-    "example": "Jag är glad att träffa dig!"
-  },
-  {
-    "id": "Lexin010355",
-    "type": "Bygg.",
-    "word": "Glasull",
-    "example": "God kväll! Välkommen hem."
-  },
-  {
-    "id": "Lexin011665",
-    "type": "Bygg.",
-    "word": "HLR - utbildning",
-    "example": "Jag hittade mina nycklar i fickan."
-  },
-  {
-    "id": "Lexin012355",
-    "type": "Bygg.",
-    "word": "Höjning - Höjdriktning",
-    "example": "Sväng till höger vid trafikljuset."
-  },
-  {
-    "id": "Lexin012455",
-    "type": "Bygg.",
-    "word": "Icke - diskriminering",
-    "example": "Hur mycket kostar det?"
-  },
-  {
-    "id": "Lexin016170",
-    "type": "Bygg.",
-    "word": "Leveranssäkerhet",
-    "example": "Jag bor i en liten lägenhet."
-  },
-  {
-    "id": "Lexin016667",
-    "type": "Bygg.",
-    "word": "Lyftredskap",
-    "example": "Vi äter lunch klockan tolv."
-  },
-  {
-    "id": "Lexin020665",
-    "type": "Bygg.",
-    "word": "Plan",
-    "example": "Vi har två pojkar och en flicka."
-  },
-  {
-    "id": "Lexin021240",
-    "type": "Bygg.",
-    "word": "Prognos",
-    "example": "Vi har ett prov i matematik imorgon."
-  },
-  {
     "id": "Lexin008245",
     "type": "Förkortning.",
     "word": "Fr o m",
     "example": "den nya lagen gäller fr o m 1 juli"
-  },
-  {
-    "id": "Lexin020196",
-    "type": "Förled.",
-    "word": "Parad",
-    "example": "Ta med ett paraply, det kan regna."
-  },
-  {
-    "id": "Lexin026367",
-    "type": "Förled.",
-    "word": "Stock",
-    "example": "Han står vid busshållplatsen och väntar."
-  },
-  {
-    "id": "Lexin001268",
-    "type": "Interjektion.",
-    "word": "Apport",
-    "example": "Min pappa arbetar på en fabrik."
-  },
-  {
-    "id": "Lexin024019",
-    "type": "JuridikR.",
-    "word": "Sjukledighet",
-    "example": "Barnet sjunger en sång för sin mamma."
-  },
-  {
-    "id": "Lexin027052",
-    "type": "JuridikR.",
-    "word": "Summarisk process",
-    "example": "Hyresvärden fixar trasig utrustning."
-  },
-  {
-    "id": "Lexin029693",
-    "type": "JuridikR.",
-    "word": "Ungdomstjänst",
-    "example": "Jag har huvudvärk idag."
-  },
-  {
-    "id": "Lexin004619",
-    "type": "JuridikS.",
-    "word": "Byggningabalken",
-    "example": "De bygger ett nytt sjukhus i stan."
-  },
-  {
-    "id": "Lexin005602",
-    "type": "JuridikS.",
-    "word": "Diskrimineringsersättning",
-    "example": "Min dotter studerar medicin."
-  },
-  {
-    "id": "Lexin005623",
-    "type": "JuridikS.",
-    "word": "Dispositiv",
-    "example": "Dra i dörren för att öppna den."
-  },
-  {
-    "id": "Lexin008672",
-    "type": "JuridikS.",
-    "word": "Fullmäktige",
-    "example": "Maten är färdig, kom och ät!"
-  },
-  {
-    "id": "Lexin010694",
-    "type": "JuridikS.",
-    "word": "Grund för yrkande",
-    "example": "Solen är gul och varm."
-  },
-  {
-    "id": "Lexin011189",
-    "type": "JuridikS.",
-    "word": "Handikappsombudsmannen",
-    "example": "Hon har långt svart hår."
-  },
-  {
-    "id": "Lexin011206",
-    "type": "JuridikS.",
-    "word": "Handlingsrekvisit",
-    "example": "Han hatar att stå tidigt på morgonen."
-  },
-  {
-    "id": "Lexin011309",
-    "type": "JuridikS.",
-    "word": "Hedersrelaterat våld och förtryck",
-    "example": "Han arbetar som ingenjör."
-  },
-  {
-    "id": "Lexin012136",
-    "type": "JuridikS.",
-    "word": "Häktningsgrunder",
-    "example": "Jag arbetade hela dagen."
-  },
-  {
-    "id": "Lexin012331",
-    "type": "JuridikS.",
-    "word": "Högsta domstolen",
-    "example": "Jag hämtar barnen från skolan klockan tre."
-  },
-  {
-    "id": "Lexin012456",
-    "type": "JuridikS.",
-    "word": "Icke - politiskt brott",
-    "example": "Hur många barn har du?"
-  },
-  {
-    "id": "Lexin015803",
-    "type": "JuridikS.",
-    "word": "Lag om god man för ensamkommande flyktingbarn",
-    "example": "Han är lång och har mörkt hår."
-  },
-  {
-    "id": "Lexin018779",
-    "type": "JuridikS.",
-    "word": "NOA - Nationella operativa avdelningen",
-    "example": "Jag är nöjd med mitt nya jobb."
-  },
-  {
-    "id": "Lexin022009",
-    "type": "JuridikS.",
-    "word": "Regering",
-    "example": "Barnet är rädd för mörkret."
-  },
-  {
-    "id": "Lexin022040",
-    "type": "JuridikS.",
-    "word": "Registerenhet",
-    "example": "Gå rakt fram och sväng höger."
-  },
-  {
-    "id": "Lexin022089",
-    "type": "JuridikS.",
-    "word": "Reklamationsplikt",
-    "example": "Läkaren skrev ut ett recept på antibiotika."
-  },
-  {
-    "id": "Lexin023109",
-    "type": "JuridikS.",
-    "word": "Rättstvist",
-    "example": "Mekanikern reparerar min bil."
-  },
-  {
-    "id": "Lexin025067",
-    "type": "JuridikS.",
-    "word": "Slutinstans",
-    "example": "Min son går i första klass."
-  },
-  {
-    "id": "Lexin028393",
-    "type": "JuridikS.",
-    "word": "Tillståndsenhet",
-    "example": "Jag tror att det blir fint väder imorgon."
-  },
-  {
-    "id": "Lexin028562",
-    "type": "JuridikS.",
-    "word": "Tjänande fastighet",
-    "example": "Jag tvättar bilen varje söndag."
-  },
-  {
-    "id": "Lexin030312",
-    "type": "JuridikS.",
-    "word": "Utmätningsfri egendom",
-    "example": "Välkommen till Sverige!"
-  },
-  {
-    "id": "Lexin031081",
-    "type": "JuridikS.",
-    "word": "Villkor vid gåva",
-    "example": "Vi bor i Malmö sedan två år."
-  },
-  {
-    "id": "Lexin003114",
-    "type": "JuridikTB.",
-    "word": "Betala uppehälle",
-    "example": "Jag beställer mat från restaurangen."
-  },
-  {
-    "id": "Lexin013117",
-    "type": "JuridikTB.",
-    "word": "Interimistiskt förordnande",
-    "example": "Jag har en jobbintervju imorgon."
-  },
-  {
-    "id": "Lexin015824",
-    "type": "JuridikTB.",
-    "word": "Laga kraft",
-    "example": "Stockholm ligger långt bort härifrån."
-  },
-  {
-    "id": "Lexin032071",
-    "type": "JuridikTB.",
-    "word": "Återkallelse",
-    "example": "Hon har vackra blå ögon."
   },
   {
     "id": "Lexin030703",
@@ -1020,364 +576,10 @@
     "example": "jag kommer vare sig du vill det eller inte jag har inte sett honom vare sig igår eller idag"
   },
   {
-    "id": "Lexin000448",
-    "type": "Medicin.",
-    "word": "Aldosteron",
-    "example": "Jag älskar min familj mer än allt annat."
-  },
-  {
-    "id": "Lexin000737",
-    "type": "Medicin.",
-    "word": "Amöbor",
-    "example": "Kan jag få en annan storlek?"
-  },
-  {
-    "id": "Lexin001247",
-    "type": "Medicin.",
-    "word": "Apoplexi",
-    "example": "Hon använder sin telefon för att lära sig svenska."
-  },
-  {
-    "id": "Lexin002154",
-    "type": "Medicin.",
-    "word": "Axonet",
-    "example": "Parkeringen är bakom byggnaden."
-  },
-  {
-    "id": "Lexin003608",
-    "type": "Medicin.",
-    "word": "Blodbrist",
-    "example": "Himlen är blå idag."
-  },
-  {
-    "id": "Lexin004177",
-    "type": "Medicin.",
-    "word": "Bronker ( Luftrören )",
-    "example": "Huset brinner! Ring brandkåren!"
-  },
-  {
-    "id": "Lexin005040",
-    "type": "Medicin.",
-    "word": "Corium",
-    "example": "Jag cyklar till jobbet på min cykel."
-  },
-  {
-    "id": "Lexin005366",
-    "type": "Medicin.",
-    "word": "Depotplåster",
-    "example": "Huset är stort. Det har fem rum."
-  },
-  {
-    "id": "Lexin006765",
-    "type": "Medicin.",
-    "word": "Enstaka djurart",
-    "example": "Företaget erbjuder gratis leverans."
-  },
-  {
-    "id": "Lexin007559",
-    "type": "Medicin.",
-    "word": "Fickbildningen",
-    "example": "Jag arbetar fem dagar i veckan."
-  },
-  {
-    "id": "Lexin007614",
-    "type": "Medicin.",
-    "word": "Filtration",
-    "example": "Jag finner det svårt att förstå grammatiken."
-  },
-  {
-    "id": "Lexin008155",
-    "type": "Medicin.",
-    "word": "Fortlever",
-    "example": "Han är förälskad i sin klasskamrat."
-  },
-  {
-    "id": "Lexin008198",
-    "type": "Medicin.",
-    "word": "Fosterskador",
-    "example": "Det är första gången jag är här."
-  },
-  {
-    "id": "Lexin010268",
-    "type": "Medicin.",
-    "word": "Giftstruma",
-    "example": "Jag gillar att läsa böcker på kvällen."
-  },
-  {
-    "id": "Lexin010361",
-    "type": "Medicin.",
-    "word": "Glatt muskulatur",
-    "example": "God natt, sov så gott!"
-  },
-  {
-    "id": "Lexin010362",
-    "type": "Medicin.",
-    "word": "Glaukom",
-    "example": "God morgon! Sov du gott?"
-  },
-  {
-    "id": "Lexin010392",
-    "type": "Medicin.",
-    "word": "Glukosbelastningsprov",
-    "example": "Vi har trägolv i vardagsrummet."
-  },
-  {
-    "id": "Lexin011036",
-    "type": "Medicin.",
-    "word": "Haemophilus influenzae",
-    "example": "Har du tid att prata?"
-  },
-  {
-    "id": "Lexin011616",
-    "type": "Medicin.",
-    "word": "Hjärnventrikel",
-    "example": "Jag hinner inte äta frukost innan jobbet."
-  },
-  {
-    "id": "Lexin011710",
-    "type": "Medicin.",
-    "word": "Hormonella åkommor",
-    "example": "Jag är hungrig, ska vi äta lunch?"
-  },
-  {
-    "id": "Lexin011785",
-    "type": "Medicin.",
-    "word": "Humant papillom virus HPV - virus",
-    "example": "Det var hundra personer på mötet."
-  },
-  {
-    "id": "Lexin011792",
-    "type": "Medicin.",
-    "word": "Humörsvängning",
-    "example": "Han hostar mycket på grund av förkylningen."
-  },
-  {
-    "id": "Lexin012393",
-    "type": "Medicin.",
-    "word": "Hörselorgan",
-    "example": "Hon har haft hosta i en vecka."
-  },
-  {
-    "id": "Lexin012454",
-    "type": "Medicin.",
-    "word": "Icke - allergiskt kontakteksem",
-    "example": "Hur länge har du bott i Sverige?"
-  },
-  {
-    "id": "Lexin014965",
-    "type": "Medicin.",
-    "word": "Kortisonbehandling",
-    "example": "Jag ska köpa mat efter jobbet."
-  },
-  {
-    "id": "Lexin016024",
-    "type": "Medicin.",
-    "word": "Lavemang",
-    "example": "Barnen leker på lekplatsen."
-  },
-  {
-    "id": "Lexin016859",
-    "type": "Medicin.",
-    "word": "Läker",
-    "example": "Han läser tidningen varje morgon."
-  },
-  {
-    "id": "Lexin017893",
-    "type": "Medicin.",
-    "word": "Mjölktänderna",
-    "example": "Morfar bor i södra Sverige."
-  },
-  {
-    "id": "Lexin018226",
-    "type": "Medicin.",
-    "word": "Muskelvävnad",
-    "example": "Jag gillar dig mycket."
-  },
-  {
-    "id": "Lexin026059",
-    "type": "Medicin.",
-    "word": "SSinnen",
-    "example": "Vi stannar hemma ikväll och tittar på film."
-  },
-  {
-    "id": "Lexin026407",
-    "type": "Medicin.",
-    "word": "Stora kroppspulsådern",
-    "example": "Vilken storlek har du?"
-  },
-  {
-    "id": "Lexin027128",
-    "type": "Medicin.",
-    "word": "Svalg",
-    "example": "Provet var svårt men jag klarade det."
-  },
-  {
-    "id": "Lexin027463",
-    "type": "Medicin.",
-    "word": "Systoliska blodtrycket",
-    "example": "Vi ska sälja vår bil."
-  },
-  {
-    "id": "Lexin027685",
-    "type": "Medicin.",
-    "word": "Sätesbjudning",
-    "example": "Tack så mycket för hjälpen!"
-  },
-  {
-    "id": "Lexin012313",
-    "type": "MedicinMN.",
-    "word": "Höghöjdslungödem",
-    "example": "Mjölken står på översta hyllan."
-  },
-  {
-    "id": "Lexin023986",
-    "type": "MedicinMN.",
-    "word": "Sjukanmäla sig",
-    "example": "Bilen är snabb och bekväm."
-  },
-  {
-    "id": "Lexin026287",
-    "type": "MedicinMN.",
-    "word": "Stickande",
-    "example": "Jag stryker mina skjortor på söndagar."
-  },
-  {
-    "id": "Lexin005808",
-    "type": "MedicinMR.",
-    "word": "Doser",
-    "example": "Vill du ha en kopp kaffe?"
-  },
-  {
-    "id": "Lexin026955",
-    "type": "MedicinMR.",
-    "word": "Störningar i cirkulation",
-    "example": "Jag väntar på ditt svar."
-  },
-  {
-    "id": "Lexin030793",
-    "type": "MedicinMR.",
-    "word": "Vattenloppor, Hinnkräftor, Cladocera",
-    "example": "Jag reser till Spanien nästa vecka."
-  },
-  {
-    "id": "Lexin003966",
-    "type": "MedicinR.",
-    "word": "Borttagna bitarna spolas ut ur leden",
-    "example": "Jag mår bra, tack!"
-  },
-  {
     "id": "Lexin011633",
     "type": "MedicinR.",
     "word": "Hjärtflimmer",
     "example": "ارتجاف العضلة القلبية بشكل غير منتظم , ينجم عن انقباضات غير منتظمة وعشوائية لخلايا العضلة القلبية , بحيث يكون هذا الانقباض غير فعال في ضخ الدم . يُقسم الرجفان القلبي إلى نوعين: رجفان أذيني رجفان بطيني"
-  },
-  {
-    "id": "Lexin011868",
-    "type": "MedicinR.",
-    "word": "Huvudet, kraniet, kranium",
-    "example": "Jag hoppas att du mår bra."
-  },
-  {
-    "id": "Lexin014935",
-    "type": "MedicinR.",
-    "word": "Korsbandsoperation",
-    "example": "Hur mycket kostar den här jackan?"
-  },
-  {
-    "id": "Lexin018225",
-    "type": "MedicinR.",
-    "word": "Muskelstyrka",
-    "example": "Det finns många svenskar i Thailand."
-  },
-  {
-    "id": "Lexin028295",
-    "type": "MedicinR.",
-    "word": "Tillfredställelse",
-    "example": "Kan du torka av bordet efter maten?"
-  },
-  {
-    "id": "Lexin028483",
-    "type": "MedicinR.",
-    "word": "Tinningbenet",
-    "example": "Jag träffar mina vänner på lördagar."
-  },
-  {
-    "id": "Lexin029551",
-    "type": "MedicinR.",
-    "word": "Underhudsfettet",
-    "example": "Ursäkta, var ligger stationen?"
-  },
-  {
-    "id": "Lexin032158",
-    "type": "MedicinR.",
-    "word": "Äggled",
-    "example": "Lampan hänger över bordet."
-  },
-  {
-    "id": "Lexin018280",
-    "type": "MedicinTB.",
-    "word": "Myrkrypningar",
-    "example": "När börjar filmen?"
-  },
-  {
-    "id": "Lexin008254",
-    "type": "Militär.",
-    "word": "Fraktioner",
-    "example": "Jag försöker lära mig svenska grammatik."
-  },
-  {
-    "id": "Lexin009770",
-    "type": "Militär.",
-    "word": "Förteckning över visa styrkor, fraktioner och vapen",
-    "example": "Jag försöker lära mig ett nytt språk."
-  },
-  {
-    "id": "Lexin022115",
-    "type": "Militär.",
-    "word": "Rekrytering",
-    "example": "Det regnar mycket i Sverige på hösten."
-  },
-  {
-    "id": "Lexin010377",
-    "type": "Multikulturella.",
-    "word": "Globalisering",
-    "example": "Jag glömmer alltid var jag lägger nycklarna."
-  },
-  {
-    "id": "Lexin017615",
-    "type": "Multikulturella.",
-    "word": "Meritprincipen",
-    "example": "Jag har ett möte klockan tio."
-  },
-  {
-    "id": "Lexin008619",
-    "type": "Namn.",
-    "word": "Fröken Ur",
-    "example": "Jag föreslår att vi tar en paus."
-  },
-  {
-    "id": "Lexin011964",
-    "type": "Namn.",
-    "word": "Hyresgästernas riksförbund",
-    "example": "Hur står det till med dig?"
-  },
-  {
-    "id": "Lexin027203",
-    "type": "Namn.",
-    "word": "Svenskt Näringsliv",
-    "example": "Jag svär att det är sant!"
-  },
-  {
-    "id": "Lexin003055",
-    "type": "ÖvregaTB.",
-    "word": "Bestående skada",
-    "example": "Kan jag betala med kort?"
-  },
-  {
-    "id": "Lexin011699",
-    "type": "ÖvregaTB.",
-    "word": "Hoppet står till",
-    "example": "Jag har ont i huvudet idag."
   },
   {
     "id": "Lexin000131",
@@ -1410,220 +612,10 @@
     "example": "företaget sålde i juni för 20 miljoner , vilket betyder en femprocentig ökning"
   },
   {
-    "id": "Lexin001426",
-    "type": "Samhälle.",
-    "word": "Arbetsvägran",
-    "example": "Han blev arg när han hörde nyheten."
-  },
-  {
-    "id": "Lexin002618",
-    "type": "Samhälle.",
-    "word": "Begravningsombud",
-    "example": "Jag behöver hjälp med läxan."
-  },
-  {
-    "id": "Lexin003050",
-    "type": "Samhälle.",
-    "word": "Bestyrkt översättning",
-    "example": "Jag fick bra betyg i alla ämnen."
-  },
-  {
-    "id": "Lexin004411",
-    "type": "Samhälle.",
-    "word": "Bröstarvingar",
-    "example": "Det var en bra film, jag gillade den."
-  },
-  {
-    "id": "Lexin010593",
-    "type": "Samhälle.",
-    "word": "Graviditetspenning",
-    "example": "Vår granne är mycket snäll."
-  },
-  {
-    "id": "Lexin011370",
-    "type": "Samhälle.",
-    "word": "Hem och konsumentkunskap",
-    "example": "Jag handlar mat på ICA varje lördag."
-  },
-  {
-    "id": "Lexin013581",
-    "type": "Samhälle.",
-    "word": "Kabinettssekreterare",
-    "example": "Jag dricker en kopp kaffe varje morgon."
-  },
-  {
-    "id": "Lexin014427",
-    "type": "Samhälle.",
-    "word": "Kolumbarier",
-    "example": "Han kommer till Sverige nästa månad."
-  },
-  {
-    "id": "Lexin015361",
-    "type": "Samhälle.",
-    "word": "Kulturdepartementet",
-    "example": "Min pappa kör taxi på kvällarna."
-  },
-  {
-    "id": "Lexin017411",
-    "type": "Samhälle.",
-    "word": "Medborgardialoger",
-    "example": "Ta medicinen tre gånger om dagen."
-  },
-  {
-    "id": "Lexin018578",
-    "type": "Samhälle.",
-    "word": "Nationellt prov",
-    "example": "Jag sov bra i natt."
-  },
-  {
-    "id": "Lexin023139",
-    "type": "Samhälle.",
-    "word": "Röjande av företagshemligheter",
-    "example": "Jag ringer dig ikväll efter middagen."
-  },
-  {
-    "id": "Lexin027665",
-    "type": "Samhälle.",
-    "word": "Särskilt anställningsstöd",
-    "example": "Vi tar en taxi till flygplatsen."
-  },
-  {
-    "id": "Lexin029221",
-    "type": "Samhälle.",
-    "word": "Tvegifte",
-    "example": "Tåget till Göteborg avgår klockan nio."
-  },
-  {
-    "id": "Lexin031028",
-    "type": "Samhälle.",
-    "word": "Vigselordning",
-    "example": "Vem är det som ringer?"
-  },
-  {
-    "id": "Lexin032240",
-    "type": "SamhälleMN.",
-    "word": "Ändamålet helgar medlen",
-    "example": "Han övar piano varje dag i en timme."
-  },
-  {
-    "id": "Lexin003813",
-    "type": "SamhälleR.",
-    "word": "Boende föräldern - boendeföräldern",
-    "example": "Jag bor i en lägenhet i Stockholm."
-  },
-  {
-    "id": "Lexin011808",
-    "type": "SamhälleR.",
-    "word": "Hur pass mycket har du läst?",
-    "example": "Farfar hugger ved till brasan."
-  },
-  {
-    "id": "Lexin012691",
-    "type": "SamhälleR.",
-    "word": "Indrivningsbrev",
-    "example": "Jag heter Ahmed och jag kommer från Syrien."
-  },
-  {
-    "id": "Lexin030676",
-    "type": "SamhälleR.",
-    "word": "Var du står kunskapsmässigt",
-    "example": "Var bor du?"
-  },
-  {
-    "id": "Lexin005541",
-    "type": "SamhälleTB.",
-    "word": "Din placering i syskonskaran",
-    "example": "Han diskar efter middagen."
-  },
-  {
-    "id": "Lexin005825",
-    "type": "SamhälleTB.",
-    "word": "Drabbats",
-    "example": "Hon dricker kaffe på morgonen."
-  },
-  {
-    "id": "Lexin017389",
-    "type": "SamhälleTB.",
-    "word": "Maxtaxa",
-    "example": "Maten i Sverige är annorlunda."
-  },
-  {
-    "id": "Lexin018575",
-    "type": "SamhälleTB.",
-    "word": "Nationella prov",
-    "example": "Jag har ont i magen."
-  },
-  {
-    "id": "Lexin007308",
-    "type": "Se.",
-    "word": "Farit",
-    "example": "Farmor bakar alltid kakor till oss."
-  },
-  {
-    "id": "Lexin007878",
-    "type": "Se.",
-    "word": "Flugit",
-    "example": "Jag äter fisk två gånger i veckan."
-  },
-  {
-    "id": "Lexin010318",
-    "type": "Se.",
-    "word": "Givit",
-    "example": "Jag blir glad när solen skiner."
-  },
-  {
-    "id": "Lexin017916",
-    "type": "Se.",
-    "word": "Moder",
-    "example": "Jag möter min vän på kaféet klockan tre."
-  },
-  {
-    "id": "Lexin024232",
-    "type": "Se.",
-    "word": "Skarf",
-    "example": "Barnen skrattar högt när de leker."
-  },
-  {
-    "id": "Lexin026943",
-    "type": "Se.",
-    "word": "Stöp",
-    "example": "Han har svart hår och mörka ögon."
-  },
-  {
-    "id": "Lexin000288",
-    "type": "Substantiv.",
-    "word": "Adverbial",
-    "example": "Det finns en affär runt hörnet."
-  },
-  {
-    "id": "Lexin000429",
-    "type": "Substantiv.",
-    "word": "Akvarell",
-    "example": "Jag har aldrig varit i Japan."
-  },
-  {
-    "id": "Lexin000460",
-    "type": "Substantiv.",
-    "word": "Alibi",
-    "example": "Alla barn går till skolan."
-  },
-  {
-    "id": "Lexin000464",
-    "type": "Substantiv.",
-    "word": "Alkemi",
-    "example": "Jag har allergi mot nötter."
-  },
-  {
     "id": "Lexin000523",
     "type": "Substantiv.",
     "word": "Allmosa",
     "example": "han vill klara sig själv och inte leva på allmosor"
-  },
-  {
-    "id": "Lexin000541",
-    "type": "Substantiv.",
-    "word": "Allmän rättshjälp",
-    "example": "Hon kommer alltid i tid."
   },
   {
     "id": "Lexin000687",
@@ -1632,58 +624,16 @@
     "example": "det är min ambition att göra ett bra lexikon ha konstnärliga ambitioner"
   },
   {
-    "id": "Lexin001269",
-    "type": "Substantiv.",
-    "word": "Apport",
-    "example": "Jag köper medicin på apoteket."
-  },
-  {
-    "id": "Lexin001768",
-    "type": "Substantiv.",
-    "word": "Avbetalningskontrakt",
-    "example": "Tåget avgår klockan sex på morgonen."
-  },
-  {
     "id": "Lexin001890",
     "type": "Substantiv.",
     "word": "Avigsida",
     "example": "industrisamhällets avigsidor"
   },
   {
-    "id": "Lexin002231",
-    "type": "Substantiv.",
-    "word": "Bakplåt",
-    "example": "Vi har en stor balkong med utsikt."
-  },
-  {
-    "id": "Lexin002261",
-    "type": "Substantiv.",
-    "word": "Bakverk",
-    "example": "Hon balanserar arbete och familjeliv."
-  },
-  {
-    "id": "Lexin002393",
-    "type": "Substantiv.",
-    "word": "Barnbarn",
-    "example": "Barnen leker på gården."
-  },
-  {
-    "id": "Lexin002718",
-    "type": "Substantiv.",
-    "word": "Bekämpningsmedel",
-    "example": "Mormor berättar alltid roliga historier."
-  },
-  {
     "id": "Lexin002866",
     "type": "Substantiv.",
     "word": "Berg - och dalbergbana",
     "example": "företagets resultat åker berg - och dalbana"
-  },
-  {
-    "id": "Lexin003329",
-    "type": "Substantiv.",
-    "word": "Bila",
-    "example": "Jag lånar böcker på biblioteket."
   },
   {
     "id": "Lexin003684",
@@ -1704,42 +654,6 @@
     "example": "byta blöjor"
   },
   {
-    "id": "Lexin003904",
-    "type": "Substantiv.",
-    "word": "Boots",
-    "example": "Barnen borstar tänderna före läggdags."
-  },
-  {
-    "id": "Lexin003938",
-    "type": "Substantiv.",
-    "word": "Borrigg",
-    "example": "Jag sitter bredvid dig."
-  },
-  {
-    "id": "Lexin004155",
-    "type": "Substantiv.",
-    "word": "Brittsommar",
-    "example": "Ljuset brinner på bordet."
-  },
-  {
-    "id": "Lexin004185",
-    "type": "Substantiv.",
-    "word": "Bronsålder",
-    "example": "Jag köper färskt bröd varje morgon."
-  },
-  {
-    "id": "Lexin004189",
-    "type": "Substantiv.",
-    "word": "Brorson",
-    "example": "Vi köper färskt bröd varje dag."
-  },
-  {
-    "id": "Lexin004318",
-    "type": "Substantiv.",
-    "word": "Bryggare",
-    "example": "Barnen bråkar om leksaker ibland."
-  },
-  {
     "id": "Lexin004445",
     "type": "Substantiv.",
     "word": "Buckla",
@@ -1750,18 +664,6 @@
     "type": "Substantiv.",
     "word": "Bulle",
     "example": "gratis saft och bullar till alla barn!"
-  },
-  {
-    "id": "Lexin004651",
-    "type": "Substantiv.",
-    "word": "Byxa",
-    "example": "Jag köpte ett par nya byxor på rean."
-  },
-  {
-    "id": "Lexin004970",
-    "type": "Substantiv.",
-    "word": "Cigarett",
-    "example": "Jag dammsugerar golvet varje vecka."
   },
   {
     "id": "Lexin005064",
@@ -1776,12 +678,6 @@
     "example": "betala dagsböter"
   },
   {
-    "id": "Lexin005477",
-    "type": "Substantiv.",
-    "word": "Diapositiv",
-    "example": "Vi diskuterar politik vid middagsbordet."
-  },
-  {
     "id": "Lexin005706",
     "type": "Substantiv.",
     "word": "Docka",
@@ -1792,12 +688,6 @@
     "type": "Substantiv.",
     "word": "Drake",
     "example": "flyga med drakar"
-  },
-  {
-    "id": "Lexin006224",
-    "type": "Substantiv.",
-    "word": "Dödsstraff",
-    "example": "Jag har mitt eget rum."
   },
   {
     "id": "Lexin006255",
@@ -1818,64 +708,16 @@
     "example": "flera mindre eldsvådor uppstod vid åskvädret"
   },
   {
-    "id": "Lexin006652",
-    "type": "Substantiv.",
-    "word": "Endräkt",
-    "example": "Receptet är enkelt att följa."
-  },
-  {
-    "id": "Lexin006732",
-    "type": "Substantiv.",
-    "word": "Enrum",
-    "example": "Jag vill ha en kaffe och ett te."
-  },
-  {
     "id": "Lexin006821",
     "type": "Substantiv.",
     "word": "Epistel",
     "example": "han skrev långa epistlar om mig"
   },
   {
-    "id": "Lexin007098",
-    "type": "Substantiv.",
-    "word": "Extrapris",
-    "example": "Min farbror bor i Malmö."
-  },
-  {
-    "id": "Lexin007245",
-    "type": "Substantiv.",
-    "word": "Familjeplanering",
-    "example": "Vilken färg vill du ha?"
-  },
-  {
     "id": "Lexin007306",
     "type": "Substantiv.",
     "word": "Farhåga",
     "example": "hysa farhågor för framtiden"
-  },
-  {
-    "id": "Lexin007310",
-    "type": "Substantiv.",
-    "word": "Farled",
-    "example": "Min farfar är åttio år gammal."
-  },
-  {
-    "id": "Lexin007408",
-    "type": "Substantiv.",
-    "word": "Fastlagen",
-    "example": "Barnet har hög feber."
-  },
-  {
-    "id": "Lexin007560",
-    "type": "Substantiv.",
-    "word": "Fickdator",
-    "example": "Vi fikar tillsammans på jobbet klockan tre."
-  },
-  {
-    "id": "Lexin007596",
-    "type": "Substantiv.",
-    "word": "Filial",
-    "example": "Det finns en park nära mitt hus."
   },
   {
     "id": "Lexin007674",
@@ -1890,34 +732,10 @@
     "example": "bilen har dåliga fjädrar"
   },
   {
-    "id": "Lexin007764",
-    "type": "Substantiv.",
-    "word": "Fjärrvärme",
-    "example": "Vi flyttar till ett nytt hus nästa månad."
-  },
-  {
     "id": "Lexin007867",
     "type": "Substantiv.",
     "word": "Floskel",
     "example": "tomma floskler"
-  },
-  {
-    "id": "Lexin007980",
-    "type": "Substantiv.",
-    "word": "Fläskpannkaka",
-    "example": "Fågeln flyger högt över träden."
-  },
-  {
-    "id": "Lexin008062",
-    "type": "Substantiv.",
-    "word": "Folkstorm",
-    "example": "Jag har skadat min fot."
-  },
-  {
-    "id": "Lexin008249",
-    "type": "Substantiv.",
-    "word": "Fragment",
-    "example": "Jag förstår inte det här ordet."
   },
   {
     "id": "Lexin008813",
@@ -1932,76 +750,10 @@
     "example": "fåror i ansiktet"
   },
   {
-    "id": "Lexin009060",
-    "type": "Substantiv.",
-    "word": "Förbrukning",
-    "example": "Han är medlem i en idrottsförening."
-  },
-  {
     "id": "Lexin009636",
     "type": "Substantiv.",
     "word": "Förstad",
     "example": "Stockholms förstäder"
-  },
-  {
-    "id": "Lexin010036",
-    "type": "Substantiv.",
-    "word": "Garage",
-    "example": "Min farfar är åttio år gammal."
-  },
-  {
-    "id": "Lexin010037",
-    "type": "Substantiv.",
-    "word": "Garant",
-    "example": "Jag har varit i Paris en gång."
-  },
-  {
-    "id": "Lexin010245",
-    "type": "Substantiv.",
-    "word": "Getto",
-    "example": "Jag går till affären för att köpa mat."
-  },
-  {
-    "id": "Lexin010264",
-    "type": "Substantiv.",
-    "word": "Giftorätt",
-    "example": "Jag gillar att läsa böcker på kvällen."
-  },
-  {
-    "id": "Lexin010368",
-    "type": "Substantiv.",
-    "word": "Glidning",
-    "example": "Glöm inte att ta med jackan!"
-  },
-  {
-    "id": "Lexin010597",
-    "type": "Substantiv.",
-    "word": "Gravitation",
-    "example": "Vi gratulerar dig på födelsedagen!"
-  },
-  {
-    "id": "Lexin010634",
-    "type": "Substantiv.",
-    "word": "Grin",
-    "example": "Bebisen gråter när hon är hungrig."
-  },
-  {
-    "id": "Lexin010673",
-    "type": "Substantiv.",
-    "word": "Grovarbete",
-    "example": "Bebisen gråter när hon är hungrig."
-  },
-  {
-    "id": "Lexin010735",
-    "type": "Substantiv.",
-    "word": "Grunka",
-    "example": "Det är viktigt att äta grönsaker."
-  },
-  {
-    "id": "Lexin010756",
-    "type": "Substantiv.",
-    "word": "Gryning",
-    "example": "Gräset är grönt på sommaren."
   },
   {
     "id": "Lexin010803",
@@ -2010,22 +762,10 @@
     "example": "en politiker måste ha kontakt med gräsrötterna"
   },
   {
-    "id": "Lexin010834",
-    "type": "Substantiv.",
-    "word": "Gudinna",
-    "example": "Barnen gungar på lekplatsen."
-  },
-  {
     "id": "Lexin011181",
     "type": "Substantiv.",
     "word": "Handgången",
     "example": "juntans handgångne man"
-  },
-  {
-    "id": "Lexin011375",
-    "type": "Substantiv.",
-    "word": "Hembränning",
-    "example": "Tvätta händerna innan du äter."
   },
   {
     "id": "Lexin011477",
@@ -2052,18 +792,6 @@
     "example": "hovmästarn , får jag betala!"
   },
   {
-    "id": "Lexin011752",
-    "type": "Substantiv.",
-    "word": "Hud - Huden",
-    "example": "Hissen är trasig, vi måste ta trappan."
-  },
-  {
-    "id": "Lexin011774",
-    "type": "Substantiv.",
-    "word": "Hugskott",
-    "example": "Hon studerar medicin på universitetet."
-  },
-  {
     "id": "Lexin011799",
     "type": "Substantiv.",
     "word": "Hundöra",
@@ -2074,12 +802,6 @@
     "type": "Substantiv.",
     "word": "Högstadium",
     "example": "eleverna på högstadiet"
-  },
-  {
-    "id": "Lexin012660",
-    "type": "Substantiv.",
-    "word": "Indexreglering",
-    "example": "Ja, det stämmer."
   },
   {
     "id": "Lexin013236",
@@ -2094,52 +816,16 @@
     "example": "jordgubbar med vispgrädde"
   },
   {
-    "id": "Lexin013476",
-    "type": "Substantiv.",
-    "word": "Justitiemord",
-    "example": "Svenskar dricker mycket kaffe."
-  },
-  {
-    "id": "Lexin013483",
-    "type": "Substantiv.",
-    "word": "Jägare",
-    "example": "Vattnet är för kallt att simma i."
-  },
-  {
     "id": "Lexin013604",
     "type": "Substantiv.",
     "word": "Kaka",
     "example": "kaffe och kakor"
   },
   {
-    "id": "Lexin013739",
-    "type": "Substantiv.",
-    "word": "Kanslisvenska",
-    "example": "Kanske kommer jag imorgon."
-  },
-  {
     "id": "Lexin013958",
     "type": "Substantiv.",
     "word": "Kindknota",
     "example": "höga kindknotor"
-  },
-  {
-    "id": "Lexin014949",
-    "type": "Substantiv.",
-    "word": "Korsrygg",
-    "example": "Vägen är kort, bara fem minuter."
-  },
-  {
-    "id": "Lexin015420",
-    "type": "Substantiv.",
-    "word": "Kurra",
-    "example": "Min kusin och jag är lika gamla."
-  },
-  {
-    "id": "Lexin015553",
-    "type": "Substantiv.",
-    "word": "Kyffe",
-    "example": "Vi grillar kyckling på sommaren."
   },
   {
     "id": "Lexin015611",
@@ -2152,36 +838,6 @@
     "type": "Substantiv.",
     "word": "Känsla",
     "example": "han är rädd för att visa känslor"
-  },
-  {
-    "id": "Lexin016023",
-    "type": "Substantiv.",
-    "word": "Lavemang",
-    "example": "Lektionen börjar om fem minuter."
-  },
-  {
-    "id": "Lexin016105",
-    "type": "Substantiv.",
-    "word": "Legend",
-    "example": "Hon ler alltid när hon ser mig."
-  },
-  {
-    "id": "Lexin016128",
-    "type": "Substantiv.",
-    "word": "Lekman",
-    "example": "Hon lever ensam i en lägenhet i centrum."
-  },
-  {
-    "id": "Lexin016680",
-    "type": "Substantiv.",
-    "word": "Lymmel",
-    "example": "Jag måste träffa läkaren idag."
-  },
-  {
-    "id": "Lexin016758",
-    "type": "Substantiv.",
-    "word": "Lårben",
-    "example": "Jag lyssnar på radio när jag kör."
   },
   {
     "id": "Lexin017216",
@@ -2214,40 +870,10 @@
     "example": "gå på mellanstadiet"
   },
   {
-    "id": "Lexin017729",
-    "type": "Substantiv.",
-    "word": "Millennium",
-    "example": "Vi har bott här i sex månader."
-  },
-  {
     "id": "Lexin017839",
     "type": "Substantiv.",
     "word": "Misstanke - Misstänkt",
     "example": "fatta misstankar misstanke om brott"
-  },
-  {
-    "id": "Lexin017867",
-    "type": "Substantiv.",
-    "word": "Mittenpartierna",
-    "example": "Det är molnigt idag men inget regn."
-  },
-  {
-    "id": "Lexin017890",
-    "type": "Substantiv.",
-    "word": "Mjölktand",
-    "example": "Morbror Sami har tre barn."
-  },
-  {
-    "id": "Lexin017898",
-    "type": "Substantiv.",
-    "word": "Mobb",
-    "example": "Moster bor nära oss."
-  },
-  {
-    "id": "Lexin017973",
-    "type": "Substantiv.",
-    "word": "Monogami",
-    "example": "Barnet målar en teckning till mamma."
   },
   {
     "id": "Lexin018216",
@@ -2286,22 +912,10 @@
     "example": "kämpa mot sociala orättvisor"
   },
   {
-    "id": "Lexin020535",
-    "type": "Substantiv.",
-    "word": "Peruk",
-    "example": "Vi går på promenad i parken."
-  },
-  {
     "id": "Lexin020550",
     "type": "Substantiv.",
     "word": "PH - värde",
     "example": "vattnets pH - värde sjunker"
-  },
-  {
-    "id": "Lexin020764",
-    "type": "Substantiv.",
-    "word": "Pluralism",
-    "example": "Min son pratar redan tre språk."
   },
   {
     "id": "Lexin020817",
@@ -2328,22 +942,10 @@
     "example": "قيادة المركبات في حالة السكر"
   },
   {
-    "id": "Lexin021887",
-    "type": "Substantiv.",
-    "word": "Reaktion",
-    "example": "Det är rea på kläder nu."
-  },
-  {
     "id": "Lexin021993",
     "type": "Substantiv.",
     "word": "Regel",
     "example": "reglerna för bostadsbidrag har ändrats reglerna om vidgat tillträde till högskolan"
-  },
-  {
-    "id": "Lexin022239",
-    "type": "Substantiv.",
-    "word": "Repövning",
-    "example": "Vi reser till Turkiet i sommar."
   },
   {
     "id": "Lexin022843",
@@ -2352,40 +954,10 @@
     "example": "rynkor kring ögonen"
   },
   {
-    "id": "Lexin023223",
-    "type": "Substantiv.",
-    "word": "Rötägg",
-    "example": "Veckan har sju dagar."
-  },
-  {
     "id": "Lexin023267",
     "type": "Substantiv.",
     "word": "Sakfråga",
     "example": "de var endast villiga att diskutera sakfrågorna"
-  },
-  {
-    "id": "Lexin023569",
-    "type": "Substantiv.",
-    "word": "Schemalagd",
-    "example": "Min mamma arbetar på sjukhuset."
-  },
-  {
-    "id": "Lexin023579",
-    "type": "Substantiv.",
-    "word": "Schnitzel",
-    "example": "Vi åker på semester till Spanien."
-  },
-  {
-    "id": "Lexin023629",
-    "type": "Substantiv.",
-    "word": "Seglare",
-    "example": "Filmen börjar snart."
-  },
-  {
-    "id": "Lexin023799",
-    "type": "Substantiv.",
-    "word": "Sexa",
-    "example": "Butiken stänger klockan sex."
   },
   {
     "id": "Lexin024184",
@@ -2412,30 +984,6 @@
     "example": "han åker ofta skidor på vintern"
   },
   {
-    "id": "Lexin024429",
-    "type": "Substantiv.",
-    "word": "Skogsmulleskola",
-    "example": "Glöm inte att skölja munnen efter tandborstningen."
-  },
-  {
-    "id": "Lexin025603",
-    "type": "Substantiv.",
-    "word": "Solbränna",
-    "example": "Vill du ha socker i kaffet?"
-  },
-  {
-    "id": "Lexin025643",
-    "type": "Substantiv.",
-    "word": "Sommarlov",
-    "example": "Han söker jobb sedan tre månader."
-  },
-  {
-    "id": "Lexin025694",
-    "type": "Substantiv.",
-    "word": "Sound",
-    "example": "Bebisen sover åtta timmar per natt."
-  },
-  {
     "id": "Lexin025813",
     "type": "Substantiv.",
     "word": "Spelregel",
@@ -2460,12 +1008,6 @@
     "example": "gå på styltor"
   },
   {
-    "id": "Lexin027103",
-    "type": "Substantiv.",
-    "word": "Susen",
-    "example": "Hur länge ska du stanna i Sverige?"
-  },
-  {
     "id": "Lexin027443",
     "type": "Substantiv.",
     "word": "Syssla",
@@ -2478,28 +1020,10 @@
     "example": "såpopera"
   },
   {
-    "id": "Lexin027779",
-    "type": "Substantiv.",
-    "word": "Tabell",
-    "example": "Hon talar fem språk flytande."
-  },
-  {
-    "id": "Lexin027781",
-    "type": "Substantiv.",
-    "word": "Tabloid",
-    "example": "Det läcker vatten från taket."
-  },
-  {
     "id": "Lexin027927",
     "type": "Substantiv.",
     "word": "Tanke",
     "example": "du är alltid i mina tankar boken leder tankarna till Strindberg"
-  },
-  {
-    "id": "Lexin028148",
-    "type": "Substantiv.",
-    "word": "Territorium",
-    "example": "Det kostar tio kronor."
   },
   {
     "id": "Lexin028480",
@@ -2514,52 +1038,10 @@
     "example": "håret hängde i tovor"
   },
   {
-    "id": "Lexin028866",
-    "type": "Substantiv.",
-    "word": "Trend",
-    "example": "Jag använder datorn varje dag."
-  },
-  {
-    "id": "Lexin029720",
-    "type": "Substantiv.",
-    "word": "Universum",
-    "example": "Jag vaknar klockan sex varje morgon."
-  },
-  {
     "id": "Lexin030365",
     "type": "Substantiv.",
     "word": "Utsaga",
     "example": "enligt egen utsago"
-  },
-  {
-    "id": "Lexin030555",
-    "type": "Substantiv.",
-    "word": "Vaktmästare",
-    "example": "Jag tränar tre gånger i veckan."
-  },
-  {
-    "id": "Lexin030558",
-    "type": "Substantiv.",
-    "word": "Vakuum",
-    "example": "Välj den bok du vill läsa."
-  },
-  {
-    "id": "Lexin030628",
-    "type": "Substantiv.",
-    "word": "Vandring",
-    "example": "Vad heter du?"
-  },
-  {
-    "id": "Lexin030629",
-    "type": "Substantiv.",
-    "word": "Vandringsled",
-    "example": "Vad för mat gillar du?"
-  },
-  {
-    "id": "Lexin030666",
-    "type": "Substantiv.",
-    "word": "Vapenlicens",
-    "example": "Banken ligger till vänster."
   },
   {
     "id": "Lexin030681",
@@ -2574,16 +1056,10 @@
     "example": "efter många vedermödor kom vi äntligen till byn"
   },
   {
-    "id": "Lexin031104",
-    "type": "Substantiv.",
-    "word": "Vimpel",
-    "example": "Jag vet inte var hon bor."
-  },
-  {
     "id": "Lexin031464",
     "type": "Substantiv.",
     "word": "Väder",
-    "example": "Hur är vädret idag? Ska det regna?"
+    "example": "Vädret är fint idag."
   },
   {
     "id": "Lexin031761",
@@ -2604,28 +1080,10 @@
     "example": "han letar information på webben"
   },
   {
-    "id": "Lexin031980",
-    "type": "Substantiv.",
-    "word": "Årsdag",
-    "example": "Min ålder är tjugofem år."
-  },
-  {
-    "id": "Lexin032078",
-    "type": "Substantiv.",
-    "word": "Återseende",
-    "example": "Jag vill också ha glass."
-  },
-  {
     "id": "Lexin032093",
     "type": "Substantiv.",
     "word": "Återverkan",
     "example": "kriget fick svåra återverkningar"
-  },
-  {
-    "id": "Lexin032243",
-    "type": "Substantiv.",
-    "word": "Ändelse",
-    "example": "Jag har ont i örat."
   },
   {
     "id": "Lexin032306",
@@ -2698,12 +1156,6 @@
     "type": "Verb.",
     "word": "Avtecknar sig",
     "example": "träden avtecknade sig mot himlen"
-  },
-  {
-    "id": "Lexin002107",
-    "type": "Verb.",
-    "word": "Avtågar",
-    "example": "Barnen badar i havet på sommaren."
   },
   {
     "id": "Lexin002125",
@@ -2916,12 +1368,6 @@
     "example": "missbruket breder ut sig"
   },
   {
-    "id": "Lexin004292",
-    "type": "Verb.",
-    "word": "Brusar upp",
-    "example": "Var försiktig så du inte bryter glaset."
-  },
-  {
     "id": "Lexin004326",
     "type": "Verb.",
     "word": "Bryr sig om",
@@ -2986,12 +1432,6 @@
     "type": "Verb.",
     "word": "Checkar in",
     "example": "man måste checka in senast en halvtimme före start"
-  },
-  {
-    "id": "Lexin005253",
-    "type": "Verb.",
-    "word": "Definierar",
-    "example": "Hon dansar salsa varje lördag."
   },
   {
     "id": "Lexin005272",
@@ -3072,12 +1512,6 @@
     "example": "hon drämde till honom med ett vedträ"
   },
   {
-    "id": "Lexin006018",
-    "type": "Verb.",
-    "word": "Duar",
-    "example": "Jag duschar varje morgon."
-  },
-  {
     "id": "Lexin006058",
     "type": "Verb.",
     "word": "Dukar under",
@@ -3150,22 +1584,10 @@
     "example": "finna sig i en särlösning finna sig i att bli åthutad"
   },
   {
-    "id": "Lexin007704",
-    "type": "Verb.",
-    "word": "Fiser",
-    "example": "Pappa fixar cykeln som är trasig."
-  },
-  {
     "id": "Lexin007758",
     "type": "Verb.",
     "word": "Fjärmar sig",
     "example": "partiet har fjärmat sig från liberalismen"
-  },
-  {
-    "id": "Lexin007767",
-    "type": "Verb.",
-    "word": "Fjärtar",
-    "example": "Vi ska flytta till en större lägenhet."
   },
   {
     "id": "Lexin007947",
@@ -3226,12 +1648,6 @@
     "type": "Verb.",
     "word": "Fräschar upp",
     "example": "fräscha upp minnet"
-  },
-  {
-    "id": "Lexin008697",
-    "type": "Verb.",
-    "word": "Funkar",
-    "example": "Året har fyra årstider."
   },
   {
     "id": "Lexin008755",
@@ -3594,12 +2010,6 @@
     "example": "hon håvade in tusentals kronor"
   },
   {
-    "id": "Lexin012105",
-    "type": "Verb.",
-    "word": "Häckar",
-    "example": "Hej då! Vi ses imorgon."
-  },
-  {
     "id": "Lexin012183",
     "type": "Verb.",
     "word": "Hämtar sig",
@@ -3622,12 +2032,6 @@
     "type": "Verb.",
     "word": "Hänger på",
     "example": "det hänger på dig att allt går bra"
-  },
-  {
-    "id": "Lexin012207",
-    "type": "Verb.",
-    "word": "Hänger sig",
-    "example": "Hon hälsar på sina grannar varje morgon."
   },
   {
     "id": "Lexin012208",
@@ -3990,12 +2394,6 @@
     "example": "möblera om i regeringen"
   },
   {
-    "id": "Lexin018583",
-    "type": "Verb.",
-    "word": "Nattar",
-    "example": "Öppna munnen och säg A."
-  },
-  {
     "id": "Lexin018659",
     "type": "Verb.",
     "word": "Nedlåter sig",
@@ -4162,12 +2560,6 @@
     "type": "Verb.",
     "word": "Reserverar sig",
     "example": "hon reserverade sig mot beslutet"
-  },
-  {
-    "id": "Lexin022274",
-    "type": "Verb.",
-    "word": "Residerar",
-    "example": "Spara resten av maten till imorgon."
   },
   {
     "id": "Lexin022647",
@@ -4488,12 +2880,6 @@
     "example": "nu får du sno dig om du ska hinna"
   },
   {
-    "id": "Lexin025501",
-    "type": "Verb.",
-    "word": "Snör",
-    "example": "Jag har snuva och ont i halsen."
-  },
-  {
     "id": "Lexin025611",
     "type": "Verb.",
     "word": "Solidariserar sig",
@@ -4782,12 +3168,6 @@
     "example": "hon satte blomkrukan i fönstret"
   },
   {
-    "id": "Lexin027694",
-    "type": "Verb.",
-    "word": "Sätter igång",
-    "example": "Tack så mycket, du är snäll!"
-  },
-  {
     "id": "Lexin027697",
     "type": "Verb.",
     "word": "Sätter sig",
@@ -4902,12 +3282,6 @@
     "example": "mamman tillerkändes vårdnaden av barnen"
   },
   {
-    "id": "Lexin028299",
-    "type": "Verb.",
-    "word": "Tillfångatar",
-    "example": "Vi bor på tredje våningen utan hiss."
-  },
-  {
     "id": "Lexin028318",
     "type": "Verb.",
     "word": "Tillgodogör sig",
@@ -4990,12 +3364,6 @@
     "type": "Verb.",
     "word": "Tråkar ut",
     "example": "hon tråkar ut mig"
-  },
-  {
-    "id": "Lexin029044",
-    "type": "Verb.",
-    "word": "Träffar",
-    "example": "Tåget till Malmö avgår klockan nio."
   },
   {
     "id": "Lexin029116",
@@ -5182,12 +3550,6 @@
     "type": "Verb.",
     "word": "Uttalar sig",
     "example": "det kan jag inte uttala mig om"
-  },
-  {
-    "id": "Lexin030618",
-    "type": "Verb.",
-    "word": "Vandaliserar",
-    "example": "Varför kom du sent?"
   },
   {
     "id": "Lexin030821",

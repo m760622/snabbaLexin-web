@@ -39,40 +39,103 @@ function normalizeArabic(text) {
 }
 
 // Helper: Get Grammar Badge for Swedish words
-function getGrammarBadge(type, forms) {
-    const normalizedType = (type || '').toLowerCase().replace('.', '');
+// Uses morphological analysis instead of relying on potentially incorrect type field
+function getGrammarBadge(type, forms, word) {
+    const formsLower = (forms || '').toLowerCase();
+    const wordLower = (word || '').toLowerCase();
+    const normalizedType = (type || '').toLowerCase().replace('.', '').replace(' ', '');
 
-    // For nouns (Substantiv) - detect En/Ett gender
-    if (normalizedType === 'subst' || normalizedType === 'substantiv') {
-        const formsLower = (forms || '').toLowerCase();
-        if (formsLower.match(/\ben\s+\w+/i) || formsLower.startsWith('en ') || formsLower.includes(', en ')) {
+    // === VERB DETECTION (Priority - check forms for verb patterns) ===
+    // Check if forms contain verb-like patterns regardless of type field
+
+    // Group 1: -ar, -ade, -at (talar, talade, talat)
+    if (formsLower.match(/\w+ar[,\s]/) && formsLower.match(/\w+ade[,\s]/)) {
+        return '<span class="grammar-badge grammar-verb">Gr. 1</span>';
+    }
+
+    // Group 2: -er, -de, -t (läser, läste, läst / köper, köpte, köpt)
+    if (formsLower.match(/\w+er[,\s]/) && (formsLower.match(/\w+de[,\s]/) || formsLower.match(/\w+te[,\s]/))) {
+        return '<span class="grammar-badge grammar-verb">Gr. 2</span>';
+    }
+
+    // Group 3: -r, -dde, -tt (bor, bodde, bott)
+    if (formsLower.match(/\w+dde[,\s]/)) {
+        return '<span class="grammar-badge grammar-verb">Gr. 3</span>';
+    }
+
+    // Group 4: Strong/irregular verbs with -it, -its, -ats, -ett supine
+    if (formsLower.match(/\w+(it|its|ats|ett)[,\s]/) || formsLower.match(/\w+(it|its|ats|ett)$/)) {
+        return '<span class="grammar-badge grammar-verb">Gr. 4</span>';
+    }
+
+    // S-passive / Deponent verbs: word ends with -s and has verb-like forms
+    if (wordLower.endsWith('s') && formsLower.match(/\w+ades[,\s]|\w+des[,\s]|\w+ades$/)) {
+        return '<span class="grammar-badge grammar-verb">Gr. 4</span>';
+    }
+
+    // General verb detection: forms contain typical verb patterns
+    if (formsLower.match(/\w+ar[,\s]|\w+er[,\s]|\w+r[,\s]/) &&
+        formsLower.match(/\w+de[,\s]|\w+ade[,\s]|\w+te[,\s]|\w+dde[,\s]/)) {
+        return '<span class="grammar-badge grammar-verb">Verb</span>';
+    }
+
+    // === NOUN DETECTION (En/Ett) ===
+    // Check for definite singular patterns
+    const formParts = formsLower.split(',').map(f => f.trim());
+    if (formParts.length >= 2) {
+        const definiteSingular = formParts[1];
+
+        // En-words: definite ends with -an, -en, -n (flygvärdinnan, bilen, mannen)
+        if (definiteSingular.match(/\w+(an|en)$/) && !definiteSingular.match(/\w+et$/)) {
             return '<span class="grammar-badge grammar-en">En</span>';
-        } else if (formsLower.match(/\bett\s+\w+/i) || formsLower.startsWith('ett ') || formsLower.includes(', ett ')) {
-            return '<span class="grammar-badge grammar-ett">Ett</span>';
         }
-        if (formsLower.includes('en,') || formsLower.match(/\w+en[,\s]/)) {
-            return '<span class="grammar-badge grammar-en">En</span>';
-        }
-        if (formsLower.includes('et,') || formsLower.match(/\w+et[,\s]/)) {
+        // Ett-words: definite ends with -et (huset, bordet, ögat)
+        if (definiteSingular.match(/\w+et$/)) {
             return '<span class="grammar-badge grammar-ett">Ett</span>';
         }
     }
 
-    // For verbs - show verb conjugation pattern
-    if (normalizedType === 'verb') {
-        const formsLower = (forms || '').toLowerCase();
-        if (formsLower.match(/\w+ar[,\s]/i) && formsLower.match(/\w+ade[,\s]/i)) {
-            return '<span class="grammar-badge grammar-verb">Gr. 1</span>';
+    // Check for explicit "en"/"ett" in forms
+    if (formsLower.startsWith('en ') || formsLower.match(/\ben\s+\w+/)) {
+        return '<span class="grammar-badge grammar-en">En</span>';
+    }
+    if (formsLower.startsWith('ett ') || formsLower.match(/\bett\s+\w+/)) {
+        return '<span class="grammar-badge grammar-ett">Ett</span>';
+    }
+
+    // === ADJECTIVE DETECTION ===
+    // Adjectives typically have 3 forms: base, base, base+a (flyhänt, flyhänt, flyhänta)
+    // or (stor, stort, stora)
+    if (formParts.length >= 3) {
+        const form1 = formParts[0];
+        const form3 = formParts[2];
+        // If third form ends with -a and is longer than first (stora vs stor)
+        if (form3.endsWith('a') && form3.length >= form1.length) {
+            // Check that forms look adjective-like (not verb-like)
+            if (!formsLower.match(/\w+ade[,\s]|\w+de[,\s]/)) {
+                return '<span class="grammar-badge grammar-adj">Adj</span>';
+            }
         }
-        if (formsLower.match(/\w+er[,\s]/i) && formsLower.match(/\w+de[,\s]/i)) {
-            return '<span class="grammar-badge grammar-verb">Gr. 2</span>';
-        }
-        if (formsLower.match(/\w+dde[,\s]/i)) {
-            return '<span class="grammar-badge grammar-verb">Gr. 3</span>';
-        }
-        if (formsLower.match(/\w+it[,\s]|it$/i)) {
-            return '<span class="grammar-badge grammar-verb">Gr. 4</span>';
-        }
+    }
+
+    // Check type field as fallback
+    if (normalizedType.includes('adj')) {
+        return '<span class="grammar-badge grammar-adj">Adj</span>';
+    }
+
+    // VerbMN / Phrasal verbs
+    if (normalizedType.includes('verbmn') || (wordLower.includes(' ') && normalizedType.includes('verb'))) {
+        return '<span class="grammar-badge grammar-phv">Ph.V</span>';
+    }
+
+    // Fallback: if type contains "verb", show Verb badge
+    if (normalizedType.includes('verb')) {
+        return '<span class="grammar-badge grammar-verb">Verb</span>';
+    }
+
+    // Fallback: if type contains "subst", show generic noun badge
+    if (normalizedType.includes('subst')) {
+        return '<span class="grammar-badge grammar-en">Subst</span>';
     }
 
     return '';
@@ -914,7 +977,7 @@ function createCard(item, index = 0) {
     const idiomArb = item[COL_IDIOM_ARB] || '';
 
     // Get grammar badge and word type category for color-coding
-    const grammarBadge = getGrammarBadge(item[COL_TYPE], forms);
+    const grammarBadge = getGrammarBadge(item[COL_TYPE], forms, swe);
     const wordTypeCategory = getWordTypeCategory(item[COL_TYPE]);
 
     // Examples
@@ -959,9 +1022,9 @@ function createCard(item, index = 0) {
                 <div class="card-header">
                     <div class="word-header-group">
                         <h2 class="word-swe" dir="ltr">${swe}</h2>
-                        ${grammarBadge}
                     </div>
                     <div class="card-actions">
+                        ${grammarBadge}
                         <button class="copy-btn" onclick="copyWord('${swe.replace(/'/g, "\\'")}', event)" aria-label="Kopiera / نسخ">
                             ${copyIcon}
                         </button>
@@ -1751,67 +1814,87 @@ let lastBeta = 0;
 let lastGamma = 0;
 
 function initDeviceTilt() {
+    console.log('[DeviceTilt] Initializing...');
+
     // Check if device orientation is supported
-    if (!window.DeviceOrientationEvent) return;
+    if (!window.DeviceOrientationEvent) {
+        console.log('[DeviceTilt] DeviceOrientationEvent not supported');
+        return;
+    }
 
     // Check if we're on mobile
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    console.log('[DeviceTilt] Is Mobile:', isMobile);
     if (!isMobile) return;
 
     // Request permission for iOS 13+
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        console.log('[DeviceTilt] iOS detected - needs permission');
+
         // Create a button to request permission (iOS requirement)
         const permissionBtn = document.createElement('button');
         permissionBtn.id = 'tiltPermissionBtn';
         permissionBtn.innerHTML = '📱 تفعيل تأثير الإمالة';
         permissionBtn.style.cssText = `
             position: fixed;
-            bottom: 80px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 12px 24px;
+            padding: 14px 28px;
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
             border: none;
             border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            z-index: 9999;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-            display: none;
+            z-index: 99999;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+            animation: pulse 2s ease-in-out infinite;
         `;
         document.body.appendChild(permissionBtn);
 
-        // Show button only on first visit
-        if (!localStorage.getItem('tiltPermissionAsked')) {
-            setTimeout(() => {
-                permissionBtn.style.display = 'block';
-            }, 2000);
-        }
+        // Show button after delay
+        setTimeout(() => {
+            permissionBtn.style.display = 'block';
+            console.log('[DeviceTilt] Permission button shown');
+        }, 1500);
 
         permissionBtn.addEventListener('click', async () => {
+            console.log('[DeviceTilt] Permission button clicked');
             try {
                 const permission = await DeviceOrientationEvent.requestPermission();
+                console.log('[DeviceTilt] Permission result:', permission);
                 if (permission === 'granted') {
                     enableDeviceTilt();
-                    localStorage.setItem('tiltPermissionAsked', 'true');
-                    showToast('تم تفعيل تأثير الإمالة! ✨');
+                    showToast('تم تفعيل تأثير الإمالة! 📱✨');
+                } else {
+                    showToast('تم رفض الإذن ❌');
                 }
             } catch (error) {
-                console.error('Device orientation permission error:', error);
+                console.error('[DeviceTilt] Permission error:', error);
+                showToast('خطأ في طلب الإذن');
             }
-            permissionBtn.style.display = 'none';
+            permissionBtn.remove();
         });
     } else {
         // Android and older iOS - permission not needed
+        console.log('[DeviceTilt] Android detected - enabling directly');
         enableDeviceTilt();
+
+        // Test if it's actually working
+        setTimeout(() => {
+            if (deviceTiltEnabled) {
+                showToast('تأثير الإمالة مفعّل! 📱');
+            }
+        }, 2000);
     }
 }
 
 function enableDeviceTilt() {
     if (deviceTiltEnabled) return;
     deviceTiltEnabled = true;
+    console.log('[DeviceTilt] Enabled!');
 
     window.addEventListener('deviceorientation', (e) => {
         // Get device orientation
@@ -1824,12 +1907,12 @@ function enableDeviceTilt() {
 
         // Normalize values (device held at ~45 degrees is "neutral")
         const neutralBeta = 45;
-        const normalizedBeta = (lastBeta - neutralBeta) * 0.15; // -10 to 10 range
-        const normalizedGamma = lastGamma * 0.15; // -10 to 10 range
+        const normalizedBeta = (lastBeta - neutralBeta) * 0.2;
+        const normalizedGamma = lastGamma * 0.2;
 
         // Clamp values
-        const xRot = Math.max(-10, Math.min(10, normalizedBeta));
-        const yRot = Math.max(-10, Math.min(10, normalizedGamma));
+        const xRot = Math.max(-12, Math.min(12, normalizedBeta));
+        const yRot = Math.max(-12, Math.min(12, normalizedGamma));
 
         // Apply to all visible cards
         const cards = document.querySelectorAll('.card');
@@ -1839,7 +1922,8 @@ function enableDeviceTilt() {
             const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
 
             if (inViewport) {
-                card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.01)`;
+                card.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(1.02)`;
+                card.style.transition = 'transform 0.1s ease-out';
             }
         });
     }, { passive: true });

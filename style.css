@@ -29,29 +29,36 @@
     /* Primary Colors - More vibrant */
     --primary: #6366F1;
     --primary-hover: #818cf8;
-    --accent: #38BDF8;
+    --accent: #10B981;
+    /* Green for interactive elements */
 
-    /* Backgrounds - Darker, more neutral */
-    --background: #0F172A;
-    --surface: #1E293B;
-    --surface-raised: #334155;
-    --surface-hover: #475569;
+    /* Backgrounds - Pure dark for elegance */
+    --background: #121212;
+    /* Deep black */
+    --surface: #1E1E1E;
+    /* Slightly lighter for cards */
+    --surface-raised: #2A2A2A;
+    --surface-hover: #333333;
 
-    /* Text - Improved contrast */
-    --text-main: #F1F5F9;
-    --text-secondary: #38BDF8;
-    --text-tertiary: #94a3b8;
-    --text-disabled: #64748b;
+    /* Text - Neutral colors for professionalism */
+    --text-main: #FFFFFF;
+    /* Pure white for main text */
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    /* 70% white for secondary */
+    --text-tertiary: rgba(255, 255, 255, 0.5);
+    --text-disabled: rgba(255, 255, 255, 0.3);
+
+    /* Arabic text color */
+    --text-arabic: rgba(255, 255, 255, 0.8);
+    /* 80% white for Arabic */
 
     /* Borders */
-    --border: #475569;
-    --border-subtle: #334155;
-    --border-focus: #818cf8;
-
-    /* States */
+    --border: #333333;
+    --border-subtle: #2A2A2A;
+    --border-focus: #10B981;
 
     /* Shadows */
-    --shadow-up: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-up: 0 -4px 6px -1px rgb(0 0 0 / 0.3);
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
     --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
 }
@@ -340,7 +347,8 @@ body::after {
 }
 
 [data-theme="dark"] body {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    background: #121212;
+    /* Solid dark background for elegance */
 }
 
 /* iPhone View Simulation */
@@ -2434,8 +2442,8 @@ h1 {
 .card {
     background: var(--surface);
     border-radius: 0.75rem;
-    padding: 0.75rem;
-    /* Reduced padding */
+    padding: 1rem;
+    /* Increased padding for breathing room */
     /* box-shadow controlled by JavaScript tilt effect */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
@@ -2464,7 +2472,10 @@ h1 {
 }
 
 [data-theme="dark"] .card {
-    border-color: var(--border-subtle);
+    background: #1E1E1E;
+    border: none;
+    /* No border for cleaner look - visual separation from background */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .card-header-info {
@@ -2508,16 +2519,26 @@ h1 {
 }
 
 .word-type {
-    font-size: 0.8rem;
-    /* Increased from 0.7rem */
+    font-size: 0.7rem;
+    /* Smaller size to not compete with main word */
     text-transform: capitalize;
     letter-spacing: 0.03em;
     color: var(--primary);
     background: rgba(99, 102, 241, 0.1);
-    padding: 0.3rem 0.8rem;
+    padding: 0.25rem 0.7rem;
     border-radius: 50px;
+    /* Pill shape */
     font-weight: 600;
-    border: 1px solid rgba(99, 102, 241, 0.2);
+    border: none;
+    /* No border for cleaner look */
+}
+
+/* Dark mode - Soft Tag for word type */
+[data-theme="dark"] .word-type {
+    background: rgba(16, 185, 129, 0.1);
+    /* Soft green */
+    color: #10B981;
+    border: none;
 }
 
 .word-arb {
@@ -2536,7 +2557,8 @@ h1 {
 }
 
 [data-theme="dark"] .word-arb {
-    color: var(--accent);
+    color: rgba(255, 255, 255, 0.8);
+    /* Neutral light gray instead of blue for professionalism */
 }
 
 /* ========================================
@@ -2552,15 +2574,18 @@ h1 {
 }
 
 /* Grammar Badges - En/Ett for nouns, Groups for verbs */
+/* Soft Tags Style - transparent bg, colored text, pill shape */
 .grammar-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 50px;
+    /* Fully rounded pill shape */
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
 }
 
+/* Light mode - solid gradients */
 .grammar-en {
     background: linear-gradient(135deg, #10B981 0%, #059669 100%);
     color: white;
@@ -2589,6 +2614,37 @@ h1 {
     background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
     color: white;
     box-shadow: 0 2px 4px rgba(6, 182, 212, 0.3);
+}
+
+/* Dark mode - Soft Tags: transparent bg + colored text */
+[data-theme="dark"] .grammar-en {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .grammar-ett {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60A5FA;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .grammar-verb {
+    background: rgba(139, 92, 246, 0.1);
+    color: #A78BFA;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .grammar-adj {
+    background: rgba(245, 158, 11, 0.1);
+    color: #FBBF24;
+    box-shadow: none;
+}
+
+[data-theme="dark"] .grammar-phv {
+    background: rgba(6, 182, 212, 0.1);
+    color: #22D3EE;
+    box-shadow: none;
 }
 
 /* Card Actions Container */

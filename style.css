@@ -4186,11 +4186,17 @@ body.flashcard-active .revealed {
 
 .wod-def-preview,
 .wod-example-preview {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    /* Match Böjningar style but lighter */
+    background: rgba(15, 23, 42, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    border-top: 1px solid rgba(6, 182, 212, 0.3);
     border-radius: 1.25rem;
     padding: 1.25rem;
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
     animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
@@ -4385,11 +4391,17 @@ body.flashcard-active .revealed {
 }
 
 .wod-def-arb-preview {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    /* Glass effect - lighter than Swedish */
+    background: rgba(15, 23, 42, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(6, 182, 212, 0.15);
+    border-top: 1px solid rgba(6, 182, 212, 0.25);
     border-radius: 1.25rem;
     padding: 1.25rem;
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
     animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.45s backwards;
 }
 
@@ -4408,11 +4420,17 @@ body.flashcard-active .revealed {
 }
 
 .wod-example-arb-preview {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    /* Glass effect - lighter than Swedish */
+    background: rgba(15, 23, 42, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(6, 182, 212, 0.15);
+    border-top: 1px solid rgba(6, 182, 212, 0.25);
     border-radius: 1.25rem;
     padding: 1.25rem;
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
     animation: slide-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.55s backwards;
 }
 

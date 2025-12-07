@@ -653,7 +653,8 @@ header {
 }
 
 [data-theme="dark"] .search-wrapper:focus-within {
-    border-color: rgba(16, 185, 129, 0.4);
+    border-color: rgba(16, 185, 129, 0.25);
+    /* Softer green border - less distracting */
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -2532,9 +2533,12 @@ h1 {
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     position: relative;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    /* Light mode: Blueish shadow for cleaner look */
+    box-shadow: 0 4px 12px rgba(0, 100, 200, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     content-visibility: auto;
     overflow: hidden;
+    /* Default border for unknown types */
+    border-left: 4px solid #9CA3AF;
 }
 
 @keyframes dazzle-pulse {
@@ -2629,8 +2633,8 @@ h1 {
 
 .word-arb {
     font-family: var(--arabic-font);
-    font-size: 1rem;
-    /* Reduced for compact cards */
+    font-size: 1.1rem;
+    /* Increased for visual balance with Swedish */
     color: #111827;
     text-align: right;
     margin: 0;
@@ -2640,8 +2644,8 @@ h1 {
 }
 
 [data-theme="dark"] .word-arb {
-    color: rgba(255, 255, 255, 0.8);
-    /* Neutral light gray instead of blue for professionalism */
+    color: rgba(255, 255, 255, 0.85);
+    /* Increased brightness for better readability */
 }
 
 /* ========================================
@@ -2734,7 +2738,8 @@ h1 {
 .card-actions {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 1rem;
+    /* Increased from 0.25rem for better touch targets */
 }
 
 /* Copy Button Styling */
@@ -2743,13 +2748,15 @@ h1 {
     border: none;
     cursor: pointer;
     color: var(--text-secondary);
-    padding: 0.4rem;
+    padding: 0.5rem;
+    /* Increased padding for better touch target */
     border-radius: 50%;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.6;
+    opacity: 0.8;
+    /* Increased from 0.6 for better visibility */
 }
 
 .copy-btn:hover {
@@ -2798,9 +2805,11 @@ h1 {
     /* Cyan for conjunctions */
 }
 
-.card[data-type="other"] {
-    border-left: 4px solid var(--border);
-    /* Default border color */
+.card[data-type="other"],
+.card:not([data-type]),
+.card[data-type=""] {
+    border-left: 4px solid #9CA3AF;
+    /* Gray for unknown/other types */
 }
 
 
@@ -3652,7 +3661,8 @@ body.dark-mode .pwa-btn.secondary:hover {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.25rem;
+    padding: 0.5rem;
+    /* Increased for better touch target */
     color: var(--text-secondary);
     transition: all 0.2s ease;
     border-radius: 50%;
@@ -3663,6 +3673,8 @@ body.dark-mode .pwa-btn.secondary:hover {
     /* Ensure clickable above card link */
     position: relative;
     /* For z-index to work */
+    opacity: 0.8;
+    /* Increased visibility */
 }
 
 .fav-btn:hover {

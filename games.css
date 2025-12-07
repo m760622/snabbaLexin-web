@@ -1581,44 +1581,35 @@ body.dark-mode .game-hint {
 }
 
 .option-btn {
-    background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 1.2rem;
-    font-size: 1.2rem;
-    border-radius: 1.5rem;
+    /* Clean Card UI - Inspired by Word of the Day */
+    background: #1E293B;
+    border: none;
+    padding: 1.5rem 1.2rem;
+    font-size: 1.15rem;
+    border-radius: 1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06),
-        inset 0 2px 4px rgba(255, 255, 255, 0.8);
-    color: var(--text-main-light);
-    font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
     position: relative;
     overflow: hidden;
     animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+    text-align: center;
+    line-height: 1.5;
 }
 
 .option-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(255, 255, 255, 0.8), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
+    display: none;
+    /* Remove gradient overlay */
 }
 
 body.dark-mode .option-btn {
-    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-    color: var(--text-main-dark);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.3),
-        0 2px 4px -1px rgba(0, 0, 0, 0.2),
-        inset 0 1px 2px rgba(255, 255, 255, 0.05);
+    /* Same as base - already dark */
+    background: #1E293B;
+    color: rgba(255, 255, 255, 0.95);
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* Staggered animation delays for options */
@@ -1639,16 +1630,14 @@ body.dark-mode .option-btn {
 }
 
 .option-btn:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow:
-        0 20px 25px -5px rgba(0, 0, 0, 0.1),
-        0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    border-color: #6366f1;
-    z-index: 1;
+    transform: translateY(-3px);
+    background: #263548;
+    /* Slightly lighter on hover */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .option-btn:hover::before {
-    opacity: 1;
+    display: none;
 }
 
 .option-btn.correct {

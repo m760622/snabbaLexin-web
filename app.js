@@ -488,15 +488,29 @@ async function init() {
 
         // Clear Button Logic
         const clearSearch = document.getElementById('clearSearch');
+        const searchIcon = document.querySelector('.search-icon');
         if (clearSearch) {
             searchInput.addEventListener('input', () => {
-                clearSearch.style.display = searchInput.value ? 'flex' : 'none';
+                const hasValue = searchInput.value.length > 0;
+                clearSearch.style.display = hasValue ? 'flex' : 'none';
+                // Hide search icon when typing, show when empty
+                if (searchIcon) {
+                    searchIcon.style.opacity = hasValue ? '0' : '1';
+                    searchIcon.style.width = hasValue ? '0' : '';
+                    searchIcon.style.marginRight = hasValue ? '0' : '';
+                }
             });
 
             clearSearch.addEventListener('click', () => {
                 searchInput.value = '';
                 searchInput.focus();
                 clearSearch.style.display = 'none';
+                // Show search icon again
+                if (searchIcon) {
+                    searchIcon.style.opacity = '1';
+                    searchIcon.style.width = '';
+                    searchIcon.style.marginRight = '';
+                }
                 updateResults();
             });
         }

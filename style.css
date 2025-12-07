@@ -501,8 +501,8 @@ header {
     /* Reduced further */
     animation: fadeIn 0.8s ease-out;
     position: relative;
-    padding-top: 3.5rem;
-    /* Reduced for less gap between title and search */
+    padding-top: 4.5rem;
+    /* Increased for breathing room from phone edge */
     backdrop-filter: blur(5px);
     /* Slight blur for header area */
 }
@@ -550,24 +550,23 @@ header {
     padding: 0 1rem;
 }
 
-/* Word Count Bubble - Glass Effect */
+/* Word Count Bubble - More Subtle */
 .word-count-bubble {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 50px;
-    height: 40px;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-    animation: bubbleSway 4s ease-in-out infinite;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    min-width: 40px;
+    height: 32px;
+    padding: 0.3rem 0.8rem;
+    background: rgba(0, 0, 0, 0.05);
+    /* More transparent */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: none;
+    /* Removed shadow for less distraction */
+    transition: transform 0.3s ease;
 }
 
 .word-count-bubble:hover {
@@ -578,10 +577,11 @@ header {
 }
 
 .word-count-bubble span {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    color: #22d3ee;
-    -webkit-text-fill-color: #22d3ee;
+    /* Light mode: Dark blue for better contrast */
+    color: #1e40af;
+    -webkit-text-fill-color: #1e40af;
 }
 
 @keyframes bubbleSway {
@@ -605,16 +605,16 @@ header {
 }
 
 [data-theme="dark"] .word-count-bubble {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    background: rgba(30, 41, 59, 0.8);
+    /* Darker background for better contrast */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none;
 }
 
 [data-theme="dark"] .word-count-bubble span {
-    color: #22d3ee;
-    -webkit-text-fill-color: #22d3ee;
+    color: #10B981;
+    /* Green to match theme accent */
+    -webkit-text-fill-color: #10B981;
 }
 
 .search-row {
@@ -658,23 +658,36 @@ header {
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Filter Toggle Button */
+/* Filter Toggle Button - Glass Effect */
 .filter-toggle-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: var(--accent);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    /* Light Mode Glassmorphism - Blue Tint */
+    background: rgba(240, 248, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    color: #33A1FD;
+    border: 1px solid rgba(51, 161, 253, 0.4);
     padding: 0;
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 16px rgba(0, 100, 200, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.filter-toggle-btn:hover,
+.filter-toggle-btn.active {
+    background: #33A1FD;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 20px rgba(51, 161, 253, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .filter-toggle-btn:hover,
@@ -1318,21 +1331,20 @@ header {
 /* Individual Letter Pulse Animation */
 .brand-title-swe .pulse-char {
     display: inline-block;
-    color: #10B981 !important;
-    -webkit-text-fill-color: #10B981 !important;
-    /* Override transparent */
+    color: #059669 !important;
+    /* Darker green for better readability - no glow */
+    -webkit-text-fill-color: #059669 !important;
     background: none !important;
-    animation: charPulse 2s ease-in-out infinite;
+    /* Removed pulse animation for cleaner look */
     transition: transform 0.2s ease;
 }
 
 .brand-title-arb .pulse-char {
     display: inline-block;
-    color: #4a5568 !important;
-    /* Dark grey for light mode - visible on white */
-    -webkit-text-fill-color: #4a5568 !important;
+    color: #1f2937 !important;
+    /* Very dark grey for light mode - high contrast */
+    -webkit-text-fill-color: #1f2937 !important;
     background: none !important;
-    animation: charPulse 2s ease-in-out infinite;
     transition: transform 0.2s ease;
 }
 
@@ -1780,18 +1792,62 @@ h1 {
 
 #searchInput {
     width: 100%;
-    /* Reset padding: Standard right padding for icon, standard left */
-    padding: 0.5rem 4rem 0.5rem 1.5rem;
-    font-size: 1.1rem;
-    border: 2px solid var(--accent);
-    /* Swapped: Bright Blue Border */
+    /* Compact height - matching filter button */
+    height: 40px;
+    padding: 0 3rem 0 1rem;
+    font-size: 0.9rem;
+    /* Light Mode Glassmorphism - Blue Tint */
+    background: rgba(240, 248, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1.5px solid rgba(51, 161, 253, 0.4);
     border-radius: 50px;
-    background-color: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     color: var(--text-main);
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 91, 150, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 16px rgba(0, 100, 200, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+#searchInput:focus {
+    border-color: rgba(51, 161, 253, 0.7);
+    box-shadow:
+        0 4px 20px rgba(51, 161, 253, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    outline: none;
+}
+
+/* Dark Mode Glass Effect - Search Input */
+[data-theme="dark"] #searchInput {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1.5px solid rgba(16, 185, 129, 0.3);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] #searchInput:focus {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow:
+        0 4px 24px rgba(16, 185, 129, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Dark Mode Glass Effect - Filter Button */
+[data-theme="dark"] .filter-toggle-btn {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .filter-toggle-btn:hover {
+    background: rgba(16, 185, 129, 0.8);
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow:
+        0 6px 24px rgba(16, 185, 129, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* Standalone Result Counter (Top Right Nav) */
@@ -2633,12 +2689,13 @@ h1 {
 
 .word-arb {
     font-family: var(--arabic-font);
-    font-size: 1.1rem;
-    /* Increased for visual balance with Swedish */
+    font-size: 1.15rem;
+    /* Slightly larger for visual balance with Swedish */
     color: #111827;
     text-align: right;
     margin: 0;
-    font-weight: 700;
+    font-weight: 800;
+    /* Increased from 700 - Arabic needs heavier weight */
     line-height: 1.3;
     direction: rtl;
 }
@@ -2738,8 +2795,8 @@ h1 {
 .card-actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    /* Increased from 0.25rem for better touch targets */
+    gap: 1.25rem;
+    /* Increased gap for better touch separation */
 }
 
 /* Copy Button Styling */

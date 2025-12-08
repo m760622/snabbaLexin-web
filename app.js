@@ -154,12 +154,17 @@ function getGrammarBadge(type, forms, word) {
     }
 
     // VerbMN / Phrasal verbs
-    if (normalizedType.includes('verbmn') || (wordLower.includes(' ') && normalizedType.includes('verb'))) {
+    if (normalizedType.includes('verbmn') || (wordLower.includes(' ') && normalizedType.includes('verb') && !normalizedType.includes('adverb'))) {
         return '<span class="grammar-badge grammar-phv">Ph.V</span>';
     }
 
-    // Fallback: if type contains "verb", show Verb badge
-    if (normalizedType.includes('verb')) {
+    // Adverb detection - MUST come before verb check! (since "adverb" contains "verb")
+    if (normalizedType.includes('adverb') || normalizedType === 'adv') {
+        return '<span class="grammar-badge grammar-adv">Adv</span>';
+    }
+
+    // Fallback: if type contains "verb" (but not "adverb"), show Verb badge
+    if (normalizedType.includes('verb') && !normalizedType.includes('adverb')) {
         return '<span class="grammar-badge grammar-verb">Verb</span>';
     }
 

@@ -1,13 +1,68 @@
 /* ========================================
    Premium Details Page Redesign - Expert Level
+   New Dark Theme with Mint Green Accents
    ======================================== */
+
+/* New Design Variables - Dark Theme with Soft Sky Blue */
+:root {
+    --bg-dark-main: #0f1115;
+    --bg-dark-card: #1e2229;
+    --text-dark-primary: #ffffff;
+    --text-dark-secondary: #a0a5ac;
+    --accent-blue: #7dd3fc;
+    --accent-blue-bg: rgba(125, 211, 252, 0.12);
+    --accent-blue-border: rgba(125, 211, 252, 0.2);
+    --border-subtle-dark: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Dark Mode Card Enhancements */
+[data-theme="dark"] .details-section {
+    background-color: var(--bg-dark-card);
+    border: var(--border-subtle-dark);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark Mode Section Headers */
+[data-theme="dark"] .section-title {
+    color: var(--accent-blue);
+    border-bottom: var(--border-subtle-dark);
+}
+
+/* Dark Mode Form Chips - Mint Green Capsule Style */
+[data-theme="dark"] .form-chip {
+    background-color: var(--accent-blue-bg);
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue-border);
+    border-radius: 50px;
+    transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .form-chip:active {
+    transform: scale(0.98);
+    background-color: rgba(52, 211, 153, 0.25);
+}
+
+/* Dark Mode Example Cards */
+[data-theme="dark"] .example-card {
+    font-style: italic;
+    line-height: 1.6;
+    color: #e2e8f0;
+    background: rgba(30, 34, 41, 0.8);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .ex-swe-detail,
+[data-theme="dark"] .ex-arb-detail {
+    color: #e2e8f0;
+}
+
+/* Dark Mode Main Word Box - Uses parent gradient */
 
 /* Hero Section - Word Display */
 .details-hero {
     background: linear-gradient(135deg, #005B96 0%, #0284c7 50%, #0ea5e9 100%);
     padding: 2.5rem 2rem 1rem 2rem;
-    /* Reduced bottom padding to 1rem */
-    /* Reduced bottom padding from 3rem to 1.5rem */
     border-radius: 2rem;
     margin-bottom: 2rem;
     position: relative;
@@ -16,6 +71,44 @@
         0 20px 60px rgba(0, 91, 150, 0.3),
         0 0 0 1px rgba(255, 255, 255, 0.1) inset;
     animation: hero-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+/* Subtle Hover Effects on Hero Card - Glow Only */
+.details-hero:hover {
+    box-shadow:
+        0 20px 60px rgba(0, 91, 150, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+        0 0 40px rgba(56, 189, 248, 0.2);
+}
+
+.details-hero:hover::before {
+    animation: rotate-glow 10s linear infinite;
+}
+
+/* Subtle hover effects on Swedish word - glow only */
+.details-hero:hover .word-swe-hero {
+    text-shadow:
+        0 4px 25px rgba(0, 0, 0, 0.4),
+        0 0 60px rgba(255, 255, 255, 0.4),
+        0 0 80px rgba(56, 189, 248, 0.3);
+}
+
+/* Subtle hover effects on Arabic word - glow only */
+.details-hero:hover .word-arb-hero {
+    text-shadow:
+        0 2px 20px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(251, 191, 36, 0.3);
+}
+
+/* Subtle hover effects on badges - glow only */
+.details-hero:hover .word-type-badge,
+.details-hero:hover .verb-group-badge,
+.details-hero:hover .gender-badge {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* ... (keep animation unchanged) ... */
@@ -161,7 +254,10 @@
     height: 200%;
     background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
     animation: rotate-glow 20s linear infinite;
+    transition: opacity 0.4s ease;
 }
+
+/* Keep glow visible on hover */
 
 .details-hero::after {
     content: '';
@@ -173,7 +269,10 @@
     background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M30 30L0 0h60L30 30zm0 0l30 30H0l30-30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     opacity: 0.3;
     pointer-events: none;
+    transition: opacity 0.4s ease;
 }
+
+/* Keep pattern visible on hover */
 
 @keyframes rotate-glow {
     0% {
@@ -246,23 +345,118 @@
     font-size: 3.5rem;
     font-weight: 900;
     color: white;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(255, 255, 255, 0.2);
+    text-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(255, 255, 255, 0.2),
+        0 0 80px rgba(56, 189, 248, 0.3);
     margin: 0 0 0.25rem 0;
-    /* Reduced margin-bottom drastically */
     line-height: 1.1;
-    animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: word-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1), word-glow 3s ease-in-out infinite 1s;
+    position: relative;
+}
+
+/* Magical shimmer effect on Swedish word */
+.word-swe-hero::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            transparent 0%,
+            transparent 40%,
+            rgba(255, 255, 255, 0.8) 50%,
+            transparent 60%,
+            transparent 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer-sweep 4s ease-in-out infinite 2s;
+    pointer-events: none;
+}
+
+@keyframes word-entrance {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+        filter: blur(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes word-glow {
+
+    0%,
+    100% {
+        text-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.3),
+            0 0 40px rgba(255, 255, 255, 0.2),
+            0 0 60px rgba(56, 189, 248, 0.2);
+    }
+
+    50% {
+        text-shadow:
+            0 4px 20px rgba(0, 0, 0, 0.3),
+            0 0 60px rgba(255, 255, 255, 0.4),
+            0 0 100px rgba(56, 189, 248, 0.4);
+    }
+}
+
+@keyframes shimmer-sweep {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
 }
 
 .word-arb-hero {
     font-size: 2.5rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.95);
-    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+    text-shadow:
+        0 2px 15px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(251, 191, 36, 0.2);
     font-family: var(--arabic-font);
     direction: rtl;
     margin: 0.25rem 0 0.75rem 0;
-    /* Reduced margins */
-    animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s backwards;
+    animation: arb-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s backwards, arb-float 4s ease-in-out infinite 1.5s;
+    position: relative;
+}
+
+@keyframes arb-entrance {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: blur(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes arb-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
 }
 
 /* Word Type Row - Audio, Badge, Favorite inline */

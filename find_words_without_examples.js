@@ -1,105 +1,57 @@
-/**
- * FIND RARE WORDS WITHOUT EXAMPLES
- * This script finds words that don't have examples yet
- */
-
+// Script to find ALL words without examples
 const fs = require('fs');
 
+// Read data.js
 const dataContent = fs.readFileSync('./data.js', 'utf-8');
-let dictionaryData;
-try {
-    dictionaryData = JSON.parse(dataContent.replace('const dictionaryData = ', '').replace(/;$/, ''));
-} catch (e) {
-    const match = dataContent.match(/(?:const|var|let)\s+dictionaryData\s*=\s*(\[[\s\S]*?\]);/);
-    dictionaryData = eval(match[1]);
+const match = dataContent.match(/const dictionaryData = (\[[\s\S]*?\]);/);
+if (!match) {
+    console.error('Could not parse data.js');
+    process.exit(1);
 }
 
-// Find entries without examples
-const wordsWithoutExamples = {
-    verbs: [],
-    nouns: [],
-    adjectives: [],
-    adverbs: [],
-    others: []
-};
+const dictionaryData = eval(match[1]);
 
-let totalWithExamples = 0;
-let totalWithoutExamples = 0;
+// Column indices
+const COL_ID = 0;
+const COL_TYPE = 1;
+const COL_SWE = 2;
+const COL_ARB = 3;
+const COL_EX_SWE = 7;
+const COL_EX_ARB = 8;
 
-for (const entry of dictionaryData) {
-    const hasExample = entry[7] && entry[7].trim() !== '';
-    const wordType = entry[1] || '';
-    const swedishWord = entry[2] || '';
+// Find all words without examples
+const wordsWithoutExamples = dictionaryData.filter(entry => {
+    const hasExample = entry[COL_EX_SWE] && entry[COL_EX_SWE].trim() !== '';
+    return !hasExample;
+});
 
-    if (hasExample) {
-        totalWithExamples++;
-    } else {
-        totalWithoutExamples++;
-
-        const wordInfo = {
-            word: swedishWord,
-            type: wordType,
-            arabic: entry[3] || ''
-        };
-
-        if (wordType.includes('Verb')) {
-            wordsWithoutExamples.verbs.push(wordInfo);
-        } else if (wordType.includes('Substantiv')) {
-            wordsWithoutExamples.nouns.push(wordInfo);
-        } else if (wordType.includes('Adjektiv')) {
-            wordsWithoutExamples.adjectives.push(wordInfo);
-        } else if (wordType.includes('Adverb')) {
-            wordsWithoutExamples.adverbs.push(wordInfo);
-        } else {
-            wordsWithoutExamples.others.push(wordInfo);
-        }
+// Group by type
+const byType = {};
+wordsWithoutExamples.forEach(entry => {
+    const type = (entry[COL_TYPE] || 'unknown').toLowerCase();
+    if (!byType[type]) {
+        byType[type] = [];
     }
-}
-
-console.log('═══════════════════════════════════════════════════════════════');
-console.log('          WORDS WITHOUT EXAMPLES - ANALYSIS');
-console.log('═══════════════════════════════════════════════════════════════\n');
-
-console.log(`📊 Total entries: ${dictionaryData.length}`);
-console.log(`✅ With examples: ${totalWithExamples} (${Math.round(totalWithExamples / dictionaryData.length * 100)}%)`);
-console.log(`❌ Without examples: ${totalWithoutExamples} (${Math.round(totalWithoutExamples / dictionaryData.length * 100)}%)`);
-
-console.log('\n📋 Breakdown by type:');
-console.log(`   Verbs: ${wordsWithoutExamples.verbs.length}`);
-console.log(`   Nouns: ${wordsWithoutExamples.nouns.length}`);
-console.log(`   Adjectives: ${wordsWithoutExamples.adjectives.length}`);
-console.log(`   Adverbs: ${wordsWithoutExamples.adverbs.length}`);
-console.log(`   Others: ${wordsWithoutExamples.others.length}`);
-
-// Sample some words for each category
-console.log('\n═══════════════════════════════════════════════════════════════');
-console.log('          SAMPLE WORDS TO ADD EXAMPLES FOR');
-console.log('═══════════════════════════════════════════════════════════════\n');
-
-console.log('🔹 VERBS (sample 30):');
-wordsWithoutExamples.verbs.slice(0, 30).forEach(w => {
-    console.log(`   "${w.word}|Verb": { exSwe: "", exArb: "" }, // ${w.arabic}`);
+    byType[type].push(entry);
 });
 
-console.log('\n🔹 NOUNS (sample 30):');
-wordsWithoutExamples.nouns.slice(0, 30).forEach(w => {
-    console.log(`   "${w.word}|Substantiv": { exSwe: "", exArb: "" }, // ${w.arabic}`);
+console.log(`\n=== Words Without Examples Summary ===`);
+console.log(`Total words without examples: ${wordsWithoutExamples.length}`);
+console.log(`Total words in dictionary: ${dictionaryData.length}`);
+console.log(`Percentage complete: ${((dictionaryData.length - wordsWithoutExamples.length) / dictionaryData.length * 100).toFixed(2)}%\n`);
+
+console.log(`=== By Type ===`);
+Object.keys(byType).sort((a, b) => byType[b].length - byType[a].length).forEach(type => {
+    console.log(`${type}: ${byType[type].length}`);
 });
 
-console.log('\n🔹 ADJECTIVES (sample 20):');
-wordsWithoutExamples.adjectives.slice(0, 20).forEach(w => {
-    console.log(`   "${w.word}|Adjektiv": { exSwe: "", exArb: "" }, // ${w.arabic}`);
+// Show sample words for each type
+console.log(`\n=== Sample Words Without Examples (first 10 of each type) ===\n`);
+Object.keys(byType).sort((a, b) => byType[b].length - byType[a].length).forEach(type => {
+    console.log(`--- ${type.toUpperCase()} (${byType[type].length} total) ---`);
+    const sample = byType[type].slice(0, 10);
+    sample.forEach((entry, index) => {
+        console.log(`  ${index + 1}. ${entry[COL_SWE]} (${entry[COL_ARB]})`);
+    });
+    console.log('');
 });
-
-// Save to JSON for easier processing
-const outputData = {
-    stats: {
-        total: dictionaryData.length,
-        withExamples: totalWithExamples,
-        withoutExamples: totalWithoutExamples
-    },
-    wordsWithoutExamples: wordsWithoutExamples
-};
-
-fs.writeFileSync('./words_without_examples.json', JSON.stringify(outputData, null, 2));
-console.log('\n✅ Full list saved to words_without_examples.json');

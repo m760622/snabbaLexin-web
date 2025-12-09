@@ -1,702 +1,128 @@
 [
   {
-    "id": "Lexin018554",
-    "type": "Medicin.",
-    "swe": "Nasalt, genom näsan",
-    "arb": "أنفي - عن طريق الأنف",
-    "arb_def": "مصطلح طبي: أنفي - عن طريق الأنف | أنفياً (عن طريق الأنف)"
+    "id": "ADDED200037",
+    "type": "Verb.",
+    "swe": "Avbokar",
+    "arb": "يلغي الحجز",
+    "arb_def": "يُلغي الحجز، يُبطل موعداً محجوزاً"
   },
   {
-    "id": "Lexin018613",
-    "type": "Medicin.",
-    "swe": "Naturläkemedel",
-    "arb": "عقاقير طبيعية",
-    "arb_def": "مصطلح طبي: عقاقير طبيعية | دواء طبيعي (عشبي)"
+    "id": "ADDED200038",
+    "type": "Verb.",
+    "swe": "Kamuflerar",
+    "arb": "يتمويه",
+    "arb_def": "يُموّه، يُخفي بالتمويه"
   },
   {
-    "id": "Lexin018630",
-    "type": "Medicin.",
-    "swe": "Navelsträngen",
-    "arb": "الحبل السري",
-    "arb_def": "مصطلح طبي: الحبل السري"
+    "id": "ADDED200039",
+    "type": "Verb.",
+    "swe": "Klonar",
+    "arb": "يستنسخ",
+    "arb_def": "يستنسخ، يُنتج نسخة مطابقة"
   },
   {
-    "id": "Lexin018663",
-    "type": "Medicin.",
-    "swe": "Nedre extremiteternas muskler",
-    "arb": "عضلات الأطراف السفلية",
-    "arb_def": "مصطلح طبي: عضلات الأطراف السفلية"
+    "id": "ADDED200040",
+    "type": "Verb.",
+    "swe": "Maximerar",
+    "arb": "يعظّم",
+    "arb_def": "يُكبّر للحد الأقصى، يزيد للأقصى"
   },
   {
-    "id": "Lexin018664",
-    "type": "Medicin.",
-    "swe": "Nedre magmunnen",
-    "arb": "البواب - فتحة البواب - الفتحة السفلية للمعدة",
-    "arb_def": "مصطلح طبي: البواب - فتحة البواب - الفتحة السفلية للمعدة | فتحة البواب (أسفل المعدة)"
+    "id": "ADDED200041",
+    "type": "Verb.",
+    "swe": "Minimerar",
+    "arb": "يقلل",
+    "arb_def": "يُصغّر للحد الأدنى، يُقلّل للأدنى"
   },
   {
-    "id": "Lexin018689",
-    "type": "Medicin.",
-    "swe": "Nefropati",
-    "arb": "اعتلال الكلية",
-    "arb_def": "مصطلح طبي: اعتلال الكلية | اعتلال كلوي"
+    "id": "ADDED200042",
+    "type": "Verb.",
+    "swe": "Konsumerar",
+    "arb": "يستهلك",
+    "arb_def": "يستهلك، يستخدم ويُنفق"
   },
   {
-    "id": "Lexin018712",
-    "type": "Medicin.",
-    "swe": "Nervcell",
-    "arb": "خلية عصبية",
-    "arb_def": "مصطلح طبي: خلية عصبية | خلية عصبية (عصبون)"
+    "id": "ADDED300000",
+    "type": "Adverb.",
+    "swe": "Rakt",
+    "arb": "مستقيماً",
+    "arb_def": "مستقيم، بشكل مباشر"
   },
   {
-    "id": "Lexin018713",
-    "type": "Medicin.",
-    "swe": "Nervimpuls",
-    "arb": "نبض عصبي",
-    "arb_def": "مصطلح طبي: نبض عصبي | نبضة عصبية (إشارة)"
+    "id": "ADDED300001",
+    "type": "Substantiv.",
+    "swe": "Hälften",
+    "arb": "النصف",
+    "arb_def": "en av två lika delar av något | نصف الشيء، جزء من اثنين متساويين"
   },
   {
-    "id": "Lexin018716",
-    "type": "Medicin.",
-    "swe": "Nervsystemet",
-    "arb": "الجهاز العصبي",
-    "arb_def": "مصطلح طبي: الجهاز العصبي"
+    "id": "ADDED300002",
+    "type": "Adjektiv.",
+    "swe": "Anagrammatisk",
+    "arb": "جناسي",
+    "arb_def": "متعلق بالجناس، قلب ترتيب الحروف"
   },
   {
-    "id": "Lexin018717",
-    "type": "Medicin.",
-    "swe": "Nervvävnad",
-    "arb": "النسيج العصبي",
-    "arb_def": "مصطلح طبي: النسيج العصبي | نسيج عصبي"
+    "id": "ADDED300003",
+    "type": "Substantiv.",
+    "swe": "Aritmetik",
+    "arb": "حساب",
+    "arb_def": "حساب، علم العمليات الحسابية | علم الحساب والعمليات الرياضية الأساسية"
   },
   {
-    "id": "Lexin018722",
-    "type": "Medicin.",
-    "swe": "Neurologisk funktionsnedsättning",
-    "arb": "قصور وظيفي عصبي",
-    "arb_def": "مصطلح طبي: قصور وظيفي عصبي | عجز عصبي (خلل وظيفي)"
+    "id": "ADDED300004",
+    "type": "Adjektiv.",
+    "swe": "Arkitektonisk",
+    "arb": "معماري",
+    "arb_def": "معماري، متعلق بفن العمارة"
   },
   {
-    "id": "Lexin018723",
-    "type": "Medicin.",
-    "swe": "Neurologisk undersökning",
-    "arb": "فحص الجهاز العصبي",
-    "arb_def": "مصطلح طبي: فحص الجهاز العصبي | فحص عصبي"
+    "id": "ADDED300005",
+    "type": "Substantiv.",
+    "swe": "Elvisp",
+    "arb": "خلاط كهربائي",
+    "arb_def": "خفّاقة كهربائية، أداة لخفق الطعام | خفاقة كهربائية لخلط وخفق الطعام"
   },
   {
-    "id": "Lexin018725",
-    "type": "Medicin.",
-    "swe": "Neuropsykiatrisk störning",
-    "arb": "اضطرابات عصبية نفسانية",
-    "arb_def": "مصطلح طبي: اضطرابات عصبية نفسانية | اضطراب عصبي نفسي"
+    "id": "ADDED300006",
+    "type": "Substantiv.",
+    "swe": "Automatik",
+    "arb": "أوتوماتيك",
+    "arb_def": "آلية، نظام تلقائي | نظام يعمل تلقائياً دون تدخل بشري"
   },
   {
-    "id": "Lexin018742",
-    "type": "Medicin.",
-    "swe": "Nickelallergi",
-    "arb": "حساسية النيكل",
-    "arb_def": "مصطلح طبي: حساسية النيكل"
+    "id": "ADDED300007",
+    "type": "Substantiv.",
+    "swe": "Avslut",
+    "arb": "نهاية",
+    "arb_def": "إنهاء، ختام أو نهاية | إنهاء وختام شيء ما، نهاية عملية أو مشروع"
   },
   {
-    "id": "Lexin018765",
-    "type": "Medicin.",
-    "swe": "Njurarna",
-    "arb": "الكليتان",
-    "arb_def": "مصطلح طبي: الكليتان | الكليتين"
+    "id": "ADDED300008",
+    "type": "Substantiv.",
+    "swe": "Anlöpning",
+    "arb": "بخار متكثف",
+    "arb_def": "imma som bildas på en yta när varm luft möter en kall yta | تكثف البخار على سطح بارد"
   },
   {
-    "id": "Lexin018767",
-    "type": "Medicin.",
-    "swe": "Njurbarken",
-    "arb": "القشرة الكلوية",
-    "arb_def": "مصطلح طبي: القشرة الكلوية | قشرة الكلة"
+    "id": "ADDED300009",
+    "type": "Substantiv.",
+    "swe": "Antiseptika",
+    "arb": "مطهر",
+    "arb_def": "مُطهّرات، مواد لقتل الجراثيم | مواد كيميائية تُستخدم لقتل الجراثيم والميكروبات"
   },
   {
-    "id": "Lexin018768",
-    "type": "Medicin.",
-    "swe": "Njurbäckenet",
-    "arb": "حوض الكلية",
-    "arb_def": "مصطلح طبي: حوض الكلية"
+    "id": "ADDED300010",
+    "type": "Substantiv.",
+    "swe": "Ambassador",
+    "arb": "سفير",
+    "arb_def": "en diplomat som representerar sitt land i ett annat land | دبلوماسي يمثل بلاده في دولة أخرى"
   },
   {
-    "id": "Lexin018770",
-    "type": "Medicin.",
-    "swe": "Njurkanal, tubuli",
-    "arb": "الوحدة الانبوبية الكلوية",
-    "arb_def": "مصطلح طبي: الوحدة الانبوبية الكلوية | نبيب كلوي (أنبوب)"
-  },
-  {
-    "id": "Lexin018772",
-    "type": "Medicin.",
-    "swe": "Njurstensanfall",
-    "arb": "نوبة حصوات الكلى",
-    "arb_def": "مصطلح طبي: نوبة حصوات الكلى | نوبة حصى الكلى (مغص كلوي)"
-  },
-  {
-    "id": "Lexin018773",
-    "type": "Medicin.",
-    "swe": "Njursvikt",
-    "arb": "فشل كلوي",
-    "arb_def": "مصطلح طبي: فشل كلوي"
-  },
-  {
-    "id": "Lexin018774",
-    "type": "Medicin.",
-    "swe": "Njurtröskel",
-    "arb": "عتبة كلوية, العتبة الكلوية",
-    "arb_def": "مصطلح طبي: عتبة كلوية, العتبة الكلوية | العتبة الكلوية"
-  },
-  {
-    "id": "Lexin018819",
-    "type": "Medicin.",
-    "swe": "Normalflora",
-    "arb": "مجهريات بشرية, ميكروبات بشرية",
-    "arb_def": "مصطلح طبي: مجهريات بشرية, ميكروبات بشرية | نبيت جرثومي طبيعي (فلورا طبيعية)"
-  },
-  {
-    "id": "Lexin018911",
-    "type": "Medicin.",
-    "swe": "Nyckelbenet",
-    "arb": "الترقوة",
-    "arb_def": "مصطلح طبي: الترقوة | عظم الترقوة"
-  },
-  {
-    "id": "Lexin018918",
-    "type": "Medicin.",
-    "swe": "Nyföddhetsperioden",
-    "arb": "فترة ما بعد الولادة",
-    "arb_def": "مصطلح طبي: فترة ما بعد الولادة | فترة حديثي الولادة"
-  },
-  {
-    "id": "Lexin019018",
-    "type": "Medicin.",
-    "swe": "Näring",
-    "arb": "تغذية",
-    "arb_def": "مصطلح طبي: تغذية"
-  },
-  {
-    "id": "Lexin019051",
-    "type": "Medicin.",
-    "swe": "Näsblödning",
-    "arb": "الرُعاف - نزيف انفي",
-    "arb_def": "مصطلح طبي: الرُعاف - نزيف انفي | نزيف الأنف (رعاف)"
-  },
-  {
-    "id": "Lexin019054",
-    "type": "Medicin.",
-    "swe": "Näsdropp - Näsdroppar",
-    "arb": "قطرة أنف - قطرات أنفية",
-    "arb_def": "مصطلح طبي: قطرة أنف - قطرات أنفية | قطرة أنف"
-  },
-  {
-    "id": "Lexin019056",
-    "type": "Medicin.",
-    "swe": "Näshåla",
-    "arb": "جوف الأنف",
-    "arb_def": "مصطلح طبي: جوف الأنف | تجويف الأنف"
-  },
-  {
-    "id": "Lexin019058",
-    "type": "Medicin.",
-    "swe": "Nässkiljeväggen, septum nasi",
-    "arb": "حاجز الأنف",
-    "arb_def": "مصطلح طبي: حاجز الأنف"
-  },
-  {
-    "id": "Lexin019060",
-    "type": "Medicin.",
-    "swe": "Nässpray",
-    "arb": "بخاخ أنفي",
-    "arb_def": "مصطلح طبي: بخاخ أنفي | بخاخ أنف"
-  },
-  {
-    "id": "Lexin019067",
-    "type": "Medicin.",
-    "swe": "Nästäppa",
-    "arb": "احتقان الانف",
-    "arb_def": "مصطلح طبي: احتقان الانف | انسداد الأنف (احتقان)"
-  },
-  {
-    "id": "Lexin019076",
-    "type": "Medicin.",
-    "swe": "Näthinneavlossning",
-    "arb": "انفصال الشبكية",
-    "arb_def": "مصطلح طبي: انفصال الشبكية"
-  },
-  {
-    "id": "Lexin019204",
-    "type": "Medicin.",
-    "swe": "Objektiva symtom",
-    "arb": "أعراض ظاهرية",
-    "arb_def": "مصطلح طبي: أعراض ظاهرية | أعراض موضوعية (علامات)"
-  },
-  {
-    "id": "Lexin019229",
-    "type": "Medicin.",
-    "swe": "Obstetrik, läran om förlossningen",
-    "arb": "طب التوليد",
-    "arb_def": "مصطلح طبي: طب التوليد"
-  },
-  {
-    "id": "Lexin019336",
-    "type": "Medicin.",
-    "swe": "Ofrivillig barnlöshet",
-    "arb": "عقم لا إرادي",
-    "arb_def": "مصطلح طبي: عقم لا إرادي | عقم (عدم إنجاب لا إرادي)"
-  },
-  {
-    "id": "Lexin019354",
-    "type": "Medicin.",
-    "swe": "Oförmåga att känna igen, agnosi",
-    "arb": "العجز عن إدراك منبه حسي",
-    "arb_def": "مصطلح طبي: العجز عن إدراك منبه حسي | عمه (فقدان القدرة على التعرف - Agnosia)"
-  },
-  {
-    "id": "Lexin019355",
-    "type": "Medicin.",
-    "swe": "Oförmåga att utföra rörelser, apraxi",
-    "arb": "العجز عن الحركة",
-    "arb_def": "مصطلح طبي: العجز عن الحركة | تعذر الأداء (Apraxia)"
-  },
-  {
-    "id": "Lexin019413",
-    "type": "Medicin.",
-    "swe": "Ojämnhet",
-    "arb": "وعورة - عدم استواء",
-    "arb_def": "مصطلح طبي: وعورة - عدم استواء | عدم انتظام (خشونة سطح)"
-  },
-  {
-    "id": "Lexin019472",
-    "type": "Medicin.",
-    "swe": "Ollon",
-    "arb": "الحشفة",
-    "arb_def": "مصطلح طبي: الحشفة | حشفة (القضيب)"
-  },
-  {
-    "id": "Lexin019496",
-    "type": "Medicin.",
-    "swe": "Olustkänsla",
-    "arb": "توعك",
-    "arb_def": "مصطلح طبي: توعك | شعور بالضيق (عدم الارتياح)"
-  },
-  {
-    "id": "Lexin019505",
-    "type": "Medicin.",
-    "swe": "Olycksfall",
-    "arb": "حادث",
-    "arb_def": "مصطلح طبي: حادث"
-  },
-  {
-    "id": "Lexin019684",
-    "type": "Medicin.",
-    "swe": "Omättade fetter",
-    "arb": "الدهون غير المشبعة",
-    "arb_def": "مصطلح طبي: الدهون غير المشبعة | دهون غير مشبعة"
-  },
-  {
-    "id": "Lexin019685",
-    "type": "Medicin.",
-    "swe": "Omättat och fleromättat fett",
-    "arb": "دهن غير مشبع وعديد الاتشبع",
-    "arb_def": "مصطلح طبي: دهن غير مشبع وعديد الاتشبع | دهون غير مشبعة ومتعددة غير مشبعة"
-  },
-  {
-    "id": "Lexin019704",
-    "type": "Medicin.",
-    "swe": "Onormal blödning",
-    "arb": "نزيف غير طبيعي",
-    "arb_def": "مصطلح طبي: نزيف غير طبيعي"
-  },
-  {
-    "id": "Lexin019707",
-    "type": "Medicin.",
-    "swe": "Ont i lederna",
-    "arb": "ألم في المفاصل",
-    "arb_def": "مصطلح طبي: ألم في المفاصل | ألم المفاصل"
-  },
-  {
-    "id": "Lexin019730",
-    "type": "Medicin.",
-    "swe": "Operativt ingrepp",
-    "arb": "تدخل جراحي",
-    "arb_def": "مصطلح طبي: تدخل جراحي"
-  },
-  {
-    "id": "Lexin019734",
-    "type": "Medicin.",
-    "swe": "Opereras bort",
-    "arb": "استئصال",
-    "arb_def": "مصطلح طبي: استئصال | يُستأصل جراحياً"
-  },
-  {
-    "id": "Lexin019764",
-    "type": "Medicin.",
-    "swe": "Orala droppar",
-    "arb": "قطرات عن طريق الفم",
-    "arb_def": "مصطلح طبي: قطرات عن طريق الفم | قطرات فموية"
-  },
-  {
-    "id": "Lexin019786",
-    "type": "Medicin.",
-    "swe": "Ordglömska, anomi",
-    "arb": "اللاتسمية أو فقدان القدرة على التسمية ( تسمية الأشياء )",
-    "arb_def": "مصطلح طبي: اللاتسمية أو فقدان القدرة على التسمية ( تسمية الأشياء ) | نسيان الكلمات (حبسة اسمية)"
-  },
-  {
-    "id": "Lexin019824",
-    "type": "Medicin.",
-    "swe": "Oregelbunden livsföring",
-    "arb": "اسلوب حياة غير منتظمة",
-    "arb_def": "مصطلح طبي: اسلوب حياة غير منتظمة | نمط حياة غير منتظم"
-  },
-  {
-    "id": "Lexin019825",
-    "type": "Medicin.",
-    "swe": "Oregelbunden mens",
-    "arb": "حيض غير منتظم",
-    "arb_def": "مصطلح طبي: حيض غير منتظم"
-  },
-  {
-    "id": "Lexin019826",
-    "type": "Medicin.",
-    "swe": "Oregelbundna hjärtslagen",
-    "arb": "عدم انتظام ضربات القلب",
-    "arb_def": "مصطلح طبي: عدم انتظام ضربات القلب | ضربات قلب غير منتظمة"
-  },
-  {
-    "id": "Lexin019832",
-    "type": "Medicin.",
-    "swe": "Organ",
-    "arb": "عضو - جزء ( الجسم )",
-    "arb_def": "مصطلح طبي: عضو - جزء ( الجسم ) | عضو"
-  },
-  {
-    "id": "Lexin019869",
-    "type": "Medicin.",
-    "swe": "Orkeslöshet",
-    "arb": "وهن, ضعف",
-    "arb_def": "مصطلح طبي: وهن, ضعف | خمول (وهن/نقص طاقة)"
-  },
-  {
-    "id": "Lexin019885",
-    "type": "Medicin.",
-    "swe": "Orsak",
-    "arb": "السبب",
-    "arb_def": "مصطلح طبي: السبب | سبب"
-  },
-  {
-    "id": "Lexin019894",
-    "type": "Medicin.",
-    "swe": "Ortopediska skor",
-    "arb": "أحذية تقويم",
-    "arb_def": "مصطلح طبي: أحذية تقويم | أحذية طبية (لتقويم العظام)"
-  },
-  {
-    "id": "Lexin019895",
-    "type": "Medicin.",
-    "swe": "Ortopediska stödförband, ortoser",
-    "arb": "رباط التجبير لدعم العظام",
-    "arb_def": "مصطلح طبي: رباط التجبير لدعم العظام | أجهزة تقويم العظام (دعامات)"
-  },
-  {
-    "id": "Lexin019897",
-    "type": "Medicin.",
-    "swe": "Ortosskena",
-    "arb": "جبيرة تثبيت المفصل",
-    "arb_def": "مصطلح طبي: جبيرة تثبيت المفصل | جبيرة تقويمية"
-  },
-  {
-    "id": "Lexin019939",
-    "type": "Medicin.",
-    "swe": "Oskyddat sex",
-    "arb": "العلاقة الجِنْسِيَّة الغير المحمية",
-    "arb_def": "مصطلح طبي: العلاقة الجِنْسِيَّة الغير المحمية | جنس غير محمي"
-  },
-  {
-    "id": "Lexin020019",
-    "type": "Medicin.",
-    "swe": "Outhärdlig smärta",
-    "arb": "ألم لا يطاق",
-    "arb_def": "مصطلح طبي: ألم لا يطاق"
-  },
-  {
-    "id": "Lexin020027",
-    "type": "Medicin.",
-    "swe": "Ovala fönstret",
-    "arb": "النافذة البيضوية",
-    "arb_def": "مصطلح طبي: النافذة البيضوية | النافذة البيضوية (في الأذن)"
-  },
-  {
-    "id": "Lexin020062",
-    "type": "Medicin.",
-    "swe": "Oxoplasmos",
-    "arb": "داء المقوسات",
-    "arb_def": "مصطلح طبي: داء المقوسات | داء المقوسات (Toxoplasmos - تصحيح الاسم الشائع توكسوبلازما)"
-  },
-  {
-    "id": "Lexin020083",
-    "type": "Medicin.",
-    "swe": "Pacemaker",
-    "arb": "ناظمة قلبية اصطناعية",
-    "arb_def": "مصطلح طبي: ناظمة قلبية اصطناعية | جهاز تنظيم ضربات القلب"
-  },
-  {
-    "id": "Lexin020098",
-    "type": "Medicin.",
-    "swe": "PAD",
-    "arb": "تشخيص الأمراض التشريحية",
-    "arb_def": "مصطلح طبي: تشخيص الأمراض التشريحية | تشخيص مرضي (PAD - فحص الأنسجة)"
-  },
-  {
-    "id": "Lexin020128",
-    "type": "Medicin.",
-    "swe": "Palpation",
-    "arb": "الفحص باللمس - الفحص بالتلمس",
-    "arb_def": "مصطلح طبي: الفحص باللمس - الفحص بالتلمس | جس (فحص باللمس)"
-  },
-  {
-    "id": "Lexin020136",
-    "type": "Medicin.",
-    "swe": "Pandemi",
-    "arb": "جائحة ( اي وباء منتشر دولياً )",
-    "arb_def": "مصطلح طبي: جائحة ( اي وباء منتشر دولياً ) | جائحة"
-  },
-  {
-    "id": "Lexin020146",
-    "type": "Medicin.",
-    "swe": "Paniksyndrom",
-    "arb": "متلازمة الهلع",
-    "arb_def": "مصطلح طبي: متلازمة الهلع | اضطراب الهلع"
-  },
-  {
-    "id": "Lexin020153",
-    "type": "Medicin.",
-    "swe": "Pannbenet",
-    "arb": "عظم الجبهة",
-    "arb_def": "مصطلح طبي: عظم الجبهة"
-  },
-  {
-    "id": "Lexin020156",
-    "type": "Medicin.",
-    "swe": "Pannloben",
-    "arb": "الفص الجبهي",
-    "arb_def": "مصطلح طبي: الفص الجبهي"
-  },
-  {
-    "id": "Lexin020236",
-    "type": "Medicin.",
-    "swe": "Parkinsons sjukdom",
-    "arb": "مرض باركنسون - داء باركنسون - الشلل الرعاشي",
-    "arb_def": "مصطلح طبي: مرض باركنسون - داء باركنسون - الشلل الرعاشي | مرض باركنسون (الشلل الرعاش)"
-  },
-  {
-    "id": "Lexin020299",
-    "type": "Medicin.",
-    "swe": "Passiv immunisering",
-    "arb": "مناعة سلبية",
-    "arb_def": "مصطلح طبي: مناعة سلبية | تمنيع سلبي"
-  },
-  {
-    "id": "Lexin020300",
-    "type": "Medicin.",
-    "swe": "Passiv rökning",
-    "arb": "تدخين سلبي",
-    "arb_def": "مصطلح طبي: تدخين سلبي"
-  },
-  {
-    "id": "Lexin020325",
-    "type": "Medicin.",
-    "swe": "Patient - förtroendenämnd",
-    "arb": "مجلس شؤون المرضى",
-    "arb_def": "مصطلح طبي: مجلس شؤون المرضى | لجنة ثقة المرضى (للتظلمات)"
-  },
-  {
-    "id": "Lexin020327",
-    "type": "Medicin.",
-    "swe": "Patientavgift",
-    "arb": "رسم المريض",
-    "arb_def": "مصطلح طبي: رسم المريض | رسوم المريض"
-  },
-  {
-    "id": "Lexin020329",
-    "type": "Medicin.",
-    "swe": "Patientjournal",
-    "arb": "سجل المريض",
-    "arb_def": "مصطلح طبي: سجل المريض | سجل المريض الطبي"
-  },
-  {
-    "id": "Lexin020350",
-    "type": "Medicin.",
-    "swe": "PBU - psykiatrisk barn och ungdomsvård",
-    "arb": "الرعاية النفسانية للشباب والأطفال",
-    "arb_def": "مصطلح طبي: الرعاية النفسانية للشباب والأطفال | الطب النفسي للأطفال والمراهقين (BUP)"
-  },
-  {
-    "id": "Lexin020432",
-    "type": "Medicin.",
-    "swe": "Pensla ( liniment på huden )",
-    "arb": "يَطلي, يَدهن",
-    "arb_def": "مصطلح طبي: يَطلي, يَدهن | يدهن (بفرشاة/مسح سائل)"
-  },
-  {
-    "id": "Lexin020460",
-    "type": "Medicin.",
-    "swe": "Peritonealdialys",
-    "arb": "ديال صفاقي",
-    "arb_def": "مصطلح طبي: ديال صفاقي | غسيل كلى بريتوني"
-  },
-  {
-    "id": "Lexin020462",
-    "type": "Medicin.",
-    "swe": "Perkussion",
-    "arb": "الفحص بنقر الأصابع - الفحص بالنقر بالاصابع",
-    "arb_def": "مصطلح طبي: الفحص بنقر الأصابع - الفحص بالنقر بالاصابع | قرع (فحص بالطرق بالأصابع)"
-  },
-  {
-    "id": "Lexin020477",
-    "type": "Medicin.",
-    "swe": "Perniciös anemi",
-    "arb": "فقر الدم الخبيث",
-    "arb_def": "مصطلح طبي: فقر الدم الخبيث | فقر الدم الخبيث (نقص B12)"
-  },
-  {
-    "id": "Lexin020478",
-    "type": "Medicin.",
-    "swe": "Peroralt, genom munnen",
-    "arb": "فموي - عن طريق الفم",
-    "arb_def": "مصطلح طبي: فموي - عن طريق الفم | عن طريق الفم"
-  },
-  {
-    "id": "Lexin020520",
-    "type": "Medicin.",
-    "swe": "Personlighetsförändring",
-    "arb": "تغير الشخصية",
-    "arb_def": "مصطلح طبي: تغير الشخصية"
-  },
-  {
-    "id": "Lexin020521",
-    "type": "Medicin.",
-    "swe": "Personlighetsstörning",
-    "arb": "اضطراب الشخصية, اضطراب في الشخصية",
-    "arb_def": "مصطلح طبي: اضطراب الشخصية, اضطراب في الشخصية | اضطراب الشخصية"
-  },
-  {
-    "id": "Lexin020542",
-    "type": "Medicin.",
-    "swe": "PET",
-    "arb": "التصوير المقطعي الطبقي بالإصدار البوزيتروني",
-    "arb_def": "مصطلح طبي: التصوير المقطعي الطبقي بالإصدار البوزيتروني | تصوير مقطعي بالانبعاث البوزيتروني (PET)"
-  },
-  {
-    "id": "Lexin020546",
-    "type": "Medicin.",
-    "swe": "Petit mal",
-    "arb": "نوبة الصرع الصغير",
-    "arb_def": "مصطلح طبي: نوبة الصرع الصغير | نوبة صرع صغرى (غيبة)"
-  },
-  {
-    "id": "Lexin020551",
-    "type": "Medicin.",
-    "swe": "PH - värde",
-    "arb": "قيمة الرقم الهيدروجيني أو معدل درجة الحموضة",
-    "arb_def": "مصطلح طبي: قيمة الرقم الهيدروجيني أو معدل درجة الحموضة | قيمة الرقم الهيدروجيني (pH)"
-  },
-  {
-    "id": "Lexin020571",
-    "type": "Medicin.",
-    "swe": "Pigment",
-    "arb": "مادة صبغية",
-    "arb_def": "مصطلح طبي: مادة صبغية | صبغيات (مكرر)"
-  },
-  {
-    "id": "Lexin020572",
-    "type": "Medicin.",
-    "swe": "Pigment",
-    "arb": "خضاب - ماده صبغيه",
-    "arb_def": "مصطلح طبي: خضاب - ماده صبغيه | صبغيات (مكرر)"
-  },
-  {
-    "id": "Lexin020614",
-    "type": "Medicin.",
-    "swe": "Pipande och väsande andningsljud",
-    "arb": "صوت تنفس مصحوب بصفير و أزيز",
-    "arb_def": "مصطلح طبي: صوت تنفس مصحوب بصفير و أزيز | صوت صفير وأزيز تنفسي"
-  },
-  {
-    "id": "Lexin020617",
-    "type": "Medicin.",
-    "swe": "Pipig, flämtande andning",
-    "arb": "تنفس مع صفير و لهاث",
-    "arb_def": "مصطلح طبي: تنفس مع صفير و لهاث | تنفس صادي (صفيري) لاهث"
-  },
-  {
-    "id": "Lexin020626",
-    "type": "Medicin.",
-    "swe": "Pirrning",
-    "arb": "تَنَمُّلُ الأَطْرافِ",
-    "arb_def": "مصطلح طبي: تَنَمُّلُ الأَطْرافِ | تنميل (وخز خفيف)"
-  },
-  {
-    "id": "Lexin020629",
-    "type": "Medicin.",
-    "swe": "Piskmask",
-    "arb": "الدودة السوطية",
-    "arb_def": "مصطلح طبي: الدودة السوطية | دودة سوطية"
-  },
-  {
-    "id": "Lexin020650",
-    "type": "Medicin.",
-    "swe": "Placering",
-    "arb": "يضع",
-    "arb_def": "مصطلح طبي: يضع | تموضع (أو إيداع)"
-  },
-  {
-    "id": "Lexin020723",
-    "type": "Medicin.",
-    "swe": "Plattor",
-    "arb": "صفائح",
-    "arb_def": "مصطلح طبي: صفائح | صفائح (أو ألواح للعظام)"
-  },
-  {
-    "id": "Lexin020801",
-    "type": "Medicin.",
-    "swe": "Plötslig spädbarnsdöd –SIDS",
-    "arb": "موت الرضع الفجائي",
-    "arb_def": "مصطلح طبي: موت الرضع الفجائي | متلازمة موت الرضيع المفاجئ (SIDS)"
-  },
-  {
-    "id": "Lexin020805",
-    "type": "Medicin.",
-    "swe": "Pneumokocker",
-    "arb": "المكورات الرئوية",
-    "arb_def": "بكتيريا المكورات الرئوية | مكورات رئوية"
-  },
-  {
-    "id": "Lexin020807",
-    "type": "Medicin.",
-    "swe": "Pneumokockinfektion",
-    "arb": "عدوى المكورات الرئوية",
-    "arb_def": "مصطلح طبي: عدوى المكورات الرئوية"
-  },
-  {
-    "id": "Lexin020839",
-    "type": "Medicin.",
-    "swe": "Polio",
-    "arb": "شلل الأطفال - التهاب المادة السنجابية الشوكي - التهاب سنجابية النخاع",
-    "arb_def": "مصطلح طبي: شلل الأطفال - التهاب المادة السنجابية الشوكي - التهاب سنجابية النخاع | شلل الأطفال"
-  },
-  {
-    "id": "Lexin020879",
-    "type": "Medicin.",
-    "swe": "Pollen",
-    "arb": "غبار الطَّلع",
-    "arb_def": "مصطلح طبي: غبار الطَّلع | لقاح (مكرر)"
-  },
-  {
-    "id": "Lexin020880",
-    "type": "Medicin.",
-    "swe": "Pollen",
-    "arb": "حبوب اللقاح - غبار الطلع",
-    "arb_def": "مصطلح طبي: حبوب اللقاح - غبار الطلع | لقاح (مكرر)"
+    "id": "ADDED300011",
+    "type": "Substantiv.",
+    "swe": "Altruism",
+    "arb": "إيثار",
+    "arb_def": "إيثار، تفضيل مصلحة الآخرين | الإيثار وتفضيل مصلحة الآخرين على مصلحة النفس"
   }
 ]

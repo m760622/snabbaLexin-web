@@ -1,0 +1,488 @@
+[
+  {
+    "id": "Lexin000131",
+    "swedish": "A, à",
+    "arabic": "( بـ ) سعر الوحدة",
+    "swedishDef": "till ett pris av"
+  },
+  {
+    "id": "Lexin000623",
+    "swedish": "Alltifrån",
+    "arabic": "من",
+    "swedishDef": "från"
+  },
+  {
+    "id": "Lexin001275",
+    "swedish": "Apropå",
+    "arabic": "فيما يتصل بـ",
+    "swedishDef": "på tal om"
+  },
+  {
+    "id": "Lexin001750",
+    "swedish": "Av",
+    "arabic": "من",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin001751",
+    "swedish": "Av",
+    "arabic": "في",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin001752",
+    "swedish": "Av",
+    "arabic": "من",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin001753",
+    "swedish": "Av",
+    "arabic": "كـ, في ما يتعلق بـ",
+    "swedishDef": "beträffande, med avseende på"
+  },
+  {
+    "id": "Lexin003188",
+    "swedish": "Beträffande",
+    "arabic": "عن",
+    "swedishDef": "i fråga om, angående"
+  },
+  {
+    "id": "Lexin003505",
+    "swedish": "Bland",
+    "arabic": "بين",
+    "swedishDef": "mellan - i kretsen av - förutom, jämte"
+  },
+  {
+    "id": "Lexin008268",
+    "swedish": "Framför",
+    "arabic": "أمام",
+    "swedishDef": "före, i spetsen för"
+  },
+  {
+    "id": "Lexin008559",
+    "swedish": "Från",
+    "arabic": "من",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin008560",
+    "swedish": "Från",
+    "arabic": "من",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin008561",
+    "swedish": "Från",
+    "arabic": "عن",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin008974",
+    "swedish": "För",
+    "arabic": "على",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin008975",
+    "swedish": "För",
+    "arabic": "مُقابل",
+    "swedishDef": "i utbyte mot"
+  },
+  {
+    "id": "Lexin008976",
+    "swedish": "För",
+    "arabic": "لِـ",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin008977",
+    "swedish": "För",
+    "arabic": "بِـ",
+    "swedishDef": "med hjälp av"
+  },
+  {
+    "id": "Lexin008978",
+    "swedish": "För",
+    "arabic": "لِـ",
+    "swedishDef": "avseende"
+  },
+  {
+    "id": "Lexin008979",
+    "swedish": "För",
+    "arabic": "في, بِـ",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin009107",
+    "swedish": "Före",
+    "arabic": "قبل",
+    "swedishDef": "innan"
+  },
+  {
+    "id": "Lexin009108",
+    "swedish": "Före",
+    "arabic": "أمام",
+    "swedishDef": "framför"
+  },
+  {
+    "id": "Lexin009834",
+    "swedish": "Förutom",
+    "arabic": "فيما عدا",
+    "swedishDef": "utom, med undantag av"
+  },
+  {
+    "id": "Lexin010167",
+    "swedish": "Genom",
+    "arabic": "عن طريق",
+    "swedishDef": "med, med hjälp av - på grund av"
+  },
+  {
+    "id": "Lexin010205",
+    "swedish": "Gentemot",
+    "arabic": "تجاه",
+    "swedishDef": "i förhållande till, emot"
+  },
+  {
+    "id": "Lexin011553",
+    "swedish": "Hitom",
+    "arabic": "من هنا",
+    "swedishDef": "på denna sida om"
+  },
+  {
+    "id": "Lexin012417",
+    "swedish": "I",
+    "arabic": "في",
+    "swedishDef": "inom, inuti"
+  },
+  {
+    "id": "Lexin012419",
+    "swedish": "I",
+    "arabic": "في",
+    "swedishDef": "inom loppet av, vid"
+  },
+  {
+    "id": "Lexin012420",
+    "swedish": "I",
+    "arabic": "إلاّ",
+    "swedishDef": "före"
+  },
+  {
+    "id": "Lexin012421",
+    "swedish": "I",
+    "arabic": "في",
+    "swedishDef": "ifråga om, vad gäller, med hänsyn till"
+  },
+  {
+    "id": "Lexin012422",
+    "swedish": "I",
+    "arabic": "كـ",
+    "swedishDef": "som, såsom"
+  },
+  {
+    "id": "Lexin012423",
+    "swedish": "I",
+    "arabic": "في",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin012424",
+    "swedish": "I",
+    "arabic": "بـ",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin012757",
+    "swedish": "Inför",
+    "arabic": "أمام",
+    "swedishDef": "framför, ansikte mot ansikte med"
+  },
+  {
+    "id": "Lexin012833",
+    "swedish": "Inklusive",
+    "arabic": "بما في ذلك",
+    "swedishDef": "medräknat, inbegripet"
+  },
+  {
+    "id": "Lexin012880",
+    "swedish": "Innan",
+    "arabic": "قبل",
+    "swedishDef": "före"
+  },
+  {
+    "id": "Lexin012883",
+    "swedish": "Innanför",
+    "arabic": "أمام",
+    "swedishDef": "på insidan av, omgiven av, inom"
+  },
+  {
+    "id": "Lexin012919",
+    "swedish": "Inom",
+    "arabic": "ضمن",
+    "swedishDef": "innanför"
+  },
+  {
+    "id": "Lexin012929",
+    "swedish": "Inpå",
+    "arabic": "قريباً من",
+    "swedishDef": "( tätt ) intill"
+  },
+  {
+    "id": "Lexin013156",
+    "swedish": "Intill",
+    "arabic": "بقرب",
+    "swedishDef": "bredvid, invid"
+  },
+  {
+    "id": "Lexin013231",
+    "swedish": "Invid",
+    "arabic": "بجانب",
+    "swedishDef": "vid sidan av, bredvid"
+  },
+  {
+    "id": "Lexin013243",
+    "swedish": "Inåt",
+    "arabic": "إلى الداخل",
+    "swedishDef": "i riktning mot det inre av"
+  },
+  {
+    "id": "Lexin013533",
+    "swedish": "Jämte",
+    "arabic": "مع",
+    "swedishDef": "tillsammans med - plus"
+  },
+  {
+    "id": "Lexin013534",
+    "swedish": "Jämte",
+    "arabic": "بجانب",
+    "swedishDef": "bredvid"
+  },
+  {
+    "id": "Lexin017395",
+    "swedish": "Med",
+    "arabic": "مع",
+    "swedishDef": "under samverkan el. medverkan av"
+  },
+  {
+    "id": "Lexin017396",
+    "swedish": "Med",
+    "arabic": "بـ",
+    "swedishDef": "genom att använda"
+  },
+  {
+    "id": "Lexin017397",
+    "swedish": "Med",
+    "arabic": "فيما يتعلق بـ",
+    "swedishDef": "i avseende på, när det gäller"
+  },
+  {
+    "id": "Lexin017398",
+    "swedish": "Med",
+    "arabic": "بـ - في",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin017535",
+    "swedish": "Mellan",
+    "arabic": "بين",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin017536",
+    "swedish": "Mellan",
+    "arabic": "بين",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin018039",
+    "swedish": "Mot",
+    "arabic": "ضد",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin018040",
+    "swedish": "Mot",
+    "arabic": "اتجاه",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin018041",
+    "swedish": "Mot",
+    "arabic": "مقابل",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin018042",
+    "swedish": "Mot",
+    "arabic": "مقارنة",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin018043",
+    "swedish": "Mot",
+    "arabic": "مع",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin018651",
+    "swedish": "Nedför",
+    "arabic": "الى الأسفل",
+    "swedishDef": "i riktning nedåt"
+  },
+  {
+    "id": "Lexin019143",
+    "swedish": "Oavsett",
+    "arabic": "بغضّ النظر",
+    "swedishDef": "utan hänsyn till, oberoende av"
+  },
+  {
+    "id": "Lexin019596",
+    "swedish": "Omkring",
+    "arabic": "حول",
+    "swedishDef": "runt"
+  },
+  {
+    "id": "Lexin020441",
+    "swedish": "Per",
+    "arabic": "عن طريق, بوساطة",
+    "swedishDef": "med ( hjälp av ), via"
+  },
+  {
+    "id": "Lexin020442",
+    "swedish": "Per",
+    "arabic": "على, في, بين",
+    "swedishDef": "för ( varje )"
+  },
+  {
+    "id": "Lexin021575",
+    "swedish": "På",
+    "arabic": "في",
+    "swedishDef": "med avseende på eller i riktning mot"
+  },
+  {
+    "id": "Lexin021576",
+    "swedish": "På",
+    "arabic": "بعد",
+    "swedishDef": "efter"
+  },
+  {
+    "id": "Lexin021577",
+    "swedish": "På",
+    "arabic": "بـ",
+    "swedishDef": "enligt bruket i"
+  },
+  {
+    "id": "Lexin022759",
+    "swedish": "Runt",
+    "arabic": "حَوْل",
+    "swedishDef": "omkring"
+  },
+  {
+    "id": "Lexin023181",
+    "swedish": "Rörande",
+    "arabic": "يتعلق بـ",
+    "swedishDef": "angående, beträffande"
+  },
+  {
+    "id": "Lexin027467",
+    "swedish": "Syvende",
+    "arabic": "أخيراً",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin028249",
+    "swedish": "Till",
+    "arabic": "لـ",
+    "swedishDef": "sammanhängande med, åt"
+  },
+  {
+    "id": "Lexin029520",
+    "swedish": "Under",
+    "arabic": "عن",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin029809",
+    "swedish": "Uppför",
+    "arabic": "على",
+    "swedishDef": "uppåt på"
+  },
+  {
+    "id": "Lexin030039",
+    "swedish": "Uppåt",
+    "arabic": "أعالي",
+    "swedishDef": "längre upp mot, i närheten av"
+  },
+  {
+    "id": "Lexin030180",
+    "swedish": "Utefter",
+    "arabic": "على امتداد",
+    "swedishDef": "längs med"
+  },
+  {
+    "id": "Lexin030299",
+    "swedish": "Utmed",
+    "arabic": "على امتداد",
+    "swedishDef": "längs"
+  },
+  {
+    "id": "Lexin030317",
+    "swedish": "Utom",
+    "arabic": "خارج نطاق",
+    "swedishDef": "utanför"
+  },
+  {
+    "id": "Lexin030318",
+    "swedish": "Utom",
+    "arabic": "سوى, ما عدا",
+    "swedishDef": "med undantag av"
+  },
+  {
+    "id": "Lexin031884",
+    "swedish": "Å",
+    "arabic": "من",
+    "swedishDef": "på"
+  },
+  {
+    "id": "Lexin032008",
+    "swedish": "Åt",
+    "arabic": "لـ",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin032475",
+    "swedish": "Över",
+    "arabic": "فوق",
+    "swedishDef": "ovanför, ovanpå"
+  },
+  {
+    "id": "Lexin032476",
+    "swedish": "Över",
+    "arabic": "في",
+    "swedishDef": "i"
+  },
+  {
+    "id": "Lexin032477",
+    "swedish": "Över",
+    "arabic": "عَبْر",
+    "swedishDef": "till andra sidan av"
+  },
+  {
+    "id": "Lexin032478",
+    "swedish": "Över",
+    "arabic": "مُروراً بـ",
+    "swedishDef": "vägen genom, via"
+  },
+  {
+    "id": "Lexin032479",
+    "swedish": "Över",
+    "arabic": "على",
+    "swedishDef": ""
+  },
+  {
+    "id": "Lexin032480",
+    "swedish": "Över",
+    "arabic": "بـ",
+    "swedishDef": "om, angående, avseende"
+  }
+]

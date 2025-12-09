@@ -1,0 +1,205 @@
+[
+  {
+    "index": 338,
+    "word": "Brutal",
+    "arabic": "فظّ",
+    "type": "Adjektiv.",
+    "example": "ett brutalt mord"
+  },
+  {
+    "index": 593,
+    "word": "Famös",
+    "arabic": "معروف",
+    "type": "Adjektiv.",
+    "example": "ministerns famösa uttalande om neutraliteten ledde till hans avgång"
+  },
+  {
+    "index": 647,
+    "word": "Flagrant",
+    "arabic": "واضح",
+    "type": "Adjektiv.",
+    "example": "flagranta brott mot mänskliga rättigheter flagranta brott mot mänskliga rättigheter flagranta brott mot mänskliga rättigheter flagranta brott mot mänskliga rättigheter flagranta brott mot mänskliga rättigheter flagranta brott mot mänskliga rättigheter"
+  },
+  {
+    "index": 731,
+    "word": "Ful",
+    "arabic": "قبيح",
+    "type": "Adjektiv.",
+    "example": "ful som ett troll"
+  },
+  {
+    "index": 750,
+    "word": "Funtad",
+    "arabic": "مخلوق",
+    "type": "Adjektiv.",
+    "example": "jag förstår inte hur en normalt funtad människa kan göra så"
+  },
+  {
+    "index": 3857,
+    "word": "Kvar",
+    "arabic": "باقٍ, متروك",
+    "type": "Adverb.",
+    "example": "stanna kvar i Malmö"
+  },
+  {
+    "index": 4145,
+    "word": "Varav",
+    "arabic": "أحدهم - أحدها",
+    "type": "Adverb.",
+    "example": "på vägen kom två personer varav en var flintskallig"
+  },
+  {
+    "index": 6344,
+    "word": "SEK",
+    "arabic": "كرونة سويدية",
+    "type": "Förkortning.",
+    "example": "växla till SEK"
+  },
+  {
+    "index": 6449,
+    "word": "Post",
+    "arabic": "تال",
+    "type": "Förled.",
+    "example": "post|gymnasiala studier"
+  },
+  {
+    "index": 7028,
+    "word": "Äsch",
+    "arabic": "أوف",
+    "type": "Interjektion.",
+    "example": "äsch , det gör inget!"
+  },
+  {
+    "index": 18558,
+    "word": "Blomma",
+    "arabic": "زهرة",
+    "type": "Substantiv.",
+    "example": "plocka blommor"
+  },
+  {
+    "index": 18900,
+    "word": "Byst",
+    "arabic": "تمثال نصفي",
+    "type": "Substantiv.",
+    "example": "en byst av Linné"
+  },
+  {
+    "index": 19917,
+    "word": "Figur",
+    "arabic": "رسم توضيحي",
+    "type": "Substantiv.",
+    "example": "se figur 2!"
+  },
+  {
+    "index": 20544,
+    "word": "Försummelse",
+    "arabic": "إهمال",
+    "type": "Substantiv.",
+    "example": "genom myndigheternas försummelse"
+  },
+  {
+    "index": 22665,
+    "word": "Kurva",
+    "arabic": "منعطف",
+    "type": "Substantiv.",
+    "example": "bilarna möttes i en tvär kurva"
+  },
+  {
+    "index": 23364,
+    "word": "Manifestation",
+    "arabic": "تظاهرة",
+    "type": "Substantiv.",
+    "example": "mötet blev en stark manifestation mot rasism"
+  },
+  {
+    "index": 23423,
+    "word": "Mask",
+    "arabic": "قناع",
+    "type": "Substantiv.",
+    "example": "hans cynism är bara en mask"
+  },
+  {
+    "index": 23823,
+    "word": "Myndighet",
+    "arabic": "سلطة",
+    "type": "Substantiv.",
+    "example": "Migrationsverket är en statlig myndighet"
+  },
+  {
+    "index": 25336,
+    "word": "Reservdel",
+    "arabic": "قطعة غيار",
+    "type": "Substantiv.",
+    "example": "reservdelar till gamla bilar är dyra"
+  },
+  {
+    "index": 25584,
+    "word": "Rymd",
+    "arabic": "فَضاء",
+    "type": "Substantiv.",
+    "example": "sväva i rymden"
+  },
+  {
+    "index": 26257,
+    "word": "Skoltrötthet",
+    "arabic": "كَلَل من الدراسة, مَلَل دراسي",
+    "type": "Substantiv.",
+    "example": "flera av eleverna i 9:an känner skoltrötthet"
+  },
+  {
+    "index": 29111,
+    "word": "Webbadress",
+    "arabic": "عنوان موقع الإنترنت",
+    "type": "Substantiv.",
+    "example": "webbadressen till Svenska datatermgruppens ingångssida är http: / / www .nada .kth .se / dataterm"
+  },
+  {
+    "index": 30508,
+    "word": "Fimpar",
+    "arabic": "يُطْفئ السيجارة",
+    "type": "Verb.",
+    "example": "hon fimpar sin cigarett"
+  },
+  {
+    "index": 30578,
+    "word": "Fortskrider",
+    "arabic": "يستمر",
+    "type": "Verb.",
+    "example": "arbetet på en ny motorväg fortskrider"
+  },
+  {
+    "index": 30605,
+    "word": "Frestar",
+    "arabic": "يُغري",
+    "type": "Verb.",
+    "example": "han frestades att köpa bilen"
+  },
+  {
+    "index": 30710,
+    "word": "Föredrar",
+    "arabic": "يقدّم",
+    "type": "Verb.",
+    "example": "en öppen debatt är att föredra framför nuvarande smussel"
+  },
+  {
+    "index": 30711,
+    "word": "Föredrar",
+    "arabic": "يفضّل",
+    "type": "Verb.",
+    "example": "föredra ett ärende"
+  },
+  {
+    "index": 31432,
+    "word": "Klämtar",
+    "arabic": "يقرع",
+    "type": "Verb.",
+    "example": "klockan klämtar för dig"
+  },
+  {
+    "index": 33681,
+    "word": "Utövar",
+    "arabic": "يُمارس",
+    "type": "Verb.",
+    "example": "utöva ett yrke utöva kontroll han utövar ett dåligt inflytande på sina kamrater"
+  }
+]

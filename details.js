@@ -16,8 +16,8 @@ const COL_TYPE = 1;
 const COL_SWE = 2;
 const COL_ARB = 3;
 const COL_ARB_DEF = 4;
-const COL_SWE_DEF = 5;
-const COL_FORMS = 6;
+const COL_SWE_DEF = 5; // Swedish Definition (or simplified Arabic def for specialized categories)
+const COL_FORMS = 6; // Forms for regular words, Swedish def for specialized categories
 const COL_EX_SWE = 7;
 const COL_EX_ARB = 8;
 const COL_IDIOM_SWE = 9;
@@ -446,11 +446,46 @@ function renderDetails(item) {
     const type = item[COL_TYPE] ? item[COL_TYPE].replace('.', '') : '';
     const sweDef = item[COL_SWE_DEF] || '';
     const arbDef = item[COL_ARB_DEF] || '';
-    const forms = item[COL_FORMS] || '';
+    const rawForms = item[COL_FORMS] || '';
     const exSwe = item[COL_EX_SWE] || '';
     const exArb = item[COL_EX_ARB] || '';
     const idiomSwe = item[COL_IDIOM_SWE] || '';
     const idiomArb = item[COL_IDIOM_ARB] || '';
+    // Main grammatical categories that have proper forms/conjugations
+    const GRAMMATICAL_CATEGORIES = [
+        'substantiv', 'verb', 'adjektiv', 'adverb',
+        'pronomen', 'preposition', 'konjunktion',
+        'interjektion', 'räkning', 'räkneord'
+    ];
+
+    // Check if this is a main grammatical category
+    const typeLower = type.toLowerCase();
+    const isGrammaticalCategory = GRAMMATICAL_CATEGORIES.some(cat => typeLower.includes(cat));
+
+    // For grammatical categories: field 6 contains forms
+    // For specialized categories: field 6 may contain Swedish definition, validate before use
+    let forms = '';
+    let effectiveSweDef = sweDef;
+
+    if (isGrammaticalCategory) {
+        // Main categories - field 6 is forms
+        forms = rawForms;
+    } else {
+        // Specialized categories - check if field 6 is definition or forms
+        // Forms: contain commas, no colon, doesn't end with period
+        const looksLikeForms = rawForms &&
+            rawForms.includes(',') &&
+            !rawForms.includes(':') &&
+            !rawForms.endsWith('.');
+
+        if (looksLikeForms) {
+            forms = rawForms;
+        } else if (rawForms) {
+            // It's a Swedish definition, use it
+            effectiveSweDef = effectiveSweDef || rawForms;
+        }
+    }
+
 
     // Check if word is in favorites (moved up for header buttons)
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -543,7 +578,7 @@ function renderDetails(item) {
 
     // Definitions Section
     let definitionsHtml = '';
-    if (sweDef || arbDef) {
+    if (effectiveSweDef || arbDef) {
         definitionsHtml = `
             <div class="details-section">
                 <h2 class="section-title">
@@ -552,13 +587,14 @@ function renderDetails(item) {
                 </h2>
                 <div class="def-content">
                     <div class="def-item">
-                        ${sweDef ? `<div class="def-swe-detail">${sweDef}</div>` : ''}
+                        ${effectiveSweDef ? `<div class="def-swe-detail">${effectiveSweDef}</div>` : ''}
                         ${arbDef ? `<div class="def-arb-detail">${arbDef}</div>` : ''}
                     </div>
                 </div>
             </div>
         `;
     }
+
 
     // Forms Section with Smart Labels
     let formsHtml = '';

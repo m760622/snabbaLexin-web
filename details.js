@@ -22,6 +22,9 @@ const COL_EX_SWE = 7;
 const COL_EX_ARB = 8;
 const COL_IDIOM_SWE = 9;
 const COL_IDIOM_ARB = 10;
+// Columns 11-12 are empty/reserved
+const COL_GENDER = 13; // Noun gender (en/ett)
+
 
 // ========================================
 // Text-to-Speech for Swedish Pronunciation
@@ -160,7 +163,10 @@ function getLabeledForms(formsArray, wordType) {
 
 // ========================================
 // Detect Noun Gender (En/Ett) from Forms
+// DISABLED: Now using pre-populated COL_GENDER column
+// Kept for future use if needed
 // ========================================
+/*
 function detectNounGender(forms) {
     if (!forms || forms.trim() === '') return null;
 
@@ -222,6 +228,8 @@ function detectNounGender(forms) {
     // Better to return null if we really can't tell, but 'en' is safe 75% bet.
     return 'en';
 }
+*/
+
 
 // ========================================
 // Detect Verb Group (1-4) from Forms
@@ -495,9 +503,10 @@ function renderDetails(item) {
     const isVerb = type.toLowerCase().includes('verb');
     const verbGroup = isVerb ? detectVerbGroup(forms) : null;
 
-    // Detect noun gender for substantiv (moved up for heroHtml)
+    // Detect noun gender for substantiv - now using pre-populated column
     const isNoun = type.toLowerCase().includes('subst');
-    const nounGender = isNoun ? detectNounGender(forms) : null;
+    // Use COL_GENDER if available, fallback to detection (disabled, see detectNounGender below)
+    const nounGender = isNoun ? (item[COL_GENDER] || null) : null;
 
     // Dynamic Font Size Calculation based on Word Length
     const getDynamicFontSize = (text) => {

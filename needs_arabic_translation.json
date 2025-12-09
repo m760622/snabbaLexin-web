@@ -1,0 +1,317 @@
+[
+  {
+    "id": "ADDED100002",
+    "swedish": "Brandbil",
+    "forms": "brandbil, brandbilen, brandbilar"
+  },
+  {
+    "id": "ADDED100003",
+    "swedish": "Polisbil",
+    "forms": "polisbil, polisbilen, polisbilar"
+  },
+  {
+    "id": "ADDED100004",
+    "swedish": "Supermarket",
+    "forms": "supermarket, supermarketen, supermarketer"
+  },
+  {
+    "id": "ADDED100005",
+    "swedish": "E-post",
+    "forms": "e-post, e-posten"
+  },
+  {
+    "id": "ADDED100006",
+    "swedish": "Simning",
+    "forms": "simning, simningen"
+  },
+  {
+    "id": "ADDED100008",
+    "swedish": "Parkeringsplats",
+    "forms": "parkeringsplats, parkeringsplatsen, parkeringsplatser"
+  },
+  {
+    "id": "ADDED100009",
+    "swedish": "Tankstation",
+    "forms": "tankstation, tankstationen, tankstationer"
+  },
+  {
+    "id": "ADDED100010",
+    "swedish": "Bebis",
+    "forms": "bebis, bebisen, bebisar"
+  },
+  {
+    "id": "ADDED100011",
+    "swedish": "Strumpor",
+    "forms": "strumpa, strumpan, strumpor"
+  },
+  {
+    "id": "ADDED100012",
+    "swedish": "Tofflor",
+    "forms": "toffla, tofflan, tofflor"
+  },
+  {
+    "id": "ADDED100013",
+    "swedish": "Sandaler",
+    "forms": "sandal, sandalen, sandaler"
+  },
+  {
+    "id": "ADDED100017",
+    "swedish": "Vattenkanna",
+    "forms": "vattenkanna, vattenkannan, vattenkannor"
+  },
+  {
+    "id": "ADDED100018",
+    "swedish": "Hostmedicin",
+    "forms": "hostmedicin, hostmedicinen"
+  },
+  {
+    "id": "ADDED100020",
+    "swedish": "Gungstol",
+    "forms": "gungstol, gungstolen, gungstolar"
+  },
+  {
+    "id": "ADDED100023",
+    "swedish": "Kryddor",
+    "forms": "krydda, kryddan, kryddor"
+  },
+  {
+    "id": "ADDED100025",
+    "swedish": "Yoga",
+    "forms": "yoga, yogan"
+  },
+  {
+    "id": "ADDED100026",
+    "swedish": "Bakning",
+    "forms": "bakning, bakningen"
+  },
+  {
+    "id": "ADDED100027",
+    "swedish": "Agenda",
+    "forms": "agenda, agendan, agendor"
+  },
+  {
+    "id": "ADDED100028",
+    "swedish": "Algoritm",
+    "forms": "algoritm, algoritmen, algoritmer"
+  },
+  {
+    "id": "ADDED100029",
+    "swedish": "Ambition",
+    "forms": "ambition, ambitionen, ambitioner"
+  },
+  {
+    "id": "ADDED200003",
+    "swedish": "Rakar sig",
+    "forms": "rakar sig, rakade sig, rakat sig"
+  },
+  {
+    "id": "ADDED200004",
+    "swedish": "Sminkar sig",
+    "forms": "sminkar sig, sminkade sig, sminkat sig"
+  },
+  {
+    "id": "ADDED200005",
+    "swedish": "Biktar sig",
+    "forms": "biktar sig, biktade sig, biktat sig"
+  },
+  {
+    "id": "ADDED200009",
+    "swedish": "Lagar mat",
+    "forms": "lagar mat, lagade mat, lagat mat"
+  },
+  {
+    "id": "ADDED200010",
+    "swedish": "Packar upp",
+    "forms": "packar upp, packade upp, packat upp"
+  },
+  {
+    "id": "ADDED200012",
+    "swedish": "Ridning",
+    "forms": "ridning, ridningen"
+  },
+  {
+    "id": "ADDED200013",
+    "swedish": "Cykling",
+    "forms": "cykling, cyklingen"
+  },
+  {
+    "id": "ADDED200014",
+    "swedish": "Gympa",
+    "forms": "gympa, gympan"
+  },
+  {
+    "id": "ADDED200016",
+    "swedish": "Bagageutrymme",
+    "forms": "bagageutrymme, bagageutrymmet"
+  },
+  {
+    "id": "ADDED200018",
+    "swedish": "Fundersam",
+    "forms": "fundersam, fundersamt, fundersamma"
+  },
+  {
+    "id": "ADDED200019",
+    "swedish": "Avslappnad",
+    "forms": "avslappnad, avslappnat, avslappnade"
+  },
+  {
+    "id": "ADDED200020",
+    "swedish": "Inspirerad",
+    "forms": "inspirerad, inspirerat, inspirerade"
+  },
+  {
+    "id": "ADDED200023",
+    "swedish": "Alkoholhaltig",
+    "forms": "alkoholhaltig, alkoholhaltigt, alkoholhaltiga"
+  },
+  {
+    "id": "ADDED200024",
+    "swedish": "Anatomisk",
+    "forms": "anatomisk, anatomiskt, anatomiska"
+  },
+  {
+    "id": "ADDED200025",
+    "swedish": "Arabisk",
+    "forms": "arabisk, arabiskt, arabiska"
+  },
+  {
+    "id": "ADDED200026",
+    "swedish": "Astronomisk",
+    "forms": "astronomisk, astronomiskt, astronomiska"
+  },
+  {
+    "id": "ADDED200027",
+    "swedish": "Atletisk",
+    "forms": "atletisk, atletiskt, atletiska"
+  },
+  {
+    "id": "ADDED200028",
+    "swedish": "Bugar",
+    "forms": "bugar, bugade, bugat"
+  },
+  {
+    "id": "ADDED200029",
+    "swedish": "Faxar",
+    "forms": "faxar, faxade, faxat"
+  },
+  {
+    "id": "ADDED200030",
+    "swedish": "Flirtar",
+    "forms": "flirtar, flirtade, flirtat"
+  },
+  {
+    "id": "ADDED200031",
+    "swedish": "Fokuserar",
+    "forms": "fokuserar, fokuserade, fokuserat"
+  },
+  {
+    "id": "ADDED200032",
+    "swedish": "Gripar",
+    "forms": "gripar, grep, gripit"
+  },
+  {
+    "id": "ADDED200033",
+    "swedish": "Kollapsar",
+    "forms": "kollapsar, kollapsade, kollapsat"
+  },
+  {
+    "id": "ADDED200034",
+    "swedish": "Moppar",
+    "forms": "moppar, moppade, moppat"
+  },
+  {
+    "id": "ADDED200035",
+    "swedish": "Dekorerar",
+    "forms": "dekorerar, dekorerade, dekorerat"
+  },
+  {
+    "id": "ADDED200036",
+    "swedish": "Panikerar",
+    "forms": "panikerar, panikerade, panikerat"
+  },
+  {
+    "id": "ADDED200037",
+    "swedish": "Avbokar",
+    "forms": "avbokar, avbokade, avbokat"
+  },
+  {
+    "id": "ADDED200038",
+    "swedish": "Kamuflerar",
+    "forms": "kamuflerar, kamuflerade, kamuflerat"
+  },
+  {
+    "id": "ADDED200039",
+    "swedish": "Klonar",
+    "forms": "klonar, klonade, klonat"
+  },
+  {
+    "id": "ADDED200040",
+    "swedish": "Maximerar",
+    "forms": "maximerar, maximerade, maximerat"
+  },
+  {
+    "id": "ADDED200041",
+    "swedish": "Minimerar",
+    "forms": "minimerar, minimerade, minimerat"
+  },
+  {
+    "id": "ADDED200042",
+    "swedish": "Konsumerar",
+    "forms": "konsumerar, konsumerade, konsumerat"
+  },
+  {
+    "id": "ADDED300002",
+    "swedish": "Anagrammatisk",
+    "forms": "anagrammatisk, anagrammatiskt, anagrammatiska"
+  },
+  {
+    "id": "ADDED300003",
+    "swedish": "Aritmetik",
+    "forms": "aritmetik, aritmetiken"
+  },
+  {
+    "id": "ADDED300004",
+    "swedish": "Arkitektonisk",
+    "forms": "arkitektonisk, arkitektoniskt, arkitektoniska"
+  },
+  {
+    "id": "ADDED300005",
+    "swedish": "Elvisp",
+    "forms": "elvisp, elvispen, elvispar"
+  },
+  {
+    "id": "ADDED300006",
+    "swedish": "Automatik",
+    "forms": "automatik, automatiken"
+  },
+  {
+    "id": "ADDED300007",
+    "swedish": "Avslut",
+    "forms": "avslut, avslutet"
+  },
+  {
+    "id": "ADDED300011",
+    "swedish": "Altruism",
+    "forms": "altruism, altruismen"
+  },
+  {
+    "id": "Lexin033609",
+    "swedish": "Pluton",
+    "hadValue": "Klusterbomb"
+  },
+  {
+    "id": "ADDED200000",
+    "swedish": "Imorgon",
+    "hadValue": "imorgon"
+  },
+  {
+    "id": "ADDED300000",
+    "swedish": "Rakt",
+    "hadValue": "rakt"
+  },
+  {
+    "id": "ADDED300009",
+    "swedish": "Antiseptika",
+    "hadValue": "antiseptika"
+  }
+]

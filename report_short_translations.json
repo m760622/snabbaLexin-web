@@ -1,0 +1,923 @@
+{
+  "summary": {
+    "total": 114,
+    "valid": 103,
+    "needsReview": 11
+  },
+  "needsReview": [
+    {
+      "id": "Lexin000924",
+      "type": "Adjektiv.",
+      "swedish": "Animerad",
+      "arabic": "حي",
+      "explanation": "حيوي، نشيط",
+      "isValid": false
+    },
+    {
+      "id": "Lexin004298",
+      "type": "Adjektiv.",
+      "swedish": "Brutal",
+      "arabic": "فظ",
+      "explanation": "قاسٍ, غليظ",
+      "isValid": false
+    },
+    {
+      "id": "Lexin020758",
+      "type": "Adjektiv.",
+      "swedish": "Plump",
+      "arabic": "فظ",
+      "explanation": "جلف, غير مهذب, خشن",
+      "isValid": false
+    },
+    {
+      "id": "Lexin022863",
+      "type": "Adjektiv.",
+      "swedish": "Rå",
+      "arabic": "فظ",
+      "explanation": "قاسٍ, جِلْف",
+      "isValid": false
+    },
+    {
+      "id": "Lexin000632",
+      "type": "Adverb.",
+      "swedish": "Alltså",
+      "arabic": "أي",
+      "explanation": "بالتالي، وبناءً على ذلك",
+      "isValid": false
+    },
+    {
+      "id": "Lexin011352",
+      "type": "Adverb.",
+      "swedish": "Helst",
+      "arabic": "أي",
+      "explanation": "الأفضل، أي كان",
+      "isValid": false
+    },
+    {
+      "id": "Lexin001140",
+      "type": "Bygg.",
+      "swedish": "Ansättning",
+      "arabic": "حث",
+      "explanation": "مصطلح بناء وتشييد",
+      "isValid": false
+    },
+    {
+      "id": "Lexin018039",
+      "type": "Preposition.",
+      "swedish": "Mot",
+      "arabic": "ضد",
+      "explanation": "حرف جر للدلالة على المعارضة",
+      "isValid": false
+    },
+    {
+      "id": "Lexin007203",
+      "type": "Substantiv.",
+      "swedish": "Fallgrop",
+      "arabic": "فخ",
+      "explanation": "صعوبة",
+      "isValid": false
+    },
+    {
+      "id": "Lexin017992",
+      "type": "Substantiv.",
+      "swedish": "Mops",
+      "arabic": "بج",
+      "explanation": "نوع من أنواع الكلاب الصغيرة",
+      "isValid": false
+    },
+    {
+      "id": "Lexin023640",
+      "type": "Substantiv.",
+      "swedish": "Sejdel",
+      "arabic": "شب",
+      "explanation": "كوب جعة بمقبض",
+      "isValid": false
+    }
+  ],
+  "valid": [
+    {
+      "id": "Lexin000662",
+      "type": "Adverb.",
+      "swedish": "Alternativt",
+      "arabic": "أو",
+      "explanation": "أو، كبديل",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001746",
+      "type": "Adverb.",
+      "swedish": "Av",
+      "arabic": "بـ",
+      "explanation": "بعيداً، ذهاباً",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001747",
+      "type": "Adverb.",
+      "swedish": "Av",
+      "arabic": "بـ",
+      "explanation": "بعيداً، ذهاباً",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001748",
+      "type": "Adverb.",
+      "swedish": "Av",
+      "arabic": "بـ",
+      "explanation": "بعيداً، ذهاباً",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001749",
+      "type": "Adverb.",
+      "swedish": "Av",
+      "arabic": "بـ",
+      "explanation": "بعيداً، ذهاباً",
+      "isValid": true
+    },
+    {
+      "id": "Lexin006180",
+      "type": "Adverb.",
+      "swedish": "Däri",
+      "arabic": "في",
+      "explanation": "في ذلك",
+      "isValid": true
+    },
+    {
+      "id": "Lexin006408",
+      "type": "Adverb.",
+      "swedish": "Ej",
+      "arabic": "لا",
+      "explanation": "تقال للنفي",
+      "isValid": true
+    },
+    {
+      "id": "Lexin012453",
+      "type": "Adverb.",
+      "swedish": "Icke",
+      "arabic": "لا",
+      "explanation": "لا، ليس (نفي)",
+      "isValid": true
+    },
+    {
+      "id": "Lexin013080",
+      "type": "Adverb.",
+      "swedish": "Inte",
+      "arabic": "لا",
+      "explanation": "لا، ليس (أداة نفي)",
+      "isValid": true
+    },
+    {
+      "id": "Lexin017393",
+      "type": "Adverb.",
+      "swedish": "Med",
+      "arabic": "مع",
+      "explanation": "بالتعاون، مع بعض",
+      "isValid": true
+    },
+    {
+      "id": "Lexin019519",
+      "type": "Adverb.",
+      "swedish": "Om",
+      "arabic": "بـ",
+      "explanation": "بخصوص، فيما يتعلق بـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin021571",
+      "type": "Adverb.",
+      "swedish": "På",
+      "arabic": "بـ",
+      "explanation": "بهذه الطريقة (أداة فعلية)",
+      "isValid": true
+    },
+    {
+      "id": "Lexin030516",
+      "type": "Adverb.",
+      "swedish": "Vad",
+      "arabic": "ما",
+      "explanation": "ماذا، ما",
+      "isValid": true
+    },
+    {
+      "id": "Lexin005162",
+      "type": "Bygg.",
+      "swedish": "Damm",
+      "arabic": "سد",
+      "explanation": "مصطلح بناء وتشييد",
+      "isValid": true
+    },
+    {
+      "id": "Lexin010254",
+      "type": "Bygg.",
+      "swedish": "Gift",
+      "arabic": "سم",
+      "explanation": "مصطلح بناء وتشييد",
+      "isValid": true
+    },
+    {
+      "id": "Lexin010322",
+      "type": "Bygg.",
+      "swedish": "Gjuta",
+      "arabic": "صب",
+      "explanation": "مصطلح بناء وتشييد",
+      "isValid": true
+    },
+    {
+      "id": "Lexin010328",
+      "type": "Bygg.",
+      "swedish": "Gjutning",
+      "arabic": "صب",
+      "explanation": "مصطلح بناء وتشييد",
+      "isValid": true
+    },
+    {
+      "id": "Lexin017047",
+      "type": "Bygg.",
+      "swedish": "Lösning",
+      "arabic": "حل",
+      "explanation": "مصطلح بناء وتشييد",
+      "isValid": true
+    },
+    {
+      "id": "Lexin019126",
+      "type": "Förkortning.",
+      "swedish": "O",
+      "arabic": "و",
+      "explanation": "اختصار",
+      "isValid": true
+    },
+    {
+      "id": "Lexin030507",
+      "type": "Förkortning.",
+      "swedish": "V",
+      "arabic": "في",
+      "explanation": "حزب اليسار, كان اسمه سابقاً في بي كو",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001681",
+      "type": "infinitivmärke.",
+      "swedish": "Att",
+      "arabic": "لـ",
+      "explanation": "مصطلح متخصص: لـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin000353",
+      "type": "Interjektion.",
+      "swedish": "Aj",
+      "arabic": "آه",
+      "explanation": "أداة تعجب أو نداء",
+      "isValid": true
+    },
+    {
+      "id": "Lexin018698",
+      "type": "Interjektion.",
+      "swedish": "Nej",
+      "arabic": "لا",
+      "explanation": "كلا",
+      "isValid": true
+    },
+    {
+      "id": "Lexin018764",
+      "type": "Interjektion.",
+      "swedish": "Nix",
+      "arabic": "لا",
+      "explanation": "أداة تعجب أو نداء",
+      "isValid": true
+    },
+    {
+      "id": "Lexin019407",
+      "type": "Interjektion.",
+      "swedish": "Oj",
+      "arabic": "أو",
+      "explanation": "صيحة تعجب أو استغراب",
+      "isValid": true
+    },
+    {
+      "id": "Lexin028517",
+      "type": "Interjektion.",
+      "swedish": "Tja",
+      "arabic": "آه",
+      "explanation": "أداة تعجب أو نداء",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001682",
+      "type": "Konjunktion.",
+      "swedish": "Att",
+      "arabic": "أن",
+      "explanation": "مصطلح متخصص: أن",
+      "isValid": true
+    },
+    {
+      "id": "Lexin006556",
+      "type": "Konjunktion.",
+      "swedish": "Eller",
+      "arabic": "أو",
+      "explanation": "أم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin019236",
+      "type": "Konjunktion.",
+      "swedish": "Och",
+      "arabic": "و",
+      "explanation": "مصطلح متخصص: و",
+      "isValid": true
+    },
+    {
+      "id": "Lexin025627",
+      "type": "Konjunktion.",
+      "swedish": "Som",
+      "arabic": "كـ",
+      "explanation": "مِثل",
+      "isValid": true
+    },
+    {
+      "id": "Lexin032235",
+      "type": "Konjunktion.",
+      "swedish": "Än",
+      "arabic": "من",
+      "explanation": "مصطلح متخصص: من",
+      "isValid": true
+    },
+    {
+      "id": "Lexin003598",
+      "type": "Medicin.",
+      "swedish": "Blod",
+      "arabic": "دم",
+      "explanation": "مصطلح طبي: دم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin011153",
+      "type": "Medicin.",
+      "swedish": "Hand",
+      "arabic": "يد",
+      "explanation": "مصطلح طبي: يد",
+      "isValid": true
+    },
+    {
+      "id": "Lexin015604",
+      "type": "Medicin.",
+      "swedish": "Käke",
+      "arabic": "فك",
+      "explanation": "مصطلح طبي: فك",
+      "isValid": true
+    },
+    {
+      "id": "Lexin026419",
+      "type": "Medicin.",
+      "swedish": "Storhjärnan",
+      "arabic": "مخ",
+      "explanation": "مصطلح طبي: مخ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin010820",
+      "type": "MedicinMR.",
+      "swedish": "Grönsallad",
+      "arabic": "خس",
+      "explanation": "مصطلح طبي: خس",
+      "isValid": true
+    },
+    {
+      "id": "Lexin014437",
+      "type": "MedicinMR.",
+      "swedish": "Kombination av",
+      "arabic": "مع",
+      "explanation": "مصطلح طبي: مع",
+      "isValid": true
+    },
+    {
+      "id": "Lexin014691",
+      "type": "Multikulturella.",
+      "swedish": "Konst",
+      "arabic": "فن",
+      "explanation": "مصطلح متعلق بالتعددية الثقافية",
+      "isValid": true
+    },
+    {
+      "id": "Lexin000623",
+      "type": "Preposition.",
+      "swedish": "Alltifrån",
+      "arabic": "من",
+      "explanation": "ابتداءً من، من",
+      "isValid": true
+    },
+    {
+      "id": "Lexin000631",
+      "type": "Preposition.",
+      "swedish": "Alltsedan",
+      "arabic": "من",
+      "explanation": "منذ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin000897",
+      "type": "Preposition.",
+      "swedish": "Angående",
+      "arabic": "عن",
+      "explanation": "حول",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001750",
+      "type": "Preposition.",
+      "swedish": "Av",
+      "arabic": "من",
+      "explanation": "حرف جر للدلالة على المصدر",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001751",
+      "type": "Preposition.",
+      "swedish": "Av",
+      "arabic": "في",
+      "explanation": "حرف جر للدلالة على المكان",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001752",
+      "type": "Preposition.",
+      "swedish": "Av",
+      "arabic": "من",
+      "explanation": "حرف جر للدلالة على الأصل",
+      "isValid": true
+    },
+    {
+      "id": "Lexin003188",
+      "type": "Preposition.",
+      "swedish": "Beträffande",
+      "arabic": "عن",
+      "explanation": "بشأن، فيما يتعلق بـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin008559",
+      "type": "Preposition.",
+      "swedish": "Från",
+      "arabic": "من",
+      "explanation": "حرف جر للدلالة على المصدر",
+      "isValid": true
+    },
+    {
+      "id": "Lexin008560",
+      "type": "Preposition.",
+      "swedish": "Från",
+      "arabic": "من",
+      "explanation": "حرف جر للدلالة على الأصل",
+      "isValid": true
+    },
+    {
+      "id": "Lexin008561",
+      "type": "Preposition.",
+      "swedish": "Från",
+      "arabic": "عن",
+      "explanation": "حرف جر للدلالة على الموضوع",
+      "isValid": true
+    },
+    {
+      "id": "Lexin012417",
+      "type": "Preposition.",
+      "swedish": "I",
+      "arabic": "في",
+      "explanation": "داخل، في داخل",
+      "isValid": true
+    },
+    {
+      "id": "Lexin012419",
+      "type": "Preposition.",
+      "swedish": "I",
+      "arabic": "في",
+      "explanation": "خلال فترة زمنية، عند",
+      "isValid": true
+    },
+    {
+      "id": "Lexin012421",
+      "type": "Preposition.",
+      "swedish": "I",
+      "arabic": "في",
+      "explanation": "فيما يخص، بالنظر إلى",
+      "isValid": true
+    },
+    {
+      "id": "Lexin012422",
+      "type": "Preposition.",
+      "swedish": "I",
+      "arabic": "كـ",
+      "explanation": "بصفة، كـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin012423",
+      "type": "Preposition.",
+      "swedish": "I",
+      "arabic": "في",
+      "explanation": "حرف جر للدلالة على المكان",
+      "isValid": true
+    },
+    {
+      "id": "Lexin012424",
+      "type": "Preposition.",
+      "swedish": "I",
+      "arabic": "بـ",
+      "explanation": "حرف جر للدلالة على الوسيلة",
+      "isValid": true
+    },
+    {
+      "id": "Lexin013533",
+      "type": "Preposition.",
+      "swedish": "Jämte",
+      "arabic": "مع",
+      "explanation": "مع، بالإضافة إلى",
+      "isValid": true
+    },
+    {
+      "id": "Lexin017395",
+      "type": "Preposition.",
+      "swedish": "Med",
+      "arabic": "مع",
+      "explanation": "مع، بمشاركة",
+      "isValid": true
+    },
+    {
+      "id": "Lexin017396",
+      "type": "Preposition.",
+      "swedish": "Med",
+      "arabic": "بـ",
+      "explanation": "باستخدام، عن طريق استعمال",
+      "isValid": true
+    },
+    {
+      "id": "Lexin018043",
+      "type": "Preposition.",
+      "swedish": "Mot",
+      "arabic": "مع",
+      "explanation": "حرف جر للدلالة على التعامل",
+      "isValid": true
+    },
+    {
+      "id": "Lexin019523",
+      "type": "Preposition.",
+      "swedish": "Om",
+      "arabic": "عن",
+      "explanation": "من, بـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin021574",
+      "type": "Preposition.",
+      "swedish": "På",
+      "arabic": "في",
+      "explanation": "خلال",
+      "isValid": true
+    },
+    {
+      "id": "Lexin021575",
+      "type": "Preposition.",
+      "swedish": "På",
+      "arabic": "في",
+      "explanation": "بخصوص أو في اتجاه",
+      "isValid": true
+    },
+    {
+      "id": "Lexin021577",
+      "type": "Preposition.",
+      "swedish": "På",
+      "arabic": "بـ",
+      "explanation": "وفقاً لـ، بحسب",
+      "isValid": true
+    },
+    {
+      "id": "Lexin028248",
+      "type": "Preposition.",
+      "swedish": "Till",
+      "arabic": "كـ",
+      "explanation": "لـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin028249",
+      "type": "Preposition.",
+      "swedish": "Till",
+      "arabic": "لـ",
+      "explanation": "مرتبط بـ، لـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin029520",
+      "type": "Preposition.",
+      "swedish": "Under",
+      "arabic": "عن",
+      "explanation": "حرف جر للدلالة على الموضوع",
+      "isValid": true
+    },
+    {
+      "id": "Lexin030042",
+      "type": "Preposition.",
+      "swedish": "Ur",
+      "arabic": "من",
+      "explanation": "خارج، ليس ضمن",
+      "isValid": true
+    },
+    {
+      "id": "Lexin030244",
+      "type": "Preposition.",
+      "swedish": "Utifrån",
+      "arabic": "من",
+      "explanation": "من الخارج",
+      "isValid": true
+    },
+    {
+      "id": "Lexin031884",
+      "type": "Preposition.",
+      "swedish": "Å",
+      "arabic": "من",
+      "explanation": "على (حرف جر قديم)",
+      "isValid": true
+    },
+    {
+      "id": "Lexin032008",
+      "type": "Preposition.",
+      "swedish": "Åt",
+      "arabic": "لـ",
+      "explanation": "لـ، نحو",
+      "isValid": true
+    },
+    {
+      "id": "Lexin032476",
+      "type": "Preposition.",
+      "swedish": "Över",
+      "arabic": "في",
+      "explanation": "في (مكان أو زمان)",
+      "isValid": true
+    },
+    {
+      "id": "Lexin032480",
+      "type": "Preposition.",
+      "swedish": "Över",
+      "arabic": "بـ",
+      "explanation": "عن، بخصوص، فيما يتعلق بـ",
+      "isValid": true
+    },
+    {
+      "id": "Lexin005540",
+      "type": "Pronomen.",
+      "swedish": "Din",
+      "arabic": "ك",
+      "explanation": "ضمير ملكية للمخاطب والمخاطبة",
+      "isValid": true
+    },
+    {
+      "id": "Lexin011150",
+      "type": "Pronomen.",
+      "swedish": "Han",
+      "arabic": "هو",
+      "explanation": "ضمير",
+      "isValid": true
+    },
+    {
+      "id": "Lexin017660",
+      "type": "Pronomen.",
+      "swedish": "Mig",
+      "arabic": "ي",
+      "explanation": "ضمير",
+      "isValid": true
+    },
+    {
+      "id": "Lexin023902",
+      "type": "Pronomen.",
+      "swedish": "Sin",
+      "arabic": "له",
+      "explanation": "لها",
+      "isValid": true
+    },
+    {
+      "id": "Lexin030518",
+      "type": "Pronomen.",
+      "swedish": "Vad",
+      "arabic": "ما",
+      "explanation": "أي",
+      "isValid": true
+    },
+    {
+      "id": "Lexin008558",
+      "type": "Se.",
+      "swedish": "Från",
+      "arabic": "من",
+      "explanation": "مرادف أو مرجع",
+      "isValid": true
+    },
+    {
+      "id": "Lexin017863",
+      "type": "Se.",
+      "swedish": "Mitt",
+      "arabic": "لي",
+      "explanation": "مرادف أو مرجع",
+      "isValid": true
+    },
+    {
+      "id": "Lexin018983",
+      "type": "Se.",
+      "swedish": "Nä",
+      "arabic": "لا",
+      "explanation": "مرادف أو مرجع",
+      "isValid": true
+    },
+    {
+      "id": "Lexin000123",
+      "type": "Substantiv.",
+      "swedish": "A",
+      "arabic": "آ",
+      "explanation": "كتاب أو نص مكتوب",
+      "isValid": true
+    },
+    {
+      "id": "Lexin000124",
+      "type": "Substantiv.",
+      "swedish": "A",
+      "arabic": "أ",
+      "explanation": "صوت أو ضجيج",
+      "isValid": true
+    },
+    {
+      "id": "Lexin001576",
+      "type": "Substantiv.",
+      "swedish": "As",
+      "arabic": "آس",
+      "explanation": "إله في أساطير الشمال القديمة",
+      "isValid": true
+    },
+    {
+      "id": "Lexin002923",
+      "type": "Substantiv.",
+      "swedish": "Berättigande",
+      "arabic": "حق",
+      "explanation": "قانون أو أمر قضائي",
+      "isValid": true
+    },
+    {
+      "id": "Lexin003492",
+      "type": "Substantiv.",
+      "swedish": "Björn",
+      "arabic": "دب",
+      "explanation": "حيوان أو كائن حي",
+      "isValid": true
+    },
+    {
+      "id": "Lexin003597",
+      "type": "Substantiv.",
+      "swedish": "Blod",
+      "arabic": "دم",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin005088",
+      "type": "Substantiv.",
+      "swedish": "D",
+      "arabic": "دي",
+      "explanation": "صوت أو ضجيج",
+      "isValid": true
+    },
+    {
+      "id": "Lexin006886",
+      "type": "Substantiv.",
+      "swedish": "Ess",
+      "arabic": "آص",
+      "explanation": "ورقة بأعلى قيمة في ورق اللعب",
+      "isValid": true
+    },
+    {
+      "id": "Lexin007588",
+      "type": "Substantiv.",
+      "swedish": "Fil",
+      "arabic": "صف",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin009961",
+      "type": "Substantiv.",
+      "swedish": "G",
+      "arabic": "جي",
+      "explanation": "صوت أو ضجيج",
+      "isValid": true
+    },
+    {
+      "id": "Lexin011020",
+      "type": "Substantiv.",
+      "swedish": "H",
+      "arabic": "سي",
+      "explanation": "النبرة السادسة على السلّم الموسيقي",
+      "isValid": true
+    },
+    {
+      "id": "Lexin013805",
+      "type": "Substantiv.",
+      "swedish": "Karda",
+      "arabic": "يد",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin014058",
+      "type": "Substantiv.",
+      "swedish": "Klass",
+      "arabic": "صف",
+      "explanation": "يوم أو فترة زمنية",
+      "isValid": true
+    },
+    {
+      "id": "Lexin014223",
+      "type": "Substantiv.",
+      "swedish": "Knapp",
+      "arabic": "زر",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin014224",
+      "type": "Substantiv.",
+      "swedish": "Knapp",
+      "arabic": "زر",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin014689",
+      "type": "Substantiv.",
+      "swedish": "Konst",
+      "arabic": "فن",
+      "explanation": "براعة",
+      "isValid": true
+    },
+    {
+      "id": "Lexin015603",
+      "type": "Substantiv.",
+      "swedish": "Käke",
+      "arabic": "فك",
+      "explanation": "حنك",
+      "isValid": true
+    },
+    {
+      "id": "Lexin015637",
+      "type": "Substantiv.",
+      "swedish": "Känning",
+      "arabic": "حس",
+      "explanation": "شعور أو إحساس",
+      "isValid": true
+    },
+    {
+      "id": "Lexin015643",
+      "type": "Substantiv.",
+      "swedish": "Känsla",
+      "arabic": "حس",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin018164",
+      "type": "Substantiv.",
+      "swedish": "Mun",
+      "arabic": "فم",
+      "explanation": "فو",
+      "isValid": true
+    },
+    {
+      "id": "Lexin018250",
+      "type": "Substantiv.",
+      "swedish": "Mygel",
+      "arabic": "غش",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin018363",
+      "type": "Substantiv.",
+      "swedish": "Måtta",
+      "arabic": "حد",
+      "explanation": "اسم يشير إلى شيء أو مفهوم",
+      "isValid": true
+    },
+    {
+      "id": "Lexin028650",
+      "type": "Substantiv.",
+      "swedish": "Ton",
+      "arabic": "طن",
+      "explanation": "كل أو نظام",
+      "isValid": true
+    },
+    {
+      "id": "Lexin030043",
+      "type": "Substantiv.",
+      "swedish": "Ur",
+      "arabic": "في",
+      "explanation": "اسم يشير إلى: في",
+      "isValid": true
+    }
+  ]
+}

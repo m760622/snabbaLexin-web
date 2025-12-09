@@ -1,0 +1,48 @@
+{
+  "timestamp": "2025-12-09T22:00:49.303Z",
+  "summary": {
+    "totalWithGender": 11534,
+    "withInflections": 11533,
+    "withoutInflections": 1,
+    "emptyInflections": 1
+  },
+  "genderBreakdown": {
+    "en": {
+      "total": 8243,
+      "withInflections": 8243,
+      "withoutInflections": 0
+    },
+    "ett": {
+      "total": 3291,
+      "withInflections": 3290,
+      "withoutInflections": 1
+    },
+    "other": {
+      "total": 0,
+      "withInflections": 0,
+      "withoutInflections": 0
+    }
+  },
+  "wordTypeBreakdown": {
+    "Substantiv.": {
+      "total": 11529,
+      "withInflections": 11528,
+      "withoutInflections": 1
+    },
+    "SubstantivR.": {
+      "total": 5,
+      "withInflections": 5,
+      "withoutInflections": 0
+    }
+  },
+  "wordsWithoutInflections": [
+    {
+      "index": 34091,
+      "lexinId": "ADDED300009",
+      "wordType": "Substantiv.",
+      "word": "Antiseptika",
+      "gender": "ett",
+      "inflections": ""
+    }
+  ]
+}

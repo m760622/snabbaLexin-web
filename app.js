@@ -395,6 +395,72 @@ async function init() {
             typeSelect.appendChild(option);
         });
 
+        // Handle filterType parameter (from details page word type badge click)
+        // Must be AFTER typeSelect options are populated
+        const urlParamsForFilter = new URLSearchParams(window.location.search);
+        const filterType = urlParamsForFilter.get('filterType');
+        if (filterType) {
+            // FIRST: Clear all previous state
+            sessionStorage.removeItem('searchQuery');
+            sessionStorage.removeItem('scrollPosition');
+            searchInput.value = '';
+
+            // Clear the results area immediately
+            const resultsArea = document.getElementById('resultsArea');
+            if (resultsArea) {
+                resultsArea.innerHTML = '<div class="placeholder-message">جاري التحميل... / Laddar...</div>';
+            }
+
+            // Clean URL immediately
+            window.history.replaceState({}, document.title, window.location.pathname);
+
+            // Show filter chips container
+            if (filterChipsContainer) {
+                filterChipsContainer.style.display = 'flex';
+            }
+            if (filterToggleBtn) {
+                filterToggleBtn.classList.add('active');
+            }
+
+            // Run search to display filtered results (delayed to ensure data is loaded)
+            setTimeout(() => {
+                // Reset current results
+                currentResults = [];
+                currentPage = 1;
+
+                // Filter by type directly - don't rely on dropdown
+                const filterTypeLower = filterType.toLowerCase();
+                currentResults = dictionaryData.filter(item => {
+                    const typeLower = (item[COL_TYPE] || '').toLowerCase();
+                    return typeLower.startsWith(filterTypeLower);
+                });
+
+                // Update typeSelect to show the type (for display purposes)
+                const matchingOption = Array.from(typeSelect.options).find(opt =>
+                    opt.value.toLowerCase().startsWith(filterTypeLower)
+                );
+                if (matchingOption) {
+                    typeSelect.value = matchingOption.value;
+                }
+
+                // Render results
+                renderResults();
+
+                // Hide empty state, show results
+                const emptyState = document.getElementById('emptyState');
+                const resultsGrid = document.getElementById('searchResults');
+                if (emptyState) emptyState.style.display = 'none';
+                if (resultsGrid) resultsGrid.style.display = 'grid';
+
+                // Update stats
+                statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+
+                // Show toast notification
+                const displayName = matchingOption ? matchingOption.textContent.split(' (')[0] : filterType;
+                showToast(`Visar alla ${displayName} / عرض جميع ${displayName}`);
+            }, 200);
+        }
+
         // Show Favorites Button
         document.getElementById('showFavoritesBtn').addEventListener('click', () => {
             const searchModeSelect = document.getElementById('searchMode');
@@ -495,21 +561,32 @@ async function init() {
         const clearSearch = document.getElementById('clearSearch');
         const searchIcon = document.querySelector('.search-icon');
         if (clearSearch) {
-            searchInput.addEventListener('input', () => {
+            // Function to update search icon visibility
+            const updateSearchIconVisibility = () => {
                 const hasValue = searchInput.value.length > 0;
                 clearSearch.style.display = hasValue ? 'flex' : 'none';
-                // Hide search icon when typing, show when empty
+                // Hide search icon when there's text, show when empty
                 if (searchIcon) {
                     searchIcon.style.opacity = hasValue ? '0' : '1';
                     searchIcon.style.width = hasValue ? '0' : '';
                     searchIcon.style.marginRight = hasValue ? '0' : '';
                 }
-            });
+            };
+
+            // Update on input
+            searchInput.addEventListener('input', updateSearchIconVisibility);
+
+            // Also update on focus (in case page loads with text in search)
+            searchInput.addEventListener('focus', updateSearchIconVisibility);
 
             clearSearch.addEventListener('click', () => {
                 searchInput.value = '';
                 searchInput.focus();
                 clearSearch.style.display = 'none';
+
+                // Reset type filter to 'all' to show landing page
+                typeSelect.value = 'all';
+
                 // Show search icon again
                 if (searchIcon) {
                     searchIcon.style.opacity = '1';
@@ -589,33 +666,6 @@ async function init() {
             window.history.replaceState({}, document.title, window.location.pathname);
         } else if (status === 'deleted') {
             showToast('Ordet har tagits bort / تم حذف الكلمة');
-            // Clean URL
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-
-        // Handle filterType parameter (from details page word type badge click)
-        const filterType = urlParams.get('filterType');
-        if (filterType) {
-            // Set the type dropdown
-            typeSelect.value = filterType;
-
-            // Show filter chips container
-            if (filterChipsContainer) {
-                filterChipsContainer.style.display = 'flex';
-            }
-            if (filterToggleBtn) {
-                filterToggleBtn.classList.add('active');
-            }
-
-            // Clear search input to show all results of this type
-            searchInput.value = '';
-
-            // Run search to display filtered results
-            handleSearch({ target: searchInput });
-
-            // Show toast notification
-            showToast(`Visar alla ${filterType} / عرض جميع ${filterType}`);
-
             // Clean URL
             window.history.replaceState({}, document.title, window.location.pathname);
         }
@@ -774,43 +824,52 @@ function handleSearch(e) {
     const selectedType = typeSelect.value;
     const sortMethod = sortSelect.value;
 
-    // If query is empty -> show all (or limit?)
+    // If query is empty -> show landing page OR filtered results
     if (rawQuery.length === 0) {
-        // Show all (lazy load handled by render)
-        currentResults = dictionaryData.slice(); // Copy all
+        // If type is 'all', show empty/landing state instead of all words
+        if (selectedType === 'all') {
+            currentResults = [];
+            currentPage = 1;
 
-        // Filter by Type even if query is empty
-        if (selectedType !== 'all') {
-            currentResults = currentResults.filter(item => {
-                const typeLower = (item[COL_TYPE] || '').toLowerCase();
-                if (selectedType === 'abbrev') return typeLower.includes('förk') || typeLower.includes('abbrev');
-                return typeLower.includes(selectedType);
-            });
+            // Show Empty State (Landing)
+            const emptyState = document.getElementById('emptyState');
+            const resultsGrid = document.getElementById('searchResults');
+
+            if (emptyState) {
+                renderHistory();
+                emptyState.style.display = 'block';
+            }
+            if (resultsGrid) resultsGrid.style.display = 'none';
+            statsElement.textContent = "";
+            if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = "";
+
+            // Clear the results area
+            resultsArea.innerHTML = '';
+            return;
         }
+
+        // Type filter is selected, show filtered results
+        currentResults = dictionaryData.slice();
+
+        // Filter by Type
+        const selectedTypeLower = selectedType.toLowerCase();
+        currentResults = currentResults.filter(item => {
+            const typeLower = (item[COL_TYPE] || '').toLowerCase();
+            if (selectedTypeLower === 'abbrev') return typeLower.includes('förk') || typeLower.includes('abbrev');
+            return typeLower.includes(selectedTypeLower);
+        });
 
         currentPage = 1;
         renderResults();
 
-        // [NEW] Toggle Empty State
+        // Hide empty state, show results
         const emptyState = document.getElementById('emptyState');
         const resultsGrid = document.getElementById('searchResults');
 
-        if (currentResults.length === 0 && rawQuery.length === 0) {
-            // Show Empty State (Landing)
-            if (emptyState) {
-                renderHistory(); // Refresh history
-                emptyState.style.display = 'block';
-            }
-            if (resultsGrid) resultsGrid.style.display = 'none';
-            statsElement.textContent = ""; // Hide stats on empty
-            if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = "";
-        } else {
-            // Show Results
-            if (emptyState) emptyState.style.display = 'none';
-            if (resultsGrid) resultsGrid.style.display = 'grid';
-            statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
-            if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = currentResults.length.toLocaleString();
-        }
+        if (emptyState) emptyState.style.display = 'none';
+        if (resultsGrid) resultsGrid.style.display = 'grid';
+        statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+        if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = currentResults.length.toLocaleString();
 
         return;
     }

@@ -25,6 +25,63 @@ const COL_IDIOM_ARB = 10;
 // Columns 11-12 are empty/reserved
 const COL_GENDER = 13; // Noun gender (en/ett)
 
+// ========================================
+// Grammar Badge Generator (Unified with main page)
+// Returns abbreviated badge like: En, Ett, Gr.1, Adj, Adv, Verb
+// ========================================
+function getGrammarBadgeText(type, forms, word) {
+    const formsLower = (forms || '').toLowerCase();
+    const wordLower = (word || '').toLowerCase();
+    const normalizedType = (type || '').toLowerCase().replace('.', '').replace(' ', '');
+
+    // === VERB DETECTION ===
+    if (formsLower.match(/\w+ar[,\s]/) && formsLower.match(/\w+ade[,\s]/)) return 'Gr. 1';
+    if (formsLower.match(/\w+er[,\s]/) && (formsLower.match(/\w+de[,\s]/) || formsLower.match(/\w+te[,\s]/))) return 'Gr. 2';
+    if (formsLower.match(/\w+dde[,\s]/)) return 'Gr. 3';
+    if (formsLower.match(/\w+(it|its|ats|ett)[,\s]/) || formsLower.match(/\w+(it|its|ats|ett)$/)) return 'Gr. 4';
+    if (wordLower.endsWith('s') && formsLower.match(/\w+ades[,\s]|\w+des[,\s]|\w+ades$/)) return 'Gr. 4';
+
+    // S-passive verbs
+    if (wordLower.match(/\w+(tas|kas|las|nas|ras|sas|vas)$/) ||
+        (wordLower.endsWith('as') && wordLower.length > 4)) return 'S-passiv';
+
+    // General verb from forms
+    if (formsLower.match(/\w+ar[,\s]|\w+er[,\s]|\w+r[,\s]/) &&
+        formsLower.match(/\w+de[,\s]|\w+ade[,\s]|\w+te[,\s]|\w+dde[,\s]/)) return 'Verb';
+
+    // === NOUN DETECTION (En/Ett) ===
+    const formParts = formsLower.split(',').map(f => f.trim());
+    if (formParts.length >= 2) {
+        const definiteSingular = formParts[1];
+        if (definiteSingular.match(/\w+(an|en)$/) && !definiteSingular.match(/\w+et$/)) return 'En';
+        if (definiteSingular.match(/\w+et$/)) return 'Ett';
+    }
+    if (formsLower.startsWith('en ') || formsLower.match(/\ben\s+\w+/)) return 'En';
+    if (formsLower.startsWith('ett ') || formsLower.match(/\bett\s+\w+/)) return 'Ett';
+
+    // === ADJECTIVE DETECTION ===
+    if (formParts.length >= 3) {
+        const form1 = formParts[0];
+        const form3 = formParts[2];
+        if (form3.endsWith('a') && form3.length >= form1.length && !formsLower.match(/\w+ade[,\s]|\w+de[,\s]/)) {
+            return 'Adj';
+        }
+    }
+    if (normalizedType.includes('adj')) return 'Adj';
+
+    // === TYPE FIELD FALLBACKS ===
+    if (normalizedType.includes('adverb') || normalizedType === 'adv') return 'Adv';
+    if (normalizedType.includes('verb') && !normalizedType.includes('adverb')) return 'Verb';
+    if (normalizedType.includes('subst')) return 'Subst';
+    if (normalizedType.includes('prep')) return 'Prep';
+    if (normalizedType.includes('konj')) return 'Konj';
+    if (normalizedType.includes('pron')) return 'Pron';
+    if (normalizedType.includes('interj')) return 'Interj';
+
+    // Fallback to type without dot
+    return type ? type.replace('.', '') : '';
+}
+
 
 // ========================================
 // Text-to-Speech for Swedish Pronunciation
@@ -510,7 +567,8 @@ function renderDetails(item) {
     // Helper to safely get values
     const swe = item[COL_SWE] || '';
     const arb = item[COL_ARB] || '';
-    const type = item[COL_TYPE] ? item[COL_TYPE].replace('.', '') : '';
+    const rawType = item[COL_TYPE] || ''; // Keep original with dot for filtering
+    const type = rawType ? rawType.replace('.', '') : ''; // Display without dot
     const sweDef = item[COL_SWE_DEF] || '';
     const arbDef = item[COL_ARB_DEF] || '';
     const rawForms = item[COL_FORMS] || '';
@@ -622,8 +680,7 @@ function renderDetails(item) {
         };
     }
 
-    // Hero Section - Restructured Layout
-    // Word Type Badge and Gender/Group badges ONLY
+    // Hero Section - Show original type (Substantiv, Verb, etc.)
     const heroHtml = `
         <div class="details-hero">
             <div class="details-hero-content">
@@ -634,9 +691,7 @@ function renderDetails(item) {
                     ${arb ? `<div class="word-arb-hero">${arb}</div>` : ''}
                     ${type ? `
                     <div class="word-type-row" style="justify-content: center;">
-                        ${nounGender ? `<span class="gender-badge gender-${nounGender}">${nounGender}</span>` : ''}
-                        ${verbGroup ? `<span class="verb-group-badge">${verbGroup}</span>` : ''}
-                        <span class="word-type-badge clickable" onclick="navigateToTypeFilter('${type}')" title="اضغط لرؤية جميع الكلمات من هذا النوع">${type}</span>
+                        <span class="word-type-badge clickable" onclick="navigateToTypeFilter('${rawType}')" title="اضغط لرؤية جميع الكلمات من هذا النوع">${type}</span>
                     </div>
                     ` : ''}
                 </div>
@@ -938,38 +993,12 @@ if (urlParams.get('status') === 'saved') {
     window.history.replaceState({ path: newUrl }, '', newUrl);
 }
 
-// ========================================
 // Navigate to Type Filter - Redirect to main page with type filter
 // ========================================
 function navigateToTypeFilter(type) {
-    // Map display types to filter values used in main app
-    const typeMap = {
-        'Verb': 'verb',
-        'verb': 'verb',
-        'Substantiv': 'subst',
-        'substantiv': 'subst',
-        'subst': 'subst',
-        'Adjektiv': 'adj',
-        'adjektiv': 'adj',
-        'adj': 'adj',
-        'Adverb': 'adv',
-        'adverb': 'adv',
-        'adv': 'adv',
-        'Preposition': 'prep',
-        'preposition': 'prep',
-        'prep': 'prep',
-        'Konjunktion': 'konj',
-        'konjunktion': 'konj',
-        'Pronomen': 'pron',
-        'pronomen': 'pron',
-        'Interjektion': 'interj',
-        'interjektion': 'interj',
-        'Räkneord': 'räkne',
-        'räkneord': 'räkne'
-    };
-
-    // Get filter value or fallback to lowercase type without dot
-    const filterValue = typeMap[type] || type.toLowerCase().replace('.', '');
+    // Pass the original type directly to main page
+    // The main page will handle matching with dropdown options
+    const filterValue = type.toLowerCase().replace('.', '');
 
     // Navigate to main page with filter parameter
     window.location.href = `index.html?filterType=${encodeURIComponent(filterValue)}`;

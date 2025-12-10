@@ -453,7 +453,7 @@ async function init() {
                 if (resultsGrid) resultsGrid.style.display = 'grid';
 
                 // Update stats
-                statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+                statsElement.textContent = currentResults.length.toLocaleString();
 
                 // Show toast notification
                 const displayName = matchingOption ? matchingOption.textContent.split(' (')[0] : filterType;
@@ -763,7 +763,7 @@ let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || []; // 
 // Filter Logic
 const filterToggleBtn = document.getElementById('filterToggleBtn');
 const filterChipsContainer = document.getElementById('filterChipsContainer');
-const filterChips = document.querySelectorAll('.filter-chip');
+const filterModeSelect = document.getElementById('filterModeSelect');
 let activeFilterMode = 'start'; // Default mode
 
 if (filterToggleBtn && filterChipsContainer) {
@@ -772,29 +772,20 @@ if (filterToggleBtn && filterChipsContainer) {
         const isHidden = filterChipsContainer.style.display === 'none';
         filterChipsContainer.style.display = isHidden ? 'flex' : 'none';
         filterToggleBtn.classList.toggle('active', isHidden);
-
-        // Focus first chip if opening
-        if (isHidden) {
-            // optional: filterChips[0].focus();
-        }
     });
+}
 
-    // Handle Chip Selection
-    filterChips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            // Update active state
-            filterChips.forEach(c => c.classList.remove('active'));
-            chip.classList.add('active');
+// Handle Filter Mode Selection (Dropdown)
+if (filterModeSelect) {
+    filterModeSelect.addEventListener('change', () => {
+        // Update mode
+        activeFilterMode = filterModeSelect.value;
 
-            // Update mode
-            activeFilterMode = chip.dataset.mode;
+        // Update search placeholder/hint
+        updateSearchPlaceholder(activeFilterMode);
 
-            // Update search placeholder/hint
-            updateSearchPlaceholder(activeFilterMode);
-
-            // Re-run search
-            handleSearch({ target: searchInput });
-        });
+        // Re-run search
+        handleSearch({ target: searchInput });
     });
 }
 
@@ -826,8 +817,9 @@ function handleSearch(e) {
 
     // If query is empty -> show landing page OR filtered results
     if (rawQuery.length === 0) {
-        // If type is 'all', show empty/landing state instead of all words
-        if (selectedType === 'all') {
+        // If type is 'all' AND not favorites mode, show empty/landing state
+        // Exception: Favorites mode should show favorites even with empty query
+        if (selectedType === 'all' && activeFilterMode !== 'favorites') {
             currentResults = [];
             currentPage = 1;
 
@@ -840,11 +832,33 @@ function handleSearch(e) {
                 emptyState.style.display = 'block';
             }
             if (resultsGrid) resultsGrid.style.display = 'none';
-            statsElement.textContent = "";
-            if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = "";
+            // Show total dictionary count when on landing page
+            statsElement.textContent = dictionaryData.length.toLocaleString();
+            if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = dictionaryData.length.toLocaleString();
 
             // Clear the results area
             resultsArea.innerHTML = '';
+            return;
+        }
+
+        // Handle favorites mode when search is empty
+        if (activeFilterMode === 'favorites') {
+            currentResults = dictionaryData.filter(item =>
+                favorites.has(String(item[COL_ID]))
+            );
+            currentPage = 1;
+            renderResults();
+
+            const emptyState = document.getElementById('emptyState');
+            const resultsGrid = document.getElementById('searchResults');
+            if (emptyState) emptyState.style.display = 'none';
+            if (resultsGrid) resultsGrid.style.display = 'grid';
+
+            if (currentResults.length === 0) {
+                statsElement.textContent = "0";
+            } else {
+                statsElement.textContent = currentResults.length.toLocaleString();
+            }
             return;
         }
 
@@ -868,7 +882,7 @@ function handleSearch(e) {
 
         if (emptyState) emptyState.style.display = 'none';
         if (resultsGrid) resultsGrid.style.display = 'grid';
-        statsElement.textContent = `${currentResults.length.toLocaleString()} träffar / نتيجة`;
+        statsElement.textContent = currentResults.length.toLocaleString();
         if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = currentResults.length.toLocaleString();
 
         return;
@@ -1030,8 +1044,8 @@ function handleSearch(e) {
 
     renderResults();
 
-    // Update Stats
-    statsElement.textContent = `${currentResults.length.toLocaleString()}`;
+    // Update Stats - always show the count, even if 0
+    statsElement.textContent = currentResults.length.toLocaleString();
 }
 
 // Global variable to debounce dropdown updates slightly if needed, or just run sync
@@ -1128,6 +1142,7 @@ function renderResults() {
                 Inga resultat hittades / لم يتم العثور على نتائج
             </div>
         `;
+        statsElement.textContent = "0";
         return;
     }
 

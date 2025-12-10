@@ -259,13 +259,18 @@
             </div>
 
             <div id="filterChipsContainer" class="filter-chips-container" style="display: none;">
-                <!-- Filter Modes -->
-                <button class="filter-chip active" data-mode="start">Start</button>
-                <button class="filter-chip" data-mode="end">End</button>
-                <button class="filter-chip" data-mode="favorites">❤️ Favorites</button>
-                <button class="filter-chip" data-mode="all">All</button>
-                <button class="filter-chip" data-mode="exact">Exact</button>
-                <button class="filter-chip" data-mode="synonym">Synonym</button>
+                <!-- Filter Mode Dropdown (Styled as Chip) -->
+                <div class="select-chip-wrapper">
+                    <select id="filterModeSelect" class="chip-select" aria-label="Välj sökläge">
+                        <option value="start">Start</option>
+                        <option value="end">End</option>
+                        <option value="favorites">❤️ Favorites</option>
+                        <option value="all">All</option>
+                        <option value="exact">Exact</option>
+                        <option value="synonym">Synonym</option>
+                    </select>
+                    <span class="chip-arrow">▼</span>
+                </div>
 
                 <!-- Sort Dropdown (Styled as Chip) -->
                 <div class="select-chip-wrapper">

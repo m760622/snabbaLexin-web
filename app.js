@@ -593,6 +593,33 @@ async function init() {
             window.history.replaceState({}, document.title, window.location.pathname);
         }
 
+        // Handle filterType parameter (from details page word type badge click)
+        const filterType = urlParams.get('filterType');
+        if (filterType) {
+            // Set the type dropdown
+            typeSelect.value = filterType;
+
+            // Show filter chips container
+            if (filterChipsContainer) {
+                filterChipsContainer.style.display = 'flex';
+            }
+            if (filterToggleBtn) {
+                filterToggleBtn.classList.add('active');
+            }
+
+            // Clear search input to show all results of this type
+            searchInput.value = '';
+
+            // Run search to display filtered results
+            handleSearch({ target: searchInput });
+
+            // Show toast notification
+            showToast(`Visar alla ${filterType} / عرض جميع ${filterType}`);
+
+            // Clean URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
         // Checks if should display install popup notification:
         if (iosPrompt && closeIosPrompt && isIos() && !isInStandaloneMode()) {
             // Show prompt after a delay

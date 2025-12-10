@@ -23,12 +23,13 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
-/* Dark Mode Section Headers - Navy Blue with Glass Effect */
+/* Dark Mode Section Headers - White with Navy Shadow */
 [data-theme="dark"] .section-title {
-    color: #1e3a8a;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(30, 58, 138, 0.8), 0 0 20px rgba(30, 58, 138, 0.5);
     background: rgba(30, 58, 138, 0.15);
     border: 1px solid rgba(30, 58, 138, 0.3);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Dark Mode Form Chips - Mint Green Capsule Style */
@@ -141,6 +142,42 @@
     white-space: nowrap;
     border-radius: 50px;
     line-height: 1;
+}
+
+/* Clickable Word Type Badge - Interactive State */
+.word-type-badge.clickable {
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.word-type-badge.clickable::after {
+    content: '→';
+    font-size: 0.7rem;
+    margin-left: 0.3rem;
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: all 0.2s ease;
+}
+
+.word-type-badge.clickable:hover {
+    transform: scale(1.05);
+    box-shadow:
+        0 6px 20px rgba(0, 91, 150, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(224, 242, 254, 0.95) 100%);
+}
+
+.word-type-badge.clickable:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.word-type-badge.clickable:active {
+    transform: scale(0.98);
+    box-shadow:
+        0 2px 10px rgba(0, 91, 150, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 @keyframes hero-entrance {

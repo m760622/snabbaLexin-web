@@ -636,7 +636,7 @@ function renderDetails(item) {
                     <div class="word-type-row" style="justify-content: center;">
                         ${nounGender ? `<span class="gender-badge gender-${nounGender}">${nounGender}</span>` : ''}
                         ${verbGroup ? `<span class="verb-group-badge">${verbGroup}</span>` : ''}
-                        <span class="word-type-badge">${type}</span>
+                        <span class="word-type-badge clickable" onclick="navigateToTypeFilter('${type}')" title="اضغط لرؤية جميع الكلمات من هذا النوع">${type}</span>
                     </div>
                     ` : ''}
                 </div>
@@ -938,4 +938,42 @@ if (urlParams.get('status') === 'saved') {
     window.history.replaceState({ path: newUrl }, '', newUrl);
 }
 
+// ========================================
+// Navigate to Type Filter - Redirect to main page with type filter
+// ========================================
+function navigateToTypeFilter(type) {
+    // Map display types to filter values used in main app
+    const typeMap = {
+        'Verb': 'verb',
+        'verb': 'verb',
+        'Substantiv': 'subst',
+        'substantiv': 'subst',
+        'subst': 'subst',
+        'Adjektiv': 'adj',
+        'adjektiv': 'adj',
+        'adj': 'adj',
+        'Adverb': 'adv',
+        'adverb': 'adv',
+        'adv': 'adv',
+        'Preposition': 'prep',
+        'preposition': 'prep',
+        'prep': 'prep',
+        'Konjunktion': 'konj',
+        'konjunktion': 'konj',
+        'Pronomen': 'pron',
+        'pronomen': 'pron',
+        'Interjektion': 'interj',
+        'interjektion': 'interj',
+        'Räkneord': 'räkne',
+        'räkneord': 'räkne'
+    };
+
+    // Get filter value or fallback to lowercase type without dot
+    const filterValue = typeMap[type] || type.toLowerCase().replace('.', '');
+
+    // Navigate to main page with filter parameter
+    window.location.href = `index.html?filterType=${encodeURIComponent(filterValue)}`;
+}
+
 init();
+

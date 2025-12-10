@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;600;700;800&display=swap"
         rel="stylesheet">
     <style>
         :root {
@@ -20,8 +20,10 @@
             --text-muted: #94a3b8;
             --success: #10b981;
             --error: #ef4444;
-            --option-bg: #334155;
-            --option-hover: #475569;
+            --fire: #f59e0b;
+            --gold: #fbbf24;
+            --fever-glow: #d946ef;
+            --boss-red: #dc2626;
         }
 
         * {
@@ -40,7 +42,10 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            /* Mobile System: Prevent Pull-to-Refresh/Bounce */
+            overscroll-behavior: none;
             touch-action: manipulation;
+            transition: background-color 1s ease;
         }
 
         /* Ambient Background */
@@ -60,6 +65,7 @@
             border-radius: 50%;
             filter: blur(80px);
             opacity: 0.4;
+            transition: all 1s ease;
         }
 
         .orb-1 {
@@ -90,6 +96,40 @@
             }
         }
 
+        /* BOSS MODE STYLING */
+        body.boss-mode .ambient-bg .orb-1 {
+            background: var(--boss-red);
+            opacity: 0.6;
+            animation-duration: 2s;
+        }
+
+        body.boss-mode .ambient-bg .orb-2 {
+            background: #7f1d1d;
+            opacity: 0.8;
+            animation-duration: 3s;
+        }
+
+        body.boss-mode .level-badge {
+            background: var(--boss-red);
+            color: white;
+            box-shadow: 0 0 15px var(--boss-red);
+            animation: pulse-red 1s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+            }
+        }
+
         /* Header */
         header {
             padding: 1rem;
@@ -102,6 +142,7 @@
             top: 0;
             z-index: 100;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 70px;
         }
 
         .back-btn {
@@ -109,8 +150,26 @@
             border: none;
             color: var(--text-color);
             cursor: pointer;
-            padding: 0.5rem;
+            padding: 12px;
+            /* Larger touch target */
             display: flex;
+            align-items: center;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+            min-width: 44px;
+            /* Mobile Standard */
+            min-height: 44px;
+        }
+
+        .back-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 0.8rem;
             align-items: center;
         }
 
@@ -119,11 +178,29 @@
             color: #818cf8;
             padding: 0.25rem 0.75rem;
             border-radius: 999px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 600;
+            white-space: nowrap;
+            transition: all 0.5s;
         }
 
-        /* Progress Bar */
+        /* LIVES TANK */
+        .lives-container {
+            display: flex;
+            gap: 4px;
+            font-size: 1.2rem;
+        }
+
+        .heart {
+            transition: transform 0.3s, opacity 0.3s, filter 0.3s;
+        }
+
+        .heart.lost {
+            opacity: 0.2;
+            transform: scale(0.8);
+            filter: grayscale(100%);
+        }
+
         .progress-container {
             height: 4px;
             background: rgba(255, 255, 255, 0.1);
@@ -139,6 +216,11 @@
             box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
         }
 
+        body.boss-mode .progress-bar {
+            background: var(--boss-red);
+            box-shadow: 0 0 10px var(--boss-red);
+        }
+
         /* Game Container */
         .game-container {
             flex: 1;
@@ -146,40 +228,106 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 0.5rem;
             max-width: 600px;
             margin: 0 auto;
             width: 100%;
-        }
-
-        .pair-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            width: 100%;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-bottom: 2rem;
+            perspective: 1200px;
             position: relative;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            /* Anchor for absolute countdown */
         }
 
-        .pair-card.correct {
-            border-color: var(--success);
-            animation: pulse-green 0.5s;
+        /* CARD ANIMATIONS */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
-        .pair-card.wrong {
-            border-color: var(--error);
-            animation: shake 0.4s;
+        .slide-in {
+            animation: slideInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
-        /* Word Row */
+        .card-flipper {
+            width: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 2rem;
+        }
+
+        .card-flipper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .pair-card,
+        .back-face {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 1.5rem;
+            width: 100%;
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            backface-visibility: hidden;
+            overflow: hidden;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .pair-card::after,
+        .back-face::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.05) 45%, transparent 50%);
+            transform: translate(-100%, -100%);
+            pointer-events: none;
+            transition: transform 0.1s;
+        }
+
+        /* SKINS */
+        body.skin-neon .pair-card {
+            border: 2px solid var(--fever-glow);
+            background: rgba(30, 41, 59, 0.95);
+            box-shadow: 0 0 20px rgba(217, 70, 239, 0.2);
+        }
+
+        body.skin-gold .pair-card {
+            border: 2px solid var(--gold);
+            background: radial-gradient(circle at top right, #332d18, #1e293b);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.3);
+        }
+
+        body.skin-gold .pair-card::after {
+            background: linear-gradient(115deg, transparent 40%, rgba(251, 191, 36, 0.2) 45%, transparent 50%);
+        }
+
+        .back-face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
         .word-row {
             display: flex;
             justify-content: space-between;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
         }
 
         .word-item {
@@ -188,41 +336,53 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 1rem;
+            padding: 1.2rem 0.5rem;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
+            border-radius: 18px;
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
             cursor: default;
             opacity: 0.5;
             border: 2px solid transparent;
         }
 
-        /* Active Target & Drag States */
         .word-item.active-target {
             opacity: 1;
             border-color: rgba(99, 102, 241, 0.5);
             border-style: dashed;
+            background: rgba(99, 102, 241, 0.05);
+            transform: translateY(-4px);
         }
 
         .word-item.solved {
             opacity: 1;
             border-color: var(--success);
             background: rgba(16, 185, 129, 0.1);
+            border-style: solid;
         }
 
-        .word-item.drag-over {
-            background: rgba(99, 102, 241, 0.2);
-            border-color: var(--primary);
-            border-style: solid;
-            transform: scale(1.02);
+        .word-item.wrong {
             opacity: 1;
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.15);
+            border-style: solid;
+            color: var(--error);
+        }
+
+        body.boss-mode .word-item.active-target {
+            border-color: var(--boss-red);
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        body.boss-mode .missing-vowel {
+            border-color: var(--boss-red);
+            color: var(--boss-red);
         }
 
         .word-text {
             font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-weight: 800;
+            margin: 0.5rem 0;
             letter-spacing: 1px;
             display: flex;
             align-items: center;
@@ -231,87 +391,195 @@
             pointer-events: none;
         }
 
+        .word-emoji {
+            font-size: 2rem;
+            margin-bottom: 0.2rem;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        .listen-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            margin-left: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            pointer-events: auto;
+        }
+
         .missing-vowel {
             display: inline-block;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             line-height: 40px;
-            border-bottom: 3px solid var(--primary);
+            border-bottom: 4px solid var(--primary);
             margin: 0 2px;
             text-align: center;
             color: var(--primary);
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 4px;
+            border-radius: 8px;
+            transition: all 0.2s;
         }
 
-        .word-def {
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            font-size: 1rem;
-            color: var(--text-muted);
-            direction: rtl;
+        .solved-text {
+            animation: pop-in 0.4s;
+            color: var(--success);
+            display: inline-block;
         }
 
-        /* Options Area */
+        @keyframes pop-in {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .back-face .context-sv {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .back-face em {
+            color: var(--primary);
+            font-style: normal;
+            text-decoration: underline;
+        }
+
+        /* Options */
         .options-area {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            gap: 1.5rem;
             width: 100%;
+            padding: 0 1rem;
         }
 
         .vowel-btn {
-            background: var(--option-bg);
-            border: 2px solid transparent;
+            background: linear-gradient(145deg, #2a384f, #1e293b);
+            border: none;
             color: var(--text-color);
-            font-size: 2rem;
-            font-weight: 700;
-            padding: 1.5rem;
-            border-radius: 16px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            padding: 1rem;
+            border-radius: 20px;
             cursor: grab;
-            /* Show grab cursor */
-            transition: all 0.2s ease;
+            transition: all 0.1s;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
             position: relative;
+            top: 0;
             z-index: 2;
             touch-action: none;
-            /* Important for touch drag */
+            box-shadow: 0 6px 0 #0f172a, 0 10px 10px rgba(0, 0, 0, 0.3);
+            /* Fix: Half width */
+            max-width: 140px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .vowel-btn:active {
+            top: 6px;
+            box-shadow: 0 0 0 #0f172a;
             cursor: grabbing;
         }
 
-        .vowel-btn.dragging {
-            opacity: 0.5;
-            transform: scale(0.95);
+        /* BOSS BANNER */
+        .boss-banner {
+            background: var(--boss-red);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 1rem;
+            animation: shake 2s infinite;
+            display: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
-        /* Flying Animation Clone */
+        .speed-badge {
+            position: absolute;
+            top: 60px;
+            /* Above stats bar roughly */
+            left: 50%;
+            transform: translateX(-50%) scale(0) rotate(10deg);
+            /* Centered */
+            background: #f59e0b;
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 900;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+            z-index: 100;
+            pointer-events: none;
+            transition: transform 0.3s;
+        }
+
+        .speed-badge.visible {
+            transform: translateX(-50%) scale(1) rotate(10deg);
+        }
+
         .flying-clone {
             position: fixed;
             background: var(--primary);
             color: white;
-            padding: 1rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 12px;
             font-size: 2rem;
             font-weight: bold;
             pointer-events: none;
             z-index: 1000;
-            transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.5s ease;
+            transition: all 0.5s ease;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
-        /* Feedback Overlay */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            animation: fade-fall 0.8s forwards;
+            border-radius: 50%;
+        }
+
+        @keyframes fade-fall {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
         .feedback-overlay {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.95);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -320,7 +588,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(8px);
             text-align: center;
             border-radius: 20px;
         }
@@ -331,95 +599,391 @@
         }
 
         .feedback-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            font-size: 5rem;
+            margin-bottom: 0.5rem;
             display: block;
+            animation: pop-in 0.5s;
         }
 
         .feedback-text {
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.8rem;
+            font-weight: 800;
             margin-bottom: 1rem;
+            color: #fff;
         }
 
-        .next-timer-bar {
-            width: 100px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .next-timer-fill {
-            height: 100%;
-            background: white;
-            width: 100%;
-            animation: timer-shrink 5s linear forwards;
-        }
-
-        @keyframes timer-shrink {
-            from {
-                width: 100%;
-            }
-
-            to {
-                width: 0%;
-            }
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            75% {
-                transform: translateX(5px);
-            }
-        }
-
-        @keyframes pulse-green {
-            0% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
-            }
-
-            70% {
-                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
-            }
-        }
-
-        /* End Screen */
         .end-screen {
             text-align: center;
             display: none;
+            padding: 2rem;
+            animation: pop-in 0.5s;
+            z-index: 500;
+            position: relative;
         }
 
-        .end-score {
-            font-size: 4rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 1rem;
+        .inline-countdown {
+            position: absolute;
+            /* Fix: Float in the empty space */
+            top: 20px;
+            /* Adjust based on header height */
+            left: 0;
+            right: 0;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .inline-countdown.visible {
+            opacity: 1;
+            /* height/margin removed to prevent shift */
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary-light);
+        }
+
+        .countdown-text {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            color: var(--text-color);
         }
 
         .restart-btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 1rem 2rem;
+            padding: 1rem 3rem;
             border-radius: 12px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
-            width: 100%;
             margin-top: 1rem;
+        }
+
+        /* START SCREEN */
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .start-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1.2rem 4rem;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
+        }
+
+        .start-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* COMBO POPUP */
+        .combo-text {
+            position: absolute;
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+            pointer-events: none;
+            z-index: 100;
+            animation: combo-float 1s forwards;
+        }
+
+        @keyframes combo-float {
+            0% {
+                transform: scale(0) translateY(0) rotate(-10deg);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2) translateY(-50px) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(1.5) translateY(-100px) rotate(10deg);
+            }
+        }
+
+        .shake {
+            animation: shake-anim 0.4s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        @keyframes shake-anim {
+
+            10%,
+            90% {
+                transform: translate3d(-2px, 0, 0);
+            }
+
+            20%,
+            80% {
+                transform: translate3d(4px, 0, 0);
+            }
+
+            30%,
+            50%,
+            70% {
+                transform: translate3d(-6px, 0, 0);
+            }
+
+            40%,
+            60% {
+                transform: translate3d(6px, 0, 0);
+            }
+
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 600px) {
+            body {
+                height: 100vh;
+                overflow: hidden;
+            }
+
+            .game-container {
+                justify-content: center;
+                /* Move to middle as requested */
+                padding: 10px;
+                height: 100%;
+                overflow-y: auto;
+                position: relative;
+            }
+
+            header {
+                height: 50px;
+                padding: 0.5rem;
+            }
+
+            .start-title {
+                font-size: 1.5rem;
+            }
+
+            .pair-card {
+                padding: 1rem;
+                margin-top: 2rem;
+                /* Adjusted for center alignment */
+                /* More space for countdown */
+            }
+
+            .word-row {
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .word-item {
+                padding: 0.5rem;
+            }
+
+            .word-emoji {
+                font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+
+            .word-text {
+                font-size: 1.4rem;
+                margin: 0.2rem 0;
+                min-height: 2rem;
+            }
+
+            .word-def {
+                font-size: 1.3rem;
+                /* Bigger Arabic font */
+                line-height: 1.4;
+                margin-top: 0.5rem;
+                font-weight: 500;
+            }
+
+            .card-flipper {
+                margin-bottom: 0.5rem;
+            }
+
+            .options-area {
+                gap: 0.5rem;
+                margin-top: auto;
+                padding-bottom: 1rem;
+            }
+
+            .vowel-btn {
+                padding: 0.8rem;
+                font-size: 1.5rem;
+                border-radius: 12px;
+            }
+
+            /* Enhanced Countdown */
+            .inline-countdown {
+                top: 15%;
+                /* Visual center of top half */
+                width: 100%;
+                height: auto;
+                justify-content: center;
+                z-index: 50;
+            }
+
+            .countdown-number {
+                font-size: 6rem;
+                /* Massive */
+                line-height: 1;
+                filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.6));
+                animation: pulse-countdown 1s infinite;
+            }
+
+            .countdown-text {
+                font-size: 1.2rem;
+                margin-top: 0;
+                font-weight: bold;
+                letter-spacing: 2px;
+            }
+        }
+
+        @keyframes pulse-countdown {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Stage Map Overlay */
+        .stage-map-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            z-index: 200;
+            display: none;
+            overflow-y: auto;
+            padding: 2rem 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .stage-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stage-node {
+            aspect-ratio: 1;
+            background: #334155;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #94a3b8;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .stage-node.solved {
+            background: #10b981;
+            color: #fff;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+        }
+
+        .stage-node.current {
+            background: #3b82f6;
+            color: #fff;
+            animation: pulse-node 1.5s infinite;
+            border: 2px solid #fff;
+        }
+
+        .stage-node.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @keyframes pulse-node {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+            }
+        }
+
+        /* Celebration Overlay */
+        .celebration-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 150;
+            display: none;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f00;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -431,7 +995,15 @@
         <div class="orb orb-2"></div>
     </div>
 
-    <!-- Progress Top -->
+    <!-- START SCREEN -->
+    <div id="startScreen" class="start-screen">
+        <div class="orb orb-1" style="width:200px; height:200px;"></div>
+        <h1 class="start-title">Svenska Vokaler<br><span style="font-size:1.5rem; font-weight:400; opacity:0.8;">تحدي
+                الأصوات السويدية</span></h1>
+        <button class="start-btn" onclick="startGame()">Börja Spela ▶</button>
+        <p style="margin-top:2rem; opacity:0.5; font-size:0.9rem;">Turn on sound 🔊</p>
+    </div>
+
     <div class="progress-container">
         <div id="progressBar" class="progress-bar"></div>
     </div>
@@ -443,428 +1015,813 @@
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
-            <span style="margin-left:8px;">Tillbaka / عودة</span>
         </button>
-        <div id="levelBadge" class="level-badge">
-            Nivå 1
+
+        <div class="stats-bar">
+            <div class="lives-container" id="livesContainer">
+                <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
+            </div>
+            <div class="level-badge" id="levelBadge" onclick="toggleStageMap()" style="cursor: pointer;">Start!</div>
         </div>
     </header>
 
     <div class="game-container">
-        <!-- Game Play Area -->
-        <div id="playArea" style="width: 100%;">
-            <div id="questionCard" class="pair-card">
-                <div class="word-row">
-                    <!-- Drop Zones -->
-                    <div id="slot1" class="word-item drop-zone" data-slot="1">
-                        <div class="word-text word-1-text">B<span class="missing-vowel">?</span>l</div>
-                        <div class="word-def word-1-def">كرة</div>
-                    </div>
-                    <div id="slot2" class="word-item drop-zone" data-slot="2">
-                        <div class="word-text word-2-text">B<span class="missing-vowel">?</span>l</div>
-                        <div class="word-def word-2-def">جذع (شجرة)</div>
-                    </div>
-                </div>
-
-                <div class="feedback-overlay" id="feedbackOverlay">
-                    <span class="feedback-icon" id="feedbackIcon">✅</span>
-                    <div class="feedback-text" id="feedbackText">Bra jobbat!</div>
-                    <div class="next-timer-bar">
-                        <div class="next-timer-fill"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="options-area" id="optionsArea">
-                <!-- Vowels generated here -->
-            </div>
-
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem;">
-                Fyll i båda orden! dra vokalerna.<br>
-                أكمل الكلمتين! اسحب الأحرف المناسبة.
-            </p>
+        <!-- Stage Map Modal -->
+        <div id="stageMapOverlay" class="stage-map-overlay">
+            <h2 style="text-align:center; color:#fff; margin-bottom:1rem;">Kartläggning 🗺️</h2>
+            <div id="stageGrid" class="stage-grid"></div>
+            <button onclick="toggleStageMap()"
+                style="display:block; margin:2rem auto; padding:1rem 2rem; background:#ef4444; border:none; border-radius:10px; color:#fff; font-weight:bold;">Close</button>
         </div>
 
-        <!-- End Screen -->
+        <!-- Celebration Container -->
+        <div id="celebrationOverlay" class="celebration-overlay"></div>
+
+        <div id="playArea" style="width: 100%; display:none;">
+
+            <div id="bossBanner" class="boss-banner">⚠️ BOSS WAVE ⚠️</div>
+
+            <div id="inlineCountdown" class="inline-countdown"></div>
+
+            <div class="speed-badge" id="speedBadge">SNABB! ⚡️</div>
+
+            <div class="card-flipper slide-in" id="cardFlipper">
+                <!-- FRONT -->
+                <div id="questionCard" class="pair-card">
+                    <div class="word-row">
+                        <div id="slot1" class="word-item drop-zone" data-slot="1">
+                            <div class="word-emoji" id="emoji1"></div>
+                            <div class="word-top-row">
+                                <div class="word-text word-1-text">B<span class="missing-vowel"></span>l</div>
+                                <button class="listen-btn" onclick="playAudioForSlot(1)" aria-label="Lyssna">🔊</button>
+                            </div>
+                            <div class="word-def word-1-def">كرة</div>
+                        </div>
+                        <div id="slot2" class="word-item drop-zone" data-slot="2">
+                            <div class="word-emoji" id="emoji2"></div>
+                            <div class="word-top-row">
+                                <div class="word-text word-2-text">B<span class="missing-vowel"></span>l</div>
+                                <button class="listen-btn" onclick="playAudioForSlot(2)" aria-label="Lyssna">🔊</button>
+                            </div>
+                            <div class="word-def word-2-def">جذع (شجرة)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BACK -->
+                <div class="back-face" id="backFace">
+                    <div class="context-title">Exempelmeningar</div>
+                    <div class="context-row">
+                        <span class="context-emoji" id="backEmoji1"></span>
+                        <div class="context-sv" id="sentence1"></div>
+                    </div>
+                    <div class="context-row">
+                        <span class="context-emoji" id="backEmoji2"></span>
+                        <div class="context-sv" id="sentence2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback -->
+            <div class="feedback-overlay" id="feedbackOverlay">
+                <span class="feedback-icon" id="feedbackIcon">✅</span>
+                <div class="feedback-text" id="feedbackText">Bra jobbat!</div>
+            </div>
+
+            <div class="options-area" id="optionsArea"></div>
+        </div>
+
         <div id="endScreen" class="end-screen">
-            <h1>Grattis! / مبروك!</h1>
-            <p>Du klarade alla nivåer.</p>
-            <div class="end-score" id="finalScore">100%</div>
-            <p>Du är en mästare på vokaler!</p>
-            <button class="restart-btn" onclick="location.reload()">Spela igen / العب مجدداً</button>
+            <h1 id="endTitle">Grattis! 👑</h1>
+            <p id="endMessage">Du klarade spelet!</p>
+            <div class="end-score" id="finalScore"></div>
+            <button class="restart-btn" onclick="location.reload()">Spela igen</button>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // DATA & GAME LOGIC
+        // DATA
         // ==========================================
         const minimalPairsData = [
-            { pair: ["O", "Ö"], w1: "Bol", d1: "جذع شجرة", w2: "Böl", d2: "أمواج (قديمة)", frame: "B_l" },
-            { pair: ["O", "Ö"], w1: "Bot", d1: "توبة / علاج", w2: "Böt", d2: "دفع غرامة (الماضي)", frame: "B_t" },
-            { pair: ["O", "Ö"], w1: "Mossa", d1: "طحلب", w2: "Mössa", d2: "قبعة شتوية", frame: "M_ssa" },
-            { pair: ["O", "Ö"], w1: "Hov", d1: "حافر / بلاط ملكي", w2: "Höv", d2: "لم يعد مستخدماً كثيراً", frame: "H_v" },
-            { pair: ["O", "Ö"], w1: "Son", d1: "ابن", w2: "Sön", d2: "أحد (اختصار قديم)", frame: "S_n" },
-            { pair: ["O", "Ö"], w1: "Not", d1: "نوتة موسيقية", w2: "Nöt", d2: "جوز / لحم بقر", frame: "N_t" },
-            { pair: ["O", "Ö"], w1: "Rom", d1: "روما / مشروب", w2: "Röm", d2: "هروب (لهجة)", frame: "R_m" },
-            { pair: ["O", "Ö"], w1: "Ko", d1: "بقرة", w2: "Kö", d2: "طابور", frame: "K_" },
+            // === O vs Ö (25 pairs) ===
+            { pair: ["O", "Ö"], w1: "Bol", d1: "عش", w2: "Böl", d2: "أمواج", frame: "B_l", e1: "🏢", e2: "🌊", s1: "Getingarna har ett bol.", s2: "Det fanns stora böljor." },
+            { pair: ["O", "Ö"], w1: "Bot", d1: "علاج", w2: "Böt", d2: "بادل", frame: "B_t", e1: "💊", e2: "💸", s1: "Det finns ingen bot.", s2: "Han böt sin bil." },
+            { pair: ["O", "Ö"], w1: "Mossa", d1: "طحلب", w2: "Mössa", d2: "قبعة", frame: "M_ssa", e1: "🌿", e2: "🧢", s1: "Stenen var täckt av mossa.", s2: "Ta på dig en mössa!" },
+            { pair: ["O", "Ö"], w1: "Hov", d1: "حافر", w2: "Höv", d2: "زعيم", frame: "H_v", e1: "🐎", e2: "👑", s1: "Hästen har en skada i sin hov.", s2: "Vikingarna hade en hövding." },
+            { pair: ["O", "Ö"], w1: "Son", d1: "ابن", w2: "Sön", d2: "أحد", frame: "S_n", e1: "👦", e2: "📅", s1: "Min son heter Erik.", s2: "Vi ses på sön." },
+            { pair: ["O", "Ö"], w1: "Not", d1: "نوتة", w2: "Nöt", d2: "جوز", frame: "N_t", e1: "🎵", e2: "🥜", s1: "Kan du läsa en not?", s2: "Ekorren hittade en nöt." },
+            { pair: ["O", "Ö"], w1: "Rom", d1: "روما", w2: "Röm", d2: "هروب", frame: "R_m", e1: "🏛️", e2: "🏃", s1: "Alla vägar bär till Rom.", s2: "Fången gjorde en römning." },
+            { pair: ["O", "Ö"], w1: "Ko", d1: "بقرة", w2: "Kö", d2: "طابور", frame: "K_", e1: "🐮", e2: "🚶", s1: "En ko säger mu.", s2: "Det var lång kö." },
+            { pair: ["O", "Ö"], w1: "Ros", d1: "وردة", w2: "Rös", d2: "كوم حجارة", frame: "R_s", e1: "🌹", e2: "🪨", s1: "En röd ros.", s2: "Ett gammalt rös." },
+            { pair: ["O", "Ö"], w1: "Lod", d1: "رصاص", w2: "Löd", d2: "لحم", frame: "L_d", e1: "⚖️", e2: "🔧", s1: "Ett lod för fiske.", s2: "Han lödde röret." },
+            { pair: ["O", "Ö"], w1: "Skog", d1: "غابة", w2: "Skög", d2: "دفع", frame: "Sk_g", e1: "🌲", e2: "👐", s1: "Vi gick i skogen.", s2: "Han sköt upp det." },
+            { pair: ["O", "Ö"], w1: "Doft", d1: "رائحة", w2: "Döft", d2: "خافت", frame: "D_ft", e1: "👃", e2: "💡", s1: "En härlig doft.", s2: "Ett döft ljus." },
+            { pair: ["O", "Ö"], w1: "Fort", d1: "سريع", w2: "Fört", d2: "أحضر", frame: "F_rt", e1: "⚡", e2: "📦", s1: "Gå fort!", s2: "Jag har fört paketet." },
+            { pair: ["O", "Ö"], w1: "Ort", d1: "مكان", w2: "Ört", d2: "عشب", frame: "_rt", e1: "📍", e2: "🌿", s1: "En liten ort.", s2: "En medicinsk ört." },
+            { pair: ["O", "Ö"], w1: "Sot", d1: "سخام", w2: "Söt", d2: "حلو", frame: "S_t", e1: "⚫", e2: "🍬", s1: "Sot från elden.", s2: "En söt kaka." },
+            { pair: ["O", "Ö"], w1: "Torn", d1: "برج", w2: "Törn", d2: "شوكة", frame: "T_rn", e1: "🗼", e2: "🌵", s1: "Ett högt torn.", s2: "En törne i foten." },
+            { pair: ["O", "Ö"], w1: "Stora", d1: "كبار", w2: "Störa", d2: "يزعج", frame: "St_ra", e1: "📏", e2: "🔔", s1: "Stora barn.", s2: "Stör mig inte!" },
+            { pair: ["O", "Ö"], w1: "Bord", d1: "طاولة", w2: "Börd", d2: "أصل", frame: "B_rd", e1: "🪑", e2: "👪", s1: "Sitt vid bordet.", s2: "Av god börd." },
+            { pair: ["O", "Ö"], w1: "Kort", d1: "بطاقة", w2: "Kört", d2: "قاد", frame: "K_rt", e1: "💳", e2: "🚗", s1: "Ett kreditkort.", s2: "Jag har kört bil." },
+            { pair: ["O", "Ö"], w1: "Lova", d1: "يعد", w2: "Löva", d2: "أوراق", frame: "L_va", e1: "🤝", e2: "🍃", s1: "Jag lovar dig.", s2: "Trädet lövar." },
+            { pair: ["O", "Ö"], w1: "Hora", d1: "عاهرة", w2: "Höra", d2: "يسمع", frame: "H_ra", e1: "🚫", e2: "👂", s1: "Ett fult ord.", s2: "Kan du höra mig?" },
+            { pair: ["O", "Ö"], w1: "Kola", d1: "كراميل", w2: "Köla", d2: "عارضة", frame: "K_la", e1: "🍬", e2: "⛵", s1: "En söt kola.", s2: "Båtens köl." },
+            { pair: ["O", "Ö"], w1: "Boka", d1: "يحجز", w2: "Böka", d2: "ينبش", frame: "B_ka", e1: "📅", e2: "🐷", s1: "Boka ett bord.", s2: "Grisen bökar." },
+            { pair: ["O", "Ö"], w1: "Stol", d1: "كرسي", w2: "Stöl", d2: "سرقة", frame: "St_l", e1: "🪑", e2: "🦹", s1: "Sitt på stolen.", s2: "En stöld." },
+            { pair: ["O", "Ö"], w1: "Fog", d1: "مفصل", w2: "Fög", d2: "طار", frame: "F_g", e1: "🦴", e2: "🕊️", s1: "En fog i väggen.", s2: "Fågeln flög." },
 
-            { pair: ["U", "Y"], w1: "Sur", d1: "حامض", w2: "Syr", d2: "يخيط", frame: "S_r" },
-            { pair: ["U", "Y"], w1: "Bur", d1: "قفص", w2: "Byr", d2: "خزانة", frame: "B_r" },
-            { pair: ["U", "Y"], w1: "Ur", d1: "من / ساعة قديمة", w2: "Yr", d2: "دوار / عاصف", frame: "_r" },
-            { pair: ["U", "Y"], w1: "Kus", d1: "حشرة", w2: "Kyss", d2: "قبلة", frame: "K_s" },
-            { pair: ["U", "Y"], w1: "Lukta", d1: "يشم", w2: "Lykta", d2: "مصباح", frame: "L_kta" },
+            // === U vs Y (25 pairs) ===
+            { pair: ["U", "Y"], w1: "Sur", d1: "حامض", w2: "Syr", d2: "يخيط", frame: "S_r", e1: "🍋", e2: "🧵", s1: "Citronen smakar surt.", s2: "Hon syr en klänning." },
+            { pair: ["U", "Y"], w1: "Bur", d1: "قفص", w2: "Byr", d2: "خزانة", frame: "B_r", e1: "🐦", e2: "🗄️", s1: "Fågeln sitter i en bur.", s2: "Lägg kläderna i byrån." },
+            { pair: ["U", "Y"], w1: "Ur", d1: "ساعة", w2: "Yr", d2: "دوار", frame: "_r", e1: "🕰️", e2: "😵", s1: "Tåget gick ur spår.", s2: "Hon kände sig yr." },
+            { pair: ["U", "Y"], w1: "Kus", d1: "حشرة", w2: "Kyss", d2: "قبلة", frame: "K_ss", e1: "🐛", e2: "💋", s1: "En liten kus.", s2: "Han gav henne en kyss." },
+            { pair: ["U", "Y"], w1: "Lukta", d1: "يشم", w2: "Lykta", d2: "مصباح", frame: "L_kta", e1: "👃", e2: "🏮", s1: "Blomman luktar gott.", s2: "Tänd din lykta." },
+            { pair: ["U", "Y"], w1: "Ful", d1: "قبيح", w2: "Fyl", d2: "سكير", frame: "F_l", e1: "👹", e2: "🥴", s1: "En ful tavla.", s2: "Ett fyllo på bänken." },
+            { pair: ["U", "Y"], w1: "Brun", d1: "بني", w2: "Bryn", d2: "حاجب", frame: "Br_n", e1: "🟤", e2: "👁️", s1: "En brun hund.", s2: "Rynka på brynet." },
+            { pair: ["U", "Y"], w1: "Mur", d1: "جدار", w2: "Myr", d2: "مستنقع", frame: "M_r", e1: "🧱", e2: "🌾", s1: "En hög mur.", s2: "En myr i skogen." },
+            { pair: ["U", "Y"], w1: "Tur", d1: "حظ", w2: "Tyr", d2: "ثور", frame: "T_r", e1: "🍀", e2: "🐂", s1: "Vilken tur!", s2: "Guden Tyr." },
+            { pair: ["U", "Y"], w1: "Sura", d1: "يغضب", w2: "Syra", d2: "حمض", frame: "S_ra", e1: "😤", e2: "⚗️", s1: "Han surar.", s2: "Syra i labbet." },
+            { pair: ["U", "Y"], w1: "Ruta", d1: "نافذة", w2: "Ryta", d2: "يزأر", frame: "R_ta", e1: "🪟", e2: "🦁", s1: "En fönsterruta.", s2: "Lejonet ryter." },
+            { pair: ["U", "Y"], w1: "Dun", d1: "ريش", w2: "Dyn", d2: "كثيب", frame: "D_n", e1: "🪶", e2: "🏜️", s1: "Mjukt dun.", s2: "En sanddyn." },
+            { pair: ["U", "Y"], w1: "Kul", d1: "ممتع", w2: "Kyl", d2: "ثلاجة", frame: "K_l", e1: "😄", e2: "❄️", s1: "Det var kul!", s2: "Lägg i kylen." },
+            { pair: ["U", "Y"], w1: "Fur", d1: "صنوبر", w2: "Fyr", d2: "منارة", frame: "F_r", e1: "🌲", e2: "🏠", s1: "En fur i skogen.", s2: "En fyr vid havet." },
+            { pair: ["U", "Y"], w1: "Nu", d1: "الآن", w2: "Ny", d2: "جديد", frame: "N_", e1: "⏰", e2: "✨", s1: "Kom nu!", s2: "En ny bil." },
+            { pair: ["U", "Y"], w1: "Spun", d1: "غزل", w2: "Spyn", d2: "تقيأ", frame: "Sp_n", e1: "🧶", e2: "🤮", s1: "Hon spann garn.", s2: "Han spydde." },
+            { pair: ["U", "Y"], w1: "Gul", d1: "أصفر", w2: "Gyl", d2: "خياشيم", frame: "G_l", e1: "💛", e2: "🐟", s1: "En gul sol.", s2: "Fiskens gälar." },
+            { pair: ["U", "Y"], w1: "Hund", d1: "كلب", w2: "Hynd", d2: "كلبة", frame: "H_nd", e1: "🐕", e2: "🐕‍🦺", s1: "En snäll hund.", s2: "En hynd med valpar." },
+            { pair: ["U", "Y"], w1: "Kung", d1: "ملك", w2: "Kyng", d2: "ملتف", frame: "K_ng", e1: "👑", e2: "🔄", s1: "Kungen bor i slottet.", s2: "Ormen kynger." },
+            { pair: ["U", "Y"], w1: "Sudd", d1: "ممحاة", w2: "Sydd", d2: "مخيط", frame: "S_dd", e1: "✏️", e2: "🧵", s1: "Ett sudd för att radera.", s2: "En sydd klänning." },
+            { pair: ["U", "Y"], w1: "Luft", d1: "هواء", w2: "Lyft", d2: "رفع", frame: "L_ft", e1: "💨", e2: "💪", s1: "Frisk luft.", s2: "Lyft den tunga lådan." },
+            { pair: ["U", "Y"], w1: "Surra", d1: "يربط", w2: "Syrra", d2: "أخت", frame: "S_rra", e1: "🔗", e2: "👧", s1: "Surra fast lasten.", s2: "Min syrra är snäll." },
+            { pair: ["U", "Y"], w1: "Fluga", d1: "ذبابة", w2: "Flyga", d2: "يطير", frame: "Fl_ga", e1: "🪰", e2: "✈️", s1: "En irriterande fluga.", s2: "Jag vill flyga." },
+            { pair: ["U", "Y"], w1: "Knuff", d1: "دفعة", w2: "Knyff", d2: "حيلة", frame: "Kn_ff", e1: "👐", e2: "🎭", s1: "En lätt knuff.", s2: "Ett smart knyff." },
+            { pair: ["U", "Y"], w1: "Stuv", d1: "يخنة", w2: "Styv", d2: "صلب", frame: "St_v", e1: "🍲", e2: "💪", s1: "En god stuvning.", s2: "Styv i kroppen." },
 
-            { pair: ["A", "Ä"], w1: "Tak", d1: "سقف", w2: "Täck", d2: "غطِّ", frame: "T_k" },
-            { pair: ["A", "Ä"], w1: "Bar", d1: "حانة / عار", w2: "Bär", d2: "توت / يحمل", frame: "B_r" },
-            { pair: ["A", "Ä"], w1: "Man", d1: "رجل", w2: "Män", d2: "رجال", frame: "M_n" },
-            { pair: ["A", "Ä"], w1: "Far", d1: "أب / يسافر", w2: "Fär", d2: "رحلة (قديمة)", frame: "F_r" },
-            { pair: ["A", "Ä"], w1: "Kaka", d1: "كعكة", w2: "Käka", d2: "ياكل", frame: "K_ka" },
-            { pair: ["A", "Ä"], w1: "Bal", d1: "حفلة رقص", w2: "Bäl", d2: "صوت حيوان", frame: "B_l" },
+            // === A vs Ä (25 pairs) ===
+            { pair: ["A", "Ä"], w1: "Tak", d1: "سقف", w2: "Täck", d2: "غطاء", frame: "T_k", e1: "🏠", e2: "🛡️", s1: "Husets tak.", s2: "Täck över maten." },
+            { pair: ["A", "Ä"], w1: "Bar", d1: "حانة", w2: "Bär", d2: "توت", frame: "B_r", e1: "🍺", e2: "🍓", s1: "Han gick till en bar.", s2: "Skogen är full av bär." },
+            { pair: ["A", "Ä"], w1: "Man", d1: "رجل", w2: "Män", d2: "رجال", frame: "M_n", e1: "👨", e2: "👥", s1: "En man gick förbi.", s2: "Två män pratade." },
+            { pair: ["A", "Ä"], w1: "Mat", d1: "طعام", w2: "Mätt", d2: "شبعان", frame: "M_t", e1: "🍽️", e2: "😋", s1: "God mat!", s2: "Jag är mätt." },
+            { pair: ["A", "Ä"], w1: "Van", d1: "معتاد", w2: "Vän", d2: "صديق", frame: "V_n", e1: "🔄", e2: "🤝", s1: "Jag är van vid det.", s2: "Min bästa vän." },
+            { pair: ["A", "Ä"], w1: "Lag", d1: "فريق", w2: "Läg", d2: "وضع", frame: "L_g", e1: "⚽", e2: "📍", s1: "Ett bra lag.", s2: "Läget är bra." },
+            { pair: ["A", "Ä"], w1: "Hal", d1: "زلق", w2: "Häl", d2: "كعب", frame: "H_l", e1: "🧊", e2: "👠", s1: "Isen är hal.", s2: "Ont i hälen." },
+            { pair: ["A", "Ä"], w1: "Dag", d1: "يوم", w2: "Däg", d2: "عجين", frame: "D_g", e1: "☀️", e2: "🍞", s1: "En fin dag.", s2: "Bröddeg." },
+            { pair: ["A", "Ä"], w1: "Kal", d1: "أصلع", w2: "Käl", d2: "نبع", frame: "K_l", e1: "👨‍🦲", e2: "💧", s1: "En kal man.", s2: "En källa i skogen." },
+            { pair: ["A", "Ä"], w1: "Tal", d1: "خطاب", w2: "Täl", d2: "يتحمل", frame: "T_l", e1: "🎤", e2: "💪", s1: "Ett viktigt tal.", s2: "Han tål smärta." },
+            { pair: ["A", "Ä"], w1: "Sal", d1: "قاعة", w2: "Säl", d2: "فقمة", frame: "S_l", e1: "🏛️", e2: "🦭", s1: "En stor sal.", s2: "En söt säl." },
+            { pair: ["A", "Ä"], w1: "Gas", d1: "غاز", w2: "Gäs", d2: "إوز", frame: "G_s", e1: "⛽", e2: "🦢", s1: "Gas för matlagning.", s2: "Gässen flyger." },
+            { pair: ["A", "Ä"], w1: "Rack", d1: "حامل", w2: "Räck", d2: "ناول", frame: "R_ck", e1: "🧥", e2: "🤲", s1: "Ett klädrack.", s2: "Räck mig saltet." },
+            { pair: ["A", "Ä"], w1: "Sack", d1: "كيس", w2: "Säck", d2: "كيس", frame: "S_ck", e1: "👝", e2: "🎒", s1: "En papperssäck.", s2: "En mjölsäck." },
+            { pair: ["A", "Ä"], w1: "Pack", d1: "حزمة", w2: "Päck", d2: "غلاف", frame: "P_ck", e1: "📦", e2: "🎁", s1: "Packa väskan.", s2: "Päckpapper." },
+            { pair: ["A", "Ä"], w1: "Rasa", d1: "ينهار", w2: "Räsa", d2: "يهرع", frame: "R_sa", e1: "🏚️", e2: "🏃", s1: "Huset rasar.", s2: "Han räsar iväg." },
+            { pair: ["A", "Ä"], w1: "Stall", d1: "إسطبل", w2: "Ställ", d2: "رف", frame: "St_ll", e1: "🐴", e2: "🗄️", s1: "Hästar i stallet.", s2: "Ett skoställ." },
+            { pair: ["A", "Ä"], w1: "Gnata", d1: "يتذمر", w2: "Gnäta", d2: "يعاتب", frame: "Gn_ta", e1: "😤", e2: "😠", s1: "Sluta gnata!", s2: "Hon gnäter." },
+            { pair: ["A", "Ä"], w1: "Fara", d1: "خطر", w2: "Fära", d2: "رحلة", frame: "F_ra", e1: "⚠️", e2: "🚢", s1: "En stor fara.", s2: "En lång färd." },
+            { pair: ["A", "Ä"], w1: "Valla", d1: "يرعى", w2: "Välla", d2: "يفيض", frame: "V_lla", e1: "🐑", e2: "🌊", s1: "Valla får.", s2: "Vattnet vällar." },
+            { pair: ["A", "Ä"], w1: "Hamn", d1: "ميناء", w2: "Hämn", d2: "انتقام", frame: "H_mn", e1: "⚓", e2: "😈", s1: "Båten i hamnen.", s2: "Ta hämnd." },
+            { pair: ["A", "Ä"], w1: "Landa", d1: "يهبط", w2: "Lända", d2: "يمتد", frame: "L_nda", e1: "✈️", e2: "📏", s1: "Flyget landar.", s2: "Det ländar dit." },
+            { pair: ["A", "Ä"], w1: "Panna", d1: "جبين", w2: "Pänna", d2: "قلم", frame: "P_nna", e1: "🧠", e2: "✏️", s1: "Svettig panna.", s2: "Min penna." },
+            { pair: ["A", "Ä"], w1: "Tang", d1: "كماشة", w2: "Täng", d2: "طحالب", frame: "T_ng", e1: "🔧", e2: "🌿", s1: "En tång för att greppa.", s2: "Tång på stranden." },
+            { pair: ["A", "Ä"], w1: "Trast", d1: "سمنة", w2: "Träst", d2: "عزاء", frame: "Tr_st", e1: "🐦", e2: "🤗", s1: "En trast sjunger.", s2: "Tröst i sorgen." },
 
-            { pair: ["Å", "O"], w1: "Kål", d1: "ملفوف", w2: "Kol", d2: "فحم", frame: "K_l" },
-            { pair: ["Å", "O"], w1: "Hål", d1: "ثقب / حفرة", w2: "Hol", d2: "جزيرة صغيرة", frame: "H_l" },
-            { pair: ["Å", "O"], w1: "Stål", d1: "فولاذ", w2: "Stol", d2: "كرسي", frame: "St_l" },
-            { pair: ["Å", "O"], w1: "Lån", d1: "قرض", w2: "Lon", d2: "حيوان الوشق", frame: "L_n" },
+            // === Å vs O (20 pairs) ===
+            { pair: ["Å", "O"], w1: "Kål", d1: "ملفوف", w2: "Kol", d2: "فحم", frame: "K_l", e1: "🥬", e2: "⚫", s1: "Vi åt kålsoppa.", s2: "Vi grillade med kol." },
+            { pair: ["Å", "O"], w1: "Hål", d1: "ثقب", w2: "Hol", d2: "جزيرة", frame: "H_l", e1: "🕳️", e2: "🏝️", s1: "Hål i strumpan.", s2: "En liten holme." },
+            { pair: ["Å", "O"], w1: "Tål", d1: "يتحمل", w2: "Tol", d2: "ترجم", frame: "T_l", e1: "💪", e2: "📖", s1: "Han tål smärta.", s2: "Hon tolkade." },
+            { pair: ["Å", "O"], w1: "Mål", d1: "هدف", w2: "Mol", d2: "جزيء", frame: "M_l", e1: "🎯", e2: "🔬", s1: "Mitt mål är klart.", s2: "En mol i kemin." },
+            { pair: ["Å", "O"], w1: "Ål", d1: "ثعبان بحر", w2: "Ol", d2: "بيرة", frame: "_l", e1: "🐍", e2: "🍺", s1: "En lång ål.", s2: "En öl, tack!" },
+            { pair: ["Å", "O"], w1: "Stål", d1: "فولاذ", w2: "Stol", d2: "كرسي", frame: "St_l", e1: "🔩", e2: "🪑", s1: "Rostfritt stål.", s2: "Sitt på stolen." },
+            { pair: ["Å", "O"], w1: "Gås", d1: "إوزة", w2: "Gos", d2: "دلال", frame: "G_s", e1: "🦢", e2: "🤗", s1: "En vit gås.", s2: "Lite gos." },
+            { pair: ["Å", "O"], w1: "Lås", d1: "قفل", w2: "Los", d2: "وشق", frame: "L_s", e1: "🔒", e2: "🐱", s1: "Lås dörren.", s2: "En los i skogen." },
+            { pair: ["Å", "O"], w1: "Bås", d1: "مقصورة", w2: "Bos", d2: "عش", frame: "B_s", e1: "🚿", e2: "🐦", s1: "Duschbås.", s2: "Fågelbos." },
+            { pair: ["Å", "O"], w1: "Rås", d1: "حدود", w2: "Ros", d2: "وردة", frame: "R_s", e1: "📏", e2: "🌹", s1: "En gammal rå.", s2: "En röd ros." },
+            { pair: ["Å", "O"], w1: "Tår", d1: "دمعة", w2: "Tor", d2: "جاف", frame: "T_r", e1: "😢", e2: "🏜️", s1: "En tår i ögat.", s2: "Torr mark." },
+            { pair: ["Å", "O"], w1: "Vår", d1: "ربيع", w2: "Vor", d2: "صديد", frame: "V_r", e1: "🌸", e2: "🩹", s1: "Våren kommer.", s2: "Var i såret." },
+            { pair: ["Å", "O"], w1: "Trål", d1: "شبكة صيد", w2: "Trol", d2: "يسحر", frame: "Tr_l", e1: "🎣", e2: "🧙", s1: "En fisktrål.", s2: "Han trollade." },
+            { pair: ["Å", "O"], w1: "Skål", d1: "في صحتك", w2: "Skol", d2: "مدرسة", frame: "Sk_l", e1: "🥂", e2: "🏫", s1: "Skål!", s2: "Gå till skolan." },
+            { pair: ["Å", "O"], w1: "Pål", d1: "عمود", w2: "Pol", d2: "قطب", frame: "P_l", e1: "🪵", e2: "🧭", s1: "En träpåle.", s2: "Nordpolen." },
+            { pair: ["Å", "O"], w1: "Nål", d1: "إبرة", w2: "Nol", d2: "صفر", frame: "N_l", e1: "🪡", e2: "0️⃣", s1: "Sy med en nål.", s2: "Noll poäng." },
+            { pair: ["Å", "O"], w1: "Bål", d1: "نار مخيم", w2: "Bol", d2: "عش", frame: "B_l", e1: "🔥", e2: "🐝", s1: "Sitta vid bålet.", s2: "Ett getingbol." },
+            { pair: ["Å", "O"], w1: "Fål", d1: "مهر", w2: "Fol", d2: "شعب", frame: "F_l", e1: "🐴", e2: "👥", s1: "Ett ungt föl.", s2: "Folket röstar." },
+            { pair: ["Å", "O"], w1: "Sår", d1: "جرح", w2: "Sor", d2: "همهمة", frame: "S_r", e1: "🩹", e2: "💤", s1: "Ett djupt sår.", s2: "Han sorlade." },
+            { pair: ["Å", "O"], w1: "Hår", d1: "شعر", w2: "Hor", d2: "زنى", frame: "H_r", e1: "💇", e2: "💔", s1: "Långt hår.", s2: "Hor är synd." },
 
-            { pair: ["Å", "A"], w1: "Hår", d1: "شعر", w2: "Har", d2: "يملك", frame: "H_r" },
-            { pair: ["Å", "A"], w1: "Kår", d1: "فيلق / اتحاد", w2: "Kar", d2: "حوض", frame: "K_r" },
-            { pair: ["Å", "A"], w1: "Lår", d1: "فخذ", w2: "Lar", d2: "يمشي ببطء", frame: "L_r" },
-            { pair: ["Å", "A"], w1: "Mål", d1: "هدف / وجبة", w2: "Mal", d2: "عثة", frame: "M_l" },
-            { pair: ["Å", "A"], w1: "Skål", d1: "نخب / وعاء", w2: "Skal", d2: "قشرة", frame: "Sk_l" },
+            // === I vs E (15 pairs) ===
+            { pair: ["I", "E"], w1: "Fil", d1: "ملف", w2: "Fel", d2: "خطأ", frame: "F_l", e1: "📁", e2: "❌", s1: "Skicka mig en fil.", s2: "Det blev fel." },
+            { pair: ["I", "E"], w1: "Vi", d1: "نحن", w2: "Ve", d2: "ويل", frame: "V_", e1: "🤗", e2: "😱", s1: "Vi ska resa bort.", s2: "Ve och fasa." },
+            { pair: ["I", "E"], w1: "Bit", d1: "قطعة", w2: "Bet", d2: "عض", frame: "B_t", e1: "🍰", e2: "🦷", s1: "En liten bit.", s2: "Hunden bet." },
+            { pair: ["I", "E"], w1: "Lid", d1: "يعاني", w2: "Led", d2: "قاد", frame: "L_d", e1: "😢", e2: "👆", s1: "Han lider av smärta.", s2: "Hon ledde vägen." },
+            { pair: ["I", "E"], w1: "Sin", d1: "ملكه", w2: "Sen", d2: "متأخر", frame: "S_n", e1: "👤", e2: "⏰", s1: "Hans sin bil.", s2: "Du är sen." },
+            { pair: ["I", "E"], w1: "Min", d1: "ملكي", w2: "Men", d2: "لكن", frame: "M_n", e1: "👆", e2: "🔄", s1: "Min bok.", s2: "Men ändå." },
+            { pair: ["I", "E"], w1: "Rim", d1: "قافية", w2: "Rem", d2: "حزام", frame: "R_m", e1: "📝", e2: "⌚", s1: "Ord som rimmar.", s2: "En klockrem." },
+            { pair: ["I", "E"], w1: "Sik", d1: "سمك", w2: "Sek", d2: "ثانية", frame: "S_k", e1: "🐟", e2: "⏱️", s1: "En sik i sjön.", s2: "Några sekunder." },
+            { pair: ["I", "E"], w1: "Vik", d1: "خليج", w2: "Vek", d2: "طوى", frame: "V_k", e1: "🏖️", e2: "📄", s1: "En vacker vik.", s2: "Han vek pappret." },
+            { pair: ["I", "E"], w1: "Pil", d1: "سهم", w2: "Pel", d2: "عمود", frame: "P_l", e1: "🏹", e2: "🏛️", s1: "En pil i luften.", s2: "En pelare." },
+            { pair: ["I", "E"], w1: "Rit", d1: "رسم", w2: "Ret", d2: "أزعج", frame: "R_t", e1: "✏️", e2: "😤", s1: "Jag ritade.", s2: "Det retade mig." },
+            { pair: ["I", "E"], w1: "Skrift", d1: "كتابة", w2: "Skeft", d2: "مائل", frame: "Skr_ft", e1: "✍️", e2: "📐", s1: "Äldre skrift.", s2: "En skev linje." },
+            { pair: ["I", "E"], w1: "Gripa", d1: "يمسك", w2: "Grepa", d2: "شوكة", frame: "Gr_pa", e1: "🤲", e2: "🔱", s1: "Gripa tag i.", s2: "En halmgrep." },
+            { pair: ["I", "E"], w1: "Stig", d1: "ممر", w2: "Steg", d2: "خطوة", frame: "St_g", e1: "🛤️", e2: "👣", s1: "En smal stig.", s2: "Ett stort steg." },
+            { pair: ["I", "E"], w1: "Vin", d1: "نبيذ", w2: "Ven", d2: "صفير", frame: "V_n", e1: "🍷", e2: "💨", s1: "Rött vin.", s2: "Vinden ven." },
 
-            { pair: ["I", "E"], w1: "Fil", d1: "ملف / لبن", w2: "Fel", d2: "خطأ", frame: "F_l" },
-            { pair: ["I", "E"], w1: "Sila", d1: "يصفي", w2: "Sela", d2: "عضلة", frame: "S_la" },
-            { pair: ["I", "E"], w1: "Vi", d1: "نحن", w2: "Ve", d2: "ويل / ألم", frame: "V_" },
-
-            { pair: ["I", "Y"], w1: "Fil", d1: "لبن / ملف", w2: "Fyl", d2: "سكير (عامية)", frame: "F_l" },
-            { pair: ["I", "Y"], w1: "Sill", d1: "رنجة", w2: "Syll", d2: "عتبة", frame: "S_ll" },
-            { pair: ["I", "Y"], w1: "Sin", d1: "خاصته", w2: "Syn", d2: "رؤية / بصر", frame: "S_n" },
-            { pair: ["I", "Y"], w1: "Min", d1: "لي / تعبير وجه", w2: "Myn", d2: "فم النهر", frame: "M_n" }
+            // === I vs Y (12 pairs) ===
+            { pair: ["I", "Y"], w1: "Fil", d1: "لبن", w2: "Fyl", d2: "سكير", frame: "F_l", e1: "🥛", e2: "🥴", s1: "Jag äter fil.", s2: "Ett fyllo sov." },
+            { pair: ["I", "Y"], w1: "Sill", d1: "رنجة", w2: "Syll", d2: "عتبة", frame: "S_ll", e1: "🐟", e2: "🚪", s1: "Sill är gott.", s2: "Syllen i huset." },
+            { pair: ["I", "Y"], w1: "Vit", d1: "أبيض", w2: "Vyt", d2: "صاح", frame: "V_t", e1: "⚪", e2: "📢", s1: "En vit klänning.", s2: "Hon vyter." },
+            { pair: ["I", "Y"], w1: "Bit", d1: "قطعة", w2: "Byt", d2: "بادل", frame: "B_t", e1: "🍰", e2: "🔄", s1: "En bit kaka.", s2: "Byt kläder." },
+            { pair: ["I", "Y"], w1: "Bil", d1: "سيارة", w2: "Byl", d2: "ثور", frame: "B_l", e1: "🚗", e2: "🐂", s1: "En röd bil.", s2: "En stor tyr." },
+            { pair: ["I", "Y"], w1: "Sim", d1: "سباحة", w2: "Sym", d2: "خياطة", frame: "S_m", e1: "🏊", e2: "🧵", s1: "Jag gillar att simma.", s2: "Symaskinen." },
+            { pair: ["I", "Y"], w1: "Kil", d1: "وتد", w2: "Kyl", d2: "ثلاجة", frame: "K_l", e1: "🔨", e2: "❄️", s1: "En träkil.", s2: "Lägg i kylen." },
+            { pair: ["I", "Y"], w1: "Rit", d1: "رسم", w2: "Ryt", d2: "زمجر", frame: "R_t", e1: "✏️", e2: "🦁", s1: "Jag ritade.", s2: "Lejonet ryter." },
+            { pair: ["I", "Y"], w1: "Lid", d1: "يعاني", w2: "Lyd", d2: "يطيع", frame: "L_d", e1: "😢", e2: "🎯", s1: "Han lider.", s2: "Lyd reglerna." },
+            { pair: ["I", "Y"], w1: "Stil", d1: "أسلوب", w2: "Styl", d2: "ركيزة", frame: "St_l", e1: "💅", e2: "🏗️", s1: "Fin stil.", s2: "En stylta." },
+            { pair: ["I", "Y"], w1: "Pir", d1: "رصيف", w2: "Pyr", d2: "يشتعل", frame: "P_r", e1: "⚓", e2: "🔥", s1: "En lång pir.", s2: "Elden pyr." },
+            { pair: ["I", "Y"], w1: "Gris", d1: "خنزير", w2: "Grys", d2: "فجر", frame: "Gr_s", e1: "🐷", e2: "🌅", s1: "En rosa gris.", s2: "I gryningen." }
         ];
 
+        // ==========================================
+        // STATE
+        // ==========================================
         const TOTAL_STAGES = 50;
-        const LEVELS_PER_STAGE = 7;
-        const AUTO_ADVANCE_MS = 2000; // Faster auto advance per level? No, only after BOTH solved.
+        const LEVELS_PER_STAGE = 5;
 
-        let currentStage = 1;
-        let currentLevel = 1;
+        // Load saved stage if available
+        let savedStage = localStorage.getItem('vowelGameStage');
+        let currentStage = savedStage ? parseInt(savedStage) : 1;
+        let currentLevel = 1; // 1 to 7
         let currentPair = null;
+        let lives = 3;
+        let streak = 0;
+        let score = 0;
         let isProcessing = false;
-        let timerId = null;
-
-        // New: Track solved state
+        let levelStartTime = 0;
+        let isBossWave = false;
         let solvedStatus = { 1: false, 2: false };
-        let currentTarget = 1; // 1 or 2
+        let failedStatus = { 1: false, 2: false }; // Track failures distinct from solved
+        let currentTarget = 1;
+        let hasStarted = false;
+
+        // Persistent Question History
+        let seenIndices = [];
+        try {
+            seenIndices = JSON.parse(localStorage.getItem('vowelPlayedIndices') || '[]');
+        } catch (e) { seenIndices = []; }
 
         // Elements
-        const word1Text = document.querySelector('.word-1-text');
-        const word1Def = document.querySelector('.word-1-def');
-        const word2Text = document.querySelector('.word-2-text');
-        const word2Def = document.querySelector('.word-2-def');
         const optionsArea = document.getElementById('optionsArea');
         const feedbackOverlay = document.getElementById('feedbackOverlay');
-        const feedbackIcon = document.getElementById('feedbackIcon');
-        const feedbackText = document.getElementById('feedbackText');
         const progressBar = document.getElementById('progressBar');
         const levelBadge = document.getElementById('levelBadge');
+        const cardFlipper = document.getElementById('cardFlipper');
+        const speedBadge = document.getElementById('speedBadge');
+        const bossBanner = document.getElementById('bossBanner');
+        const livesContainer = document.getElementById('livesContainer');
+        const startScreen = document.getElementById('startScreen');
+        const playArea = document.getElementById('playArea');
 
-        // Drag State
-        let draggedVowel = null;
+        // Tilt Logic
+        const container = document.querySelector('.game-container');
+        container.addEventListener('mousemove', (e) => {
+            if (isProcessing || !hasStarted) return;
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+            const centerX = rect.width / 2; const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -5; const rotateY = ((x - centerX) / centerX) * 5;
+            cardFlipper.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+        container.addEventListener('mouseleave', () => { cardFlipper.style.transform = `rotateX(0) rotateY(0)`; });
+
+        function startGame() {
+            startScreen.style.opacity = '0';
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                playArea.style.display = 'block';
+                hasStarted = true;
+                initGame();
+            }, 500);
+        }
 
         function initGame() {
-            currentStage = 1;
+            window.speechSynthesis.getVoices();
+            // Load Saved Stage
+            let saved = localStorage.getItem('vowelGameStage');
+            currentStage = saved ? parseInt(saved) : 1;
             currentLevel = 1;
+            score = 0; lives = 3; streak = 0;
+            updateLives();
+            setupDropZones(); // Fix: Initialize drop zones
             loadLevel();
         }
 
-        function getRandomPair() {
-            return minimalPairsData[Math.floor(Math.random() * minimalPairsData.length)];
+        function setupDropZones() {
+            // Mouse Drag Support
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault(); // Necessary to allow dropping
+                    if (!zone.classList.contains('solved')) {
+                        zone.classList.add('drag-over');
+                        e.dataTransfer.dropEffect = 'move';
+                    }
+                });
+
+                zone.addEventListener('dragleave', (e) => {
+                    zone.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    if (zone.classList.contains('solved')) return;
+
+                    const vowel = e.dataTransfer.getData('text/plain');
+                    if (vowel) {
+                        const slotId = parseInt(zone.dataset.slot);
+                        // Only accept answers on the current target slot
+                        if (slotId === currentTarget) {
+                            handleAnswer(vowel, null, slotId);
+                        }
+                    }
+                });
+            });
+        }
+
+        function updateLives() {
+            livesContainer.innerHTML = '';
+            for (let i = 0; i < 3; i++) {
+                const h = document.createElement('span');
+                h.className = `heart ${i < lives ? '' : 'lost'}`;
+                h.textContent = '❤️';
+                livesContainer.appendChild(h);
+            }
+        }
+
+        function checkSkins() {
+            document.body.classList.remove('skin-neon', 'skin-gold');
+            if (streak > 5) document.body.classList.add('skin-neon');
+            if (score > 2000) document.body.classList.add('skin-gold');
         }
 
         function loadLevel() {
             if (isProcessing) return;
 
-            if (currentLevel > LEVELS_PER_STAGE) {
-                if (currentStage >= TOTAL_STAGES) {
-                    showEndScreen();
-                    return;
-                }
-                currentStage++;
-                currentLevel = 1;
+            // Check Win Condition (Max Stages)
+            if (currentStage > TOTAL_STAGES) {
+                showEndScreen(true);
+                return;
             }
 
-            levelBadge.textContent = `Nivå ${currentStage} - ${currentLevel}/${LEVELS_PER_STAGE}`;
-            const totalProgress = ((currentStage - 1) * LEVELS_PER_STAGE + (currentLevel - 1)) / (TOTAL_STAGES * LEVELS_PER_STAGE) * 100;
-            progressBar.style.width = `${totalProgress}%`;
+            // Boss Check: Last level of stage (Level 7)
+            isBossWave = (currentLevel === LEVELS_PER_STAGE);
+            document.body.classList.toggle('boss-mode', isBossWave);
+            bossBanner.innerHTML = isBossWave ? '🔥 BOSS LEVEL 🔥' : '';
+            bossBanner.style.display = isBossWave ? 'block' : 'none';
 
+            levelBadge.textContent = `Stage ${currentStage} • Level ${currentLevel}/${LEVELS_PER_STAGE}`;
+
+            // Progress Bar (Overall Progress)
+            const totalLevelsPlayed = ((currentStage - 1) * LEVELS_PER_STAGE) + currentLevel;
+            const totalLevels = TOTAL_STAGES * LEVELS_PER_STAGE;
+            progressBar.style.width = `${(totalLevelsPlayed / totalLevels) * 100}%`;
+
+            checkSkins();
+
+            // Reset Card with Slide Animation
+            cardFlipper.classList.remove('flipped');
+            cardFlipper.classList.remove('slide-in');
+            void cardFlipper.offsetWidth; // Force Reflow
+            cardFlipper.classList.add('slide-in');
+
+            speedBadge.classList.remove('visible');
             feedbackOverlay.classList.remove('visible');
-            clearTimeout(timerId);
+            document.getElementById('inlineCountdown').classList.remove('visible');
+            levelStartTime = Date.now();
 
-            currentPair = getRandomPair();
+            document.getElementById('inlineCountdown').classList.remove('visible');
+            levelStartTime = Date.now();
+
+            // Get Next Pair (Persistent)
+            currentPair = getNextPair();
+
             solvedStatus = { 1: false, 2: false };
-            currentTarget = 1; // Always start aiming at 1, but drag allows 2.
+            failedStatus = { 1: false, 2: false };
+            currentTarget = 1;
 
-            // Render Words
-            const vowels = currentPair.pair;
             const p = currentPair;
+            // Fix: Use Regex for case-insensitive replacement (O -> o in Son)
+            let frame1 = p.w1.replace(new RegExp(p.pair[0], 'i'), '<span class="missing-vowel"></span>');
+            let frame2 = p.w2.replace(new RegExp(p.pair[1], 'i'), '<span class="missing-vowel"></span>');
 
-            // Frames
-            let frame1, frame2;
-            const ph = '<span class="missing-vowel">?</span>';
-            if (p.frame && p.frame !== "FAKE") {
-                frame1 = p.frame.replace('_', ph);
-                frame2 = frame1; // Default
-                if (p.w1.length !== p.w2.length) {
-                    frame1 = p.w1.replace(p.pair[0], ph).replace(p.pair[0].toLowerCase(), ph);
-                    frame2 = p.w2.replace(p.pair[1], ph).replace(p.pair[1].toLowerCase(), ph);
-                }
-            } else {
-                frame1 = p.w1.replace(p.pair[0], ph);
-                frame2 = p.w2.replace(p.pair[1], ph);
-            }
+            document.querySelector('.word-1-text').innerHTML = frame1;
+            document.querySelector('.word-2-text').innerHTML = frame2;
+            document.querySelector('.word-1-def').innerText = p.d1;
+            document.querySelector('.word-2-def').innerText = p.d2;
+            document.getElementById('emoji1').textContent = p.e1 || '📦';
+            document.getElementById('emoji2').textContent = p.e2 || '📦';
 
-            word1Text.innerHTML = frame1;
-            word1Def.textContent = p.d1;
-            word2Text.innerHTML = frame2;
-            word2Def.textContent = p.d2;
+            document.getElementById('backEmoji1').textContent = p.e1 || '';
+            document.getElementById('backEmoji2').textContent = p.e2 || '';
+            document.getElementById('sentence1').innerHTML = (p.s1 || "").replace(new RegExp(p.w1.substr(0, 3), 'gi'), m => `<em>${m}</em>`);
+            document.getElementById('sentence2').innerHTML = (p.s2 || "").replace(new RegExp(p.w2.substr(0, 3), 'gi'), m => `<em>${m}</em>`);
 
             updateTargetStyling();
 
-            // Buttons
+            const vowels = p.pair;
             const shuffledVowels = [...vowels].sort(() => Math.random() - 0.5);
             optionsArea.innerHTML = '';
-
             shuffledVowels.forEach(v => {
                 const btn = document.createElement('button');
-                btn.className = 'vowel-btn';
+                btn.className = 'vowel-btn slide-in';
                 btn.textContent = v;
                 btn.draggable = true;
-
-                // Click Handler -> targets *current* target
-                btn.addEventListener('click', (e) => animateFly(v, btn, currentTarget));
-
-                // Drag Start
-                btn.addEventListener('dragstart', (e) => {
-                    draggedVowel = v;
-                    btn.classList.add('dragging');
-                    e.dataTransfer.setData('text/plain', v);
-                    e.dataTransfer.effectAllowed = 'move';
-                });
-
-                btn.addEventListener('dragend', () => {
-                    btn.classList.remove('dragging');
-                    draggedVowel = null;
-                    document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
-                });
-
-                // Touch Drag (Mobile)
-                btn.addEventListener('touchstart', handleTouchStart, { passive: false });
-                btn.addEventListener('touchmove', handleTouchMove, { passive: false });
-                btn.addEventListener('touchend', handleTouchEnd);
-
+                setupInteractions(btn, v);
                 optionsArea.appendChild(btn);
             });
         }
 
         function updateTargetStyling() {
-            const slots = [1, 2];
-            slots.forEach(id => {
+            [1, 2].forEach(id => {
                 const el = document.getElementById(`slot${id}`);
-                el.classList.remove('active-target', 'solved');
-                el.dataset.isActive = 'false';
+                el.classList.remove('active-target', 'solved', 'wrong');
 
-                if (solvedStatus[id]) {
-                    el.classList.add('solved');
-                    // visual fill handled in handleAnswer
-                } else {
-                    // Not solved
-                    if (id === currentTarget) {
-                        el.classList.add('active-target'); // dashed outline
-                        el.dataset.isActive = 'true';
-                        el.style.opacity = '1';
-                    } else {
-                        // Not solved, not current active
-                        // Can we drag to it? Yes.
-                        el.dataset.isActive = 'true'; // Allow drag dropping on both anytime
-                        el.style.opacity = '0.7';
-                    }
-                }
+                if (failedStatus[id]) el.classList.add('wrong'); // Priority to fail
+                else if (solvedStatus[id]) el.classList.add('solved');
+                else if (id === currentTarget) el.classList.add('active-target');
             });
         }
 
-        // Touch Drag Handlers
-        let touchEl = null; let touchClone = null; let touchStartX, touchStartY;
+        function setupInteractions(btn, vowel) {
+            btn.addEventListener('click', () => animateFly(vowel, btn, currentTarget));
 
-        function handleTouchStart(e) {
+            // Mouse Drag
+            btn.addEventListener('dragstart', (e) => {
+                btn.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', vowel);
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            btn.addEventListener('dragend', () => {
+                btn.classList.remove('dragging');
+                document.querySelectorAll('.word-item').forEach(e => e.classList.remove('drag-over'));
+            });
+
+            // Touch Drag (Full Support)
+            btn.addEventListener('touchstart', (e) => handleTouchStart(e, btn), { passive: false });
+            btn.addEventListener('touchmove', handleTouchMove, { passive: false });
+            btn.addEventListener('touchend', (e) => handleTouchEnd(e, btn, vowel));
+        }
+
+        // Touch Logic
+        let touchClone = null;
+        let touchOffset = { x: 0, y: 0 };
+
+        function handleTouchStart(e, btn) {
             if (isProcessing) return;
-            touchEl = e.currentTarget;
             const touch = e.touches[0];
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
-            draggedVowel = touchEl.textContent.trim();
-            touchClone = touchEl.cloneNode(true);
-            touchClone.style.position = 'fixed'; touchClone.style.zIndex = '1000'; touchClone.style.pointerEvents = 'none';
-            touchClone.style.width = touchEl.offsetWidth + 'px'; touchClone.style.height = touchEl.offsetHeight + 'px';
-            touchClone.style.left = touchEl.getBoundingClientRect().left + 'px'; touchClone.style.top = touchEl.getBoundingClientRect().top + 'px';
+            const rect = btn.getBoundingClientRect();
+            touchOffset.x = touch.clientX - rect.left;
+            touchOffset.y = touch.clientY - rect.top;
+
+            btn.classList.add('dragging');
+
+            // Create visual clone for dragging
+            touchClone = btn.cloneNode(true);
+            touchClone.style.position = 'fixed';
+            touchClone.style.width = rect.width + 'px';
+            touchClone.style.height = rect.height + 'px';
+            touchClone.style.left = rect.left + 'px';
+            touchClone.style.top = rect.top + 'px';
+            touchClone.style.zIndex = '2000';
+            touchClone.style.pointerEvents = 'none';
+            touchClone.style.opacity = '0.9';
+            touchClone.style.transform = 'scale(1.1)';
+            touchClone.style.boxShadow = '0 10px 20px rgba(0,0,0,0.5)';
             document.body.appendChild(touchClone);
-            touchEl.classList.add('dragging');
+        }
+
+        function getNextPair() {
+            // Find indices not yet seen
+            let available = minimalPairsData.map((_, i) => i).filter(i => !seenIndices.includes(i));
+
+            // If all seen, reset history (start new cycle)
+            if (available.length === 0) {
+                const lastSeen = seenIndices[seenIndices.length - 1]; // Last text played
+                seenIndices = [];
+                available = minimalPairsData.map((_, i) => i);
+
+                // Prevent immediate repeat of the very last word
+                if (available.length > 1) {
+                    available = available.filter(i => i !== lastSeen);
+                }
+            }
+
+            // Pick random
+            const randIndex = available[Math.floor(Math.random() * available.length)];
+
+            // Save to history
+            seenIndices.push(randIndex);
+            localStorage.setItem('vowelPlayedIndices', JSON.stringify(seenIndices));
+
+            return minimalPairsData[randIndex];
         }
 
         function handleTouchMove(e) {
             if (!touchClone) return;
-            e.preventDefault();
+            e.preventDefault(); // Prevent scrolling while dragging
             const touch = e.touches[0];
-            const dx = touch.clientX - touchStartX; const dy = touch.clientY - touchStartY;
-            touchClone.style.transform = `translate(${dx}px, ${dy}px)`;
+            touchClone.style.left = (touch.clientX - touchOffset.x) + 'px';
+            touchClone.style.top = (touch.clientY - touchOffset.y) + 'px';
 
+            // Highlight Drop Zones
             const target = document.elementFromPoint(touch.clientX, touch.clientY);
-            const dropZone = target ? target.closest('.word-item') : null;
+            const dropZone = target ? target.closest('.drop-zone') : null;
             document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
             if (dropZone && !dropZone.classList.contains('solved')) {
                 dropZone.classList.add('drag-over');
             }
         }
 
-        function handleTouchEnd(e) {
+        function handleTouchEnd(e, btn, vowel) {
             if (!touchClone) return;
             const touch = e.changedTouches[0];
             const target = document.elementFromPoint(touch.clientX, touch.clientY);
-            const dropZone = target ? target.closest('.word-item') : null;
-            document.body.removeChild(touchClone); touchClone = null;
-            touchEl.classList.remove('dragging');
+            const dropZone = target ? target.closest('.drop-zone') : null;
+
+            // Cleanup
+            document.body.removeChild(touchClone);
+            touchClone = null;
+            btn.classList.remove('dragging');
             document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
 
             if (dropZone && !dropZone.classList.contains('solved')) {
                 const slotId = parseInt(dropZone.dataset.slot);
-                handleAnswer(draggedVowel, touchEl, slotId);
+                // Only accept answers on the current target slot
+                if (slotId === currentTarget) {
+                    handleAnswer(vowel, btn, slotId);
+                }
             }
         }
 
-        // Desktop Drop
-        document.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            const dropZone = e.target.closest('.word-item');
-            if (dropZone && !dropZone.classList.contains('solved')) dropZone.classList.add('drag-over');
-        });
-
-        document.addEventListener('dragleave', (e) => {
-            const dropZone = e.target.closest('.word-item');
-            if (dropZone) dropZone.classList.remove('drag-over');
-        });
-
-        document.addEventListener('drop', (e) => {
-            e.preventDefault();
-            const dropZone = e.target.closest('.word-item');
-            if (dropZone && !dropZone.classList.contains('solved')) {
-                const vowel = e.dataTransfer.getData('text/plain');
-                const btn = Array.from(document.querySelectorAll('.vowel-btn')).find(b => b.textContent === vowel);
-                const slotId = parseInt(dropZone.dataset.slot);
-                handleAnswer(vowel, btn, slotId);
-            }
-            document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
-        });
-
-        // Fly Animation
         function animateFly(vowel, btnEl, targetSlotId) {
-            if (isProcessing) return;
-            if (solvedStatus[targetSlotId]) return; // Cannot fly to solved
-
+            if (isProcessing || solvedStatus[targetSlotId]) return;
             isProcessing = true;
-            const targetEl = document.getElementById(`slot${targetSlotId}`);
+
+            // Spawn Clone
             const clone = btnEl.cloneNode(true);
             clone.classList.add('flying-clone');
             const rect = btnEl.getBoundingClientRect();
             clone.style.left = rect.left + 'px'; clone.style.top = rect.top + 'px';
             document.body.appendChild(clone);
 
-            const qMark = targetEl.querySelector('.missing-vowel') || targetEl; // Fallback
-            const targetRect = qMark.getBoundingClientRect();
-            clone.offsetHeight;
-            clone.style.left = (targetRect.left - (rect.width / 2) + (targetRect.width / 2)) + 'px';
-            clone.style.top = (targetRect.top - (rect.height / 2) + (targetRect.height / 2)) + 'px';
-            clone.style.transform = 'scale(0.5)'; clone.style.opacity = '0';
+            const targetEl = document.getElementById(`slot${targetSlotId}`);
+            const tRect = targetEl.getBoundingClientRect();
 
+            // Animate
             setTimeout(() => {
-                document.body.removeChild(clone);
-                isProcessing = false;
-                handleAnswer(vowel, btnEl, targetSlotId);
-            }, 500);
+                clone.style.left = (tRect.left + tRect.width / 2 - 25) + 'px';
+                clone.style.top = (tRect.top + tRect.height / 2 - 25) + 'px';
+                clone.style.transform = 'scale(0.5)'; clone.style.opacity = '0';
+            }, 10);
+
+            setTimeout(() => { document.body.removeChild(clone); isProcessing = false; handleAnswer(vowel, btnEl, targetSlotId); }, 400); // Fast 400ms
+        }
+
+        function playAudioForSlot(id) {
+            const w = id === 1 ? currentPair.w1 : currentPair.w2;
+            if (window.speechSynthesis) window.speechSynthesis.speak(new SpeechSynthesisUtterance(w));
+        }
+
+        function showComboText(text) {
+            const el = document.createElement('div');
+            el.className = 'combo-text';
+            el.textContent = text;
+            const rect = document.getElementById('livesContainer').getBoundingClientRect();
+            el.style.left = (rect.left - 50) + 'px';
+            el.style.top = (rect.top + 20) + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1000);
         }
 
         function handleAnswer(selectedVowel, btnEl, slotId) {
-            if (isProcessing && !btnEl.classList.contains('dragging')) return;
-            if (solvedStatus[slotId]) return; // Already solved
-
-            // Validate Logic
-            // Slot 1 expects pair[0], Slot 2 expects pair[1]
+            if (isProcessing) return;
             const expectedVowel = slotId === 1 ? currentPair.pair[0] : currentPair.pair[1];
 
-            // Loose check for A vs Ä logic? No, strict.
-            const isCorrect = selectedVowel === expectedVowel;
-
-            if (isCorrect) {
-                // Mark Correct
+            if (selectedVowel === expectedVowel) {
                 solvedStatus[slotId] = true;
+                failedStatus[slotId] = false; // Clear failure if corrected
+                const slotEl = document.getElementById(`slot${slotId}`);
+                slotEl.classList.add('solved');
+                slotEl.classList.remove('wrong'); // Fix: Remove red border if corrected
 
-                // Fill Text
-                const targetTextEl = slotId === 1 ? word1Text : word2Text;
                 const fullWord = slotId === 1 ? currentPair.w1 : currentPair.w2;
-                targetTextEl.innerHTML = fullWord.replace(expectedVowel, `<span style="color:var(--success)">${expectedVowel}</span>`);
+                if (slotId === 1) document.querySelector('.word-1-text').innerHTML = fullWord;
+                else document.querySelector('.word-2-text').innerHTML = fullWord;
 
-                // Check if BOTH solved
+                if (btnEl) btnEl.classList.add('selected-correct'); // Guarded
+                playAudioForSlot(slotId);
+                streak++;
+                score += 100 * (streak > 5 ? 2 : 1);
+
+                // Combo Visuals
+                if (streak % 5 === 0) showComboText(`${streak}x COMBO!`);
+                else if (streak === 3) showComboText("HEATING UP!");
+
                 if (solvedStatus[1] && solvedStatus[2]) {
                     levelComplete();
                 } else {
-                    // Not done yet.
-                    // Switch target focus if we solved the current target
-                    if (currentTarget === slotId) {
-                        currentTarget = slotId === 1 ? 2 : 1;
-                    }
+                    currentTarget = slotId === 1 ? 2 : 1;
                     updateTargetStyling();
+                    if (streak > 3) playAudioForSlot(currentTarget);
                 }
             } else {
-                // Wrong
-                const card = document.getElementById('questionCard');
-                card.classList.add('wrong');
-                setTimeout(() => card.classList.remove('wrong'), 500);
+                if (btnEl) btnEl.classList.add('selected-wrong'); // Guarded
+                lives--; streak = 0; updateLives();
+                if (window.navigator.vibrate) window.navigator.vibrate(400);
 
-                // Maybe just shake button?
-                if (btnEl) {
-                    btnEl.classList.add('selected-wrong');
-                    setTimeout(() => btnEl.classList.remove('selected-wrong'), 500);
+                // Reveal Answer in RED and Continue
+                solvedStatus[slotId] = true;
+                failedStatus[slotId] = true; // Mark as failed persistence
+                const slotEl = document.getElementById(`slot${slotId}`);
+                slotEl.classList.add('wrong');
+
+                // Show the USER'S choice (even if wrong) so they see "Böl" instead of "Bol"
+                // Match case logic: If "_" is at start, Keep Case. If middle, Lowercase.
+                // Simple heuristic: Check frame index 0.
+                const isStart = currentPair.frame.indexOf('_') === 0;
+                const vDisplay = isStart ? selectedVowel.toUpperCase() : selectedVowel.toLowerCase();
+                const wrongWord = currentPair.frame.replace('_', vDisplay);
+
+                if (slotId === 1) document.querySelector('.word-1-text').innerText = wrongWord;
+                else document.querySelector('.word-2-text').innerText = wrongWord;
+
+                if (lives <= 0) {
+                    showEndScreen(false);
+                } else {
+                    // Continue Flow
+                    if (solvedStatus[1] && solvedStatus[2]) {
+                        levelComplete();
+                    } else {
+                        currentTarget = slotId === 1 ? 2 : 1;
+                        updateTargetStyling();
+                    }
                 }
             }
         }
 
         function levelComplete() {
             isProcessing = true;
-            document.getElementById('questionCard').classList.add('correct');
-            feedbackIcon.textContent = '🎉';
-            feedbackText.textContent = 'Bra! / ممتاز';
-            feedbackOverlay.classList.add('visible');
+            const timeTaken = Date.now() - levelStartTime;
+            if (timeTaken < 5000) { speedBadge.classList.add('visible'); score += 50; }
 
-            const timerBar = document.querySelector('.next-timer-fill');
-            timerBar.style.animation = 'none';
-            timerBar.offsetHeight;
-            timerBar.style.animation = 'timer-shrink 2s linear forwards';
+            // Hide Boss Banner during transition to avoid confusion
+            document.getElementById('bossBanner').style.display = 'none';
 
-            timerId = setTimeout(() => {
-                isProcessing = false;
-                document.getElementById('questionCard').classList.remove('correct', 'wrong');
-                currentLevel++;
-                loadLevel();
-            }, 2000); // 2 seconds between levels
+            setTimeout(() => { cardFlipper.classList.add('flipped'); }, 600);
+
+            // Wait for user to read context (reduced to 1s based on request)
+            setTimeout(() => {
+                startCountdown();
+            }, 1000);
         }
 
-        function showEndScreen() {
-            document.querySelector('.game-container').innerHTML = '';
-            document.getElementById('endScreen').style.display = 'block';
-            document.querySelector('.game-container').appendChild(document.getElementById('endScreen'));
+        function startCountdown() {
+            const container = document.getElementById('inlineCountdown');
+            // Update Text based on context
+            const isStageClear = (currentLevel === LEVELS_PER_STAGE);
+            const msg = isStageClear ? "NEXT STAGE" : "NEXT LEVEL";
+
+            container.innerHTML = `<div class="countdown-number" id="cNum">3</div><div class="countdown-text">${msg}</div>`;
+            container.classList.add('visible');
+
+            let count = 3;
+            const numEl = container.querySelector('#cNum');
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    numEl.textContent = count;
+                } else {
+                    clearInterval(timer);
+                    container.classList.remove('visible');
+
+                    // Progression Logic
+                    if (currentLevel < LEVELS_PER_STAGE) {
+                        currentLevel++;
+                    } else {
+                        // Stage Complete!
+                        currentStage++;
+                        currentLevel = 1;
+
+                        // Default Reward: +1 Heart (Max 5)
+                        if (lives < 5) {
+                            lives++;
+                            updateLives();
+                            showComboText("+1 ❤️");
+                        }
+
+                        // Save Progress Explicitly
+                        try {
+                            localStorage.setItem('vowelGameStage', currentStage.toString());
+                        } catch (e) { console.error("Save failed", e); }
+
+                        // Trigger Celebration
+                        triggerStageCelebration();
+                    }
+                    isProcessing = false;
+                    loadLevel();
+                }
+            }, 1000);
         }
 
-        initGame();
+        function showEndScreen(win) {
+            document.querySelector('.game-container').querySelector('#playArea').style.display = 'none';
+            const endScreen = document.getElementById('endScreen');
+            endScreen.style.display = 'block';
+            endScreen.querySelector('#endTitle').textContent = win ? "Grattis! 👑" : "Game Over 💀";
+            endScreen.querySelector('#endMessage').textContent = win ? "Du har bemästrat alla nivåer!" : "Dina liv tog slut.";
+            endScreen.querySelector('#finalScore').textContent = `Poäng: ${score}`;
+        }
 
+        // ==========================================
+        // UI FEATURES
+        // ==========================================
+        function toggleStageMap() {
+            const el = document.getElementById('stageMapOverlay');
+            if (el.style.display === 'block') {
+                el.style.display = 'none';
+            } else {
+                renderStageMap();
+                el.style.display = 'block';
+            }
+        }
+
+        function renderStageMap() {
+            const grid = document.getElementById('stageGrid');
+            grid.innerHTML = '';
+            for (let i = 1; i <= TOTAL_STAGES; i++) {
+                const node = document.createElement('div');
+                node.className = 'stage-node';
+                node.textContent = i;
+
+                if (i < currentStage) {
+                    node.classList.add('solved');
+                    node.innerHTML += ' ✓';
+                    // Allow clicking to replay solved stages
+                    node.addEventListener('click', () => {
+                        currentStage = i;
+                        currentLevel = 1;
+                        toggleStageMap();
+                        loadLevel();
+                    });
+                } else if (i === currentStage) {
+                    node.classList.add('current');
+                    node.addEventListener('click', () => {
+                        toggleStageMap(); // Just close and continue
+                    });
+                } else {
+                    node.classList.add('locked');
+                    node.innerHTML += ' 🔒';
+                }
+                grid.appendChild(node);
+            }
+        }
+
+        function triggerStageCelebration() {
+            const overlay = document.getElementById('celebrationOverlay');
+            overlay.innerHTML = '';
+            overlay.style.display = 'block';
+
+            // Create Confetti
+            for (let i = 0; i < 100; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = Math.random() * 100 + '%';
+                c.style.backgroundColor = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'][Math.floor(Math.random() * 6)];
+                c.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                c.style.animationDelay = Math.random() + 's';
+                overlay.appendChild(c);
+            }
+
+            // Big Text
+            const text = document.createElement('h1');
+            text.textContent = "STAGE CLEAR! 🎉";
+            text.style.position = 'absolute';
+            text.style.top = '15%'; text.style.left = '50%'; /* Higher up */
+            text.style.transform = 'translate(-50%, -50%) scale(0)';
+            text.style.color = '#fff';
+            text.style.fontSize = '3rem';
+            text.style.textShadow = '0 0 20px black';
+            text.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            overlay.appendChild(text);
+
+            setTimeout(() => text.style.transform = 'translate(-50%, -50%) scale(1)', 100);
+
+            // Cleanup
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                overlay.innerHTML = '';
+            }, 3500);
+        }
+
+        // Do NOT auto init; wait for Start Button
     </script>
 </body>
 

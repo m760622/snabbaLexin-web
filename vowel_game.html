@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Svenska Vokaler - المتشابهات الصوتية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --error: #ef4444;
+            --option-bg: #334155;
+            --option-hover: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+            background: #6366f1;
+            animation: float 10s infinite alternate;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -100px;
+            background: #a855f7;
+            animation: float 12s infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        /* Header */
+        header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .level-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            width: 100%;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Game Container */
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .pair-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 2rem;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .pair-card.correct {
+            border-color: var(--success);
+            animation: pulse-green 0.5s;
+        }
+
+        .pair-card.wrong {
+            border-color: var(--error);
+            animation: shake 0.4s;
+        }
+
+        /* Word Row */
+        .word-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .word-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: default;
+            opacity: 0.5;
+            border: 2px solid transparent;
+        }
+
+        /* Active Target & Drag States */
+        .word-item.active-target {
+            opacity: 1;
+            border-color: rgba(99, 102, 241, 0.5);
+            border-style: dashed;
+        }
+
+        .word-item.solved {
+            opacity: 1;
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .word-item.drag-over {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+            border-style: solid;
+            transform: scale(1.02);
+            opacity: 1;
+        }
+
+        .word-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3rem;
+            pointer-events: none;
+        }
+
+        .missing-vowel {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 3px solid var(--primary);
+            margin: 0 2px;
+            text-align: center;
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .word-def {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            font-size: 1rem;
+            color: var(--text-muted);
+            direction: rtl;
+        }
+
+        /* Options Area */
+        .options-area {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .vowel-btn {
+            background: var(--option-bg);
+            border: 2px solid transparent;
+            color: var(--text-color);
+            font-size: 2rem;
+            font-weight: 700;
+            padding: 1.5rem;
+            border-radius: 16px;
+            cursor: grab;
+            /* Show grab cursor */
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+            touch-action: none;
+            /* Important for touch drag */
+        }
+
+        .vowel-btn:active {
+            cursor: grabbing;
+        }
+
+        .vowel-btn.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Flying Animation Clone */
+        .flying-clone {
+            position: fixed;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 2rem;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 1000;
+            transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.5s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Feedback Overlay */
+        .feedback-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+            text-align: center;
+            border-radius: 20px;
+        }
+
+        .feedback-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .feedback-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feedback-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .next-timer-bar {
+            width: 100px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .next-timer-fill {
+            height: 100%;
+            background: white;
+            width: 100%;
+            animation: timer-shrink 5s linear forwards;
+        }
+
+        @keyframes timer-shrink {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        @keyframes pulse-green {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        /* End Screen */
+        .end-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .end-score {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .restart-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <!-- Progress Top -->
+    <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <header>
+        <button class="back-btn" onclick="window.history.back()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span style="margin-left:8px;">Tillbaka / عودة</span>
+        </button>
+        <div id="levelBadge" class="level-badge">
+            Nivå 1
+        </div>
+    </header>
+
+    <div class="game-container">
+        <!-- Game Play Area -->
+        <div id="playArea" style="width: 100%;">
+            <div id="questionCard" class="pair-card">
+                <div class="word-row">
+                    <!-- Drop Zones -->
+                    <div id="slot1" class="word-item drop-zone" data-slot="1">
+                        <div class="word-text word-1-text">B<span class="missing-vowel">?</span>l</div>
+                        <div class="word-def word-1-def">كرة</div>
+                    </div>
+                    <div id="slot2" class="word-item drop-zone" data-slot="2">
+                        <div class="word-text word-2-text">B<span class="missing-vowel">?</span>l</div>
+                        <div class="word-def word-2-def">جذع (شجرة)</div>
+                    </div>
+                </div>
+
+                <div class="feedback-overlay" id="feedbackOverlay">
+                    <span class="feedback-icon" id="feedbackIcon">✅</span>
+                    <div class="feedback-text" id="feedbackText">Bra jobbat!</div>
+                    <div class="next-timer-bar">
+                        <div class="next-timer-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="options-area" id="optionsArea">
+                <!-- Vowels generated here -->
+            </div>
+
+            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem;">
+                Fyll i båda orden! dra vokalerna.<br>
+                أكمل الكلمتين! اسحب الأحرف المناسبة.
+            </p>
+        </div>
+
+        <!-- End Screen -->
+        <div id="endScreen" class="end-screen">
+            <h1>Grattis! / مبروك!</h1>
+            <p>Du klarade alla nivåer.</p>
+            <div class="end-score" id="finalScore">100%</div>
+            <p>Du är en mästare på vokaler!</p>
+            <button class="restart-btn" onclick="location.reload()">Spela igen / العب مجدداً</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // DATA & GAME LOGIC
+        // ==========================================
+        const minimalPairsData = [
+            { pair: ["O", "Ö"], w1: "Bol", d1: "جذع شجرة", w2: "Böl", d2: "أمواج (قديمة)", frame: "B_l" },
+            { pair: ["O", "Ö"], w1: "Bot", d1: "توبة / علاج", w2: "Böt", d2: "دفع غرامة (الماضي)", frame: "B_t" },
+            { pair: ["O", "Ö"], w1: "Mossa", d1: "طحلب", w2: "Mössa", d2: "قبعة شتوية", frame: "M_ssa" },
+            { pair: ["O", "Ö"], w1: "Hov", d1: "حافر / بلاط ملكي", w2: "Höv", d2: "لم يعد مستخدماً كثيراً", frame: "H_v" },
+            { pair: ["O", "Ö"], w1: "Son", d1: "ابن", w2: "Sön", d2: "أحد (اختصار قديم)", frame: "S_n" },
+            { pair: ["O", "Ö"], w1: "Not", d1: "نوتة موسيقية", w2: "Nöt", d2: "جوز / لحم بقر", frame: "N_t" },
+            { pair: ["O", "Ö"], w1: "Rom", d1: "روما / مشروب", w2: "Röm", d2: "هروب (لهجة)", frame: "R_m" },
+            { pair: ["O", "Ö"], w1: "Ko", d1: "بقرة", w2: "Kö", d2: "طابور", frame: "K_" },
+
+            { pair: ["U", "Y"], w1: "Sur", d1: "حامض", w2: "Syr", d2: "يخيط", frame: "S_r" },
+            { pair: ["U", "Y"], w1: "Bur", d1: "قفص", w2: "Byr", d2: "خزانة", frame: "B_r" },
+            { pair: ["U", "Y"], w1: "Ur", d1: "من / ساعة قديمة", w2: "Yr", d2: "دوار / عاصف", frame: "_r" },
+            { pair: ["U", "Y"], w1: "Kus", d1: "حشرة", w2: "Kyss", d2: "قبلة", frame: "K_s" },
+            { pair: ["U", "Y"], w1: "Lukta", d1: "يشم", w2: "Lykta", d2: "مصباح", frame: "L_kta" },
+
+            { pair: ["A", "Ä"], w1: "Tak", d1: "سقف", w2: "Täck", d2: "غطِّ", frame: "T_k" },
+            { pair: ["A", "Ä"], w1: "Bar", d1: "حانة / عار", w2: "Bär", d2: "توت / يحمل", frame: "B_r" },
+            { pair: ["A", "Ä"], w1: "Man", d1: "رجل", w2: "Män", d2: "رجال", frame: "M_n" },
+            { pair: ["A", "Ä"], w1: "Far", d1: "أب / يسافر", w2: "Fär", d2: "رحلة (قديمة)", frame: "F_r" },
+            { pair: ["A", "Ä"], w1: "Kaka", d1: "كعكة", w2: "Käka", d2: "ياكل", frame: "K_ka" },
+            { pair: ["A", "Ä"], w1: "Bal", d1: "حفلة رقص", w2: "Bäl", d2: "صوت حيوان", frame: "B_l" },
+
+            { pair: ["Å", "O"], w1: "Kål", d1: "ملفوف", w2: "Kol", d2: "فحم", frame: "K_l" },
+            { pair: ["Å", "O"], w1: "Hål", d1: "ثقب / حفرة", w2: "Hol", d2: "جزيرة صغيرة", frame: "H_l" },
+            { pair: ["Å", "O"], w1: "Stål", d1: "فولاذ", w2: "Stol", d2: "كرسي", frame: "St_l" },
+            { pair: ["Å", "O"], w1: "Lån", d1: "قرض", w2: "Lon", d2: "حيوان الوشق", frame: "L_n" },
+
+            { pair: ["Å", "A"], w1: "Hår", d1: "شعر", w2: "Har", d2: "يملك", frame: "H_r" },
+            { pair: ["Å", "A"], w1: "Kår", d1: "فيلق / اتحاد", w2: "Kar", d2: "حوض", frame: "K_r" },
+            { pair: ["Å", "A"], w1: "Lår", d1: "فخذ", w2: "Lar", d2: "يمشي ببطء", frame: "L_r" },
+            { pair: ["Å", "A"], w1: "Mål", d1: "هدف / وجبة", w2: "Mal", d2: "عثة", frame: "M_l" },
+            { pair: ["Å", "A"], w1: "Skål", d1: "نخب / وعاء", w2: "Skal", d2: "قشرة", frame: "Sk_l" },
+
+            { pair: ["I", "E"], w1: "Fil", d1: "ملف / لبن", w2: "Fel", d2: "خطأ", frame: "F_l" },
+            { pair: ["I", "E"], w1: "Sila", d1: "يصفي", w2: "Sela", d2: "عضلة", frame: "S_la" },
+            { pair: ["I", "E"], w1: "Vi", d1: "نحن", w2: "Ve", d2: "ويل / ألم", frame: "V_" },
+
+            { pair: ["I", "Y"], w1: "Fil", d1: "لبن / ملف", w2: "Fyl", d2: "سكير (عامية)", frame: "F_l" },
+            { pair: ["I", "Y"], w1: "Sill", d1: "رنجة", w2: "Syll", d2: "عتبة", frame: "S_ll" },
+            { pair: ["I", "Y"], w1: "Sin", d1: "خاصته", w2: "Syn", d2: "رؤية / بصر", frame: "S_n" },
+            { pair: ["I", "Y"], w1: "Min", d1: "لي / تعبير وجه", w2: "Myn", d2: "فم النهر", frame: "M_n" }
+        ];
+
+        const TOTAL_STAGES = 50;
+        const LEVELS_PER_STAGE = 7;
+        const AUTO_ADVANCE_MS = 2000; // Faster auto advance per level? No, only after BOTH solved.
+
+        let currentStage = 1;
+        let currentLevel = 1;
+        let currentPair = null;
+        let isProcessing = false;
+        let timerId = null;
+
+        // New: Track solved state
+        let solvedStatus = { 1: false, 2: false };
+        let currentTarget = 1; // 1 or 2
+
+        // Elements
+        const word1Text = document.querySelector('.word-1-text');
+        const word1Def = document.querySelector('.word-1-def');
+        const word2Text = document.querySelector('.word-2-text');
+        const word2Def = document.querySelector('.word-2-def');
+        const optionsArea = document.getElementById('optionsArea');
+        const feedbackOverlay = document.getElementById('feedbackOverlay');
+        const feedbackIcon = document.getElementById('feedbackIcon');
+        const feedbackText = document.getElementById('feedbackText');
+        const progressBar = document.getElementById('progressBar');
+        const levelBadge = document.getElementById('levelBadge');
+
+        // Drag State
+        let draggedVowel = null;
+
+        function initGame() {
+            currentStage = 1;
+            currentLevel = 1;
+            loadLevel();
+        }
+
+        function getRandomPair() {
+            return minimalPairsData[Math.floor(Math.random() * minimalPairsData.length)];
+        }
+
+        function loadLevel() {
+            if (isProcessing) return;
+
+            if (currentLevel > LEVELS_PER_STAGE) {
+                if (currentStage >= TOTAL_STAGES) {
+                    showEndScreen();
+                    return;
+                }
+                currentStage++;
+                currentLevel = 1;
+            }
+
+            levelBadge.textContent = `Nivå ${currentStage} - ${currentLevel}/${LEVELS_PER_STAGE}`;
+            const totalProgress = ((currentStage - 1) * LEVELS_PER_STAGE + (currentLevel - 1)) / (TOTAL_STAGES * LEVELS_PER_STAGE) * 100;
+            progressBar.style.width = `${totalProgress}%`;
+
+            feedbackOverlay.classList.remove('visible');
+            clearTimeout(timerId);
+
+            currentPair = getRandomPair();
+            solvedStatus = { 1: false, 2: false };
+            currentTarget = 1; // Always start aiming at 1, but drag allows 2.
+
+            // Render Words
+            const vowels = currentPair.pair;
+            const p = currentPair;
+
+            // Frames
+            let frame1, frame2;
+            const ph = '<span class="missing-vowel">?</span>';
+            if (p.frame && p.frame !== "FAKE") {
+                frame1 = p.frame.replace('_', ph);
+                frame2 = frame1; // Default
+                if (p.w1.length !== p.w2.length) {
+                    frame1 = p.w1.replace(p.pair[0], ph).replace(p.pair[0].toLowerCase(), ph);
+                    frame2 = p.w2.replace(p.pair[1], ph).replace(p.pair[1].toLowerCase(), ph);
+                }
+            } else {
+                frame1 = p.w1.replace(p.pair[0], ph);
+                frame2 = p.w2.replace(p.pair[1], ph);
+            }
+
+            word1Text.innerHTML = frame1;
+            word1Def.textContent = p.d1;
+            word2Text.innerHTML = frame2;
+            word2Def.textContent = p.d2;
+
+            updateTargetStyling();
+
+            // Buttons
+            const shuffledVowels = [...vowels].sort(() => Math.random() - 0.5);
+            optionsArea.innerHTML = '';
+
+            shuffledVowels.forEach(v => {
+                const btn = document.createElement('button');
+                btn.className = 'vowel-btn';
+                btn.textContent = v;
+                btn.draggable = true;
+
+                // Click Handler -> targets *current* target
+                btn.addEventListener('click', (e) => animateFly(v, btn, currentTarget));
+
+                // Drag Start
+                btn.addEventListener('dragstart', (e) => {
+                    draggedVowel = v;
+                    btn.classList.add('dragging');
+                    e.dataTransfer.setData('text/plain', v);
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+
+                btn.addEventListener('dragend', () => {
+                    btn.classList.remove('dragging');
+                    draggedVowel = null;
+                    document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
+                });
+
+                // Touch Drag (Mobile)
+                btn.addEventListener('touchstart', handleTouchStart, { passive: false });
+                btn.addEventListener('touchmove', handleTouchMove, { passive: false });
+                btn.addEventListener('touchend', handleTouchEnd);
+
+                optionsArea.appendChild(btn);
+            });
+        }
+
+        function updateTargetStyling() {
+            const slots = [1, 2];
+            slots.forEach(id => {
+                const el = document.getElementById(`slot${id}`);
+                el.classList.remove('active-target', 'solved');
+                el.dataset.isActive = 'false';
+
+                if (solvedStatus[id]) {
+                    el.classList.add('solved');
+                    // visual fill handled in handleAnswer
+                } else {
+                    // Not solved
+                    if (id === currentTarget) {
+                        el.classList.add('active-target'); // dashed outline
+                        el.dataset.isActive = 'true';
+                        el.style.opacity = '1';
+                    } else {
+                        // Not solved, not current active
+                        // Can we drag to it? Yes.
+                        el.dataset.isActive = 'true'; // Allow drag dropping on both anytime
+                        el.style.opacity = '0.7';
+                    }
+                }
+            });
+        }
+
+        // Touch Drag Handlers
+        let touchEl = null; let touchClone = null; let touchStartX, touchStartY;
+
+        function handleTouchStart(e) {
+            if (isProcessing) return;
+            touchEl = e.currentTarget;
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            draggedVowel = touchEl.textContent.trim();
+            touchClone = touchEl.cloneNode(true);
+            touchClone.style.position = 'fixed'; touchClone.style.zIndex = '1000'; touchClone.style.pointerEvents = 'none';
+            touchClone.style.width = touchEl.offsetWidth + 'px'; touchClone.style.height = touchEl.offsetHeight + 'px';
+            touchClone.style.left = touchEl.getBoundingClientRect().left + 'px'; touchClone.style.top = touchEl.getBoundingClientRect().top + 'px';
+            document.body.appendChild(touchClone);
+            touchEl.classList.add('dragging');
+        }
+
+        function handleTouchMove(e) {
+            if (!touchClone) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const dx = touch.clientX - touchStartX; const dy = touch.clientY - touchStartY;
+            touchClone.style.transform = `translate(${dx}px, ${dy}px)`;
+
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            const dropZone = target ? target.closest('.word-item') : null;
+            document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
+            if (dropZone && !dropZone.classList.contains('solved')) {
+                dropZone.classList.add('drag-over');
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (!touchClone) return;
+            const touch = e.changedTouches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            const dropZone = target ? target.closest('.word-item') : null;
+            document.body.removeChild(touchClone); touchClone = null;
+            touchEl.classList.remove('dragging');
+            document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
+
+            if (dropZone && !dropZone.classList.contains('solved')) {
+                const slotId = parseInt(dropZone.dataset.slot);
+                handleAnswer(draggedVowel, touchEl, slotId);
+            }
+        }
+
+        // Desktop Drop
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const dropZone = e.target.closest('.word-item');
+            if (dropZone && !dropZone.classList.contains('solved')) dropZone.classList.add('drag-over');
+        });
+
+        document.addEventListener('dragleave', (e) => {
+            const dropZone = e.target.closest('.word-item');
+            if (dropZone) dropZone.classList.remove('drag-over');
+        });
+
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const dropZone = e.target.closest('.word-item');
+            if (dropZone && !dropZone.classList.contains('solved')) {
+                const vowel = e.dataTransfer.getData('text/plain');
+                const btn = Array.from(document.querySelectorAll('.vowel-btn')).find(b => b.textContent === vowel);
+                const slotId = parseInt(dropZone.dataset.slot);
+                handleAnswer(vowel, btn, slotId);
+            }
+            document.querySelectorAll('.word-item').forEach(el => el.classList.remove('drag-over'));
+        });
+
+        // Fly Animation
+        function animateFly(vowel, btnEl, targetSlotId) {
+            if (isProcessing) return;
+            if (solvedStatus[targetSlotId]) return; // Cannot fly to solved
+
+            isProcessing = true;
+            const targetEl = document.getElementById(`slot${targetSlotId}`);
+            const clone = btnEl.cloneNode(true);
+            clone.classList.add('flying-clone');
+            const rect = btnEl.getBoundingClientRect();
+            clone.style.left = rect.left + 'px'; clone.style.top = rect.top + 'px';
+            document.body.appendChild(clone);
+
+            const qMark = targetEl.querySelector('.missing-vowel') || targetEl; // Fallback
+            const targetRect = qMark.getBoundingClientRect();
+            clone.offsetHeight;
+            clone.style.left = (targetRect.left - (rect.width / 2) + (targetRect.width / 2)) + 'px';
+            clone.style.top = (targetRect.top - (rect.height / 2) + (targetRect.height / 2)) + 'px';
+            clone.style.transform = 'scale(0.5)'; clone.style.opacity = '0';
+
+            setTimeout(() => {
+                document.body.removeChild(clone);
+                isProcessing = false;
+                handleAnswer(vowel, btnEl, targetSlotId);
+            }, 500);
+        }
+
+        function handleAnswer(selectedVowel, btnEl, slotId) {
+            if (isProcessing && !btnEl.classList.contains('dragging')) return;
+            if (solvedStatus[slotId]) return; // Already solved
+
+            // Validate Logic
+            // Slot 1 expects pair[0], Slot 2 expects pair[1]
+            const expectedVowel = slotId === 1 ? currentPair.pair[0] : currentPair.pair[1];
+
+            // Loose check for A vs Ä logic? No, strict.
+            const isCorrect = selectedVowel === expectedVowel;
+
+            if (isCorrect) {
+                // Mark Correct
+                solvedStatus[slotId] = true;
+
+                // Fill Text
+                const targetTextEl = slotId === 1 ? word1Text : word2Text;
+                const fullWord = slotId === 1 ? currentPair.w1 : currentPair.w2;
+                targetTextEl.innerHTML = fullWord.replace(expectedVowel, `<span style="color:var(--success)">${expectedVowel}</span>`);
+
+                // Check if BOTH solved
+                if (solvedStatus[1] && solvedStatus[2]) {
+                    levelComplete();
+                } else {
+                    // Not done yet.
+                    // Switch target focus if we solved the current target
+                    if (currentTarget === slotId) {
+                        currentTarget = slotId === 1 ? 2 : 1;
+                    }
+                    updateTargetStyling();
+                }
+            } else {
+                // Wrong
+                const card = document.getElementById('questionCard');
+                card.classList.add('wrong');
+                setTimeout(() => card.classList.remove('wrong'), 500);
+
+                // Maybe just shake button?
+                if (btnEl) {
+                    btnEl.classList.add('selected-wrong');
+                    setTimeout(() => btnEl.classList.remove('selected-wrong'), 500);
+                }
+            }
+        }
+
+        function levelComplete() {
+            isProcessing = true;
+            document.getElementById('questionCard').classList.add('correct');
+            feedbackIcon.textContent = '🎉';
+            feedbackText.textContent = 'Bra! / ممتاز';
+            feedbackOverlay.classList.add('visible');
+
+            const timerBar = document.querySelector('.next-timer-fill');
+            timerBar.style.animation = 'none';
+            timerBar.offsetHeight;
+            timerBar.style.animation = 'timer-shrink 2s linear forwards';
+
+            timerId = setTimeout(() => {
+                isProcessing = false;
+                document.getElementById('questionCard').classList.remove('correct', 'wrong');
+                currentLevel++;
+                loadLevel();
+            }, 2000); // 2 seconds between levels
+        }
+
+        function showEndScreen() {
+            document.querySelector('.game-container').innerHTML = '';
+            document.getElementById('endScreen').style.display = 'block';
+            document.querySelector('.game-container').appendChild(document.getElementById('endScreen'));
+        }
+
+        initGame();
+
+    </script>
+</body>
+
+</html>

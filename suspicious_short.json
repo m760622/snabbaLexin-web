@@ -95,7 +95,7 @@
     "type": "Bygg.",
     "swedish": "Damm",
     "arabic": "سد",
-    "explanation": "مصطلح بناء وتشييد"
+    "explanation": "مصطلح بناء وتشييد | غبار (مكرر)"
   },
   {
     "id": "Lexin010254",
@@ -109,7 +109,7 @@
     "type": "Bygg.",
     "swedish": "Gjuta",
     "arabic": "صب",
-    "explanation": "مصطلح بناء وتشييد"
+    "explanation": "مصطلح بناء وتشييد | يصب (خرسانة/معدن)"
   },
   {
     "id": "Lexin010328",
@@ -123,7 +123,7 @@
     "type": "Bygg.",
     "swedish": "Lösning",
     "arabic": "حل",
-    "explanation": "مصطلح بناء وتشييد"
+    "explanation": "مصطلح بناء وتشييد | حل (أو محلول)"
   },
   {
     "id": "Lexin019126",
@@ -242,21 +242,21 @@
     "type": "Medicin.",
     "swedish": "Storhjärnan",
     "arabic": "مخ",
-    "explanation": "مصطلح طبي: مخ"
+    "explanation": "مصطلح طبي: مخ | المخ (الدماغ الكبير)"
   },
   {
     "id": "Lexin010820",
     "type": "MedicinMR.",
     "swedish": "Grönsallad",
     "arabic": "خس",
-    "explanation": "مصطلح طبي: خس"
+    "explanation": "مصطلح طبي: خس | سلطة خضراء"
   },
   {
     "id": "Lexin014437",
     "type": "MedicinMR.",
     "swedish": "Kombination av",
     "arabic": "مع",
-    "explanation": "مصطلح طبي: مع"
+    "explanation": "مصطلح طبي: مع | مزيج من"
   },
   {
     "id": "Lexin014691",
@@ -718,6 +718,6 @@
     "type": "Substantiv.",
     "swedish": "Ur",
     "arabic": "في",
-    "explanation": "اسم يشير إلى: في"
+    "explanation": "اسم يشير إلى: في | خارج من، ساعة يد"
   }
 ]

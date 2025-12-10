@@ -1,1 +1,135 @@
-[]
+[
+  {
+    "id": "Lexin013302",
+    "type": "JuridikR.",
+    "swedish": "IÖV Lag om intensivövervakning med elektronisk kontroll",
+    "field": "مصطلح قانوني: قانون الرقابة المشددة بتحكم إلكتروني | قانون المراقبة المكثفة بالرقابة الإلكترونية (IÖV)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin004239",
+    "type": "JuridikS.",
+    "swedish": "Brottsförebyggande rådet",
+    "field": "مصطلح قانوني: مجلس الوقاية من الجريمة | المجلس الوطني السويدي لمكافحة الجريمة (BRÅ)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin022545",
+    "type": "JuridikS.",
+    "swedish": "Riskåklagare",
+    "field": "مصطلح قانوني: مدعي الدولة العام - النائب العام | النائب العام (تصحيح محتمل: Riksåklagare)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin000035",
+    "type": "JuridikTB.",
+    "swedish": "2 § dråp",
+    "field": "مصطلح قانوني: القتل الغير متعمد - قتل القصد, قتل دون سبق إصرار - قتل بطريق الخطأ | المادة 2 § القتل الخطأ (أو القتل المخفف - Dråp)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin003104",
+    "type": "JuridikTB.",
+    "swedish": "Besöksförbud",
+    "field": "مصطلح قانوني: منع الزيارة | قـرار منـع الزيارة (أمر عدم التعرض - Kontaktförbud حالياً)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin008498",
+    "type": "JuridikTB.",
+    "swedish": "Frivården",
+    "field": "مصطلح قانوني: رعاية المحكومين خارج السجن, إصلاح المحكومين خارج السجن | مصلحة الرعاية الإصلاحية المفتوحة (Frivården)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin027564",
+    "type": "JuridikTB.",
+    "swedish": "Säkerhetspolisen",
+    "field": "مصطلح قانوني: شرطة الأمن العام, أمن الدولة - المخابرات | شرطة الأمن (SÄPO - المخابرات)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin026036",
+    "type": "Medicin.",
+    "swedish": "Spänningshuvudvärk",
+    "field": "مصطلح طبي: صداع توتري | صداع توتري (Spänningshuvudvärk)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin032376",
+    "type": "Medicin.",
+    "swedish": "ÖLI - Övre luftvägsinfektion",
+    "field": "مصطلح طبي: عدوى المجاري الهوائية العليا | عدوى الجهاز التنفسي العلوي (ÖLI)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin004691",
+    "type": "MedicinR.",
+    "swedish": "Bäckenet, femur",
+    "field": "مصطلح طبي: عظم الفخذ | الحوض، الفخذ (ملاحظة: Femur هو الفخذ، Bäcken هو الحوض)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "Lexin032158",
+    "type": "MedicinR.",
+    "swedish": "Äggled",
+    "field": "مصطلح طبي: مفصل زلالي | مفصل بيضوي (Ellipsoid - تصحيح محتمل لـ Äggled)",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "ADDED200001",
+    "type": "Verb.",
+    "swedish": "Klär sig",
+    "field": "att ta på sig kläder",
+    "pattern": "/\\batt\\b/"
+  },
+  {
+    "id": "ADDED200002",
+    "type": "Verb.",
+    "swedish": "Tvättar sig",
+    "field": "att rengöra sin kropp med vatten och tvål",
+    "pattern": "/\\boch\\b/"
+  },
+  {
+    "id": "ADDED200006",
+    "type": "Verb.",
+    "swedish": "Snyter sig",
+    "field": "att blåsa näsan i en näsduk",
+    "pattern": "/\\batt\\b/"
+  },
+  {
+    "id": "ADDED200007",
+    "type": "Verb.",
+    "swedish": "Kommer ihåg",
+    "field": "att minnas något från förr",
+    "pattern": "/\\batt\\b/"
+  },
+  {
+    "id": "ADDED200008",
+    "type": "Verb.",
+    "swedish": "Ber om ursäkt",
+    "field": "att uttrycka att man är ledsen för något man gjort",
+    "pattern": "/\\batt\\b/"
+  },
+  {
+    "id": "ADDED200017",
+    "type": "Adjektiv.",
+    "swedish": "Överraskad",
+    "field": "förvånad över något oväntat",
+    "pattern": "/[åäöÅÄÖ]/"
+  },
+  {
+    "id": "ADDED200021",
+    "type": "Adjektiv.",
+    "swedish": "Förväntansfull",
+    "field": "ivrig och spänd inför något som ska hända",
+    "pattern": "/\\boch\\b/"
+  },
+  {
+    "id": "ADDED200022",
+    "type": "Adjektiv.",
+    "swedish": "Besvärad",
+    "field": "orolig eller störd av något",
+    "pattern": "/[åäöÅÄÖ]/"
+  }
+]

@@ -83,9 +83,10 @@ function toggleFavorite(id) {
 }
 
 // ========================================
-// Smart Copy - Copy formatted content
+// Smart Copy - Copy formatted content with Visual Feedback
 // ========================================
 let currentItem = null; // Store current item for copy function
+let copyButtonOriginalHTML = ''; // Store original button HTML
 
 function handleSmartCopy() {
     if (!currentItem) {
@@ -129,11 +130,66 @@ function handleSmartCopy() {
 
     content += `🔗 ${window.location.href}`;
 
+    const smartCopyBtn = document.getElementById('smartCopyBtn');
+
     navigator.clipboard.writeText(content).then(() => {
         showToast('تم نسخ البطاقة بنجاح! / Kopierat!');
+
+        // Visual Feedback: Change icon to checkmark
+        if (smartCopyBtn) {
+            if (!copyButtonOriginalHTML) {
+                copyButtonOriginalHTML = smartCopyBtn.innerHTML;
+            }
+
+            smartCopyBtn.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    style="color: #10b981;">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span style="color: #10b981;">تم النسخ! / Kopierat!</span>
+            `;
+
+            smartCopyBtn.style.transform = 'scale(1.05)';
+
+            // Revert after 2 seconds
+            setTimeout(() => {
+                if (smartCopyBtn) {
+                    smartCopyBtn.innerHTML = copyButtonOriginalHTML;
+                    smartCopyBtn.style.transform = 'scale(1)';
+                }
+            }, 2000);
+        }
     }).catch(() => {
         showToast('Kunde inte kopiera / فشل النسخ');
     });
+}
+
+// ========================================
+// Skeleton Loading State
+// ========================================
+function showSkeletonLoading() {
+    detailsArea.innerHTML = `
+        <div class="details-loading">
+            <div class="skeleton skeleton-hero"></div>
+            <div class="skeleton skeleton-section"></div>
+            <div class="skeleton skeleton-section"></div>
+            <div class="skeleton skeleton-section"></div>
+        </div>
+    `;
+}
+
+// ========================================
+// SVG Icon Generator
+// ========================================
+function getSVGIcon(iconName) {
+    const icons = {
+        book: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>`,
+        text: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>`,
+        lightbulb: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg>`,
+        message: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>`
+    };
+    return icons[iconName] || '';
 }
 
 // ========================================
@@ -369,6 +425,9 @@ function parseAdjectiveForms(formsArray) {
 
 // Initialize
 async function init() {
+    // Show skeleton loading first
+    showSkeletonLoading();
+
     // Theme Logic handled by utils.js (ThemeManager.init called on DOMContentLoaded)
 
     const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -591,7 +650,7 @@ function renderDetails(item) {
         definitionsHtml = `
             <div class="details-section">
                 <h2 class="section-title">
-                    <span class="section-icon">📖</span>
+                    <span class="section-icon">${getSVGIcon('book')}</span>
                     Definition / تعريف
                 </h2>
                 <div class="def-content">
@@ -623,7 +682,7 @@ function renderDetails(item) {
             formsHtml = `
                 <div class="details-section">
                     <h2 class="section-title">
-                        <span class="section-icon">🔤</span>
+                        <span class="section-icon">${getSVGIcon('text')}</span>
                         Böjningar / تصريفات
                     </h2>
                     <div class="forms-grid">
@@ -640,7 +699,7 @@ function renderDetails(item) {
         examplesHtml = `
             <div class="details-section">
                 <h2 class="section-title">
-                    <span class="section-icon">💡</span>
+                    <span class="section-icon">${getSVGIcon('lightbulb')}</span>
                     Exempel / أمثلة
                 </h2>
                 <div class="example-card">
@@ -657,7 +716,7 @@ function renderDetails(item) {
         idiomsHtml = `
             <div class="details-section">
                 <h2 class="section-title">
-                    <span class="section-icon">💬</span>
+                    <span class="section-icon">${getSVGIcon('message')}</span>
                     Uttryck / تعبير
                 </h2>
                 <div class="example-card">

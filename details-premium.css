@@ -23,10 +23,12 @@
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
-/* Dark Mode Section Headers */
+/* Dark Mode Section Headers - Navy Blue with Glass Effect */
 [data-theme="dark"] .section-title {
-    color: var(--accent-blue);
-    border-bottom: var(--border-subtle-dark);
+    color: #1e3a8a;
+    background: rgba(30, 58, 138, 0.15);
+    border: 1px solid rgba(30, 58, 138, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Dark Mode Form Chips - Mint Green Capsule Style */
@@ -61,7 +63,7 @@
 
 /* Hero Section - Word Display */
 .details-hero {
-    background: linear-gradient(135deg, #005B96 0%, #0284c7 50%, #0ea5e9 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e3a8a 50%, #0ea5e9 100%);
     padding: 2.5rem 2rem 1rem 2rem;
     border-radius: 2rem;
     margin-bottom: 2rem;
@@ -113,10 +115,7 @@
 
 /* ... (keep animation unchanged) ... */
 
-/* Word Type Badge (The main one) */
-/* Word Type Badge (The main one) */
-/* Word Type Badge (The main one) */
-/* Word Type Badge (The main one) */
+/* Word Type Badge (The main one) - UNIFIED HEIGHT */
 .word-type-badge {
     background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(240, 249, 255, 0.9) 100%);
     backdrop-filter: blur(12px);
@@ -127,23 +126,21 @@
         inset 0 1px 0 rgba(255, 255, 255, 1);
 
     /* Perfect Centering with Flexbox */
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     height: 32px;
     padding: 0 1.25rem;
-    /* No top/bottom padding needed with flex */
 
     font-size: 0.85rem;
     font-weight: 800;
-    color: #005B96;
+    color: #1e3a8a;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 1.5px;
     white-space: nowrap;
-    transform-style: preserve-3d;
+    border-radius: 50px;
     line-height: 1;
-    /* Force line-height to match font-size for centering */
 }
 
 @keyframes hero-entrance {
@@ -535,15 +532,19 @@
     padding: 0 1rem;
     font-size: 0.8rem;
     font-weight: 700;
-    color: #005B96;
+    color: #1e3a8a;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
 
-/* Gender Badge (En/Ett) & Verb Group */
+/* Gender Badge (En/Ett) & Verb Group - UNIFIED HEIGHT */
 .gender-badge,
 .verb-group-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
     min-width: 36px;
     padding: 0 0.75rem;
     font-size: 0.8rem;
@@ -553,6 +554,8 @@
     white-space: nowrap;
     border-width: 2px;
     border-style: solid;
+    border-radius: 50px;
+    line-height: 1;
 }
 
 /* En-words (utrum) - Green theme */
@@ -711,7 +714,7 @@
     margin-bottom: 1.5rem;
     border: 2px solid transparent;
     background-image: linear-gradient(var(--surface), var(--surface)),
-        linear-gradient(135deg, #005B96 0%, #0ea5e9 100%);
+        linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%);
     background-origin: border-box;
     background-clip: padding-box, border-box;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -760,14 +763,21 @@
     font-weight: 800;
     color: var(--primary);
     margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid var(--border);
+    padding: 1rem 1.5rem;
+
+    /* Glassmorphism Effect */
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
 .section-icon {
     width: 28px;
     height: 28px;
-    background: linear-gradient(135deg, #005B96 0%, #33A1FD 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #33A1FD 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -786,7 +796,7 @@
     padding: 1.25rem;
     background: var(--background);
     border-radius: 1rem;
-    border-left: 4px solid #005B96;
+    border-left: 4px solid #1e3a8a;
     transition: all 0.3s ease;
 }
 
@@ -886,6 +896,12 @@
     box-shadow: 0 4px 12px rgba(0, 91, 150, 0.2);
 }
 
+/* Micro-interaction: Active State */
+.form-chip:active {
+    transform: scale(0.95) translateY(0);
+    box-shadow: inset 0 2px 4px rgba(0, 91, 150, 0.15);
+}
+
 .form-chip-labeled:hover .form-chip {
     background: linear-gradient(135deg, rgba(0, 91, 150, 0.2) 0%, rgba(14, 165, 233, 0.2) 100%);
     transform: translateY(-2px);
@@ -916,7 +932,7 @@
     /* Shimmering Gradient Animation */
     background: linear-gradient(to right,
             #475569 20%,
-            #005B96 40%,
+            #1e3a8a 40%,
             #0ea5e9 60%,
             #475569 80%);
     background-size: 200% auto;
@@ -962,7 +978,7 @@
 
 /* Hero Section - Word Display */
 .details-hero {
-    background: linear-gradient(135deg, #005B96 0%, #0284c7 50%, #0ea5e9 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e3a8a 50%, #0ea5e9 100%);
     padding: 2.5rem 2rem 1rem 2rem;
     /* Reduce bottom padding to 1rem */
     border-radius: 2rem;
@@ -1017,7 +1033,7 @@
 .header-action-btn:hover {
     background: rgba(255, 255, 255, 0.6);
     transform: translateY(-2px);
-    color: #005B96;
+    color: #1e3a8a;
     /* Darker blue on hover */
     box-shadow: 0 4px 12px rgba(0, 91, 150, 0.1);
 }
@@ -1035,7 +1051,7 @@
 /* Special active state for favorite/flashcard */
 .header-action-btn.active {
     background: rgba(255, 255, 255, 0.5);
-    color: #005B96;
+    color: #1e3a8a;
 }
 
 /* Dark mode adjustments for header pill */
@@ -1115,7 +1131,7 @@
     border-radius: 50px;
     font-size: 0.9rem;
     font-weight: 700;
-    color: #005B96;
+    color: #1e3a8a;
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -1220,7 +1236,7 @@
     flex: 1;
     min-width: 150px;
     padding: 1.25rem;
-    background: linear-gradient(135deg, #005B96 0%, #0ea5e9 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%);
     color: white;
     border: none;
     border-radius: 1rem;
@@ -1296,9 +1312,19 @@ body.flashcard-active .revealed {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
-[data-theme="dark"] .word-swe-hero,
+/* Dark Mode - Enhanced Contrast for Better Readability */
+[data-theme="dark"] .word-swe-hero {
+    text-shadow:
+        0 4px 25px rgba(0, 0, 0, 0.8),
+        0 0 50px rgba(255, 255, 255, 0.25),
+        0 0 80px rgba(56, 189, 248, 0.4);
+}
+
 [data-theme="dark"] .word-arb-hero {
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 255, 255, 0.1);
+    text-shadow:
+        0 2px 20px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(251, 191, 36, 0.35);
+    color: rgba(255, 255, 255, 0.98);
 }
 
 [data-theme="dark"] .word-type-badge {
@@ -1706,7 +1732,7 @@ body.flashcard-active .revealed {
     justify-content: center;
     background: linear-gradient(135deg, rgba(0, 91, 150, 0.12) 0%, rgba(14, 165, 233, 0.08) 100%);
     border: 2px solid rgba(0, 91, 150, 0.15);
-    color: #005B96;
+    color: #1e3a8a;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 8px rgba(0, 91, 150, 0.08);
@@ -1770,7 +1796,7 @@ body.flashcard-active .revealed {
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, rgba(0, 91, 150, 0.15) 0%, rgba(14, 165, 233, 0.15) 100%);
-    color: #005B96;
+    color: #1e3a8a;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
 }
@@ -1794,7 +1820,7 @@ body.flashcard-active .revealed {
 
 /* Active state for flashcard button */
 .header-action-btn.active {
-    background: linear-gradient(135deg, #005B96 0%, #0ea5e9 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%);
     color: white;
     border-color: transparent;
     box-shadow: 0 4px 15px rgba(0, 91, 150, 0.4);
@@ -2057,4 +2083,146 @@ button:active,
         top: 1rem;
         right: 1rem;
     }
+}
+
+/* ========================================
+   More Actions Dropdown Menu
+   ======================================== */
+.more-actions-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 91, 150, 0.15);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 0.5rem;
+    min-width: 200px;
+    z-index: 1000;
+    animation: dropdown-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdown-slide-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.more-action-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    color: #4a6fa5;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: var(--arabic-font);
+    text-align: left;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.more-action-item:hover {
+    background: rgba(0, 91, 150, 0.1);
+    color: #1e3a8a;
+}
+
+.more-action-item:active {
+    transform: scale(0.98);
+    background: rgba(0, 91, 150, 0.15);
+}
+
+.more-action-item svg {
+    flex-shrink: 0;
+}
+
+/* Dark Mode for Dropdown */
+[data-theme="dark"] .more-actions-menu {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .more-action-item {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .more-action-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+/* Responsive - Stack menu on small screens */
+@media (max-width: 480px) {
+    .more-actions-menu {
+        right: 1rem;
+        left: 1rem;
+        min-width: auto;
+    }
+}
+
+/* ========================================
+   Skeleton Loading Screens
+   ======================================== */
+.details-loading {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 1rem;
+}
+
+.skeleton-hero {
+    height: 250px;
+    border-radius: 2rem;
+}
+
+.skeleton-section {
+    height: 150px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Dark Mode Skeleton */
+[data-theme="dark"] .skeleton {
+    background: linear-gradient(90deg, #1e2229 25%, #2a2f38 50%, #1e2229 75%);
+    background-size: 200% 100%;
+}
+
+/* Section Icon Enhancement */
+.section-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+}
+
+.section-icon svg {
+    stroke: currentColor;
 }

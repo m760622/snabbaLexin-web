@@ -609,6 +609,7 @@ async function init() {
 
         // Type Filter Listener
         typeSelect.addEventListener('change', () => {
+            sessionStorage.setItem('filterTypeVal', typeSelect.value);
             updateResults();
         });
 
@@ -628,11 +629,36 @@ async function init() {
         }, 100));
 
         // Restore state
+        // 1. Restore Filters
+        const savedFilterMode = sessionStorage.getItem('filterMode');
+        if (savedFilterMode) {
+            activeFilterMode = savedFilterMode;
+            // Update UI - Dropdown
+            const filterModeSelect = document.getElementById('filterModeSelect');
+            if (filterModeSelect) filterModeSelect.value = activeFilterMode;
+            // Update UI - Chips (Legacy support if any)
+            document.querySelectorAll('.filter-chip').forEach(c => {
+                c.classList.toggle('active', c.dataset.mode === activeFilterMode);
+            });
+        }
+
+        const savedType = sessionStorage.getItem('filterTypeVal');
+        if (savedType) {
+            typeSelect.value = savedType;
+        }
+
+        // 2. Restore Query (or use browser restored input)
         const savedQuery = sessionStorage.getItem('searchQuery');
-        if (savedQuery) {
-            searchInput.value = savedQuery;
+        // Use saved query OR existing input value (restored by browser)
+        const queryToRestore = savedQuery || searchInput.value;
+
+        if (queryToRestore) {
+            searchInput.value = queryToRestore;
+            // Ensure search is triggered even if sessionStorage was empty
             handleSearch({ target: searchInput });
         } else {
+            // Only focus if we are truly empty state
+            renderHistory();
             searchInput.focus();
         }
 
@@ -767,19 +793,39 @@ const filterModeSelect = document.getElementById('filterModeSelect');
 let activeFilterMode = 'start'; // Default mode
 
 if (filterToggleBtn && filterChipsContainer) {
-    // Toggle Filters
+    // Toggle Filters with Animation
     filterToggleBtn.addEventListener('click', () => {
         const isHidden = filterChipsContainer.style.display === 'none';
-        filterChipsContainer.style.display = isHidden ? 'flex' : 'none';
-        filterToggleBtn.classList.toggle('active', isHidden);
+
+        if (isHidden) {
+            // OPENING
+            filterChipsContainer.classList.remove('closing');
+            filterChipsContainer.style.display = 'flex';
+            filterToggleBtn.classList.add('active');
+        } else {
+            // CLOSING
+            filterChipsContainer.classList.add('closing');
+            filterToggleBtn.classList.remove('active');
+
+            // Wait for animation to finish before hiding
+            setTimeout(() => {
+                // Check if it's still supposed to be closed (user didn't click again fast)
+                if (filterChipsContainer.classList.contains('closing')) {
+                    filterChipsContainer.style.display = 'none';
+                    filterChipsContainer.classList.remove('closing');
+                }
+            }, 280); // Slightly less than 0.3s to prevent flicker
+        }
     });
 }
 
 // Handle Filter Mode Selection (Dropdown)
 if (filterModeSelect) {
     filterModeSelect.addEventListener('change', () => {
-        // Update mode
+        // Update global state
         activeFilterMode = filterModeSelect.value;
+        // Save state
+        sessionStorage.setItem('filterMode', activeFilterMode);
 
         // Update search placeholder/hint
         updateSearchPlaceholder(activeFilterMode);
@@ -1079,25 +1125,26 @@ function updateTypeDropdown(items) {
     });
 
     // 2. Define standard types to always show (pinned)
-    const pinnedTypes = ['substantiv', 'verb', 'adjektiv', 'adverb', 'preposition'];
+    const pinnedTypes = [
+        'substantiv', 'verb', 'adjektiv', 'adverb', 'pronomen',
+        'preposition', 'konjunktion', 'interjektion', 'räkneord'
+    ];
 
     // 3. Build Options HTML
     let html = `<option value="all">Alla (${items.length})</option>`;
 
     // Function to generate option line
     const createOption = (key, label, count) => {
-        // Find a raw value that matches this key for the value attribute?
-        // Actually the value attribute is used for filtering.
-        // My filtering logic uses `includes`. So 'subst' matches 'substantiv'.
-        // Let's use clean keys as values.
-        // Wait, my HTML had 'subst', 'verb'.
-        // Let's stick to standard keys: 'subst', 'verb', 'adj', 'adv', 'prep' for pinned.
-
         // Map full key back to short code for value if it's a pinned one
         let val = key;
         if (key === 'substantiv') val = 'subst';
         if (key === 'adjektiv') val = 'adj';
-        // verbs are just 'verb'
+        if (key === 'adverb') val = 'adv';
+        if (key === 'preposition') val = 'prep';
+        if (key === 'pronomen') val = 'pron';
+        if (key === 'konjunktion') val = 'konj';
+        if (key === 'interjektion') val = 'interj';
+        if (key === 'räkneord') val = 'räkn';
 
         const isSelected = currentVal === val ? 'selected' : '';
         return `<option value="${val}" ${isSelected}>${label} (${count})</option>`;
@@ -1105,16 +1152,37 @@ function updateTypeDropdown(items) {
 
     // Add Pinned Types
     pinnedTypes.forEach(type => {
-        const key = type; // e.g. 'substantiv'
-        const count = counts[key] || 0;
-        // Also check for short code in counts if data is messy
-        // But I normalized to full names above?
-        // Let's robustly sum counts?
-        // Actually, let's keep it simple. Normalize `t` to `substantiv` if it is `subst`.
+        const key = type;
+
+        // Sum counts for normalized types
+        let count = 0;
+
+        // Helper to find count for various abbreviations
+        const getCount = (abbrevs) => {
+            let c = 0;
+            abbrevs.forEach(abbr => {
+                if (counts[abbr]) {
+                    c += counts[abbr];
+                    delete counts[abbr]; // Remove from pool
+                }
+            });
+            return c;
+        };
+
+        if (type === 'substantiv') count = getCount(['substantiv', 'subst']);
+        else if (type === 'verb') count = getCount(['verb']);
+        else if (type === 'adjektiv') count = getCount(['adjektiv', 'adj']);
+        else if (type === 'adverb') count = getCount(['adverb', 'adv']);
+        else if (type === 'preposition') count = getCount(['preposition', 'prep']);
+        else if (type === 'pronomen') count = getCount(['pronomen', 'pron']);
+        else if (type === 'konjunktion') count = getCount(['konjunktion', 'konj']);
+        else if (type === 'interjektion') count = getCount(['interjektion', 'interj']);
+        else if (type === 'räkneord') count = getCount(['räkneord', 'räkn']);
+        else count = counts[type] || 0;
 
         const label = type.charAt(0).toUpperCase() + type.slice(1);
+        // ALWAYS show pinned types, even if count is 0
         html += createOption(key, label, count);
-        delete counts[key]; // Remove from pool so we don't duplicate
     });
 
     // Add Separator
@@ -1124,8 +1192,11 @@ function updateTypeDropdown(items) {
     const sortedRemaining = Object.entries(counts).sort((a, b) => b[1] - a[1]);
 
     sortedRemaining.forEach(([key, count]) => {
-        const label = (TYPE_LABELS[key] || key).charAt(0).toUpperCase() + (TYPE_LABELS[key] || key).slice(1);
-        html += `<option value="${key}" ${currentVal === key ? 'selected' : ''}>${label} (${count})</option>`;
+        if (count > 0) { // Only show if > 0
+            const label = (TYPE_LABELS[key] || key).charAt(0).toUpperCase() + (TYPE_LABELS[key] || key).slice(1);
+            // Use key as value for remaining types
+            html += `<option value="${key}" ${currentVal === key ? 'selected' : ''}>${label} (${count})</option>`;
+        }
     });
 
     typeSelect.innerHTML = html;
@@ -1946,9 +2017,49 @@ function showWordInfoTooltip(element, wordData) {
 // --- Smart Empty State Logic ---
 
 function renderHistory() {
-    // History feature disabled by user request
-    return;
+    const emptyState = document.getElementById('emptyState');
+    if (!emptyState) return;
+
+    if (!searchHistory || searchHistory.length === 0) {
+        emptyState.innerHTML = `
+            <div class="placeholder-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.3;">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+            </div>
+            <div class="placeholder-text">Börja skriva för att söka / ابدأ الكتابة للبحث</div>
+        `;
+        return;
+    }
+
+    const historyHtml = searchHistory.map(term =>
+        `<span class="history-chip" onclick="setSearch('${term.replace(/'/g, "\\'")}')">${term}</span>`
+    ).join('');
+
+    emptyState.innerHTML = `
+        <div class="history-container">
+            <div class="history-header">
+                <span class="history-icon" style="margin-right: 0.5rem; opacity: 0.7;">🕒</span> 
+                <span style="opacity: 0.8; font-size: 0.9rem;">Senaste sökningar / سجل البحث</span>
+            </div>
+            <div class="history-chips">
+                ${historyHtml}
+            </div>
+            <button onclick="clearHistory(event)" class="clear-history-btn">Rensa historik / مسح السجل</button>
+        </div>
+    `;
 }
+
+// Helper to clear history
+window.clearHistory = function (e) {
+    if (e) e.stopPropagation();
+    if (confirm('Rensa historik? / مسح السجل؟')) {
+        searchHistory = [];
+        localStorage.removeItem('searchHistory');
+        renderHistory();
+    }
+};
 
 function addToHistory(term) {
     if (!term || term.length < 2) return;

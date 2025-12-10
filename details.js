@@ -611,6 +611,36 @@ function renderDetails(item) {
         }
     }
 
+    // --- FIX: SPLIT MIXED DEFINITIONS ---
+    // Some specialized words (like Bygg terms) have mixed content in the Swedish field
+    // Example: "term | translation"
+    if (effectiveSweDef && effectiveSweDef.includes('|') && !arbDef) {
+        const parts = effectiveSweDef.split('|').map(s => s.trim());
+        if (parts.length === 2) {
+            // Assume Part 1 is Arb/Trans and Part 2 is Swe/Desc, OR vice versa based on detection
+            // In the user's screenshot: "en av två... | نصف..."
+            // Often format is: "Swedish Term | Arabic Translation" OR "Context | Translation"
+
+            // Heuristic: Check for Arabic chars
+            const hasArabicPart1 = /[\u0600-\u06FF]/.test(parts[0]);
+            const hasArabicPart2 = /[\u0600-\u06FF]/.test(parts[1]);
+
+            if (hasArabicPart1 && !hasArabicPart2) {
+                arbDef = parts[0];
+                effectiveSweDef = parts[1];
+            } else if (!hasArabicPart1 && hasArabicPart2) {
+                effectiveSweDef = parts[0];
+                arbDef = parts[1];
+            } else {
+                // Both or neither have Arabic, just split them for display cleanly?
+                // For now, keep as is but replace pipe with break if needed, 
+                // but cleaner to assign to fields if we can guess.
+                // Fallback: Assign to Swe and Arb blindly? No, risky.
+                // Let's just trust the pipe separation for visual distinction
+            }
+        }
+    }
+
 
     // Check if word is in favorites (moved up for header buttons)
     const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');

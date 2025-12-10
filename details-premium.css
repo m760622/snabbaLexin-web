@@ -849,6 +849,11 @@
     color: var(--text-main);
     margin-bottom: 0.75rem;
     line-height: 1.6;
+    display: block;
+    /* Enforce new line */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    /* Subtle separator */
+    padding-bottom: 0.5rem;
 }
 
 .def-arb-detail {
@@ -858,6 +863,9 @@
     color: var(--text-secondary);
     direction: rtl;
     line-height: 1.8;
+    display: block;
+    /* Enforce new line */
+    margin-top: 0.5rem;
 }
 
 /* Forms Section with Labels */

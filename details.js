@@ -129,7 +129,11 @@ function playGoogleTTS(text, lang = 'sv') {
 
     ttsAudio.src = url;
     ttsAudio.volume = 1.0;
-    ttsAudio.playbackRate = 0.7; // Slower for learning
+
+    // Set playback rate after audio is ready (iOS fix)
+    ttsAudio.oncanplay = () => {
+        ttsAudio.playbackRate = 0.7; // Slower for learning
+    };
 
     // iOS requires user interaction - but we're called from click
     ttsAudio.play().then(() => {

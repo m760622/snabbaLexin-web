@@ -1854,7 +1854,7 @@
             vgAudio = new Audio();
             vgAudio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(w)}`;
             vgAudio.volume = 1.0;
-            vgAudio.playbackRate = 0.8; // Slower for learning
+            vgAudio.playbackRate = 0.7; // Slower for learning
 
             vgAudio.play().then(() => {
                 console.log('Playing Swedish TTS for:', w);

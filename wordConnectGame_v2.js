@@ -1437,7 +1437,7 @@ function playOnlineTTS(text) {
     wcAudio = new Audio();
     wcAudio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(text)}`;
     wcAudio.volume = 1.0;
-    wcAudio.playbackRate = 0.8; // Slower for learning
+    wcAudio.playbackRate = 0.7; // Slower for learning
 
     wcAudio.play().catch(err => {
         console.warn("Online TTS failed, falling back to local:", err);

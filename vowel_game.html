@@ -985,6 +985,170 @@
                 opacity: 0;
             }
         }
+
+        /* Daily Challenge */
+        .daily-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1rem;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .daily-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .daily-btn.completed {
+            background: linear-gradient(135deg, #10b981, #059669);
+            pointer-events: none;
+        }
+
+        .daily-timer {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            color: #f59e0b;
+            font-weight: bold;
+            font-size: 1.2rem;
+            z-index: 100;
+            display: none;
+        }
+
+        .daily-badge {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            color: #1e293b;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 300;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .daily-badge.visible {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Particle Effects */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 1.5rem;
+            animation: particle-fly 1s ease-out forwards;
+        }
+
+        .particle.star {
+            color: #fbbf24;
+            text-shadow: 0 0 10px #fbbf24;
+        }
+
+        .particle.flame {
+            color: #ef4444;
+            text-shadow: 0 0 15px #ef4444, 0 0 30px #f97316;
+        }
+
+        .particle.sparkle {
+            color: #a855f7;
+            text-shadow: 0 0 10px #a855f7;
+        }
+
+        @keyframes particle-fly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.3) rotate(360deg);
+            }
+        }
+
+        .burst-container {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Audio Mode */
+        .audio-btn {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .audio-mode .word-text {
+            filter: blur(12px);
+            user-select: none;
+            transition: filter 0.3s;
+        }
+
+        .audio-mode .word-text.revealed {
+            filter: blur(0);
+        }
+
+        .audio-mode .word-emoji {
+            font-size: 3rem;
+        }
+
+        .audio-hint {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: none;
+            animation: pulse 1.5s infinite;
+        }
+
+        .audio-mode .audio-hint {
+            display: block;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
     </style>
 </head>
 
@@ -1001,6 +1165,8 @@
         <h1 class="start-title">Svenska Vokaler<br><span style="font-size:1.5rem; font-weight:400; opacity:0.8;">تحدي
                 الأصوات السويدية</span></h1>
         <button class="start-btn" onclick="startGame()">Börja Spela ▶</button>
+        <button class="daily-btn" id="dailyBtn" onclick="startDailyChallenge()">🌟 Dagens Utmaning</button>
+        <button class="audio-btn" onclick="startAudioMode()">🔊 Ljudläge</button>
         <p style="margin-top:2rem; opacity:0.5; font-size:0.9rem;">Turn on sound 🔊</p>
     </div>
 
@@ -1037,6 +1203,13 @@
         <!-- Celebration Container -->
         <div id="celebrationOverlay" class="celebration-overlay"></div>
 
+        <!-- Daily Challenge UI -->
+        <div class="daily-timer" id="dailyTimer">⏱️ 00:00</div>
+        <div class="daily-badge" id="dailyBadge">
+            🏆 Dagens Utmaning Avklarad!<br>
+            <span style="font-size:2rem;">+3 ❤️</span>
+        </div>
+
         <div id="playArea" style="width: 100%; display:none;">
 
             <div id="bossBanner" class="boss-banner">⚠️ BOSS WAVE ⚠️</div>
@@ -1044,6 +1217,8 @@
             <div id="inlineCountdown" class="inline-countdown"></div>
 
             <div class="speed-badge" id="speedBadge">SNABB! ⚡️</div>
+
+            <div class="audio-hint" id="audioHint">🔊 Klicka på högtalaren för att lyssna!</div>
 
             <div class="card-flipper slide-in" id="cardFlipper">
                 <!-- FRONT -->
@@ -1267,6 +1442,16 @@
             seenIndices = JSON.parse(localStorage.getItem('vowelPlayedIndices') || '[]');
         } catch (e) { seenIndices = []; }
 
+        // Fisher-Yates Shuffle for true randomization
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
         // Elements
         const optionsArea = document.getElementById('optionsArea');
         const feedbackOverlay = document.getElementById('feedbackOverlay');
@@ -1425,10 +1610,20 @@
 
             updateTargetStyling();
 
-            const vowels = p.pair;
-            const shuffledVowels = [...vowels].sort(() => Math.random() - 0.5);
+            // All Swedish vowels for distractors
+            const allVowels = ['A', 'E', 'I', 'O', 'U', 'Y', 'Å', 'Ä', 'Ö'];
+            const correctVowels = p.pair;
+
+            // Get 2 distractor vowels (not in the pair)
+            const distractors = shuffleArray(allVowels
+                .filter(v => !correctVowels.includes(v)))
+                .slice(0, 2);
+
+            // Combine and shuffle all 4 options
+            const allOptions = shuffleArray([...correctVowels, ...distractors]);
+
             optionsArea.innerHTML = '';
-            shuffledVowels.forEach(v => {
+            allOptions.forEach(v => {
                 const btn = document.createElement('button');
                 btn.className = 'vowel-btn slide-in';
                 btn.textContent = v;
@@ -1584,6 +1779,62 @@
             setTimeout(() => { document.body.removeChild(clone); isProcessing = false; handleAnswer(vowel, btnEl, targetSlotId); }, 400); // Fast 400ms
         }
 
+        // ==========================================
+        // PARTICLE EFFECTS SYSTEM
+        // ==========================================
+        function spawnParticle(x, y, type, emoji) {
+            const particle = document.createElement('div');
+            particle.className = `particle ${type}`;
+            particle.textContent = emoji;
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+
+            // Random direction
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 50 + Math.random() * 100;
+            particle.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+            particle.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 1000);
+        }
+
+        function burstParticles(element, type) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            const particles = {
+                star: { emojis: ['⭐', '✨', '🌟'], count: 8 },
+                flame: { emojis: ['🔥', '💥', '⚡'], count: 12 },
+                sparkle: { emojis: ['💜', '💫', '✨'], count: 10 }
+            };
+
+            const config = particles[type] || particles.star;
+
+            for (let i = 0; i < config.count; i++) {
+                setTimeout(() => {
+                    const emoji = config.emojis[Math.floor(Math.random() * config.emojis.length)];
+                    spawnParticle(centerX, centerY, type, emoji);
+                }, i * 50);
+            }
+        }
+
+        function triggerCorrectAnswerEffect(slotId) {
+            const slotEl = document.getElementById(`slot${slotId}`);
+
+            if (streak >= 5) {
+                // Flame burst for high streak
+                burstParticles(slotEl, 'flame');
+            } else if (streak >= 3) {
+                // Sparkle for medium streak
+                burstParticles(slotEl, 'sparkle');
+            } else {
+                // Stars for normal correct
+                burstParticles(slotEl, 'star');
+            }
+        }
+
         function playAudioForSlot(id) {
             const w = id === 1 ? currentPair.w1 : currentPair.w2;
             if (window.speechSynthesis) window.speechSynthesis.speak(new SpeechSynthesisUtterance(w));
@@ -1617,6 +1868,7 @@
 
                 if (btnEl) btnEl.classList.add('selected-correct'); // Guarded
                 playAudioForSlot(slotId);
+                triggerCorrectAnswerEffect(slotId); // Particle burst!
                 streak++;
                 score += 100 * (streak > 5 ? 2 : 1);
 
@@ -1819,6 +2071,236 @@
                 overlay.style.display = 'none';
                 overlay.innerHTML = '';
             }, 3500);
+        }
+
+        // ==========================================
+        // DAILY CHALLENGE SYSTEM
+        // ==========================================
+        let isDailyMode = false;
+        let dailyStartTime = 0;
+        let dailyTimerInterval = null;
+        let dailyWordsCompleted = 0;
+        const DAILY_WORDS_COUNT = 5;
+
+        function getTodayKey() {
+            const d = new Date();
+            return `daily_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+        }
+
+        function isDailyChallengeCompleted() {
+            return localStorage.getItem(getTodayKey()) === 'completed';
+        }
+
+        function getDailyPairs() {
+            // Generate consistent pairs for each day using date as seed
+            const today = new Date();
+            const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            const shuffled = [...minimalPairsData].sort((a, b) => {
+                const hashA = (seed * minimalPairsData.indexOf(a)) % 1000;
+                const hashB = (seed * minimalPairsData.indexOf(b)) % 1000;
+                return hashA - hashB;
+            });
+            return shuffled.slice(0, DAILY_WORDS_COUNT);
+        }
+
+        function updateDailyButton() {
+            const btn = document.getElementById('dailyBtn');
+            if (isDailyChallengeCompleted()) {
+                btn.classList.add('completed');
+                btn.innerHTML = '✅ Avklarad idag!';
+            }
+        }
+
+        function startDailyChallenge() {
+            if (isDailyChallengeCompleted()) return;
+
+            isDailyMode = true;
+            dailyWordsCompleted = 0;
+            dailyStartTime = Date.now();
+
+            // Hide start screen, show game
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('playArea').style.display = 'block';
+            hasStarted = true;
+
+            // Show timer
+            const timerEl = document.getElementById('dailyTimer');
+            timerEl.style.display = 'block';
+
+            // Start timer update
+            dailyTimerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - dailyStartTime) / 1000);
+                const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+                const secs = (elapsed % 60).toString().padStart(2, '0');
+                timerEl.textContent = `⏱️ ${mins}:${secs}`;
+            }, 1000);
+
+            // Set up daily pairs
+            window.dailyPairs = getDailyPairs();
+            window.dailyIndex = 0;
+
+            // Reset state
+            lives = 3;
+            streak = 0;
+            score = 0;
+            updateLives();
+
+            loadDailyLevel();
+        }
+
+        function loadDailyLevel() {
+            if (window.dailyIndex >= DAILY_WORDS_COUNT) {
+                completeDailyChallenge();
+                return;
+            }
+
+            currentPair = window.dailyPairs[window.dailyIndex];
+            solvedStatus = { 1: false, 2: false };
+            failedStatus = { 1: false, 2: false };
+            currentTarget = 1;
+            levelStartTime = Date.now();
+
+            // Update UI
+            levelBadge.textContent = `Daily: ${window.dailyIndex + 1}/${DAILY_WORDS_COUNT}`;
+
+            cardFlipper.classList.remove('flipped');
+            speedBadge.classList.remove('visible');
+
+            const p = currentPair;
+            let frame1 = p.w1.replace(new RegExp(p.pair[0], 'i'), '<span class="missing-vowel"></span>');
+            let frame2 = p.w2.replace(new RegExp(p.pair[1], 'i'), '<span class="missing-vowel"></span>');
+
+            document.querySelector('.word-1-text').innerHTML = frame1;
+            document.querySelector('.word-2-text').innerHTML = frame2;
+            document.querySelector('.word-1-def').innerText = p.d1;
+            document.querySelector('.word-2-def').innerText = p.d2;
+            document.getElementById('emoji1').textContent = p.e1 || '📦';
+            document.getElementById('emoji2').textContent = p.e2 || '📦';
+
+            updateTargetStyling();
+
+            // All Swedish vowels for distractors
+            const allVowels = ['A', 'E', 'I', 'O', 'U', 'Y', 'Å', 'Ä', 'Ö'];
+            const correctVowels = p.pair;
+
+            // Get 2 distractor vowels (not in the pair)
+            const distractors = shuffleArray(allVowels
+                .filter(v => !correctVowels.includes(v)))
+                .slice(0, 2);
+
+            // Combine and shuffle all 4 options
+            const allOptions = shuffleArray([...correctVowels, ...distractors]);
+
+            optionsArea.innerHTML = '';
+            allOptions.forEach(v => {
+                const btn = document.createElement('button');
+                btn.className = 'vowel-btn slide-in';
+                btn.textContent = v;
+                btn.draggable = true;
+                setupInteractions(btn, v);
+                optionsArea.appendChild(btn);
+            });
+        }
+
+        function dailyLevelComplete() {
+            window.dailyIndex++;
+            dailyWordsCompleted++;
+
+            setTimeout(() => {
+                cardFlipper.classList.add('flipped');
+            }, 600);
+
+            setTimeout(() => {
+                loadDailyLevel();
+            }, 1500);
+        }
+
+        function completeDailyChallenge() {
+            // Stop timer
+            clearInterval(dailyTimerInterval);
+            document.getElementById('dailyTimer').style.display = 'none';
+
+            // Mark as completed
+            localStorage.setItem(getTodayKey(), 'completed');
+
+            // Award +3 hearts
+            lives = Math.min(lives + 3, 5);
+            updateLives();
+
+            // Show badge
+            const badge = document.getElementById('dailyBadge');
+            badge.classList.add('visible');
+
+            // Calculate time
+            const elapsed = Math.floor((Date.now() - dailyStartTime) / 1000);
+            const mins = Math.floor(elapsed / 60);
+            const secs = elapsed % 60;
+            badge.innerHTML = `🏆 Dagens Utmaning Avklarad!<br><span style="font-size:1.2rem;">Tid: ${mins}:${secs.toString().padStart(2, '0')}</span><br><span style="font-size:2rem;">+3 ❤️</span>`;
+
+            setTimeout(() => {
+                badge.classList.remove('visible');
+                isDailyMode = false;
+                // Return to start screen
+                document.getElementById('playArea').style.display = 'none';
+                document.getElementById('startScreen').style.display = 'flex';
+                updateDailyButton();
+            }, 4000);
+        }
+
+        // Override levelComplete for daily mode
+        const originalLevelComplete = levelComplete;
+        levelComplete = function () {
+            if (isDailyMode) {
+                dailyLevelComplete();
+            } else {
+                originalLevelComplete();
+            }
+        };
+
+        // Check daily button on load
+        document.addEventListener('DOMContentLoaded', updateDailyButton);
+
+        // ==========================================
+        // AUDIO LEARNING MODE
+        // ==========================================
+        let isAudioMode = false;
+
+        function startAudioMode() {
+            isAudioMode = true;
+
+            // Add audio mode class to body
+            document.body.classList.add('audio-mode');
+
+            // Start normal game with audio mode active
+            startGame();
+
+            // Auto-play first word after a short delay
+            setTimeout(() => {
+                playAudioForSlot(currentTarget);
+            }, 1000);
+        }
+
+        function revealWordInAudioMode(slotId) {
+            if (!isAudioMode) return;
+            const wordText = document.querySelector(`.word-${slotId}-text`);
+            if (wordText) wordText.classList.add('revealed');
+        }
+
+        // Modify handleAnswer to reveal word in audio mode
+        const originalHandleAnswer = handleAnswer;
+        handleAnswer = function (selectedVowel, btnEl, slotId) {
+            // Reveal the word when answered (correct or wrong)
+            revealWordInAudioMode(slotId);
+
+            // Call original
+            originalHandleAnswer(selectedVowel, btnEl, slotId);
+        };
+
+        // Reset audio mode on game restart
+        function resetAudioMode() {
+            isAudioMode = false;
+            document.body.classList.remove('audio-mode');
+            document.querySelectorAll('.word-text').forEach(el => el.classList.remove('revealed'));
         }
 
         // Do NOT auto init; wait for Start Button

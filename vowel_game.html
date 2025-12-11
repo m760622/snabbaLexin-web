@@ -1835,18 +1835,37 @@
             }
         }
 
-        // Swedish Voice Cache
+        // Swedish Voice Cache (Enhanced for iOS)
         let swedishVoice = null;
+        const isIOS_VG = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
         function getSwedishVoice() {
             if (swedishVoice) return swedishVoice;
 
             const voices = window.speechSynthesis.getVoices();
-            // Priority: Swedish voices
-            swedishVoice = voices.find(v => v.lang === 'sv-SE') ||
-                voices.find(v => v.lang.startsWith('sv')) ||
-                voices.find(v => v.name.toLowerCase().includes('swedish')) ||
-                voices[0]; // Fallback
+
+            // Filter Swedish voices
+            const swedishVoices = voices.filter(v =>
+                v.lang === 'sv-SE' || v.lang.startsWith('sv-') || v.lang === 'sv' ||
+                v.name.toLowerCase().includes('swedish') ||
+                v.name.toLowerCase().includes('svenska')
+            );
+
+            if (swedishVoices.length > 0) {
+                // Priority: Alva (iOS), Klara (iOS), Google, Microsoft, first available
+                swedishVoice =
+                    swedishVoices.find(v => v.name.includes('Alva')) ||
+                    swedishVoices.find(v => v.name.includes('Klara')) ||
+                    swedishVoices.find(v => v.name.includes('Oskar')) ||
+                    swedishVoices.find(v => v.name.includes('Google')) ||
+                    swedishVoices.find(v => v.name.includes('Microsoft')) ||
+                    swedishVoices[0];
+            } else {
+                // Fallback to any voice
+                swedishVoice = voices[0];
+            }
+
             return swedishVoice;
         }
 
@@ -1856,6 +1875,8 @@
                 swedishVoice = null;
                 getSwedishVoice();
             };
+            // Trigger initial voice loading
+            window.speechSynthesis.getVoices();
         }
 
         function playAudioForSlot(id) {
@@ -1865,14 +1886,33 @@
             // Cancel any ongoing speech
             window.speechSynthesis.cancel();
 
-            const utterance = new SpeechSynthesisUtterance(w);
-            utterance.voice = getSwedishVoice();
-            utterance.lang = 'sv-SE';
-            utterance.rate = 0.8;  // Slower for clarity
-            utterance.pitch = 1.0;
-            utterance.volume = 1.0;
+            // iOS fix: delay after cancel
+            const delay = isIOS_VG ? 100 : 0;
 
-            window.speechSynthesis.speak(utterance);
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(w);
+                utterance.voice = getSwedishVoice();
+                utterance.lang = 'sv-SE';
+                utterance.rate = isIOS_VG ? 0.85 : 0.8;  // Slightly faster on iOS
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+
+                // iOS fix: ensure punctuation for proper pronunciation
+                if (isIOS_VG && w && !w.match(/[.!?]$/)) {
+                    utterance.text = w + '.';
+                }
+
+                window.speechSynthesis.speak(utterance);
+
+                // iOS fix: Resume if paused
+                if (isIOS_VG) {
+                    setTimeout(() => {
+                        if (speechSynthesis.paused) {
+                            speechSynthesis.resume();
+                        }
+                    }, 250);
+                }
+            }, delay);
         }
 
         function showComboText(text) {

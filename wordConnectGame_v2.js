@@ -1413,16 +1413,26 @@ function resetWordConnectProgress() {
     }
 }
 
-// --- AUDIO ---
+// --- AUDIO (Enhanced for iOS) ---
+const isIOS_WC = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+let cachedSwedishVoice_WC = null;
+
 function speakWord(text) {
-    // 1. Try Online TTS (Google Translate)
-    playOnlineTTS(text);
+    // On iOS, prefer local TTS for reliability, otherwise try online first
+    if (isIOS_WC) {
+        playLocalTTS(text);
+    } else {
+        playOnlineTTS(text);
+    }
 }
 
 function playOnlineTTS(text) {
     const audio = new Audio();
     audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(text)}`;
 
+    // iOS requires user interaction to play audio
     audio.play().catch(err => {
         console.warn("Online TTS failed, falling back to local:", err);
         playLocalTTS(text);
@@ -1430,34 +1440,74 @@ function playOnlineTTS(text) {
 }
 
 function playLocalTTS(text) {
-    if ('speechSynthesis' in window) {
+    if (!('speechSynthesis' in window)) return;
+
+    // Cancel any ongoing speech
+    speechSynthesis.cancel();
+
+    // iOS fix: delay after cancel
+    const delay = isIOS_WC ? 100 : 0;
+
+    setTimeout(() => {
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'sv-SE'; // Swedish
-        utterance.rate = 0.9; // Slightly slower
+        utterance.lang = 'sv-SE';
+        utterance.rate = isIOS_WC ? 0.9 : 0.85;
+        utterance.volume = 1;
 
-        // Smart Voice Selection
-        const voices = window.speechSynthesis.getVoices();
-        let selectedVoice = null;
+        // Get and cache Swedish voice
+        if (!cachedSwedishVoice_WC) {
+            const voices = window.speechSynthesis.getVoices();
+            const swedishVoices = voices.filter(v =>
+                v.lang === 'sv-SE' || v.lang.startsWith('sv-') || v.lang === 'sv'
+            );
 
-        // 1. Try to find a specific high-quality Swedish voice
-        const swedishVoices = voices.filter(voice => voice.lang.includes('sv'));
-
-        if (swedishVoices.length > 0) {
-            // Priority: Google > Microsoft > Enhanced > Default
-            selectedVoice = swedishVoices.find(v => v.name.includes('Google')) ||
-                swedishVoices.find(v => v.name.includes('Microsoft')) ||
-                swedishVoices.find(v => v.name.includes('Enhanced')) ||
-                swedishVoices[0];
+            if (swedishVoices.length > 0) {
+                // Priority: Alva (iOS), Google, Microsoft, Enhanced, first available
+                cachedSwedishVoice_WC =
+                    swedishVoices.find(v => v.name.includes('Alva')) ||
+                    swedishVoices.find(v => v.name.includes('Klara')) ||
+                    swedishVoices.find(v => v.name.includes('Google')) ||
+                    swedishVoices.find(v => v.name.includes('Microsoft')) ||
+                    swedishVoices.find(v => v.name.includes('Enhanced')) ||
+                    swedishVoices[0];
+            }
         }
 
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
-            // Adjust rate based on voice type if needed
-            if (selectedVoice.name.includes('Google')) utterance.rate = 0.85;
+        if (cachedSwedishVoice_WC) {
+            utterance.voice = cachedSwedishVoice_WC;
+        }
+
+        // iOS fix: Sometimes needs text to end with punctuation
+        if (isIOS_WC && text && !text.match(/[.!?]$/)) {
+            utterance.text = text + '.';
         }
 
         window.speechSynthesis.speak(utterance);
-    }
+
+        // iOS fix: Resume if paused
+        if (isIOS_WC) {
+            setTimeout(() => {
+                if (speechSynthesis.paused) {
+                    speechSynthesis.resume();
+                }
+            }, 250);
+        }
+    }, delay);
+}
+
+// Initialize voices on load (iOS fix)
+if ('speechSynthesis' in window) {
+    speechSynthesis.onvoiceschanged = () => {
+        const voices = speechSynthesis.getVoices();
+        const swedishVoices = voices.filter(v => v.lang.startsWith('sv'));
+        if (swedishVoices.length > 0) {
+            cachedSwedishVoice_WC = swedishVoices.find(v => v.name.includes('Alva')) ||
+                swedishVoices.find(v => v.name.includes('Klara')) ||
+                swedishVoices[0];
+        }
+    };
+    // Trigger voice loading
+    speechSynthesis.getVoices();
 }
 
 // --- BOMB MODE LOGIC ---
@@ -1696,12 +1746,35 @@ function showLibrary() {
 }
 
 function speakSentence(text) {
-    if ('speechSynthesis' in window) {
+    if (!('speechSynthesis' in window)) return;
+
+    speechSynthesis.cancel();
+
+    const delay = isIOS_WC ? 100 : 0;
+
+    setTimeout(() => {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'sv-SE';
-        utterance.rate = 0.9; // Slightly slower for sentences
+        utterance.rate = 0.8; // Slower for sentences
+        utterance.volume = 1;
+
+        if (cachedSwedishVoice_WC) {
+            utterance.voice = cachedSwedishVoice_WC;
+        }
+
+        // iOS fix: ensure punctuation
+        if (isIOS_WC && text && !text.match(/[.!?]$/)) {
+            utterance.text = text + '.';
+        }
+
         window.speechSynthesis.speak(utterance);
-    }
+
+        if (isIOS_WC) {
+            setTimeout(() => {
+                if (speechSynthesis.paused) speechSynthesis.resume();
+            }, 250);
+        }
+    }, delay);
 }
 
 function deleteWord(wordToDelete) {

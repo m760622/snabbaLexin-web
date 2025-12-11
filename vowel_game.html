@@ -1835,9 +1835,44 @@
             }
         }
 
+        // Swedish Voice Cache
+        let swedishVoice = null;
+
+        function getSwedishVoice() {
+            if (swedishVoice) return swedishVoice;
+
+            const voices = window.speechSynthesis.getVoices();
+            // Priority: Swedish voices
+            swedishVoice = voices.find(v => v.lang === 'sv-SE') ||
+                voices.find(v => v.lang.startsWith('sv')) ||
+                voices.find(v => v.name.toLowerCase().includes('swedish')) ||
+                voices[0]; // Fallback
+            return swedishVoice;
+        }
+
+        // Load voices (async on some browsers)
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                swedishVoice = null;
+                getSwedishVoice();
+            };
+        }
+
         function playAudioForSlot(id) {
             const w = id === 1 ? currentPair.w1 : currentPair.w2;
-            if (window.speechSynthesis) window.speechSynthesis.speak(new SpeechSynthesisUtterance(w));
+            if (!window.speechSynthesis) return;
+
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(w);
+            utterance.voice = getSwedishVoice();
+            utterance.lang = 'sv-SE';
+            utterance.rate = 0.8;  // Slower for clarity
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            window.speechSynthesis.speak(utterance);
         }
 
         function showComboText(text) {

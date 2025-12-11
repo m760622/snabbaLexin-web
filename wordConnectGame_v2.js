@@ -1413,30 +1413,40 @@ function resetWordConnectProgress() {
     }
 }
 
-// --- AUDIO (Enhanced for iOS) ---
+// --- AUDIO (Uses Google Translate TTS for high quality) ---
 const isIOS_WC = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 let cachedSwedishVoice_WC = null;
+let wcAudio = null;
 
 function speakWord(text) {
-    // On iOS, prefer local TTS for reliability, otherwise try online first
-    if (isIOS_WC) {
-        playLocalTTS(text);
-    } else {
-        playOnlineTTS(text);
+    if (!text || text.trim() === '') return;
+
+    // Stop any currently playing audio
+    if (wcAudio) {
+        wcAudio.pause();
+        wcAudio.currentTime = 0;
     }
+
+    // Always try Google TTS first (best quality)
+    playOnlineTTS(text);
 }
 
 function playOnlineTTS(text) {
-    const audio = new Audio();
-    audio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(text)}`;
+    wcAudio = new Audio();
+    wcAudio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(text)}`;
+    wcAudio.volume = 1.0;
 
-    // iOS requires user interaction to play audio
-    audio.play().catch(err => {
+    wcAudio.play().catch(err => {
         console.warn("Online TTS failed, falling back to local:", err);
         playLocalTTS(text);
     });
+
+    wcAudio.onerror = () => {
+        console.warn("Audio error, falling back to local TTS");
+        playLocalTTS(text);
+    };
 }
 
 function playLocalTTS(text) {

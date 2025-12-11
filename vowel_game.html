@@ -1835,84 +1835,73 @@
             }
         }
 
-        // Swedish Voice Cache (Enhanced for iOS)
-        let swedishVoice = null;
+        // TTS using Google Translate for high quality Swedish pronunciation
+        let vgAudio = null;
         const isIOS_VG = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-        function getSwedishVoice() {
-            if (swedishVoice) return swedishVoice;
+        function playAudioForSlot(id) {
+            const w = id === 1 ? currentPair.w1 : currentPair.w2;
+            if (!w) return;
 
-            const voices = window.speechSynthesis.getVoices();
-
-            // Filter Swedish voices
-            const swedishVoices = voices.filter(v =>
-                v.lang === 'sv-SE' || v.lang.startsWith('sv-') || v.lang === 'sv' ||
-                v.name.toLowerCase().includes('swedish') ||
-                v.name.toLowerCase().includes('svenska')
-            );
-
-            if (swedishVoices.length > 0) {
-                // Priority: Alva (iOS), Klara (iOS), Google, Microsoft, first available
-                swedishVoice =
-                    swedishVoices.find(v => v.name.includes('Alva')) ||
-                    swedishVoices.find(v => v.name.includes('Klara')) ||
-                    swedishVoices.find(v => v.name.includes('Oskar')) ||
-                    swedishVoices.find(v => v.name.includes('Google')) ||
-                    swedishVoices.find(v => v.name.includes('Microsoft')) ||
-                    swedishVoices[0];
-            } else {
-                // Fallback to any voice
-                swedishVoice = voices[0];
+            // Stop any existing audio
+            if (vgAudio) {
+                vgAudio.pause();
+                vgAudio.currentTime = 0;
             }
 
+            // Use Google Translate TTS for best quality
+            vgAudio = new Audio();
+            vgAudio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(w)}`;
+            vgAudio.volume = 1.0;
+
+            vgAudio.play().then(() => {
+                console.log('Playing Swedish TTS for:', w);
+            }).catch(err => {
+                console.warn('Google TTS failed, trying local:', err);
+                playLocalTTS_VG(w);
+            });
+
+            vgAudio.onerror = () => {
+                console.warn('Audio error, falling back to local TTS');
+                playLocalTTS_VG(w);
+            };
+        }
+
+        // Local TTS fallback
+        let swedishVoice = null;
+
+        function getSwedishVoice() {
+            if (swedishVoice) return swedishVoice;
+            const voices = window.speechSynthesis.getVoices();
+            const sv = voices.filter(v => v.lang.startsWith('sv'));
+            if (sv.length > 0) {
+                swedishVoice = sv.find(v => v.name.includes('Alva')) ||
+                    sv.find(v => v.name.includes('Klara')) ||
+                    sv[0];
+            }
             return swedishVoice;
         }
 
-        // Load voices (async on some browsers)
+        function playLocalTTS_VG(text) {
+            if (!window.speechSynthesis) return;
+            speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = getSwedishVoice();
+            utterance.lang = 'sv-SE';
+            utterance.rate = 0.85;
+            utterance.volume = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Initialize voices
         if (window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = () => {
+            speechSynthesis.onvoiceschanged = () => {
                 swedishVoice = null;
                 getSwedishVoice();
             };
-            // Trigger initial voice loading
-            window.speechSynthesis.getVoices();
-        }
-
-        function playAudioForSlot(id) {
-            const w = id === 1 ? currentPair.w1 : currentPair.w2;
-            if (!window.speechSynthesis) return;
-
-            // Cancel any ongoing speech
-            window.speechSynthesis.cancel();
-
-            // iOS fix: delay after cancel
-            const delay = isIOS_VG ? 100 : 0;
-
-            setTimeout(() => {
-                const utterance = new SpeechSynthesisUtterance(w);
-                utterance.voice = getSwedishVoice();
-                utterance.lang = 'sv-SE';
-                utterance.rate = isIOS_VG ? 0.85 : 0.8;  // Slightly faster on iOS
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
-
-                // iOS fix: ensure punctuation for proper pronunciation
-                if (isIOS_VG && w && !w.match(/[.!?]$/)) {
-                    utterance.text = w + '.';
-                }
-
-                window.speechSynthesis.speak(utterance);
-
-                // iOS fix: Resume if paused
-                if (isIOS_VG) {
-                    setTimeout(() => {
-                        if (speechSynthesis.paused) {
-                            speechSynthesis.resume();
-                        }
-                    }, 250);
-                }
-            }, delay);
+            speechSynthesis.getVoices();
         }
 
         function showComboText(text) {

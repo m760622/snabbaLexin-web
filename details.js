@@ -85,103 +85,71 @@ function getGrammarBadgeText(type, forms, word) {
 
 // ========================================
 // Text-to-Speech for Swedish Pronunciation
-// Enhanced for iOS Safari compatibility
+// Uses Google Translate TTS for high quality
 // ========================================
-
-// Cache for Swedish voices
-let cachedSwedishVoice = null;
-let voicesLoaded = false;
 
 // Detect iOS/Safari
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-// Initialize voices with proper iOS handling
-function initVoices() {
-    return new Promise((resolve) => {
-        if (!('speechSynthesis' in window)) {
-            resolve(false);
-            return;
-        }
+// Audio element for TTS
+let ttsAudio = null;
+let lastSpokenText = '';
 
-        const voices = speechSynthesis.getVoices();
-        if (voices.length > 0) {
-            findBestSwedishVoice(voices);
-            voicesLoaded = true;
-            resolve(true);
-        } else {
-            // iOS Safari needs this event
-            speechSynthesis.onvoiceschanged = () => {
-                const v = speechSynthesis.getVoices();
-                findBestSwedishVoice(v);
-                voicesLoaded = true;
-                resolve(true);
-            };
-            // Fallback timeout for iOS
-            setTimeout(() => {
-                const v = speechSynthesis.getVoices();
-                if (v.length > 0) {
-                    findBestSwedishVoice(v);
-                    voicesLoaded = true;
-                }
-                resolve(voicesLoaded);
-            }, 500);
-        }
+// Main speak function - uses Google Translate TTS for best quality
+function speakWord(text, lang = 'sv') {
+    if (!text || text.trim() === '') return;
+
+    // Clean text
+    const cleanText = text.replace(/'/g, "'").trim();
+
+    // Avoid repeating the same word too quickly
+    if (cleanText === lastSpokenText && ttsAudio && !ttsAudio.paused) {
+        return;
+    }
+    lastSpokenText = cleanText;
+
+    // Stop any currently playing audio
+    if (ttsAudio) {
+        ttsAudio.pause();
+        ttsAudio.currentTime = 0;
+    }
+
+    // Try Google Translate TTS first (high quality)
+    playGoogleTTS(cleanText, lang);
+}
+
+// Google Translate TTS - High quality Swedish pronunciation
+function playGoogleTTS(text, lang = 'sv') {
+    // Create new audio element
+    ttsAudio = new Audio();
+
+    // Google Translate TTS endpoint
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encodeURIComponent(text)}`;
+
+    ttsAudio.src = url;
+    ttsAudio.volume = 1.0;
+
+    // iOS requires user interaction - but we're called from click
+    ttsAudio.play().then(() => {
+        console.log('Playing Swedish TTS for:', text);
+    }).catch(err => {
+        console.warn('Google TTS failed, trying local:', err);
+        // Fallback to local speech synthesis
+        playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
     });
+
+    // Handle playback errors
+    ttsAudio.onerror = () => {
+        console.warn('Audio error, falling back to local TTS');
+        playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
+    };
 }
 
-// Find the best Swedish voice with priority
-function findBestSwedishVoice(voices) {
-    if (!voices || voices.length === 0) return null;
+// Local TTS fallback (browser built-in)
+let cachedSwedishVoice = null;
 
-    // Priority list for Swedish voices (best quality first)
-    const priorityNames = [
-        'Alva',        // iOS high-quality Swedish voice
-        'Klara',       // iOS Swedish enhanced
-        'Oskar',       // iOS Swedish male
-        'Google',      // Chrome Swedish
-        'Microsoft',   // Edge Swedish
-        'Enhanced',    // Enhanced voices
-        'Premium'      // Premium voices
-    ];
-
-    // Get all Swedish voices
-    const swedishVoices = voices.filter(v =>
-        v.lang === 'sv-SE' ||
-        v.lang === 'sv' ||
-        v.lang.startsWith('sv-') ||
-        v.name.toLowerCase().includes('swedish') ||
-        v.name.toLowerCase().includes('svenska')
-    );
-
-    if (swedishVoices.length === 0) {
-        console.log('No Swedish voices found. Available:', voices.map(v => `${v.name} (${v.lang})`));
-        return null;
-    }
-
-    console.log('Swedish voices found:', swedishVoices.map(v => v.name));
-
-    // Find best voice by priority
-    for (const priorityName of priorityNames) {
-        const match = swedishVoices.find(v =>
-            v.name.toLowerCase().includes(priorityName.toLowerCase())
-        );
-        if (match) {
-            cachedSwedishVoice = match;
-            console.log('Selected Swedish voice:', match.name);
-            return match;
-        }
-    }
-
-    // Fallback to first Swedish voice
-    cachedSwedishVoice = swedishVoices[0];
-    console.log('Fallback Swedish voice:', swedishVoices[0].name);
-    return swedishVoices[0];
-}
-
-// Main speak function with iOS fixes
-function speakWord(text, lang = 'sv-SE') {
+function playLocalTTS(text, lang = 'sv-SE') {
     if (!('speechSynthesis' in window)) {
         showToast('Ljuduppspelning stöds inte / التشغيل الصوتي غير مدعوم');
         return;
@@ -196,47 +164,36 @@ function speakWord(text, lang = 'sv-SE') {
     setTimeout(() => {
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = lang;
-        utterance.rate = isIOS ? 0.9 : 0.85; // Slightly faster on iOS for better flow
+        utterance.rate = 0.85;
         utterance.pitch = 1;
         utterance.volume = 1;
 
-        // Get voices if not loaded
-        if (!voicesLoaded) {
+        // Get best Swedish voice
+        if (!cachedSwedishVoice) {
             const voices = speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                findBestSwedishVoice(voices);
-                voicesLoaded = true;
+            const swedishVoices = voices.filter(v =>
+                v.lang === 'sv-SE' || v.lang.startsWith('sv-') || v.lang === 'sv'
+            );
+
+            if (swedishVoices.length > 0) {
+                // Priority: Alva (iOS), Klara, Google, Microsoft
+                cachedSwedishVoice =
+                    swedishVoices.find(v => v.name.includes('Alva')) ||
+                    swedishVoices.find(v => v.name.includes('Klara')) ||
+                    swedishVoices.find(v => v.name.includes('Google')) ||
+                    swedishVoices.find(v => v.name.includes('Microsoft')) ||
+                    swedishVoices[0];
             }
         }
 
-        // Apply cached Swedish voice
         if (cachedSwedishVoice) {
             utterance.voice = cachedSwedishVoice;
         }
 
-        // iOS fix: Sometimes needs text to end with punctuation
-        if (isIOS && text && !text.match(/[.!?]$/)) {
-            utterance.text = text + '.';
-        }
-
-        // Error handling
-        utterance.onerror = (event) => {
-            console.error('Speech error:', event.error);
-            // Try fallback without specific voice
-            if (cachedSwedishVoice) {
-                const fallbackUtterance = new SpeechSynthesisUtterance(text);
-                fallbackUtterance.lang = lang;
-                fallbackUtterance.rate = 0.9;
-                speechSynthesis.speak(fallbackUtterance);
-            }
-        };
-
-        // Speak
         speechSynthesis.speak(utterance);
 
-        // iOS fix: Prevent speech from stopping when app goes to background
+        // iOS fix: Resume if paused
         if (isIOS) {
-            // Resume if paused (iOS sometimes pauses automatically)
             setTimeout(() => {
                 if (speechSynthesis.paused) {
                     speechSynthesis.resume();
@@ -248,15 +205,17 @@ function speakWord(text, lang = 'sv-SE') {
 
 // Initialize voices on page load
 if ('speechSynthesis' in window) {
-    // Trigger voice loading
-    initVoices();
-
-    // Re-init on visibility change (iOS fix)
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && isIOS) {
-            speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = () => {
+        const voices = speechSynthesis.getVoices();
+        const swedishVoices = voices.filter(v => v.lang.startsWith('sv'));
+        if (swedishVoices.length > 0) {
+            cachedSwedishVoice = swedishVoices.find(v => v.name.includes('Alva')) ||
+                swedishVoices.find(v => v.name.includes('Klara')) ||
+                swedishVoices[0];
         }
-    });
+    };
+    // Trigger voice loading
+    speechSynthesis.getVoices();
 }
 
 // ========================================

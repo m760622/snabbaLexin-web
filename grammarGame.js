@@ -118,10 +118,17 @@ function startGrammarGame() {
             grammarScore += 20;
             document.getElementById('grammarScore').textContent = grammarScore;
             saveScore('grammar', grammarScore);
-            // triggerConfetti(); // Removed per user request
+            // Trigger confetti (commented out per user request previously, but we can verify if needed)
+            // triggerConfetti(); 
 
-            // Show explanation
-            explanationEl.innerHTML = `<strong>✓ Korrekt!</strong><br>${currentGrammarRule.explanation}<br><span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>`;
+            // Show explanation with Listen Button
+            const sentenceText = grammarTarget.join(' ');
+            explanationEl.innerHTML = `
+                <strong>✓ Korrekt!</strong><br>
+                <button class="grammar-listen-btn" onclick="speakSentence('${sentenceText.replace(/'/g, "\\'")}')" style="background:none; border:none; cursor:pointer; font-size:1.2rem; float:right;">🔊 Lyssna</button>
+                ${currentGrammarRule.explanation}<br>
+                <span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>
+            `;
             explanationEl.style.display = 'block';
             explanationEl.style.background = 'rgba(16, 185, 129, 0.1)';
             explanationEl.style.borderLeft = '4px solid #10b981';
@@ -164,15 +171,32 @@ window.showGrammarAnswer = function () {
     feedbackEl.textContent = "Här är rätt svar! / إليك الإجابة الصحيحة!";
     feedbackEl.className = 'game-feedback';
 
-    // Show explanation
-    explanationEl.innerHTML = `<strong>ℹ️ Förklaring:</strong><br>${currentGrammarRule.explanation}<br><span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>`;
+    // Construct Explanation HTML with Listen Button
+    const sentenceText = grammarTarget.join(' ');
+    explanationEl.innerHTML = `
+        <strong>ℹ️ Förklaring:</strong><br>
+        <button class="grammar-listen-btn" onclick="speakSentence('${sentenceText.replace(/'/g, "\\'")}')" style="background:none; border:none; cursor:pointer; font-size:1.2rem; float:right;">🔊 Lyssna</button>
+        ${currentGrammarRule.explanation}<br>
+        <span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>
+    `;
+
     explanationEl.style.display = 'block';
+    // Style adjustments for explanation box handled in CSS usually, but inline here:
     explanationEl.style.background = 'rgba(99, 102, 241, 0.1)';
     explanationEl.style.borderLeft = '4px solid #6366f1';
 
     nextBtn.style.display = 'inline-block';
     checkBtn.disabled = true;
     if (showAnswerBtn) showAnswerBtn.disabled = true;
+}
+
+// Speak helper
+function speakSentence(text) {
+    if (typeof TTSManager !== 'undefined') {
+        TTSManager.speak(text);
+    } else {
+        console.warn('TTSManager not found');
+    }
 }
 
 // Initialize on load

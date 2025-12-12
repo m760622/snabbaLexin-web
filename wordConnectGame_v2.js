@@ -1147,8 +1147,8 @@ function checkWin() {
         // Update Status Element
         const statusEl = document.getElementById('wcLevelStatus');
         if (statusEl) {
-            // statusEl.textContent = "Nivå Klar! / اكتمل المستوى!"; // Removed per user request
             statusEl.classList.add('visible');
+            triggerConfetti(); // Celebration!
         }
 
         wcState.coins += 20;
@@ -1293,69 +1293,188 @@ function nextLevel() {
     startLevel(wcState.chapter, wcState.stage);
 }
 
-// --- LEVEL SELECT UI ---
+// --- VISUAL STAGE MAP UI ---
 function openLevelSelect() {
     const modal = document.getElementById('wcLevelSelectModal');
     const grid = document.getElementById('wcLevelGrid');
+
+    // Clear & Setup for Map
     grid.innerHTML = '';
+    grid.className = 'wc-map-container'; // Override grid class
+
+    // Add path SVG container
+    const svgOverlay = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svgOverlay.setAttribute("class", "wc-map-path-svg");
+    // We'll set height dynamically or let it fill container
+    grid.appendChild(svgOverlay);
 
     modal.style.display = 'flex';
 
-    // Render 100 levels
+    // Track nodes for drawing paths
+    const validNodes = []; // {x, y, el}
+
+    // Render Chapters & Stages
     for (let c = 1; c <= WC_CONFIG.totalChapters; c++) {
-        // Chapter Header
-        const header = document.createElement('div');
-        header.className = 'wc-chapter-header';
+        // Chapter Section
+        const section = document.createElement('div');
+        section.className = 'wc-map-chapter-section';
 
+        // Chapter Title
         const theme = getThemeForChapter(c);
-        header.textContent = theme ? `Kapitel ${c}: ${theme.name}` : `Kapitel ${c}`;
-        grid.appendChild(header);
+        const title = document.createElement('div');
+        title.className = 'wc-map-chapter-title';
+        title.textContent = theme ? `Kapitel ${c}: ${theme.name}` : `Kapitel ${c}`;
+        section.appendChild(title);
 
-        const chapterGrid = document.createElement('div');
-        chapterGrid.className = 'wc-chapter-grid';
+        // Nodes Container
+        const nodesContainer = document.createElement('div');
+        nodesContainer.className = 'wc-map-nodes-container';
 
         for (let s = 1; s <= WC_CONFIG.stagesPerChapter; s++) {
+            const isUnlocked = (c < wcState.maxChapter) || (c === wcState.maxChapter && s <= wcState.maxStage) || (s === 1 && c === 1);
+            const isCurrent = (c === wcState.chapter && s === wcState.stage);
+            const isCompleted = (c < wcState.maxChapter) || (c === wcState.maxChapter && s < wcState.maxStage);
+
+            // Zigzag Pattern: Left -> Center -> Right -> Center ...
+            // Use stage number to determine position
+            let alignClass = 'wc-node-center';
+            const mod4 = s % 4;
+            if (mod4 === 1) alignClass = 'wc-node-center';     // 1: Center
+            else if (mod4 === 2) alignClass = 'wc-node-right'; // 2: Right
+            else if (mod4 === 3) alignClass = 'wc-node-center';// 3: Center
+            else alignClass = 'wc-node-left';                  // 0: Left
+
+            const wrapper = document.createElement('div');
+            wrapper.className = `wc-map-node-wrapper ${alignClass}`;
+
             const btn = document.createElement('button');
-            btn.className = 'wc-level-btn';
-            btn.textContent = `${c} -${s} `;
+            btn.className = `wc-map-node ${isUnlocked ? 'unlocked' : 'locked'} ${isCurrent ? 'current' : ''}`;
+            btn.textContent = s; // Stage Number only inside bubble
 
-            // Lock Logic
-            // Unlock if:
-            // 1. Chapter is less than maxChapter
-            // 2. Chapter IS maxChapter AND Stage is <= maxStage
-            // STRICT CHAPTER LOCKING: Can't see next chapter until current is done (implied by maxChapter)
+            // Label below
+            const label = document.createElement('div');
+            label.className = 'wc-map-node-label';
+            label.textContent = `${c}-${s}`;
+            btn.appendChild(label);
 
-            const isUnlocked = (c < wcState.maxChapter) || (c === wcState.maxChapter && s <= wcState.maxStage) || (s === 1);
-
-            // Also, only show current chapter or unlocked chapters? 
-            // User asked: "Open first chapter, when finished open second".
-            // So we should visually lock/dim future chapters.
-            // The current logic handles unlocking.
+            /*
+            // Stars (Future Feature)
+            if (isCompleted) {
+                const stars = document.createElement('div');
+                stars.className = 'wc-node-stars';
+                stars.innerHTML = '★'; // Just 1 star for now
+                btn.appendChild(stars);
+            }
+            */
 
             if (isUnlocked) {
-                btn.classList.add('unlocked');
-                btn.onclick = () => startLevel(c, s);
-            } else {
-                btn.classList.add('locked');
-                btn.innerHTML += ' 🔒';
-                btn.disabled = true;
+                btn.onclick = () => {
+                    startLevel(c, s);
+                    closeLevelSelect();
+                };
             }
 
-            chapterGrid.appendChild(btn);
+            wrapper.appendChild(btn);
+            nodesContainer.appendChild(wrapper);
+
+            // Collect for path drawing (we need positions after render)
+            // But simplify: Grid layout is predictable? 
+            // Better: Add ID to node and draw lines after render via requestAnimationFrame
+            btn.id = `map-node-${c}-${s}`;
+            validNodes.push({ id: btn.id, isUnlocked });
         }
-        grid.appendChild(chapterGrid);
+
+        section.appendChild(nodesContainer);
+        grid.appendChild(section);
     }
 
-    // Add Reset Button at the bottom
+    // Connect Nodes with SVG Paths
+    // Must wait for layout
+    requestAnimationFrame(() => {
+        drawMapPaths(validNodes, svgOverlay, grid);
+
+        // Auto-scroll to Current
+        const currentBtn = document.querySelector('.wc-map-node.current');
+        if (currentBtn) {
+            currentBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
+    // Reset Button (at bottom)
+    const resetWrapper = document.createElement('div');
+    resetWrapper.style.width = '100%';
+    resetWrapper.style.padding = '2rem';
+    resetWrapper.style.display = 'flex';
+    resetWrapper.style.justifyContent = 'center';
+
     const resetBtn = document.createElement('button');
     resetBtn.className = 'wc-btn-secondary';
-    resetBtn.style.marginTop = '2rem';
-    resetBtn.style.width = '100%';
     resetBtn.style.color = '#ef4444';
     resetBtn.style.borderColor = '#ef4444';
     resetBtn.textContent = 'Återställ Framsteg / إعادة تعيين التقدم ⚠️';
     resetBtn.onclick = resetWordConnectProgress;
-    grid.appendChild(resetBtn);
+
+    resetWrapper.appendChild(resetBtn);
+    grid.appendChild(resetWrapper);
+}
+
+function drawMapPaths(nodes, svg, container) {
+    // Clear
+    svg.innerHTML = '';
+    const containerRect = container.getBoundingClientRect();
+
+    // Set SVG height
+    svg.style.height = `${container.scrollHeight}px`;
+
+    let pathD = '';
+    let prevRect = null;
+
+    nodes.forEach((node, index) => {
+        const el = document.getElementById(node.id);
+        if (!el) return;
+
+        const rect = el.getBoundingClientRect();
+
+        // Coordinates relative to container
+        // Account for scroll (container might be scrolled)
+        const x = rect.left - containerRect.left + rect.width / 2;
+        const y = el.offsetTop + rect.height / 2; // offsetTop is relative to positioned parent (grid)
+
+        if (index > 0 && prevRect) {
+            // Draw line from prev to current
+            // Curve?
+            const px = prevRect.x;
+            const py = prevRect.y;
+
+            // Straight line or curved?
+            // Simple Line
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+
+            // Curved Path
+            // M px py C (px) (py+mid) (x) (y-mid) x y
+            const midY = (py + y) / 2;
+            const d = `M ${px} ${py} C ${px} ${midY}, ${x} ${midY}, ${x} ${y}`;
+
+            line.setAttribute("d", d);
+            line.setAttribute("stroke", node.isUnlocked ? "#fbbf24" : "#4b5563");
+            line.setAttribute("stroke-width", "4");
+            line.setAttribute("fill", "none");
+            line.setAttribute("stroke-dasharray", node.isUnlocked ? "none" : "5,5"); // Dashed if locked (future nodes?)
+
+            // Only draw if BOTH are unlocked? Or logic:
+            // If prev was unlocked, line is unlocked? 
+            // Actually, if Current is locked, the path TO it is locked (semi-transparent)
+
+            if (!node.isUnlocked) {
+                line.setAttribute("stroke", "#4b5563");
+                line.setAttribute("opacity", "0.5");
+            }
+
+            svg.appendChild(line);
+        }
+
+        prevRect = { x, y };
+    });
 }
 
 function closeLevelSelect() {

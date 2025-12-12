@@ -437,7 +437,8 @@ async function init() {
 
                 // Update typeSelect to show the type (for display purposes)
                 const matchingOption = Array.from(typeSelect.options).find(opt =>
-                    opt.value.toLowerCase().startsWith(filterTypeLower)
+                    opt.value.toLowerCase().startsWith(filterTypeLower) ||
+                    filterTypeLower.startsWith(opt.value.toLowerCase())
                 );
                 if (matchingOption) {
                     typeSelect.value = matchingOption.value;
@@ -462,16 +463,18 @@ async function init() {
         }
 
         // Show Favorites Button
+        // Show Favorites Button
         document.getElementById('showFavoritesBtn').addEventListener('click', () => {
-            const searchModeSelect = document.getElementById('searchMode');
-            searchModeSelect.value = 'favorites';
-            handleSearch({ target: searchInput });
+            if (filterModeSelect) {
+                filterModeSelect.value = 'favorites';
+                // Trigger change event to update activeFilterMode and placeholer
+                filterModeSelect.dispatchEvent(new Event('change'));
+            }
 
             // Close settings menu
-            const settingsMenu = document.querySelector('.settings-menu');
+            const settingsMenu = document.getElementById('settingsMenu');
             if (settingsMenu) {
                 settingsMenu.style.display = 'none';
-                setTimeout(() => settingsMenu.style.display = '', 100); // Reset after delay to allow re-opening
             }
         });
 
@@ -1401,8 +1404,8 @@ window.toggleFavorite = function (id, btn, event) {
     localStorage.setItem('favorites', JSON.stringify([...favorites]));
 
     // If currently viewing favorites, refresh list
-    const searchMode = document.getElementById('searchMode').value;
-    if (searchMode === 'favorites') {
+    // If currently viewing favorites, refresh list
+    if (activeFilterMode === 'favorites') {
         updateResults();
     }
 };

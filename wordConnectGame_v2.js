@@ -1144,11 +1144,10 @@ function checkWin() {
     if (wcState.foundWords.length === wcState.currentLevelData.words.length) {
         // Level Complete!
 
-        // Update Status Element
         const statusEl = document.getElementById('wcLevelStatus');
         if (statusEl) {
             statusEl.classList.add('visible');
-            triggerConfetti(); // Celebration!
+            triggerStageCelebration(); // Enhanced Celebration!
         }
 
         wcState.coins += 20;
@@ -1818,4 +1817,48 @@ function clearLibrary() {
 
 function closeLibrary() {
     document.getElementById('wcLibraryModal').style.display = 'none';
+}
+
+// --- ENHANCED STAGE CELEBRATION ---
+function triggerStageCelebration() {
+    // 1. Confetti effect (reuse existing)
+    if (typeof triggerConfetti === 'function') {
+        triggerConfetti();
+    }
+
+    // 2. Screen flash effect
+    const flash = document.createElement('div');
+    flash.className = 'celebration-flash';
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 600);
+
+    // 3. Stars burst from center
+    createStarBurst();
+}
+
+function createStarBurst() {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const stars = ['⭐', '🌟', '✨', '💫'];
+
+    for (let i = 0; i < 12; i++) {
+        const star = document.createElement('div');
+        star.className = 'celebration-star';
+        star.textContent = stars[Math.floor(Math.random() * stars.length)];
+
+        // Random position spread
+        const angle = (i / 12) * Math.PI * 2;
+        const distance = 100 + Math.random() * 100;
+        const endX = centerX + Math.cos(angle) * distance;
+        const endY = centerY + Math.sin(angle) * distance;
+
+        star.style.left = centerX + 'px';
+        star.style.top = centerY + 'px';
+        star.style.setProperty('--endX', (endX - centerX) + 'px');
+        star.style.setProperty('--endY', (endY - centerY) + 'px');
+        star.style.animationDelay = (i * 50) + 'ms';
+
+        document.body.appendChild(star);
+        setTimeout(() => star.remove(), 1200);
+    }
 }

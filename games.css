@@ -5050,6 +5050,7 @@ body.dark-mode .wc-reward-translation {
     color: #fca5a5;
     transform: rotate(90deg);
 }
+
 /* --- Stage Map Styles --- */
 .wc-map-container {
     display: flex;
@@ -5080,7 +5081,8 @@ body.dark-mode .wc-reward-translation {
 
 .wc-map-path-svg {
     position: absolute;
-    top: 50px; /* Start below title */
+    top: 50px;
+    /* Start below title */
     left: 0;
     width: 100%;
     height: calc(100% - 50px);
@@ -5093,7 +5095,8 @@ body.dark-mode .wc-reward-translation {
     z-index: 1;
     display: flex;
     flex-direction: column;
-    gap: 3rem; /* Spacing between nodes */
+    gap: 3rem;
+    /* Spacing between nodes */
     padding-bottom: 2rem;
 }
 
@@ -5105,9 +5108,19 @@ body.dark-mode .wc-reward-translation {
 }
 
 /* Zigzag alignment classes */
-.wc-node-left { justify-content: flex-start; padding-left: 20%; }
-.wc-node-center { justify-content: center; }
-.wc-node-right { justify-content: flex-end; padding-right: 20%; }
+.wc-node-left {
+    justify-content: flex-start;
+    padding-left: 20%;
+}
+
+.wc-node-center {
+    justify-content: center;
+}
+
+.wc-node-right {
+    justify-content: flex-end;
+    padding-right: 20%;
+}
 
 .wc-map-node {
     width: 60px;
@@ -5137,7 +5150,8 @@ body.dark-mode .wc-reward-translation {
 .wc-map-node.current {
     transform: scale(1.2);
     box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
-    background: linear-gradient(135deg, #3b82f6, #2563eb); /* Blue for current */
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    /* Blue for current */
     border-color: #bfdbfe;
     color: white;
     animation: pulseNode 2s infinite;
@@ -5161,7 +5175,7 @@ body.dark-mode .wc-reward-translation {
     font-size: 0.8rem;
     color: #cbd5e1;
     font-weight: 600;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     padding: 2px 6px;
     border-radius: 4px;
 }
@@ -5177,11 +5191,120 @@ body.dark-mode .wc-reward-translation {
 .wc-node-star {
     font-size: 0.8rem;
     color: #fbbf24;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes pulseNode {
-    0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(59, 130, 246, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(59, 130, 246, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
+/* --- Map Icon Button in Header --- */
+.wc-map-icon-btn {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: white;
+    flex-shrink: 0;
+}
+
+.wc-map-icon-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.wc-map-icon-btn:active {
+    transform: scale(0.95);
+}
+
+.wc-map-icon-btn svg {
+    stroke: white;
+}
+
+/* --- Celebration Effects --- */
+.celebration-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(251, 191, 36, 0.4), transparent);
+    pointer-events: none;
+    z-index: 9998;
+    animation: flashPulse 0.5s ease-out forwards;
+}
+
+@keyframes flashPulse {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.celebration-star {
+    position: fixed;
+    font-size: 2rem;
+    pointer-events: none;
+    z-index: 9999;
+    animation: starBurst 1s ease-out forwards;
+}
+
+@keyframes starBurst {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(calc(-50% + var(--endX, 0px)), calc(-50% + var(--endY, -100px))) scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* Level Complete Enhanced Animation */
+.wc-level-status.visible {
+    animation: levelComplete 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes levelComplete {
+    0% {
+        transform: scale(0.5) translateY(-20px);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2) translateY(0);
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
 }

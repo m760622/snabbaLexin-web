@@ -1,2 +1,0 @@
-# snabbaLexin
-translation

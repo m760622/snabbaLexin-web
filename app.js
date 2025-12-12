@@ -316,7 +316,150 @@ async function init() {
             if (badge && typeof AnimationManager !== 'undefined') {
                 AnimationManager.animate(badge, 'pulse');
             }
+
+            // Update modal if open
+            if (document.getElementById('progressModal')?.style.display !== 'none') {
+                updateProgressDashboard();
+            }
         });
+
+        // Progress Dashboard Modal
+        const progressBadge = document.getElementById('progressBadge');
+        const progressModal = document.getElementById('progressModal');
+        const closeProgressBtn = document.getElementById('closeProgress');
+
+        if (progressBadge && progressModal) {
+            progressBadge.addEventListener('click', () => {
+                progressModal.style.display = 'flex';
+                updateProgressDashboard();
+                HapticManager.trigger('light');
+            });
+
+            closeProgressBtn?.addEventListener('click', () => {
+                progressModal.style.display = 'none';
+            });
+
+            progressModal.addEventListener('click', (e) => {
+                if (e.target === progressModal) {
+                    progressModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Daily Goal Adjustment
+        const dailyGoalInput = document.getElementById('dailyGoalInput');
+        const saveGoalBtn = document.getElementById('saveGoalBtn');
+
+        if (dailyGoalInput && saveGoalBtn) {
+            dailyGoalInput.value = ProgressManager.getDailyGoal();
+
+            saveGoalBtn.addEventListener('click', () => {
+                const newGoal = parseInt(dailyGoalInput.value) || 10;
+                ProgressManager.setDailyGoal(newGoal);
+                updateProgressDashboard();
+                HapticManager.trigger('success');
+            });
+        }
+
+        // Share Progress Button
+        const shareProgressBtn = document.getElementById('shareProgressBtn');
+        if (shareProgressBtn) {
+            shareProgressBtn.addEventListener('click', () => {
+                ProgressManager.shareProgress();
+            });
+        }
+    }
+
+    // Progress Dashboard Update Function
+    function updateProgressDashboard() {
+        if (typeof ProgressManager === 'undefined') return;
+
+        const stats = ProgressManager.getStats();
+        const dailyProgress = ProgressManager.getDailyProgress();
+        const achievements = ProgressManager.getAllAchievements();
+        const history = ProgressManager.getActivityHistory();
+
+        // Update Progress Ring
+        const ringValue = document.getElementById('progressRingValue');
+        const ringGoal = document.getElementById('progressRingGoal');
+        const ringCircle = document.querySelector('.progress-ring-circle');
+
+        if (ringValue) ringValue.textContent = dailyProgress.current;
+        if (ringGoal) ringGoal.textContent = dailyProgress.goal;
+
+        if (ringCircle) {
+            const circumference = 2 * Math.PI * 50; // r = 50
+            const offset = circumference - (dailyProgress.percentage / 100) * circumference;
+            ringCircle.style.strokeDashoffset = offset;
+        }
+
+        // Update Status Text
+        const statusEl = document.getElementById('dailyProgressStatus');
+        if (statusEl) {
+            if (dailyProgress.percentage >= 100) {
+                statusEl.textContent = '🎉 Mål uppnått! / تم تحقيق الهدف!';
+            } else if (dailyProgress.percentage >= 50) {
+                statusEl.textContent = '💪 Halvvägs! / في منتصف الطريق!';
+            } else {
+                statusEl.textContent = 'Fortsätt läsa! / استمر!';
+            }
+        }
+
+        // Update Streaks
+        const modalStreak = document.getElementById('modalStreak');
+        const modalLongestStreak = document.getElementById('modalLongestStreak');
+        if (modalStreak) modalStreak.textContent = stats.allTime.currentStreak;
+        if (modalLongestStreak) modalLongestStreak.textContent = stats.allTime.longestStreak;
+
+        // Update Activity Chart
+        const chartEl = document.getElementById('activityChart');
+        if (chartEl) {
+            const today = new Date().toISOString().split('T')[0];
+            const maxWords = Math.max(1, ...history.map(h => h.words));
+
+            // Create 7 bars (Mon-Sun)
+            let barsHtml = '';
+            for (let i = 0; i < 7; i++) {
+                const dayData = history[i] || { words: 0 };
+                const heightPercent = (dayData.words / maxWords) * 100;
+                const isToday = dayData.date === today;
+                const isEmpty = dayData.words === 0;
+
+                barsHtml += `<div class="activity-bar ${isEmpty ? 'empty' : ''} ${isToday ? 'today' : ''}" 
+                                  style="height: ${Math.max(4, heightPercent)}%"
+                                  title="${dayData.words} ord"></div>`;
+            }
+            chartEl.innerHTML = barsHtml;
+        }
+
+        // Update Stats Cards
+        document.getElementById('statUniqueWords')?.textContent &&
+            (document.getElementById('statUniqueWords').textContent = stats.allTime.uniqueWords.toLocaleString());
+        document.getElementById('statSearches')?.textContent &&
+            (document.getElementById('statSearches').textContent = stats.allTime.totalSearches.toLocaleString());
+        document.getElementById('statGames')?.textContent &&
+            (document.getElementById('statGames').textContent = stats.allTime.totalGames.toLocaleString());
+        document.getElementById('statTTS')?.textContent &&
+            (document.getElementById('statTTS').textContent = stats.today.ttsUsed.toLocaleString());
+
+        // Update Achievements
+        const achievementsGrid = document.getElementById('achievementsGrid');
+        const achievementCount = document.getElementById('achievementCount');
+
+        if (achievementsGrid) {
+            const unlockedCount = achievements.filter(a => a.unlocked).length;
+            if (achievementCount) {
+                achievementCount.textContent = `(${unlockedCount}/${achievements.length})`;
+            }
+
+            achievementsGrid.innerHTML = achievements.map(a => `
+                <div class="achievement-badge ${a.unlocked ? 'unlocked' : 'locked'}" 
+                     title="${a.name} / ${a.nameAr}${a.unlockedAt ? '\n' + new Date(a.unlockedAt).toLocaleDateString() : ''}">
+                    <span class="achievement-icon">${a.icon}</span>
+                    <span class="achievement-name">${a.name}</span>
+                </div>
+            `).join('');
+        }
     }
 
     // Mobile View Toggle
@@ -1786,6 +1929,23 @@ function initWordOfTheDay() {
         };
     }
 
+    // TTS Button - Speak the Swedish word
+    const wodTTSBtn = wodCard.querySelector('#wodTTSBtn');
+    if (wodTTSBtn) {
+        wodTTSBtn.onclick = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (!currentWodWord) return;
+
+            const sweWord = currentWodWord[COL_SWE];
+            if (sweWord && typeof TTSManager !== 'undefined') {
+                TTSManager.speak(sweWord, 'sv');
+                HapticManager.trigger('light');
+                AnimationManager.animate(wodTTSBtn, 'pulse');
+            }
+        };
+    }
+
     // Initialize with Daily Word
     // Use timestamp for randomness per session/day
     // To make it truly Daily, we should use Today's Date hash.
@@ -1806,6 +1966,7 @@ let quizScore = 0;
 
 function initQuiz() {
     const quizBtn = document.getElementById('quizBtn');
+    const favQuizBtn = document.getElementById('favQuizBtn');
     // gameBtn is a link, no listener needed if href is set, but kept if we want analytics
     const quizContainer = document.getElementById('quizInlineContainer');
     const closeQuiz = document.getElementById('closeQuiz');
@@ -1816,6 +1977,38 @@ function initQuiz() {
             // Close settings menu if open
             const settingsMenu = document.getElementById('settingsMenu');
             if (settingsMenu) settingsMenu.style.display = 'none';
+
+            // Set quiz mode to all words
+            quizMode = 'all';
+
+            // Toggle Quiz
+            if (quizContainer.style.display === 'none') {
+                quizContainer.style.display = 'block';
+                startQuiz();
+                // Smooth scroll to quiz
+                quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                quizContainer.style.display = 'none';
+            }
+        });
+    }
+
+    // Favorites Quiz Button
+    if (favQuizBtn && quizContainer) {
+        favQuizBtn.addEventListener('click', (e) => {
+            // Close settings menu if open
+            const settingsMenu = document.getElementById('settingsMenu');
+            if (settingsMenu) settingsMenu.style.display = 'none';
+
+            // Check if user has favorites
+            const favIds = JSON.parse(localStorage.getItem('favorites') || '[]');
+            if (favIds.length < 4) {
+                showToast('Lägg till minst 4 favoriter först! / أضف 4 مفضلات على الأقل ⭐');
+                return;
+            }
+
+            // Set quiz mode to favorites
+            quizMode = 'favorites';
 
             // Toggle Quiz
             if (quizContainer.style.display === 'none') {
@@ -1843,6 +2036,9 @@ function initQuiz() {
     }
 }
 
+// Quiz mode: 'all' or 'favorites'
+let quizMode = 'all';
+
 function startQuiz() {
     // Modified: Target inline container
     const quizContainer = document.getElementById('quizInlineContainer');
@@ -1850,6 +2046,7 @@ function startQuiz() {
     const questionCard = document.querySelector('.question-card');
     const quizOptions = document.getElementById('quizOptions');
     const nextQuestionBtn = document.getElementById('nextQuestion');
+    const quizHeader = document.querySelector('.quiz-header-compact h2');
 
     quizScore = 0;
     comboCount = 0; // Reset combo
@@ -1860,6 +2057,11 @@ function startQuiz() {
         quizContainer.classList.remove('streak-3', 'streak-5', 'streak-10'); // Reset styles
     }
 
+    // Update header based on mode
+    if (quizHeader) {
+        quizHeader.textContent = quizMode === 'favorites' ? '⭐ Favoriter Quiz' : 'Snabbtest';
+    }
+
     // Hide end screen, show quiz elements
     if (quizEndScreen) quizEndScreen.style.display = 'none';
     if (questionCard) questionCard.style.display = 'block';
@@ -1868,10 +2070,18 @@ function startQuiz() {
 
     // Core display logic is handled by initQuiz's toggle, so we don't force 'flex' here
 
-    // Populate quizQuestions with a random subset of dictionaryData
+    // Populate quizQuestions based on mode
     quizQuestions = [];
-    const numQuestions = Math.min(10, dictionaryData.length); // Max 10 questions or less if dictionary is small
-    const shuffledData = [...dictionaryData].sort(() => Math.random() - 0.5);
+    let sourceData = dictionaryData;
+
+    if (quizMode === 'favorites') {
+        // Filter to only favorites
+        const favIds = JSON.parse(localStorage.getItem('favorites') || '[]');
+        sourceData = dictionaryData.filter(word => favIds.includes(String(word[COL_ID])));
+    }
+
+    const numQuestions = Math.min(10, sourceData.length); // Max 10 questions or less if source is small
+    const shuffledData = [...sourceData].sort(() => Math.random() - 0.5);
     for (let i = 0; i < numQuestions; i++) {
         quizQuestions.push(shuffledData[i]);
     }
@@ -2228,6 +2438,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initQuiz();
     initPhysicsLogo();
 
+    // Handle PWA shortcuts via URL hash/params
+    handleShortcutNavigation();
+
     // Init Empty State
     renderHistory();
     const emptyState = document.getElementById('emptyState');
@@ -2237,6 +2450,58 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('searchResults')) document.getElementById('searchResults').style.display = 'none';
     }
 });
+
+// Handle PWA shortcut navigation via URL hash/params
+function handleShortcutNavigation() {
+    const hash = window.location.hash;
+    const params = new URLSearchParams(window.location.search);
+
+    // Handle #wod - scroll to Word of the Day
+    if (hash === '#wod') {
+        const wodCard = document.getElementById('wordOfTheDay');
+        if (wodCard) {
+            setTimeout(() => {
+                wodCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (typeof AnimationManager !== 'undefined') {
+                    AnimationManager.animate(wodCard, 'pulse');
+                }
+            }, 500);
+        }
+        // Clear hash
+        history.replaceState(null, '', window.location.pathname);
+    }
+
+    // Handle #quiz - open quiz
+    if (hash === '#quiz') {
+        const quizBtn = document.getElementById('quizBtn');
+        if (quizBtn) {
+            setTimeout(() => {
+                quizBtn.click();
+            }, 500);
+        }
+        // Clear hash
+        history.replaceState(null, '', window.location.pathname);
+    }
+
+    // Handle ?filter=favorites - show favorites
+    if (params.get('filter') === 'favorites') {
+        const filterModeSelect = document.getElementById('filterModeSelect');
+        if (filterModeSelect) {
+            filterModeSelect.value = 'favorites';
+            filterModeSelect.dispatchEvent(new Event('change'));
+        } else {
+            // Fallback: set filter mode directly
+            if (typeof activeFilterMode !== 'undefined') {
+                activeFilterMode = 'favorites';
+                if (typeof updateResults === 'function') {
+                    updateResults();
+                }
+            }
+        }
+        // Clear params
+        history.replaceState(null, '', window.location.pathname);
+    }
+}
 
 // 3D Tilt Logic
 function attachTiltListeners() {

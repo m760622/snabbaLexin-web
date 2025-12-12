@@ -150,8 +150,18 @@
                         </svg></span>
                     <span>Snabbtest / تحدي</span>
                 </button>
+                <button id="favQuizBtn" class="menu-item" aria-label="اختبار المفضلات">
+                    <span class="icon-box" style="color: #F59E0B;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                            </polygon>
+                        </svg></span>
+                    <span>⭐ Quiz Favoriter / اختبار المفضلات</span>
+                </button>
                 <a href="games.html" id="gameBtn" class="menu-item" aria-label="Spel / ألعاب">
-                    <span class="icon-box" style="color: #10B981;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box" style="color: #3B82F6;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="7" height="7"></rect>
@@ -562,6 +572,121 @@
             <div class="wod-modal-body">
                 <!-- Content injected via JS -->
                 <div id="wodModalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Dashboard Modal -->
+    <div id="progressModal" class="modal progress-modal" style="display: none;">
+        <div class="modal-content progress-modal-content">
+            <div class="modal-header progress-modal-header">
+                <h2>📊 Min Progress / تقدمي</h2>
+                <button id="closeProgress" class="close-btn">&times;</button>
+            </div>
+            <div class="progress-modal-body">
+                <!-- Daily Progress Ring Section -->
+                <div class="progress-section daily-progress-section">
+                    <div class="progress-ring-container">
+                        <svg class="progress-ring" width="120" height="120">
+                            <circle class="progress-ring-bg" stroke-width="10" fill="transparent" r="50" cx="60"
+                                cy="60" />
+                            <circle class="progress-ring-circle" stroke-width="10" fill="transparent" r="50" cx="60"
+                                cy="60" stroke-dasharray="314.159" stroke-dashoffset="314.159" />
+                        </svg>
+                        <div class="progress-ring-text">
+                            <span class="progress-ring-value" id="progressRingValue">0</span>
+                            <span class="progress-ring-goal">/<span id="progressRingGoal">10</span></span>
+                        </div>
+                    </div>
+                    <div class="daily-progress-info">
+                        <h3>Dagens mål / هدف اليوم 🎯</h3>
+                        <p class="progress-subtitle" id="dailyProgressStatus">Fortsätt läsa! / استمر!</p>
+                        <div class="goal-adjuster">
+                            <label for="dailyGoalInput">Ändra mål:</label>
+                            <input type="number" id="dailyGoalInput" min="1" max="100" value="10">
+                            <button id="saveGoalBtn" class="mini-btn">💾</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Streak Section -->
+                <div class="progress-section streak-section">
+                    <div class="streak-card">
+                        <span class="streak-icon">🔥</span>
+                        <div class="streak-info">
+                            <span class="streak-value" id="modalStreak">0</span>
+                            <span class="streak-label">dagars streak / سلسلة</span>
+                        </div>
+                    </div>
+                    <div class="streak-card">
+                        <span class="streak-icon">👑</span>
+                        <div class="streak-info">
+                            <span class="streak-value" id="modalLongestStreak">0</span>
+                            <span class="streak-label">längsta / الأطول</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Chart (7 days) -->
+                <div class="progress-section activity-section">
+                    <h4>📈 Veckoaktivitet / نشاط الأسبوع</h4>
+                    <div class="activity-chart" id="activityChart">
+                        <!-- Bars will be injected by JS -->
+                    </div>
+                    <div class="activity-legend">
+                        <span>Mån</span><span>Tis</span><span>Ons</span><span>Tor</span><span>Fre</span><span>Lör</span><span>Sön</span>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="progress-section stats-section">
+                    <h4>📊 Statistik / الإحصائيات</h4>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-icon">📖</span>
+                            <span class="stat-value" id="statUniqueWords">0</span>
+                            <span class="stat-label">Unika ord</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🔍</span>
+                            <span class="stat-value" id="statSearches">0</span>
+                            <span class="stat-label">Sökningar</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🎮</span>
+                            <span class="stat-value" id="statGames">0</span>
+                            <span class="stat-label">Spel</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-icon">🔊</span>
+                            <span class="stat-value" id="statTTS">0</span>
+                            <span class="stat-label">Uttal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="progress-section achievements-section">
+                    <h4>🏆 Prestationer / الإنجازات <span id="achievementCount">(0/0)</span></h4>
+                    <div class="achievements-grid" id="achievementsGrid">
+                        <!-- Achievement badges will be injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Share Button -->
+                <div class="progress-section share-section">
+                    <button id="shareProgressBtn" class="share-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3"></circle>
+                            <circle cx="6" cy="12" r="3"></circle>
+                            <circle cx="18" cy="19" r="3"></circle>
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                        </svg>
+                        Dela min progress / شارك تقدمي
+                    </button>
+                </div>
             </div>
         </div>
     </div>

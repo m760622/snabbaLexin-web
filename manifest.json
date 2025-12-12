@@ -7,7 +7,7 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f3f4f6",
-  "theme_color": "#6366f1",
+  "theme_color": "#3B82F6",
   "lang": "sv",
   "dir": "ltr",
   "categories": [
@@ -44,10 +44,46 @@
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "Spela / ألعاب",
+      "name": "📅 Dagens Ord / كلمة اليوم",
+      "short_name": "Word of Day",
+      "description": "Se dagens ord / شاهد كلمة اليوم",
+      "url": "./index.html#wod",
+      "icons": [
+        {
+          "src": "icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "⭐ Favoriter / المفضلات",
+      "short_name": "Favorites",
+      "description": "Visa mina favoritord / عرض كلماتي المفضلة",
+      "url": "./index.html?filter=favorites",
+      "icons": [
+        {
+          "src": "icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "🎮 Spela / ألعاب",
       "short_name": "Games",
       "description": "Öppna spelzonen / افتح منطقة الألعاب",
       "url": "./games.html",
+      "icons": [
+        {
+          "src": "icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "⚡ Snabbtest / اختبار سريع",
+      "short_name": "Quiz",
+      "description": "Starta ett snabbtest / ابدأ اختبار سريع",
+      "url": "./index.html#quiz",
       "icons": [
         {
           "src": "icon.png",

@@ -289,12 +289,140 @@ const ProgressManager = {
         { id: 'word_collector', name: '50 ord', nameAr: '50 كلمة', icon: '📖', condition: (d) => d.allTime.uniqueWordsViewed.length >= 50 },
         { id: 'word_master', name: '100 ord', nameAr: '100 كلمة', icon: '🏆', condition: (d) => d.allTime.uniqueWordsViewed.length >= 100 },
         { id: 'word_legend', name: '500 ord', nameAr: '500 كلمة', icon: '👑', condition: (d) => d.allTime.uniqueWordsViewed.length >= 500 },
+        { id: 'word_expert', name: '1000 ord', nameAr: '1000 كلمة', icon: '🎓', condition: (d) => d.allTime.uniqueWordsViewed.length >= 1000 },
         { id: 'streak_3', name: '3 dagars streak', nameAr: 'سلسلة 3 أيام', icon: '🔥', condition: (d) => d.allTime.currentStreak >= 3 },
         { id: 'streak_7', name: 'Veckans streak', nameAr: 'سلسلة أسبوع', icon: '⚡', condition: (d) => d.allTime.currentStreak >= 7 },
         { id: 'streak_30', name: 'Månads streak', nameAr: 'سلسلة شهر', icon: '💎', condition: (d) => d.allTime.currentStreak >= 30 },
+        { id: 'streak_100', name: '100 dagars streak', nameAr: 'سلسلة 100 يوم', icon: '🌟', condition: (d) => d.allTime.currentStreak >= 100 },
         { id: 'daily_10', name: '10 ord idag', nameAr: '10 كلمات اليوم', icon: '⭐', condition: (d) => d.daily.wordsViewed.length >= 10 },
-        { id: 'gamer', name: 'Spelaren', nameAr: 'اللاعب', icon: '🎮', condition: (d) => d.allTime.totalGamesPlayed >= 10 }
+        { id: 'daily_goal', name: 'Dagligt mål', nameAr: 'الهدف اليومي', icon: '🎯', condition: (d) => d.daily.wordsViewed.length >= (parseInt(localStorage.getItem('dailyGoal')) || 10) },
+        { id: 'gamer', name: 'Spelaren', nameAr: 'اللاعب', icon: '🎮', condition: (d) => d.allTime.totalGamesPlayed >= 10 },
+        { id: 'super_gamer', name: '50 spel', nameAr: '50 لعبة', icon: '🏅', condition: (d) => d.allTime.totalGamesPlayed >= 50 },
+        { id: 'tts_master', name: '100 uttal', nameAr: '100 نطق', icon: '🎙️', condition: (d) => d.allTime.totalTtsUsed >= 100 },
+        { id: 'search_pro', name: '500 sökningar', nameAr: '500 بحث', icon: '🔎', condition: (d) => d.allTime.totalSearches >= 500 }
     ],
+
+    // Daily goal management
+    DAILY_GOAL_KEY: 'dailyGoal',
+
+    getDailyGoal() {
+        return parseInt(localStorage.getItem(this.DAILY_GOAL_KEY)) || 10;
+    },
+
+    setDailyGoal(goal) {
+        const validGoal = Math.max(1, Math.min(100, parseInt(goal) || 10));
+        localStorage.setItem(this.DAILY_GOAL_KEY, validGoal.toString());
+        showToast(`Dagligt mål: ${validGoal} ord / الهدف اليومي: ${validGoal} كلمة 🎯`);
+        return validGoal;
+    },
+
+    getDailyProgress() {
+        const data = this.getData();
+        const goal = this.getDailyGoal();
+        const current = data.daily.wordsViewed.length;
+        const percentage = Math.min(100, Math.round((current / goal) * 100));
+        return { current, goal, percentage };
+    },
+
+    // Activity history for charts (last 7 days)
+    ACTIVITY_HISTORY_KEY: 'activityHistory',
+
+    getActivityHistory() {
+        try {
+            const saved = localStorage.getItem(this.ACTIVITY_HISTORY_KEY);
+            return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+            return [];
+        }
+    },
+
+    updateActivityHistory() {
+        const today = this.getTodayString();
+        const data = this.getData();
+        let history = this.getActivityHistory();
+
+        // Find or create today's entry
+        const todayIndex = history.findIndex(h => h.date === today);
+        const todayData = {
+            date: today,
+            words: data.daily.wordsViewed.length,
+            searches: data.daily.searches,
+            games: data.daily.gamesPlayed,
+            tts: data.daily.ttsUsed
+        };
+
+        if (todayIndex >= 0) {
+            history[todayIndex] = todayData;
+        } else {
+            history.push(todayData);
+        }
+
+        // Keep only last 7 days
+        history = history
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 7)
+            .reverse();
+
+        localStorage.setItem(this.ACTIVITY_HISTORY_KEY, JSON.stringify(history));
+        return history;
+    },
+
+    // Share progress
+    async shareProgress() {
+        const stats = this.getStats();
+        const dailyProgress = this.getDailyProgress();
+
+        const shareText = `📚 SnabbaLexin - Min progress / تقدمي
+
+🔥 Streak: ${stats.allTime.currentStreak} dagar / أيام
+📖 Ord idag: ${dailyProgress.current}/${dailyProgress.goal} (${dailyProgress.percentage}%)
+🏆 Totalt: ${stats.allTime.uniqueWords} unika ord / كلمة فريدة
+🎮 Spel: ${stats.allTime.totalGames}
+🏅 Prestationer: ${stats.achievements.length}/${this.ACHIEVEMENTS.length}
+
+Lär dig svenska med SnabbaLexin! 🇸🇪🇸🇦`;
+
+        // Try Web Share API first
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'SnabbaLexin Progress',
+                    text: shareText
+                });
+                showToast('Delat! / تمت المشاركة! 📤');
+                HapticManager.trigger('success');
+                return true;
+            } catch (e) {
+                if (e.name !== 'AbortError') {
+                    console.warn('Share failed:', e);
+                }
+            }
+        }
+
+        // Fallback: Copy to clipboard
+        try {
+            await navigator.clipboard.writeText(shareText);
+            showToast('Kopierad till urklipp! / تم النسخ! 📋');
+            HapticManager.trigger('success');
+            return true;
+        } catch (e) {
+            showToast('Kunde inte dela / فشلت المشاركة ❌');
+            return false;
+        }
+    },
+
+    // Get all achievements with unlock status
+    getAllAchievements() {
+        const data = this.getData();
+        return this.ACHIEVEMENTS.map(achievement => {
+            const unlocked = data.achievements.find(a => a.id === achievement.id);
+            return {
+                ...achievement,
+                unlocked: !!unlocked,
+                unlockedAt: unlocked ? unlocked.unlockedAt : null
+            };
+        });
+    },
 
     // Check and unlock achievements
     checkAchievements(data) {
@@ -324,6 +452,9 @@ const ProgressManager = {
                 }
             });
         }
+
+        // Update activity history
+        this.updateActivityHistory();
     },
 
     // Dispatch custom event for UI updates
@@ -337,6 +468,7 @@ const ProgressManager = {
     // Reset all progress (for testing)
     reset() {
         localStorage.removeItem(this.STORAGE_KEY);
+        localStorage.removeItem(this.ACTIVITY_HISTORY_KEY);
         showToast('Progress återställd / تم إعادة التعيين');
     }
 };
@@ -1067,6 +1199,193 @@ function initRippleEffect() {
     });
 }
 
+// ========================================
+// Shake to Toggle Theme
+// ========================================
+const ShakeManager = {
+    threshold: 15,        // Acceleration threshold to detect shake
+    timeout: 1000,        // Cooldown between shakes
+    lastShakeTime: 0,
+    lastX: null,
+    lastY: null,
+    lastZ: null,
+    isListening: false,
+
+    init() {
+        if (!window.DeviceMotionEvent) {
+            console.log('[Shake] DeviceMotion not supported');
+            return;
+        }
+
+        // iOS 13+ requires permission
+        if (typeof DeviceMotionEvent.requestPermission === 'function') {
+            // Will request on first user interaction
+            document.addEventListener('click', () => this.requestPermission(), { once: true });
+            document.addEventListener('touchstart', () => this.requestPermission(), { once: true });
+        } else {
+            this.startListening();
+        }
+    },
+
+    async requestPermission() {
+        if (this.isListening) return;
+
+        try {
+            const permission = await DeviceMotionEvent.requestPermission();
+            if (permission === 'granted') {
+                this.startListening();
+            }
+        } catch (e) {
+            console.warn('[Shake] Permission denied:', e);
+        }
+    },
+
+    startListening() {
+        if (this.isListening) return;
+        this.isListening = true;
+
+        window.addEventListener('devicemotion', (e) => this.handleMotion(e), true);
+        console.log('[Shake] Started listening for shake gestures');
+    },
+
+    handleMotion(event) {
+        const acceleration = event.accelerationIncludingGravity;
+        if (!acceleration) return;
+
+        const { x, y, z } = acceleration;
+        const now = Date.now();
+
+        if (this.lastX !== null) {
+            const deltaX = Math.abs(x - this.lastX);
+            const deltaY = Math.abs(y - this.lastY);
+            const deltaZ = Math.abs(z - this.lastZ);
+
+            if ((deltaX > this.threshold || deltaY > this.threshold || deltaZ > this.threshold) &&
+                (now - this.lastShakeTime > this.timeout)) {
+
+                this.lastShakeTime = now;
+                this.onShake();
+            }
+        }
+
+        this.lastX = x;
+        this.lastY = y;
+        this.lastZ = z;
+    },
+
+    onShake() {
+        console.log('[Shake] Shake detected! Toggling theme...');
+        ThemeManager.toggle();
+        HapticManager.trigger('medium');
+    }
+};
+
+// ========================================
+// Long Press to Speak (TTS)
+// ========================================
+const LongPressTTS = {
+    pressTimer: null,
+    pressDuration: 500, // ms to hold for long press
+    currentElement: null,
+
+    init() {
+        // Target speakable elements - including entire cards for Swedish pronunciation
+        const speakableSelectors = [
+            // Search result cards - will speak Swedish only
+            '.card',
+            // Word of the Day
+            '.wod-swe', '.wod-arb',
+            '.wod-def-text', '.wod-example-text', '.wod-idiom-swe', '.wod-idiom-arb',
+            // Search results
+            '.word-swe', '.word-arb',
+            // Details page
+            '.word-swe-hero', '.word-arb-hero',
+            '.def-swe-detail', '.def-arb-detail',
+            '.ex-swe-detail', '.ex-arb-detail',
+            '.form-chip',
+            // Custom attribute
+            '[data-speakable]'
+        ];
+
+        document.addEventListener('touchstart', (e) => this.handleTouchStart(e, speakableSelectors), { passive: true });
+        document.addEventListener('touchend', () => this.handleTouchEnd(), { passive: true });
+        document.addEventListener('touchmove', () => this.handleTouchEnd(), { passive: true });
+
+        // Also support long-press on mouse (for desktop testing)
+        document.addEventListener('mousedown', (e) => this.handleTouchStart(e, speakableSelectors));
+        document.addEventListener('mouseup', () => this.handleTouchEnd());
+        document.addEventListener('mouseleave', () => this.handleTouchEnd());
+
+        console.log('[LongPressTTS] Initialized');
+    },
+
+    handleTouchStart(event, selectors) {
+        const target = event.target;
+
+        // Check if target matches any speakable selector
+        const speakableElement = selectors.reduce((found, selector) => {
+            if (found) return found;
+            return target.closest(selector);
+        }, null);
+
+        if (!speakableElement) return;
+
+        this.currentElement = speakableElement;
+
+        this.pressTimer = setTimeout(() => {
+            this.speak(speakableElement);
+        }, this.pressDuration);
+    },
+
+    handleTouchEnd() {
+        if (this.pressTimer) {
+            clearTimeout(this.pressTimer);
+            this.pressTimer = null;
+        }
+        this.currentElement = null;
+    },
+
+    speak(element) {
+        let text = '';
+        let lang = 'sv';
+
+        // Check if this is a search result card - always speak Swedish only
+        const resultCard = element.closest('.card');
+        if (resultCard) {
+            // Get Swedish word from the .word-swe element
+            const sweElement = resultCard.querySelector('.word-swe, h2');
+            text = sweElement?.textContent?.trim() || '';
+            lang = 'sv';
+        } else {
+            // For other elements, use the element's text
+            text = element.textContent?.trim();
+
+            // Detect language based on text content or class
+            const isArabic = /[\u0600-\u06FF]/.test(text) ||
+                element.classList.contains('wod-arb') ||
+                element.classList.contains('arb-text') ||
+                element.classList.contains('word-arb') ||
+                element.dir === 'rtl';
+
+            lang = isArabic ? 'ar' : 'sv';
+        }
+
+        if (!text || text.length < 1) return;
+
+        if (typeof TTSManager !== 'undefined') {
+            TTSManager.speak(text, lang);
+            HapticManager.trigger('success');
+
+            // Visual feedback
+            if (typeof AnimationManager !== 'undefined') {
+                AnimationManager.animate(element, 'pulse');
+            }
+
+            showToast(`🔊 ${text.substring(0, 20)}${text.length > 20 ? '...' : ''}`);
+        }
+    }
+};
+
 // Auto-initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
@@ -1083,4 +1402,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof ReminderManager !== 'undefined') {
         ReminderManager.init();
     }
+
+    // Initialize shake to toggle theme
+    ShakeManager.init();
+
+    // Initialize long press to speak
+    LongPressTTS.init();
 });

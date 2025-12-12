@@ -296,6 +296,29 @@ async function init() {
     // Load Favorites using Manager
     favorites = FavoritesManager.getFavorites();
 
+    // Initialize Progress UI
+    if (typeof ProgressManager !== 'undefined') {
+        const stats = ProgressManager.getStats();
+        const dailyWordsEl = document.getElementById('dailyWordsCount');
+        const streakEl = document.getElementById('currentStreak');
+
+        if (dailyWordsEl) dailyWordsEl.textContent = stats.today.wordsViewed;
+        if (streakEl) streakEl.textContent = stats.allTime.currentStreak;
+
+        // Listen for progress updates
+        document.addEventListener('progressUpdate', (e) => {
+            const newStats = ProgressManager.getStats();
+            if (dailyWordsEl) dailyWordsEl.textContent = newStats.today.wordsViewed;
+            if (streakEl) streakEl.textContent = newStats.allTime.currentStreak;
+
+            // Add animation to badge on update
+            const badge = document.getElementById('progressBadge');
+            if (badge && typeof AnimationManager !== 'undefined') {
+                AnimationManager.animate(badge, 'pulse');
+            }
+        });
+    }
+
     // Mobile View Toggle
     const mobileViewToggle = document.getElementById('mobileViewToggle');
     if (mobileViewToggle) {
@@ -912,6 +935,11 @@ function handleSearch(e) {
     const lowerQuery = rawQuery.toLowerCase(); // For exact/end
 
     sessionStorage.setItem('searchQuery', e.target.value);
+
+    // Track search in ProgressManager (only for meaningful queries)
+    if (rawQuery.length >= 2 && typeof ProgressManager !== 'undefined') {
+        ProgressManager.trackSearch(rawQuery);
+    }
 
     // Get Filter Values (Restore missing vars)
     const selectedType = typeSelect.value;

@@ -930,6 +930,69 @@ body::after {
     }
 }
 
+/* ========================================
+   PROGRESS STATS BADGE
+   ======================================== */
+
+.progress-stats-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.progress-stats-badge:hover {
+    transform: scale(1.05);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
+
+.progress-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.progress-stat .stat-icon {
+    font-size: 0.9rem;
+}
+
+.progress-stat span:last-child {
+    color: var(--text-main);
+    font-weight: 700;
+}
+
+.progress-divider {
+    color: rgba(128, 128, 128, 0.4);
+    font-weight: 300;
+}
+
+[data-theme="dark"] .progress-stats-badge {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="dark"] .progress-stats-badge:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive - hide on very small screens */
+@media (max-width: 360px) {
+    .progress-stats-badge {
+        display: none;
+    }
+}
+
 /* iPhone View Simulation */
 body.iphone-view {
     max-width: 393px;

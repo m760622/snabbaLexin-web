@@ -538,6 +538,11 @@ async function init() {
                 checkCustomWord(id);
                 setupShare(item, headerShareBtn);
                 setupFlashcardMode();
+
+                // Track word view in ProgressManager
+                if (typeof ProgressManager !== 'undefined') {
+                    ProgressManager.trackWordView(id, item[COL_SWE]);
+                }
             } else {
                 detailsArea.innerHTML = '<div class="placeholder-message">Ord hittades inte / لم يتم العثور على الكلمة</div>';
             }

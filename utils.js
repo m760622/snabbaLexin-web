@@ -60,6 +60,288 @@ const ThemeManager = {
 };
 
 // ========================================
+// Progress Tracking Manager
+// ========================================
+const ProgressManager = {
+    STORAGE_KEY: 'learningProgress',
+
+    // Default data structure
+    getDefaultData() {
+        return {
+            daily: {
+                date: this.getTodayString(),
+                searches: 0,
+                wordsViewed: [],
+                ttsUsed: 0,
+                gamesPlayed: 0
+            },
+            weekly: {
+                weekStart: this.getWeekStartString(),
+                searches: 0,
+                wordsViewed: 0,
+                gamesPlayed: 0
+            },
+            allTime: {
+                totalSearches: 0,
+                totalWordsViewed: 0,
+                totalTtsUsed: 0,
+                totalGamesPlayed: 0,
+                uniqueWordsViewed: [],
+                firstUse: new Date().toISOString(),
+                currentStreak: 0,
+                longestStreak: 0,
+                lastActiveDate: null
+            },
+            achievements: []
+        };
+    },
+
+    // Date helpers
+    getTodayString() {
+        return new Date().toISOString().split('T')[0];
+    },
+
+    getWeekStartString() {
+        const now = new Date();
+        const dayOfWeek = now.getDay();
+        const diff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        const monday = new Date(now.setDate(diff));
+        return monday.toISOString().split('T')[0];
+    },
+
+    // Load data from localStorage
+    getData() {
+        try {
+            const saved = localStorage.getItem(this.STORAGE_KEY);
+            if (saved) {
+                const data = JSON.parse(saved);
+                // Check if daily data needs reset
+                if (data.daily.date !== this.getTodayString()) {
+                    data.daily = {
+                        date: this.getTodayString(),
+                        searches: 0,
+                        wordsViewed: [],
+                        ttsUsed: 0,
+                        gamesPlayed: 0
+                    };
+                }
+                // Check if weekly data needs reset
+                if (data.weekly.weekStart !== this.getWeekStartString()) {
+                    data.weekly = {
+                        weekStart: this.getWeekStartString(),
+                        searches: 0,
+                        wordsViewed: 0,
+                        gamesPlayed: 0
+                    };
+                }
+                return data;
+            }
+        } catch (e) {
+            console.error('Error loading progress:', e);
+        }
+        return this.getDefaultData();
+    },
+
+    // Save data to localStorage
+    saveData(data) {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+        } catch (e) {
+            console.error('Error saving progress:', e);
+        }
+    },
+
+    // Track a search event
+    trackSearch(query) {
+        if (!query || query.length < 2) return;
+
+        const data = this.getData();
+        data.daily.searches++;
+        data.weekly.searches++;
+        data.allTime.totalSearches++;
+        this.updateStreak(data);
+        this.saveData(data);
+        this.checkAchievements(data);
+
+        // Dispatch event for UI updates
+        this.dispatchProgressEvent('search', { query, dailyCount: data.daily.searches });
+    },
+
+    // Track viewing a word
+    trackWordView(wordId, word) {
+        if (!wordId) return;
+
+        const data = this.getData();
+
+        // Track daily views (allow duplicates for session)
+        if (!data.daily.wordsViewed.includes(wordId)) {
+            data.daily.wordsViewed.push(wordId);
+        }
+
+        // Track weekly views count
+        data.weekly.wordsViewed++;
+
+        // Track all-time views
+        data.allTime.totalWordsViewed++;
+
+        // Track unique words
+        if (!data.allTime.uniqueWordsViewed.includes(wordId)) {
+            data.allTime.uniqueWordsViewed.push(wordId);
+        }
+
+        this.updateStreak(data);
+        this.saveData(data);
+        this.checkAchievements(data);
+
+        this.dispatchProgressEvent('wordView', {
+            wordId,
+            word,
+            dailyCount: data.daily.wordsViewed.length,
+            totalUnique: data.allTime.uniqueWordsViewed.length
+        });
+    },
+
+    // Track TTS usage
+    trackTTS(word) {
+        const data = this.getData();
+        data.daily.ttsUsed++;
+        data.allTime.totalTtsUsed++;
+        this.saveData(data);
+
+        this.dispatchProgressEvent('tts', { word, dailyCount: data.daily.ttsUsed });
+    },
+
+    // Track game played
+    trackGame(gameName, score) {
+        const data = this.getData();
+        data.daily.gamesPlayed++;
+        data.weekly.gamesPlayed++;
+        data.allTime.totalGamesPlayed++;
+        this.updateStreak(data);
+        this.saveData(data);
+        this.checkAchievements(data);
+
+        this.dispatchProgressEvent('game', { gameName, score, dailyCount: data.daily.gamesPlayed });
+    },
+
+    // Update streak
+    updateStreak(data) {
+        const today = this.getTodayString();
+        const lastActive = data.allTime.lastActiveDate;
+
+        if (lastActive === today) {
+            // Already active today, no change
+            return;
+        }
+
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayString = yesterday.toISOString().split('T')[0];
+
+        if (lastActive === yesterdayString) {
+            // Consecutive day - increase streak
+            data.allTime.currentStreak++;
+        } else if (lastActive !== today) {
+            // Streak broken - reset to 1
+            data.allTime.currentStreak = 1;
+        }
+
+        // Update longest streak
+        if (data.allTime.currentStreak > data.allTime.longestStreak) {
+            data.allTime.longestStreak = data.allTime.currentStreak;
+        }
+
+        data.allTime.lastActiveDate = today;
+    },
+
+    // Get current stats
+    getStats() {
+        const data = this.getData();
+        return {
+            today: {
+                searches: data.daily.searches,
+                wordsViewed: data.daily.wordsViewed.length,
+                ttsUsed: data.daily.ttsUsed,
+                gamesPlayed: data.daily.gamesPlayed
+            },
+            week: {
+                searches: data.weekly.searches,
+                wordsViewed: data.weekly.wordsViewed,
+                gamesPlayed: data.weekly.gamesPlayed
+            },
+            allTime: {
+                totalSearches: data.allTime.totalSearches,
+                totalWordsViewed: data.allTime.totalWordsViewed,
+                uniqueWords: data.allTime.uniqueWordsViewed.length,
+                totalGames: data.allTime.totalGamesPlayed,
+                currentStreak: data.allTime.currentStreak,
+                longestStreak: data.allTime.longestStreak,
+                daysSinceStart: Math.floor((new Date() - new Date(data.allTime.firstUse)) / (1000 * 60 * 60 * 24))
+            },
+            achievements: data.achievements
+        };
+    },
+
+    // Achievement definitions
+    ACHIEVEMENTS: [
+        { id: 'first_search', name: 'Första sökning', nameAr: 'البحث الأول', icon: '🔍', condition: (d) => d.allTime.totalSearches >= 1 },
+        { id: 'word_explorer', name: '10 ord', nameAr: '10 كلمات', icon: '📚', condition: (d) => d.allTime.uniqueWordsViewed.length >= 10 },
+        { id: 'word_collector', name: '50 ord', nameAr: '50 كلمة', icon: '📖', condition: (d) => d.allTime.uniqueWordsViewed.length >= 50 },
+        { id: 'word_master', name: '100 ord', nameAr: '100 كلمة', icon: '🏆', condition: (d) => d.allTime.uniqueWordsViewed.length >= 100 },
+        { id: 'word_legend', name: '500 ord', nameAr: '500 كلمة', icon: '👑', condition: (d) => d.allTime.uniqueWordsViewed.length >= 500 },
+        { id: 'streak_3', name: '3 dagars streak', nameAr: 'سلسلة 3 أيام', icon: '🔥', condition: (d) => d.allTime.currentStreak >= 3 },
+        { id: 'streak_7', name: 'Veckans streak', nameAr: 'سلسلة أسبوع', icon: '⚡', condition: (d) => d.allTime.currentStreak >= 7 },
+        { id: 'streak_30', name: 'Månads streak', nameAr: 'سلسلة شهر', icon: '💎', condition: (d) => d.allTime.currentStreak >= 30 },
+        { id: 'daily_10', name: '10 ord idag', nameAr: '10 كلمات اليوم', icon: '⭐', condition: (d) => d.daily.wordsViewed.length >= 10 },
+        { id: 'gamer', name: 'Spelaren', nameAr: 'اللاعب', icon: '🎮', condition: (d) => d.allTime.totalGamesPlayed >= 10 }
+    ],
+
+    // Check and unlock achievements
+    checkAchievements(data) {
+        let newAchievements = [];
+
+        this.ACHIEVEMENTS.forEach(achievement => {
+            const alreadyUnlocked = data.achievements.find(a => a.id === achievement.id);
+            if (!alreadyUnlocked && achievement.condition(data)) {
+                const unlocked = {
+                    id: achievement.id,
+                    unlockedAt: new Date().toISOString()
+                };
+                data.achievements.push(unlocked);
+                newAchievements.push(achievement);
+            }
+        });
+
+        if (newAchievements.length > 0) {
+            this.saveData(data);
+            newAchievements.forEach(a => {
+                this.dispatchProgressEvent('achievement', a);
+                // Show toast for new achievement
+                showToast(`🎉 ${a.icon} ${a.name} / ${a.nameAr}`);
+                // Haptic feedback
+                if (typeof HapticManager !== 'undefined') {
+                    HapticManager.trigger('success');
+                }
+            });
+        }
+    },
+
+    // Dispatch custom event for UI updates
+    dispatchProgressEvent(type, detail) {
+        const event = new CustomEvent('progressUpdate', {
+            detail: { type, ...detail }
+        });
+        document.dispatchEvent(event);
+    },
+
+    // Reset all progress (for testing)
+    reset() {
+        localStorage.removeItem(this.STORAGE_KEY);
+        showToast('Progress återställd / تم إعادة التعيين');
+    }
+};
+
+// ========================================
 // Favorites Manager
 // ========================================
 const FavoritesManager = {
@@ -168,6 +450,11 @@ const TTSManager = {
             return;
         }
         this.lastSpokenText = cleanText;
+
+        // Track TTS usage in ProgressManager
+        if (typeof ProgressManager !== 'undefined') {
+            ProgressManager.trackTTS(cleanText);
+        }
 
         // Stop current
         this.stop();

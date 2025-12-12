@@ -1413,117 +1413,14 @@ function resetWordConnectProgress() {
     }
 }
 
-// --- AUDIO (Uses Google Translate TTS for high quality) ---
-const isIOS_WC = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-let cachedSwedishVoice_WC = null;
-let wcAudio = null;
-
+// --- AUDIO (Uses Google Translate TTS via Unified Manager) ---
 function speakWord(text) {
-    if (!text || text.trim() === '') return;
-
-    // Stop any currently playing audio
-    if (wcAudio) {
-        wcAudio.pause();
-        wcAudio.currentTime = 0;
-    }
-
-    // Always try Google TTS first (best quality)
-    playOnlineTTS(text);
+    TTSManager.speak(text);
 }
 
-function playOnlineTTS(text) {
-    wcAudio = new Audio();
-    wcAudio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(text)}`;
-    wcAudio.volume = 1.0;
-
-    // Set playback rate after audio is ready (iOS fix)
-    wcAudio.oncanplay = () => {
-        wcAudio.playbackRate = 0.7; // Slower for learning
-    };
-
-    wcAudio.play().catch(err => {
-        console.warn("Online TTS failed, falling back to local:", err);
-        playLocalTTS(text);
-    });
-
-    wcAudio.onerror = () => {
-        console.warn("Audio error, falling back to local TTS");
-        playLocalTTS(text);
-    };
-}
-
-function playLocalTTS(text) {
-    if (!('speechSynthesis' in window)) return;
-
-    // Cancel any ongoing speech
-    speechSynthesis.cancel();
-
-    // iOS fix: delay after cancel
-    const delay = isIOS_WC ? 100 : 0;
-
-    setTimeout(() => {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'sv-SE';
-        utterance.rate = isIOS_WC ? 0.9 : 0.85;
-        utterance.volume = 1;
-
-        // Get and cache Swedish voice
-        if (!cachedSwedishVoice_WC) {
-            const voices = window.speechSynthesis.getVoices();
-            const swedishVoices = voices.filter(v =>
-                v.lang === 'sv-SE' || v.lang.startsWith('sv-') || v.lang === 'sv'
-            );
-
-            if (swedishVoices.length > 0) {
-                // Priority: Alva (iOS), Google, Microsoft, Enhanced, first available
-                cachedSwedishVoice_WC =
-                    swedishVoices.find(v => v.name.includes('Alva')) ||
-                    swedishVoices.find(v => v.name.includes('Klara')) ||
-                    swedishVoices.find(v => v.name.includes('Google')) ||
-                    swedishVoices.find(v => v.name.includes('Microsoft')) ||
-                    swedishVoices.find(v => v.name.includes('Enhanced')) ||
-                    swedishVoices[0];
-            }
-        }
-
-        if (cachedSwedishVoice_WC) {
-            utterance.voice = cachedSwedishVoice_WC;
-        }
-
-        // iOS fix: Sometimes needs text to end with punctuation
-        if (isIOS_WC && text && !text.match(/[.!?]$/)) {
-            utterance.text = text + '.';
-        }
-
-        window.speechSynthesis.speak(utterance);
-
-        // iOS fix: Resume if paused
-        if (isIOS_WC) {
-            setTimeout(() => {
-                if (speechSynthesis.paused) {
-                    speechSynthesis.resume();
-                }
-            }, 250);
-        }
-    }, delay);
-}
-
-// Initialize voices on load (iOS fix)
-if ('speechSynthesis' in window) {
-    speechSynthesis.onvoiceschanged = () => {
-        const voices = speechSynthesis.getVoices();
-        const swedishVoices = voices.filter(v => v.lang.startsWith('sv'));
-        if (swedishVoices.length > 0) {
-            cachedSwedishVoice_WC = swedishVoices.find(v => v.name.includes('Alva')) ||
-                swedishVoices.find(v => v.name.includes('Klara')) ||
-                swedishVoices[0];
-        }
-    };
-    // Trigger voice loading
-    speechSynthesis.getVoices();
-}
+// Remove local TTS implementations
+// playOnlineTTS and playLocalTTS are now handled by unified TTSManager
+// initialized in utils.js
 
 // --- BOMB MODE LOGIC ---
 function initBombMode(letterCount) {
@@ -1761,35 +1658,7 @@ function showLibrary() {
 }
 
 function speakSentence(text) {
-    if (!('speechSynthesis' in window)) return;
-
-    speechSynthesis.cancel();
-
-    const delay = isIOS_WC ? 100 : 0;
-
-    setTimeout(() => {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'sv-SE';
-        utterance.rate = 0.8; // Slower for sentences
-        utterance.volume = 1;
-
-        if (cachedSwedishVoice_WC) {
-            utterance.voice = cachedSwedishVoice_WC;
-        }
-
-        // iOS fix: ensure punctuation
-        if (isIOS_WC && text && !text.match(/[.!?]$/)) {
-            utterance.text = text + '.';
-        }
-
-        window.speechSynthesis.speak(utterance);
-
-        if (isIOS_WC) {
-            setTimeout(() => {
-                if (speechSynthesis.paused) speechSynthesis.resume();
-            }, 250);
-        }
-    }, delay);
+    TTSManager.speak(text);
 }
 
 function deleteWord(wordToDelete) {

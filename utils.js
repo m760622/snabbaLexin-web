@@ -102,6 +102,125 @@ const FavoritesManager = {
     }
 };
 
+// ========================================
+// TTS Manager (Text-to-Speech)
+// ========================================
+const TTSManager = {
+    audio: null,
+    lastSpokenText: '',
+    cachedSwedishVoice: null,
+    isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1),
+
+    speak(text, lang = 'sv') {
+        if (!text || text.trim() === '') return;
+        const cleanText = text.replace(/\'/g, "\'").trim();
+
+        // Prevent rapid repeats of the same text
+        if (cleanText === this.lastSpokenText && this.audio && !this.audio.paused) {
+            return;
+        }
+        this.lastSpokenText = cleanText;
+
+        // Stop current
+        this.stop();
+
+        // 1. Try Google Translate TTS (Primary)
+        this.playGoogleTTS(cleanText, lang);
+    },
+
+    stop() {
+        if (this.audio) {
+            this.audio.pause();
+            this.audio.currentTime = 0;
+        }
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+    },
+
+    playGoogleTTS(text, lang) {
+        this.audio = new Audio();
+        const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encodeURIComponent(text)}`;
+        this.audio.src = url;
+        this.audio.volume = 1.0;
+
+        // iOS Fix: Adjust rate only after metadata is loaded to avoid errors
+        this.audio.oncanplay = () => {
+            // Slightly slower for better clarity, similar to previous implementation
+            this.audio.playbackRate = 0.75;
+        };
+
+        const playPromise = this.audio.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log('Playing Google TTS:', text);
+            }).catch(err => {
+                console.warn('Google TTS failed/blocked, falling back to local:', err);
+                this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
+            });
+        }
+
+        this.audio.onerror = () => {
+            console.warn('Google TTS audio error, falling back.');
+            this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
+        };
+    },
+
+    playLocalTTS(text, lang) {
+        if (!window.speechSynthesis) return;
+
+        // iOS Fix: Small delay after cancel
+        const delay = this.isIOS ? 50 : 0;
+
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 0.85;
+            utterance.volume = 1.0;
+
+            // Find best voice
+            if (lang === 'sv-SE' || lang.startsWith('sv')) {
+                utterance.voice = this.getBestSwedishVoice();
+            }
+
+            window.speechSynthesis.speak(utterance);
+
+            // iOS Fix: Force resume if it gets stuck
+            if (this.isIOS) {
+                setTimeout(() => {
+                    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+                }, 100);
+            }
+        }, delay);
+    },
+
+    getBestSwedishVoice() {
+        if (this.cachedSwedishVoice) return this.cachedSwedishVoice;
+
+        const voices = window.speechSynthesis.getVoices();
+        const svVoices = voices.filter(v => v.lang.startsWith('sv'));
+
+        if (svVoices.length === 0) return null;
+
+        // Priority: Alva (iOS), Klara, Google, etc.
+        this.cachedSwedishVoice =
+            svVoices.find(v => v.name.includes('Alva')) ||
+            svVoices.find(v => v.name.includes('Klara')) ||
+            svVoices.find(v => v.name.includes('Google')) ||
+            svVoices[0];
+
+        return this.cachedSwedishVoice;
+    }
+};
+
+// Initialize voices on load (needed for Chrome/Safari async voice loading)
+if (window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = () => {
+        TTSManager.cachedSwedishVoice = null; // Reset cache
+    };
+}
+
 // Auto-initialize theme on load
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();

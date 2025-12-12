@@ -1274,6 +1274,7 @@
         </div>
     </div>
 
+    <script src="utils.js"></script>
     <script>
         // ==========================================
         // DATA
@@ -1835,79 +1836,15 @@
             }
         }
 
-        // TTS using Google Translate for high quality Swedish pronunciation
-        let vgAudio = null;
-        const isIOS_VG = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
+        // TTS using Unified TTSManager
         function playAudioForSlot(id) {
             const w = id === 1 ? currentPair.w1 : currentPair.w2;
             if (!w) return;
 
-            // Stop any existing audio
-            if (vgAudio) {
-                vgAudio.pause();
-                vgAudio.currentTime = 0;
-            }
-
-            // Use Google Translate TTS for best quality
-            vgAudio = new Audio();
-            vgAudio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=sv&client=tw-ob&q=${encodeURIComponent(w)}`;
-            vgAudio.volume = 1.0;
-
-            // Set playback rate after audio is ready (iOS fix)
-            vgAudio.oncanplay = () => {
-                vgAudio.playbackRate = 0.7; // Slower for learning
-            };
-
-            vgAudio.play().then(() => {
-                console.log('Playing Swedish TTS for:', w);
-            }).catch(err => {
-                console.warn('Google TTS failed, trying local:', err);
-                playLocalTTS_VG(w);
-            });
-
-            vgAudio.onerror = () => {
-                console.warn('Audio error, falling back to local TTS');
-                playLocalTTS_VG(w);
-            };
+            TTSManager.speak(w);
         }
 
-        // Local TTS fallback
-        let swedishVoice = null;
-
-        function getSwedishVoice() {
-            if (swedishVoice) return swedishVoice;
-            const voices = window.speechSynthesis.getVoices();
-            const sv = voices.filter(v => v.lang.startsWith('sv'));
-            if (sv.length > 0) {
-                swedishVoice = sv.find(v => v.name.includes('Alva')) ||
-                    sv.find(v => v.name.includes('Klara')) ||
-                    sv[0];
-            }
-            return swedishVoice;
-        }
-
-        function playLocalTTS_VG(text) {
-            if (!window.speechSynthesis) return;
-            speechSynthesis.cancel();
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.voice = getSwedishVoice();
-            utterance.lang = 'sv-SE';
-            utterance.rate = 0.85;
-            utterance.volume = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // Initialize voices
-        if (window.speechSynthesis) {
-            speechSynthesis.onvoiceschanged = () => {
-                swedishVoice = null;
-                getSwedishVoice();
-            };
-            speechSynthesis.getVoices();
-        }
+        // Initialize voices setup handled by TTSManager/utils.js
 
         function showComboText(text) {
             const el = document.createElement('div');

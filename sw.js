@@ -138,4 +138,52 @@ self.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
+
+    // Handle notification request from main thread
+    if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
+        const { title, body, icon, badge, tag, data } = event.data;
+
+        self.registration.showNotification(title, {
+            body: body,
+            icon: icon || './icon.png',
+            badge: badge || './icon.png',
+            tag: tag || 'snabba-lexin-notification',
+            data: data || { url: './' },
+            vibrate: [100, 50, 100],
+            requireInteraction: false
+        }).then(() => {
+            console.log('[SW] Notification shown:', title);
+        }).catch(err => {
+            console.error('[SW] Error showing notification:', err);
+        });
+    }
+});
+
+// Handle notification click - open the app
+self.addEventListener('notificationclick', (event) => {
+    console.log('[SW] Notification clicked');
+    event.notification.close();
+
+    const urlToOpen = event.notification.data?.url || './';
+
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true })
+            .then((windowClients) => {
+                // Check if there's already a window open
+                for (let i = 0; i < windowClients.length; i++) {
+                    const client = windowClients[i];
+                    if (client.url.includes('snabbaLexin') || client.url.includes('index.html')) {
+                        // Focus existing window
+                        return client.focus();
+                    }
+                }
+                // Open new window if none found
+                return clients.openWindow(urlToOpen);
+            })
+    );
+});
+
+// Handle notification close (optional tracking)
+self.addEventListener('notificationclose', (event) => {
+    console.log('[SW] Notification closed');
 });

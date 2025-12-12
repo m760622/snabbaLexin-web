@@ -395,6 +395,269 @@ const FavoritesManager = {
 };
 
 // ========================================
+// Reminder Notifications Manager
+// ========================================
+const ReminderManager = {
+    STORAGE_KEY: 'reminderSettings',
+    scheduledTimeoutId: null,
+
+    // Motivational messages for reminders
+    MESSAGES: [
+        { sv: 'Dags att lära sig nya ord! 📚', ar: 'حان وقت تعلم كلمات جديدة!' },
+        { sv: 'Din streak väntar på dig! 🔥', ar: 'سلسلتك في انتظارك!' },
+        { sv: 'Bara 5 minuter av lärande! ⏰', ar: '5 دقائق فقط من التعلم!' },
+        { sv: 'Håll din inlärning igång! 💪', ar: 'حافظ على استمرار تعلمك!' },
+        { sv: 'Nya ord väntar på dig! ✨', ar: 'كلمات جديدة تنتظرك!' },
+        { sv: 'Träna ditt ordförråd idag! 🎯', ar: 'درّب مفرداتك اليوم!' },
+        { sv: 'En dag utan lärande är en förlorad dag! 📖', ar: 'يوم بدون تعلم يوم ضائع!' },
+        { sv: 'Ditt svenska blir bättre varje dag! 🇸🇪', ar: 'سويديتك تتحسن كل يوم!' }
+    ],
+
+    // Default settings
+    getDefaultSettings() {
+        return {
+            enabled: false,
+            time: '18:00',
+            lastNotified: null,
+            permissionGranted: false
+        };
+    },
+
+    // Load settings from localStorage
+    getSettings() {
+        try {
+            const saved = localStorage.getItem(this.STORAGE_KEY);
+            return saved ? JSON.parse(saved) : this.getDefaultSettings();
+        } catch (e) {
+            console.error('Error loading reminder settings:', e);
+            return this.getDefaultSettings();
+        }
+    },
+
+    // Save settings to localStorage
+    saveSettings(settings) {
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(settings));
+        } catch (e) {
+            console.error('Error saving reminder settings:', e);
+        }
+    },
+
+    // Check if notifications are supported
+    isSupported() {
+        return 'Notification' in window && 'serviceWorker' in navigator;
+    },
+
+    // Request notification permission
+    async requestPermission() {
+        if (!this.isSupported()) {
+            showToast('Aviseringar stöds inte / الإشعارات غير مدعومة ❌');
+            return false;
+        }
+
+        try {
+            const permission = await Notification.requestPermission();
+            const settings = this.getSettings();
+            settings.permissionGranted = permission === 'granted';
+            this.saveSettings(settings);
+
+            if (permission === 'granted') {
+                showToast('Aviseringar aktiverade! / تم تفعيل الإشعارات! ✅');
+                return true;
+            } else if (permission === 'denied') {
+                showToast('Aviseringar blockerade / الإشعارات محظورة ⚠️');
+                return false;
+            }
+            return false;
+        } catch (e) {
+            console.error('Error requesting permission:', e);
+            return false;
+        }
+    },
+
+    // Enable reminders
+    async enable(time = '18:00') {
+        const settings = this.getSettings();
+
+        // Request permission if not granted
+        if (Notification.permission !== 'granted') {
+            const granted = await this.requestPermission();
+            if (!granted) {
+                return false;
+            }
+        }
+
+        settings.enabled = true;
+        settings.time = time;
+        settings.permissionGranted = true;
+        this.saveSettings(settings);
+
+        // Schedule the reminder
+        this.scheduleReminder();
+
+        showToast(`Påminnelse inställd kl ${time} / تم ضبط التذكير ⏰`);
+        return true;
+    },
+
+    // Disable reminders
+    disable() {
+        const settings = this.getSettings();
+        settings.enabled = false;
+        this.saveSettings(settings);
+
+        // Cancel scheduled reminder
+        if (this.scheduledTimeoutId) {
+            clearTimeout(this.scheduledTimeoutId);
+            this.scheduledTimeoutId = null;
+        }
+
+        showToast('Påminnelse avstängd / تم إيقاف التذكير 🔕');
+    },
+
+    // Update reminder time
+    updateTime(time) {
+        const settings = this.getSettings();
+        settings.time = time;
+        this.saveSettings(settings);
+
+        if (settings.enabled) {
+            this.scheduleReminder();
+        }
+    },
+
+    // Schedule the next reminder
+    scheduleReminder() {
+        const settings = this.getSettings();
+        if (!settings.enabled) return;
+
+        // Clear existing timeout
+        if (this.scheduledTimeoutId) {
+            clearTimeout(this.scheduledTimeoutId);
+        }
+
+        // Calculate ms until the scheduled time
+        const now = new Date();
+        const [hours, minutes] = settings.time.split(':').map(Number);
+        const targetTime = new Date();
+        targetTime.setHours(hours, minutes, 0, 0);
+
+        // If the time has passed today, schedule for tomorrow
+        if (targetTime <= now) {
+            targetTime.setDate(targetTime.getDate() + 1);
+        }
+
+        const msUntilReminder = targetTime - now;
+
+        console.log(`Reminder scheduled for ${targetTime.toLocaleString()}, in ${Math.round(msUntilReminder / 1000 / 60)} minutes`);
+
+        // Schedule the notification
+        this.scheduledTimeoutId = setTimeout(() => {
+            this.sendNotification();
+            // Schedule the next day's reminder
+            this.scheduleReminder();
+        }, msUntilReminder);
+    },
+
+    // Get a random motivational message
+    getRandomMessage() {
+        return this.MESSAGES[Math.floor(Math.random() * this.MESSAGES.length)];
+    },
+
+    // Send a notification
+    async sendNotification() {
+        if (Notification.permission !== 'granted') return;
+
+        const settings = this.getSettings();
+        const today = new Date().toISOString().split('T')[0];
+
+        // Don't send if already notified today
+        if (settings.lastNotified === today) {
+            console.log('Already notified today, skipping');
+            return;
+        }
+
+        const message = this.getRandomMessage();
+
+        try {
+            // Try Service Worker notification first (works in background)
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'SHOW_NOTIFICATION',
+                    title: 'SnabbaLexin 📚',
+                    body: `${message.sv}\n${message.ar}`,
+                    icon: './icon.png',
+                    badge: './icon.png',
+                    tag: 'daily-reminder',
+                    data: { url: './' }
+                });
+            } else {
+                // Fallback to regular notification
+                new Notification('SnabbaLexin 📚', {
+                    body: `${message.sv}\n${message.ar}`,
+                    icon: './icon.png',
+                    badge: './icon.png',
+                    tag: 'daily-reminder'
+                });
+            }
+
+            // Update last notified date
+            settings.lastNotified = today;
+            this.saveSettings(settings);
+
+            console.log('Reminder notification sent');
+        } catch (e) {
+            console.error('Error sending notification:', e);
+        }
+    },
+
+    // Send a test notification immediately
+    async sendTestNotification() {
+        if (Notification.permission !== 'granted') {
+            const granted = await this.requestPermission();
+            if (!granted) return;
+        }
+
+        const message = this.getRandomMessage();
+
+        try {
+            // Try Service Worker notification first
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'SHOW_NOTIFICATION',
+                    title: 'SnabbaLexin - Test 🧪',
+                    body: `${message.sv}\n${message.ar}`,
+                    icon: './icon.png',
+                    badge: './icon.png',
+                    tag: 'test-reminder',
+                    data: { url: './' }
+                });
+            } else {
+                new Notification('SnabbaLexin - Test 🧪', {
+                    body: `${message.sv}\n${message.ar}`,
+                    icon: './icon.png',
+                    badge: './icon.png',
+                    tag: 'test-reminder'
+                });
+            }
+
+            showToast('Testavisering skickad! / تم إرسال إشعار اختباري! 🔔');
+            HapticManager.trigger('success');
+        } catch (e) {
+            console.error('Error sending test notification:', e);
+            showToast('Kunde inte skicka avisering / فشل إرسال الإشعار ❌');
+        }
+    },
+
+    // Initialize on page load
+    init() {
+        const settings = this.getSettings();
+        if (settings.enabled && settings.permissionGranted) {
+            this.scheduleReminder();
+        }
+    }
+};
+
+// ========================================
 // TTS Manager (Text-to-Speech)
 // ========================================
 const TTSManager = {
@@ -815,4 +1078,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize ripple effect
     initRippleEffect();
+
+    // Initialize reminder notifications
+    if (typeof ReminderManager !== 'undefined') {
+        ReminderManager.init();
+    }
 });

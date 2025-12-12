@@ -368,6 +368,61 @@ async function init() {
         });
     }
 
+    // Reminder Notifications Control
+    const reminderToggle = document.getElementById('reminderToggle');
+    const reminderTimeContainer = document.getElementById('reminderTimeContainer');
+    const reminderTime = document.getElementById('reminderTime');
+    const testReminderBtn = document.getElementById('testReminderBtn');
+
+    if (reminderToggle && typeof ReminderManager !== 'undefined') {
+        // Initialize from saved settings
+        const reminderSettings = ReminderManager.getSettings();
+        reminderToggle.checked = reminderSettings.enabled;
+        if (reminderTime) {
+            reminderTime.value = reminderSettings.time || '18:00';
+        }
+        if (reminderTimeContainer) {
+            reminderTimeContainer.style.display = reminderSettings.enabled ? 'flex' : 'none';
+        }
+
+        // Toggle reminder on/off
+        reminderToggle.addEventListener('change', async (e) => {
+            e.stopPropagation(); // Prevent menu from closing
+
+            if (e.target.checked) {
+                const time = reminderTime ? reminderTime.value : '18:00';
+                const success = await ReminderManager.enable(time);
+                if (!success) {
+                    e.target.checked = false; // Revert if failed
+                } else if (reminderTimeContainer) {
+                    reminderTimeContainer.style.display = 'flex';
+                }
+            } else {
+                ReminderManager.disable();
+                if (reminderTimeContainer) {
+                    reminderTimeContainer.style.display = 'none';
+                }
+            }
+        });
+
+        // Update time when changed
+        if (reminderTime) {
+            reminderTime.addEventListener('change', (e) => {
+                e.stopPropagation();
+                ReminderManager.updateTime(e.target.value);
+                showToast(`Påminnelse ändrad till ${e.target.value} / تم تغيير التذكير ⏰`);
+            });
+        }
+
+        // Test notification button
+        if (testReminderBtn) {
+            testReminderBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent menu from closing
+                ReminderManager.sendTestNotification();
+            });
+        }
+    }
+
 
     // PWA Install Prompt Logic (consolidated)
     let deferredPrompt;

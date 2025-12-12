@@ -88,6 +88,24 @@
                     <span>Mobilvy / جوال</span>
                 </button>
 
+                <!-- TTS Speed Control -->
+                <div class="menu-item tts-speed-control">
+                    <span class="icon-box" style="color: #8b5cf6;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg></span>
+                    <div class="tts-speed-wrapper">
+                        <div class="tts-speed-header">
+                            <span>Uttalshastighet / سرعة النطق</span>
+                            <span id="ttsSpeedValue" class="tts-speed-badge">85%</span>
+                        </div>
+                        <input type="range" id="ttsSpeedSlider" min="50" max="150" value="85" class="tts-slider">
+                        <button id="ttsTestBtn" class="tts-test-btn">🔊 Testa / اختبر</button>
+                    </div>
+                </div>
+
                 <div class="menu-divider"></div>
                 <button id="showFavoritesBtn" class="menu-item" aria-label="Visa favoriter / عرض المفضلة">
                     <span class="icon-box" style="color: #F59E0B;"><svg xmlns="http://www.w3.org/2000/svg" width="18"

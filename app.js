@@ -293,6 +293,40 @@ async function init() {
         }
     }
 
+    // TTS Speed Slider Control
+    const ttsSpeedSlider = document.getElementById('ttsSpeedSlider');
+    const ttsSpeedValue = document.getElementById('ttsSpeedValue');
+    const ttsTestBtn = document.getElementById('ttsTestBtn');
+
+    if (ttsSpeedSlider && ttsSpeedValue) {
+        // Initialize from saved value
+        const currentSpeed = TTSManager.getSpeed();
+        ttsSpeedSlider.value = Math.round(currentSpeed * 100);
+        ttsSpeedValue.textContent = `${Math.round(currentSpeed * 100)}%`;
+
+        // Update on slider change
+        ttsSpeedSlider.addEventListener('input', (e) => {
+            const speedPercent = parseInt(e.target.value);
+            ttsSpeedValue.textContent = `${speedPercent}%`;
+        });
+
+        // Save on release
+        ttsSpeedSlider.addEventListener('change', (e) => {
+            const speedPercent = parseInt(e.target.value);
+            const speed = speedPercent / 100;
+            TTSManager.setSpeed(speed);
+        });
+    }
+
+    // TTS Test Button
+    if (ttsTestBtn) {
+        ttsTestBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent menu from closing
+            TTSManager.speak('Hej, det här är en test av uttal', 'sv');
+        });
+    }
+
+
     // PWA Install Prompt Logic (consolidated)
     let deferredPrompt;
     const pwaPrompt = document.getElementById('pwa-install-prompt');

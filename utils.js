@@ -110,6 +110,20 @@ const TTSManager = {
     lastSpokenText: '',
     cachedSwedishVoice: null,
     isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1),
+    timeoutId: null,
+
+    // Speed settings (0.5 = slow, 1.0 = normal, 1.5 = fast)
+    getSpeed() {
+        const saved = localStorage.getItem('ttsSpeed');
+        return saved ? parseFloat(saved) : 0.85; // Default: slightly slower for clarity
+    },
+
+    setSpeed(speed) {
+        const clamped = Math.min(1.5, Math.max(0.5, speed));
+        localStorage.setItem('ttsSpeed', clamped.toString());
+        showToast(`Uttalshastighet: ${Math.round(clamped * 100)}% / سرعة النطق`);
+        return clamped;
+    },
 
     speak(text, lang = 'sv') {
         if (!text || text.trim() === '') return;
@@ -139,30 +153,53 @@ const TTSManager = {
     },
 
     playGoogleTTS(text, lang) {
+        // Clear previous timeout
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+            this.timeoutId = null;
+        }
+
         this.audio = new Audio();
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encodeURIComponent(text)}`;
         this.audio.src = url;
         this.audio.volume = 1.0;
 
+        const speed = this.getSpeed();
+
         // iOS Fix: Adjust rate only after metadata is loaded to avoid errors
         this.audio.oncanplay = () => {
-            // Slightly slower for better clarity, similar to previous implementation
-            this.audio.playbackRate = 0.75;
+            this.audio.playbackRate = speed;
+            // Clear timeout on successful load
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+                this.timeoutId = null;
+            }
         };
+
+        // Timeout fallback: if audio doesn't start within 5 seconds, use local TTS
+        this.timeoutId = setTimeout(() => {
+            if (this.audio && (this.audio.readyState < 2 || this.audio.paused)) {
+                console.warn('Google TTS timeout (5s), falling back to local.');
+                this.audio.pause();
+                this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
+            }
+        }, 5000);
 
         const playPromise = this.audio.play();
 
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                console.log('Playing Google TTS:', text);
+                console.log('Playing Google TTS:', text, 'at speed:', speed);
             }).catch(err => {
                 console.warn('Google TTS failed/blocked, falling back to local:', err);
+                if (this.timeoutId) clearTimeout(this.timeoutId);
                 this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
             });
         }
 
         this.audio.onerror = () => {
             console.warn('Google TTS audio error, falling back.');
+            if (this.timeoutId) clearTimeout(this.timeoutId);
             this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
         };
     },
@@ -172,11 +209,12 @@ const TTSManager = {
 
         // iOS Fix: Small delay after cancel
         const delay = this.isIOS ? 50 : 0;
+        const speed = this.getSpeed();
 
         setTimeout(() => {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = lang;
-            utterance.rate = 0.85;
+            utterance.rate = speed;
             utterance.volume = 1.0;
 
             // Find best voice

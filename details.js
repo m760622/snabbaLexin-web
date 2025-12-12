@@ -2,6 +2,25 @@
 // State
 // dictionaryData is global from data.js
 
+// iOS Audio Unlock - Must happen on first user touch/click
+let audioUnlockHandled = false;
+const unlockAudioOnFirstTouch = () => {
+    if (audioUnlockHandled) return;
+    audioUnlockHandled = true;
+
+    // Use TTSManager's unlock function if available
+    if (typeof TTSManager !== 'undefined' && TTSManager.unlockAudio) {
+        TTSManager.unlockAudio();
+    }
+
+    // Remove listeners after first touch
+    document.removeEventListener('touchstart', unlockAudioOnFirstTouch);
+    document.removeEventListener('click', unlockAudioOnFirstTouch);
+    console.log('[Audio] Unlocked on first user interaction');
+};
+document.addEventListener('touchstart', unlockAudioOnFirstTouch, { once: true, passive: true });
+document.addEventListener('click', unlockAudioOnFirstTouch, { once: true });
+
 // DOM Elements
 const detailsArea = document.getElementById('detailsArea');
 const flashcardBtn = document.getElementById('flashcardBtn');

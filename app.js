@@ -7,6 +7,25 @@ let renderedCount = 0; // Track how many are currently shown
 let favorites = new Set(); // Store favorite IDs
 const BATCH_SIZE = 50; // Number of items to load per batch
 
+// iOS Audio Unlock - Must happen on first user touch/click
+let audioUnlockHandled = false;
+const unlockAudioOnFirstTouch = () => {
+    if (audioUnlockHandled) return;
+    audioUnlockHandled = true;
+
+    // Use TTSManager's unlock function if available
+    if (typeof TTSManager !== 'undefined' && TTSManager.unlockAudio) {
+        TTSManager.unlockAudio();
+    }
+
+    // Remove listeners after first touch
+    document.removeEventListener('touchstart', unlockAudioOnFirstTouch);
+    document.removeEventListener('click', unlockAudioOnFirstTouch);
+    console.log('[Audio] Unlocked on first user interaction');
+};
+document.addEventListener('touchstart', unlockAudioOnFirstTouch, { once: true, passive: true });
+document.addEventListener('click', unlockAudioOnFirstTouch, { once: true });
+
 // Quiz State
 let quizQuestions = [];
 let currentQuestionIndex = 0;

@@ -63,6 +63,491 @@
     --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
+/* ========================================
+   LOADING SKELETONS
+   ======================================== */
+
+/* Base Skeleton */
+.skeleton {
+    background: linear-gradient(90deg,
+            var(--surface) 0%,
+            var(--surface-secondary, rgba(255, 255, 255, 0.1)) 50%,
+            var(--surface) 100%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: var(--radius, 8px);
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .skeleton {
+    background: linear-gradient(90deg,
+            #2a2a2a 0%,
+            #3a3a3a 50%,
+            #2a2a2a 100%);
+    background-size: 200% 100%;
+}
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Skeleton Shapes */
+.skeleton-text {
+    height: 1em;
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+
+.skeleton-text.short {
+    width: 60%;
+}
+
+.skeleton-text.medium {
+    width: 80%;
+}
+
+.skeleton-text.long {
+    width: 95%;
+}
+
+.skeleton-title {
+    height: 1.5em;
+    width: 70%;
+    margin-bottom: 0.75em;
+}
+
+.skeleton-card {
+    height: 120px;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 16px;
+}
+
+.skeleton-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.skeleton-button {
+    height: 44px;
+    width: 120px;
+    border-radius: 22px;
+}
+
+/* Skeleton Card Template */
+.skeleton-word-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--surface);
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+}
+
+/* ========================================
+   MICRO-ANIMATIONS
+   ======================================== */
+
+/* Bounce Animation */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.bounce {
+    animation: bounce 0.3s ease-in-out;
+}
+
+/* Pulse Animation (for favorites, notifications) */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.15);
+    }
+
+    50% {
+        transform: scale(0.95);
+    }
+
+    75% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pulse {
+    animation: pulse 0.4s ease-in-out;
+}
+
+/* Heart Beat (for adding to favorites) */
+@keyframes heartbeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    10% {
+        transform: scale(1.3);
+    }
+
+    20% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.2);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+}
+
+.heartbeat {
+    animation: heartbeat 0.6s ease-in-out;
+}
+
+/* Shake Animation (for errors) */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Success Check Animation */
+@keyframes checkmark {
+    0% {
+        transform: scale(0) rotate(-45deg);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2) rotate(-45deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) rotate(-45deg);
+        opacity: 1;
+    }
+}
+
+.checkmark {
+    animation: checkmark 0.4s ease-out forwards;
+}
+
+/* Slide In Animations */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in-up {
+    animation: slideInUp 0.3s ease-out forwards;
+}
+
+.slide-in-down {
+    animation: slideInDown 0.3s ease-out forwards;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+/* Staggered Animation Delays */
+.stagger-1 {
+    animation-delay: 0.05s;
+}
+
+.stagger-2 {
+    animation-delay: 0.1s;
+}
+
+.stagger-3 {
+    animation-delay: 0.15s;
+}
+
+.stagger-4 {
+    animation-delay: 0.2s;
+}
+
+.stagger-5 {
+    animation-delay: 0.25s;
+}
+
+/* Ripple Effect */
+.ripple-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0);
+    animation: ripple-effect 0.6s linear;
+    pointer-events: none;
+}
+
+[data-theme="dark"] .ripple {
+    background: rgba(16, 185, 129, 0.3);
+}
+
+@keyframes ripple-effect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Button Press Effect - Enhanced */
+.btn-press {
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-press:active {
+    transform: scale(0.95);
+    box-shadow: none !important;
+}
+
+/* Card Hover Lift - Enhanced */
+.card-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) {
+    .card-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+}
+
+.card-lift:active {
+    transform: scale(0.98);
+}
+
+/* Glow Effect */
+@keyframes glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px var(--primary);
+    }
+
+    50% {
+        box-shadow: 0 0 20px var(--primary), 0 0 30px var(--primary);
+    }
+}
+
+.glow {
+    animation: glow 2s ease-in-out infinite;
+}
+
+/* Fade In/Out */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.fade-in-scale {
+    animation: fadeInScale 0.3s ease-out forwards;
+}
+
+/* Success/Error Flash */
+@keyframes flashSuccess {
+
+    0%,
+    100% {
+        background-color: inherit;
+    }
+
+    50% {
+        background-color: rgba(16, 185, 129, 0.3);
+    }
+}
+
+@keyframes flashError {
+
+    0%,
+    100% {
+        background-color: inherit;
+    }
+
+    50% {
+        background-color: rgba(239, 68, 68, 0.3);
+    }
+}
+
+.flash-success {
+    animation: flashSuccess 0.5s ease-in-out;
+}
+
+.flash-error {
+    animation: flashError 0.5s ease-in-out;
+}
+
+/* Floating Animation (for icons/badges) */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.float {
+    animation: float 2s ease-in-out infinite;
+}
+
+/* Spin Animation */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Loading Dots */
+@keyframes loadingDots {
+
+    0%,
+    80%,
+    100% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 1;
+    }
+}
+
+.loading-dots span {
+    animation: loadingDots 1.4s infinite ease-in-out both;
+}
+
+.loading-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: 0;
+}
+
 /* --- Ambient Background --- */
 .ambient-background {
     position: fixed;

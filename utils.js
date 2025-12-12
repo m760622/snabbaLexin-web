@@ -76,7 +76,7 @@ const FavoritesManager = {
         return this.getFavorites().has(id);
     },
 
-    toggle(id) {
+    toggle(id, buttonElement = null) {
         let favorites = this.getFavorites(); // Returns a Set
         let isAdded = false;
 
@@ -90,6 +90,16 @@ const FavoritesManager = {
 
         // Save back to localStorage
         localStorage.setItem('favorites', JSON.stringify([...favorites]));
+
+        // Haptic feedback (if HapticManager is available)
+        if (typeof HapticManager !== 'undefined') {
+            HapticManager.trigger(isAdded ? 'success' : 'light');
+        }
+
+        // Animation feedback (if AnimationManager and button available)
+        if (buttonElement && typeof AnimationManager !== 'undefined') {
+            AnimationManager.animate(buttonElement, isAdded ? 'heartbeat' : 'pulse');
+        }
 
         // Notify user
         if (isAdded) {
@@ -318,7 +328,204 @@ if (window.speechSynthesis) {
     };
 }
 
-// Auto-initialize theme on load
+// ========================================
+// Haptic Feedback Manager
+// ========================================
+const HapticManager = {
+    isSupported: 'vibrate' in navigator,
+
+    // Vibration patterns (in milliseconds)
+    patterns: {
+        light: [10],           // Very short tap
+        medium: [20],          // Short tap
+        heavy: [30],           // Longer tap
+        success: [10, 50, 10], // Double tap for success
+        error: [50, 30, 50, 30, 50], // Triple pulse for error
+        warning: [30, 50, 30], // Double pulse for warning
+        selection: [5],        // Ultra-light for selections
+    },
+
+    /**
+     * Trigger haptic feedback
+     * @param {string} type - Type of feedback: 'light', 'medium', 'heavy', 'success', 'error', 'warning', 'selection'
+     */
+    trigger(type = 'light') {
+        if (!this.isSupported) return false;
+
+        const pattern = this.patterns[type] || this.patterns.light;
+
+        try {
+            navigator.vibrate(pattern);
+            return true;
+        } catch (e) {
+            console.warn('Haptic feedback failed:', e);
+            return false;
+        }
+    },
+
+    /**
+     * Stop any ongoing vibration
+     */
+    stop() {
+        if (this.isSupported) {
+            navigator.vibrate(0);
+        }
+    },
+
+    /**
+     * Custom vibration pattern
+     * @param {number[]} pattern - Array of durations [vibrate, pause, vibrate, pause, ...]
+     */
+    custom(pattern) {
+        if (!this.isSupported) return false;
+
+        try {
+            navigator.vibrate(pattern);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+};
+
+// ========================================
+// Animation Manager
+// ========================================
+const AnimationManager = {
+    /**
+     * Add animation class and remove after completion
+     * @param {HTMLElement} element - Target element
+     * @param {string} animationClass - CSS class name
+     * @param {number} duration - Duration in ms (default: auto-detect from CSS)
+     */
+    animate(element, animationClass, duration = null) {
+        if (!element) return;
+
+        // Remove class first (in case it's already applied)
+        element.classList.remove(animationClass);
+
+        // Force reflow to restart animation
+        void element.offsetWidth;
+
+        // Add animation class
+        element.classList.add(animationClass);
+
+        // Remove after animation completes
+        const cleanupDuration = duration || this.getAnimationDuration(element) || 500;
+        setTimeout(() => {
+            element.classList.remove(animationClass);
+        }, cleanupDuration);
+    },
+
+    /**
+     * Get computed animation duration from CSS
+     */
+    getAnimationDuration(element) {
+        const style = getComputedStyle(element);
+        const duration = style.animationDuration || style.transitionDuration || '0s';
+        return parseFloat(duration) * (duration.includes('ms') ? 1 : 1000);
+    },
+
+    /**
+     * Create ripple effect on click
+     * @param {Event} event - Click/touch event
+     * @param {HTMLElement} container - Container element
+     */
+    createRipple(event, container) {
+        if (!container) container = event.currentTarget;
+        if (!container) return;
+
+        // Ensure container has proper positioning
+        const position = getComputedStyle(container).position;
+        if (position === 'static') {
+            container.style.position = 'relative';
+        }
+        container.style.overflow = 'hidden';
+
+        // Calculate ripple position
+        const rect = container.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = (event.clientX || event.touches?.[0]?.clientX || rect.left + rect.width / 2) - rect.left - size / 2;
+        const y = (event.clientY || event.touches?.[0]?.clientY || rect.top + rect.height / 2) - rect.top - size / 2;
+
+        // Create ripple element
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+        `;
+
+        container.appendChild(ripple);
+
+        // Remove after animation
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    },
+
+    /**
+     * Add staggered animation to children
+     * @param {HTMLElement} parent - Parent container
+     * @param {string} animationClass - Animation class to apply
+     * @param {number} delayStep - Delay between each child (ms)
+     */
+    staggerChildren(parent, animationClass, delayStep = 50) {
+        if (!parent) return;
+
+        const children = parent.children;
+        Array.from(children).forEach((child, index) => {
+            child.style.animationDelay = `${index * delayStep}ms`;
+            child.classList.add(animationClass);
+        });
+    }
+};
+
+// ========================================
+// Enhanced Button/Element Interactions
+// ========================================
+
+/**
+ * Add haptic and visual feedback to buttons
+ * Call this on page load for elements with data-haptic attribute
+ */
+function initHapticButtons() {
+    document.querySelectorAll('[data-haptic]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const type = btn.dataset.haptic || 'light';
+            HapticManager.trigger(type);
+        });
+
+        btn.addEventListener('touchstart', (e) => {
+            AnimationManager.createRipple(e, btn);
+        }, { passive: true });
+    });
+}
+
+/**
+ * Add ripple effect to all buttons
+ */
+function initRippleEffect() {
+    document.querySelectorAll('button, .btn, .action-btn, .menu-item, .card').forEach(el => {
+        if (!el.dataset.noRipple) {
+            el.addEventListener('click', (e) => {
+                AnimationManager.createRipple(e, el);
+            });
+        }
+    });
+}
+
+// Auto-initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();
+
+    // Initialize haptic buttons if available
+    if (HapticManager.isSupported) {
+        initHapticButtons();
+    }
+
+    // Initialize ripple effect
+    initRippleEffect();
 });

@@ -1,0 +1,191 @@
+[
+  {
+    "index": 6161,
+    "id": "Lexin031497",
+    "type": "Bygg.",
+    "word": "Vägnät",
+    "def": "Alla vägar i ett område"
+  },
+  {
+    "index": 6162,
+    "id": "Lexin031504",
+    "type": "Bygg.",
+    "word": "Vägunderhåll",
+    "def": "Skötsel av vägar (plogning, lagning)"
+  },
+  {
+    "index": 6163,
+    "id": "Lexin031508",
+    "type": "Bygg.",
+    "word": "Vägvält",
+    "def": "Maskin som plattar till asfalt"
+  },
+  {
+    "index": 6164,
+    "id": "Lexin031554",
+    "type": "Bygg.",
+    "word": "Vält",
+    "def": "Maskin för att platta till mark"
+  },
+  {
+    "index": 6165,
+    "id": "Lexin031602",
+    "type": "Bygg.",
+    "word": "Värde",
+    "def": "Vad något är värt i pengar"
+  },
+  {
+    "index": 6166,
+    "id": "Lexin031654",
+    "type": "Bygg.",
+    "word": "Värmeisolering",
+    "def": "Material som håller värmen kvar i huset"
+  },
+  {
+    "index": 6167,
+    "id": "Lexin031655",
+    "type": "Bygg.",
+    "word": "Värmematta",
+    "def": "Matta med elslingor för golvvärme"
+  },
+  {
+    "index": 6168,
+    "id": "Lexin031659",
+    "type": "Bygg.",
+    "word": "Värmesystem",
+    "def": "Systemet för uppvärmning (pannor, rör, element)"
+  },
+  {
+    "index": 6169,
+    "id": "Lexin031660",
+    "type": "Bygg.",
+    "word": "Värmeväxlare",
+    "def": "Apparat som flyttar värme mellan luft/vatten"
+  },
+  {
+    "index": 6170,
+    "id": "Lexin031661",
+    "type": "Bygg.",
+    "word": "Värmeväxling",
+    "def": "Processen där värme flyttas"
+  },
+  {
+    "index": 6171,
+    "id": "Lexin031662",
+    "type": "Bygg.",
+    "word": "Värmeåtervinning",
+    "def": "Att ta vara på värmen i frånluften"
+  },
+  {
+    "index": 6172,
+    "id": "Lexin031666",
+    "type": "Bygg.",
+    "word": "Värna om livet",
+    "def": "Säkerhetsarbete för att rädda liv"
+  },
+  {
+    "index": 6173,
+    "id": "Lexin031711",
+    "type": "Bygg.",
+    "word": "Vätska",
+    "def": "Flytande ämne (som vatten eller olja)"
+  },
+  {
+    "index": 6174,
+    "id": "Lexin031806",
+    "type": "Bygg.",
+    "word": "Yrkesarbetare",
+    "def": "Person utbildad för ett hantverk"
+  },
+  {
+    "index": 6175,
+    "id": "Lexin031807",
+    "type": "Bygg.",
+    "word": "Yrkesbakgrund",
+    "def": "Tidigare erfarenhet av yrket"
+  },
+  {
+    "index": 6176,
+    "id": "Lexin031837",
+    "type": "Bygg.",
+    "word": "Ytbearbetning",
+    "def": "Att göra ytan fin (slipa, måla)"
+  },
+  {
+    "index": 6177,
+    "id": "Lexin031962",
+    "type": "Bygg.",
+    "word": "Ånggenerator",
+    "def": "Maskin som gör ånga"
+  },
+  {
+    "index": 6178,
+    "id": "Lexin031964",
+    "type": "Bygg.",
+    "word": "Ångspärr",
+    "def": "Plastfolie som stoppar fuktig luft"
+  },
+  {
+    "index": 6179,
+    "id": "Lexin032051",
+    "type": "Bygg.",
+    "word": "Återfylld",
+    "def": "Grop som fyllts igen med jord"
+  },
+  {
+    "index": 6180,
+    "id": "Lexin032108",
+    "type": "Bygg.",
+    "word": "Åtgärd",
+    "def": "Sak man gör för att fixa ett problem"
+  },
+  {
+    "index": 6181,
+    "id": "Lexin032141",
+    "type": "Bygg.",
+    "word": "Ädelträ",
+    "def": "Fint träslag (t.ex. ek, teak)"
+  },
+  {
+    "index": 6182,
+    "id": "Lexin032305",
+    "type": "Bygg.",
+    "word": "Ärtsingel",
+    "def": "Små runda stenar för trädgårdsgångar"
+  },
+  {
+    "index": 6183,
+    "id": "Lexin032390",
+    "type": "Bygg.",
+    "word": "Ömsesidig",
+    "def": "Som gäller båda parter"
+  },
+  {
+    "index": 6184,
+    "id": "Lexin032446",
+    "type": "Bygg.",
+    "word": "Öronproppar",
+    "def": "Skydd man stoppar i öronen"
+  },
+  {
+    "index": 6185,
+    "id": "Lexin032543",
+    "type": "Bygg.",
+    "word": "Övergångsperiod",
+    "def": "Tid mellan två tillstånd (t.ex. vid flytt)"
+  },
+  {
+    "index": 6186,
+    "id": "Lexin032630",
+    "type": "Bygg.",
+    "word": "Översiktsplan",
+    "def": "Kommunens plan för markanvändning i stort"
+  },
+  {
+    "index": 6187,
+    "id": "Lexin032678",
+    "type": "Bygg.",
+    "word": "Övertramp",
+    "def": "Att göra fel eller gå över gränsen"
+  }
+]

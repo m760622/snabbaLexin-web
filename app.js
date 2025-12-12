@@ -368,6 +368,36 @@ async function init() {
                 ProgressManager.shareProgress();
             });
         }
+
+        // Weekly Goal Adjustment
+        const weeklyGoalInput = document.getElementById('weeklyGoalInput');
+        const saveWeeklyGoalBtn = document.getElementById('saveWeeklyGoalBtn');
+
+        if (weeklyGoalInput && saveWeeklyGoalBtn) {
+            weeklyGoalInput.value = ProgressManager.getWeeklyGoal();
+
+            saveWeeklyGoalBtn.addEventListener('click', () => {
+                const newGoal = parseInt(weeklyGoalInput.value) || 50;
+                ProgressManager.setWeeklyGoal(newGoal);
+                updateProgressDashboard();
+                HapticManager.trigger('success');
+            });
+        }
+
+        // Flashcards Button
+        const flashcardsBtn = document.getElementById('flashcardsBtn');
+        if (flashcardsBtn) {
+            flashcardsBtn.addEventListener('click', () => {
+                if (typeof FlashcardManager !== 'undefined') {
+                    FlashcardManager.startSession('favorites');
+                }
+            });
+        }
+
+        // Initialize Flashcard Manager
+        if (typeof FlashcardManager !== 'undefined') {
+            FlashcardManager.init();
+        }
     }
 
     // Progress Dashboard Update Function
@@ -404,6 +434,21 @@ async function init() {
                 statusEl.textContent = 'Fortsätt läsa! / استمر!';
             }
         }
+
+        // Update Weekly Progress
+        const weeklyProgress = ProgressManager.getWeeklyProgress();
+        const weeklyFill = document.getElementById('weeklyProgressFill');
+        const weeklyCurrent = document.getElementById('weeklyProgressCurrent');
+        const weeklyGoal = document.getElementById('weeklyProgressGoal');
+        const weeklyPercent = document.getElementById('weeklyProgressPercent');
+        const weeklyGoalInput = document.getElementById('weeklyGoalInput');
+
+        if (weeklyFill) weeklyFill.style.width = `${weeklyProgress.percentage}%`;
+        if (weeklyCurrent) weeklyCurrent.textContent = weeklyProgress.current;
+        if (weeklyGoal) weeklyGoal.textContent = weeklyProgress.goal;
+        if (weeklyPercent) weeklyPercent.textContent = `${weeklyProgress.percentage}%`;
+        if (weeklyGoalInput) weeklyGoalInput.value = weeklyProgress.goal;
+
 
         // Update Streaks
         const modalStreak = document.getElementById('modalStreak');

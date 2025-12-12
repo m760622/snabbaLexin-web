@@ -324,6 +324,29 @@ const ProgressManager = {
         return { current, goal, percentage };
     },
 
+    // Weekly Goal Management
+    WEEKLY_GOAL_KEY: 'weeklyGoal',
+
+    getWeeklyGoal() {
+        return parseInt(localStorage.getItem(this.WEEKLY_GOAL_KEY)) || 50;
+    },
+
+    setWeeklyGoal(goal) {
+        const validGoal = Math.max(10, Math.min(500, parseInt(goal) || 50));
+        localStorage.setItem(this.WEEKLY_GOAL_KEY, validGoal.toString());
+        showToast(`Veckomål: ${validGoal} ord / الهدف الأسبوعي: ${validGoal} كلمة 🎯`);
+        this.dispatchProgressEvent('weeklyGoalUpdated', { goal: validGoal });
+        return validGoal;
+    },
+
+    getWeeklyProgress() {
+        const data = this.getData();
+        const goal = this.getWeeklyGoal();
+        const current = data.weekly.wordsViewed || 0;
+        const percentage = Math.min(100, Math.round((current / goal) * 100));
+        return { current, goal, percentage };
+    },
+
     // Activity history for charts (last 7 days)
     ACTIVITY_HISTORY_KEY: 'activityHistory',
 
@@ -470,6 +493,310 @@ Lär dig svenska med SnabbaLexin! 🇸🇪🇸🇦`;
         localStorage.removeItem(this.STORAGE_KEY);
         localStorage.removeItem(this.ACTIVITY_HISTORY_KEY);
         showToast('Progress återställd / تم إعادة التعيين');
+    }
+};
+
+// ========================================
+// Spaced Repetition Manager (SM-2 Algorithm)
+// ========================================
+const SpacedRepetitionManager = {
+    STORAGE_KEY: 'spacedRepetitionData',
+
+    getData() {
+        try {
+            return JSON.parse(localStorage.getItem(this.STORAGE_KEY)) || {};
+        } catch (e) {
+            return {};
+        }
+    },
+
+    saveData(data) {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+    },
+
+    // Get word review data or create defaults
+    getWordData(wordId) {
+        const data = this.getData();
+        if (!data[wordId]) {
+            data[wordId] = {
+                interval: 1,          // Days until next review
+                easeFactor: 2.5,      // Ease factor (starts at 2.5)
+                nextReview: new Date().toISOString().split('T')[0], // Today
+                reviewCount: 0,
+                lastQuality: null
+            };
+            this.saveData(data);
+        }
+        return data[wordId];
+    },
+
+    // SM-2 Algorithm: Calculate next review date based on quality (0-5)
+    calculateNextReview(quality, wordId) {
+        const data = this.getData();
+        const wordData = data[wordId] || this.getWordData(wordId);
+
+        // SM-2 Algorithm
+        let newEF = wordData.easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
+        newEF = Math.max(1.3, newEF); // Minimum EF is 1.3
+
+        let newInterval;
+        if (quality < 3) {
+            // Incorrect response - reset interval
+            newInterval = 1;
+        } else {
+            if (wordData.reviewCount === 0) {
+                newInterval = 1;
+            } else if (wordData.reviewCount === 1) {
+                newInterval = 6;
+            } else {
+                newInterval = Math.round(wordData.interval * newEF);
+            }
+        }
+
+        // Calculate next review date
+        const nextDate = new Date();
+        nextDate.setDate(nextDate.getDate() + newInterval);
+
+        // Update word data
+        data[wordId] = {
+            interval: newInterval,
+            easeFactor: newEF,
+            nextReview: nextDate.toISOString().split('T')[0],
+            reviewCount: quality >= 3 ? wordData.reviewCount + 1 : 0,
+            lastQuality: quality
+        };
+        this.saveData(data);
+
+        return data[wordId];
+    },
+
+    // Get words due for review today (from favorites)
+    getDueWords() {
+        const today = new Date().toISOString().split('T')[0];
+        const data = this.getData();
+        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+        const dueWords = favorites.filter(wordId => {
+            const wordData = data[wordId];
+            if (!wordData) return true; // Never reviewed
+            return wordData.nextReview <= today;
+        });
+
+        return dueWords;
+    },
+
+    // Get count of due words
+    getDueCount() {
+        return this.getDueWords().length;
+    }
+};
+
+// ========================================
+// Flashcard Manager
+// ========================================
+const FlashcardManager = {
+    currentCards: [],
+    currentIndex: 0,
+    reviewedCount: 0,
+    correctCount: 0,
+    isFlipped: false,
+
+    init() {
+        const self = this; // Store reference for event listeners
+        const modal = document.getElementById('flashcardModal');
+        const closeBtn = document.getElementById('closeFlashcard');
+        const flashcard = document.getElementById('flashcard');
+        const controls = document.getElementById('flashcardControls');
+        const speakBtn = document.getElementById('flashcardSpeakBtn');
+
+        if (!modal) return;
+
+        // Close button
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Click outside to close
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Flip card on click
+        if (flashcard) {
+            flashcard.addEventListener('click', () => {
+                self.flipCard();
+            });
+        }
+
+        // Speak button
+        if (speakBtn) {
+            speakBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const currentWord = self.currentCards[self.currentIndex];
+                if (currentWord && typeof TTSManager !== 'undefined') {
+                    TTSManager.speak(currentWord[1], 'sv'); // COL_SWE = 1
+                }
+            });
+        }
+
+        // Rating buttons
+        if (controls) {
+            controls.querySelectorAll('.fc-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const quality = parseInt(e.currentTarget.dataset.quality);
+                    self.rateCard(quality);
+                });
+            });
+        }
+    },
+
+    startSession(source = 'favorites') {
+        const modal = document.getElementById('flashcardModal');
+        if (!modal) return;
+
+        // Get cards based on source
+        if (source === 'favorites') {
+            const favIds = JSON.parse(localStorage.getItem('favorites') || '[]');
+            if (favIds.length < 1) {
+                showToast('Lägg till favoriter först! / أضف مفضلات أولاً ⭐');
+                return;
+            }
+
+            // Get word data from dictionary
+            if (typeof dictionaryData !== 'undefined') {
+                this.currentCards = dictionaryData.filter(
+                    word => favIds.includes(String(word[0])) // COL_ID = 0
+                );
+            }
+        } else if (source === 'due') {
+            const dueIds = SpacedRepetitionManager.getDueWords();
+            if (dueIds.length < 1) {
+                showToast('Inga ord att granska! / لا توجد كلمات للمراجعة 🎉');
+                return;
+            }
+            if (typeof dictionaryData !== 'undefined') {
+                this.currentCards = dictionaryData.filter(
+                    word => dueIds.includes(String(word[0]))
+                );
+            }
+        }
+
+        // Shuffle cards
+        this.currentCards = this.currentCards.sort(() => Math.random() - 0.5).slice(0, 10);
+
+        // Reset state
+        this.currentIndex = 0;
+        this.reviewedCount = 0;
+        this.correctCount = 0;
+        this.isFlipped = false;
+
+        // Update UI
+        this.updateUI();
+        document.getElementById('flashcard')?.classList.remove('flipped');
+        document.getElementById('flashcardControls').style.display = 'none';
+
+        // Show modal
+        modal.style.display = 'flex';
+
+        // Close settings menu
+        const settingsMenu = document.getElementById('settingsMenu');
+        if (settingsMenu) settingsMenu.style.display = 'none';
+    },
+
+    flipCard() {
+        const flashcard = document.getElementById('flashcard');
+        const controls = document.getElementById('flashcardControls');
+
+        if (!this.isFlipped) {
+            flashcard?.classList.add('flipped');
+            controls.style.display = 'grid';
+            this.isFlipped = true;
+
+            // Haptic feedback
+            if (typeof HapticManager !== 'undefined') {
+                HapticManager.trigger('light');
+            }
+        }
+    },
+
+    rateCard(quality) {
+        const currentWord = this.currentCards[this.currentIndex];
+        if (!currentWord) return;
+
+        const wordId = String(currentWord[0]); // COL_ID = 0
+
+        // Record in spaced repetition
+        SpacedRepetitionManager.calculateNextReview(quality, wordId);
+
+        // Update stats
+        this.reviewedCount++;
+        if (quality >= 3) {
+            this.correctCount++;
+        }
+
+        // Update UI stats
+        document.getElementById('fcReviewedCount').textContent = this.reviewedCount;
+        document.getElementById('fcCorrectCount').textContent = this.correctCount;
+
+        // Move to next card or end session
+        this.currentIndex++;
+        if (this.currentIndex >= this.currentCards.length) {
+            this.endSession();
+        } else {
+            this.showNextCard();
+        }
+    },
+
+    showNextCard() {
+        const flashcard = document.getElementById('flashcard');
+        const controls = document.getElementById('flashcardControls');
+
+        // Reset flip
+        flashcard?.classList.remove('flipped');
+        controls.style.display = 'none';
+        this.isFlipped = false;
+
+        // Update UI
+        this.updateUI();
+    },
+
+    updateUI() {
+        const currentWord = this.currentCards[this.currentIndex];
+        if (!currentWord) return;
+
+        document.getElementById('flashcardFront').textContent = currentWord[1] || ''; // COL_SWE
+        document.getElementById('flashcardBack').textContent = currentWord[2] || ''; // COL_ARB
+        document.getElementById('flashcardCurrent').textContent = this.currentIndex + 1;
+        document.getElementById('flashcardTotal').textContent = this.currentCards.length;
+    },
+
+    endSession() {
+        const modal = document.getElementById('flashcardModal');
+        if (!modal) return;
+
+        // Show summary
+        const percentage = this.reviewedCount > 0 ?
+            Math.round((this.correctCount / this.reviewedCount) * 100) : 0;
+
+        let emoji = '🎉';
+        if (percentage < 50) emoji = '💪';
+        else if (percentage < 80) emoji = '👍';
+
+        showToast(`${emoji} ${this.correctCount}/${this.reviewedCount} rätt (${percentage}%)`);
+
+        // Close modal after delay
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 1500);
+
+        // Track in progress
+        if (typeof ProgressManager !== 'undefined') {
+            ProgressManager.trackGame('flashcards', this.correctCount);
+        }
     }
 };
 
@@ -777,6 +1104,49 @@ const ReminderManager = {
         } catch (e) {
             console.error('Error sending test notification:', e);
             showToast('Kunde inte skicka avisering / فشل إرسال الإشعار ❌');
+        }
+    },
+
+    // Send Word of the Day notification
+    async sendWODNotification() {
+        if (Notification.permission !== 'granted') {
+            const granted = await this.requestPermission();
+            if (!granted) return;
+        }
+
+        try {
+            // Get a random word from dictionary
+            if (typeof dictionaryData === 'undefined' || dictionaryData.length === 0) {
+                console.error('Dictionary data not available');
+                return;
+            }
+
+            const randomWord = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
+            const wordId = randomWord[0];  // COL_ID
+            const word = randomWord[1];     // COL_SWE
+            const translation = randomWord[2]; // COL_ARB
+
+            // Send via Service Worker
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'SHOW_WOD_NOTIFICATION',
+                    word: word,
+                    translation: translation,
+                    wordId: wordId
+                });
+                console.log('WOD notification sent:', word);
+            } else {
+                // Fallback
+                new Notification('📚 Dagens Ord / كلمة اليوم', {
+                    body: `${word}\n${translation}`,
+                    icon: './icon.png',
+                    tag: 'word-of-day'
+                });
+            }
+
+            showToast('📚 Dagens ord: ' + word);
+        } catch (e) {
+            console.error('Error sending WOD notification:', e);
         }
     },
 

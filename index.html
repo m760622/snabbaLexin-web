@@ -160,6 +160,16 @@
                         </svg></span>
                     <span>⭐ Quiz Favoriter / اختبار المفضلات</span>
                 </button>
+                <button id="flashcardsBtn" class="menu-item" aria-label="Flashcards / بطاقات">
+                    <span class="icon-box" style="color: #8B5CF6;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                            height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="M12 8v8"></path>
+                            <path d="M8 12h8"></path>
+                        </svg></span>
+                    <span>🃏 Flashcards / بطاقات</span>
+                </button>
                 <a href="games.html" id="gameBtn" class="menu-item" aria-label="Spel / ألعاب">
                     <span class="icon-box" style="color: #3B82F6;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -609,6 +619,25 @@
                     </div>
                 </div>
 
+                <!-- Weekly Progress Section -->
+                <div class="progress-section weekly-progress-section">
+                    <h4>🎯 Veckomål / هدف الأسبوع</h4>
+                    <div class="weekly-progress-bar">
+                        <div class="weekly-progress-fill" id="weeklyProgressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="weekly-progress-info">
+                        <span class="weekly-progress-text">
+                            <span id="weeklyProgressCurrent">0</span>/<span id="weeklyProgressGoal">50</span> ord
+                        </span>
+                        <span class="weekly-progress-percent" id="weeklyProgressPercent">0%</span>
+                    </div>
+                    <div class="goal-adjuster weekly-goal-adjuster">
+                        <label for="weeklyGoalInput">Veckomål:</label>
+                        <input type="number" id="weeklyGoalInput" min="10" max="500" value="50">
+                        <button id="saveWeeklyGoalBtn" class="mini-btn">💾</button>
+                    </div>
+                </div>
+
                 <!-- Streak Section -->
                 <div class="progress-section streak-section">
                     <div class="streak-card">
@@ -687,6 +716,58 @@
                         Dela min progress / شارك تقدمي
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flashcards Modal -->
+    <div id="flashcardModal" class="modal flashcard-modal" style="display: none;">
+        <div class="modal-content flashcard-modal-content">
+            <div class="flashcard-header">
+                <div class="flashcard-progress">
+                    <span id="flashcardCurrent">1</span>/<span id="flashcardTotal">10</span>
+                </div>
+                <h2>🃏 Flashcards</h2>
+                <button id="closeFlashcard" class="close-btn">&times;</button>
+            </div>
+
+            <div class="flashcard-body">
+                <div class="flashcard-container">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-face flashcard-front">
+                            <span class="flashcard-text" id="flashcardFront">Hej</span>
+                            <span class="flashcard-hint">Tryck för att vända / اضغط للقلب</span>
+                        </div>
+                        <div class="flashcard-face flashcard-back">
+                            <span class="flashcard-text" id="flashcardBack">مرحبا</span>
+                            <button class="flashcard-speak-btn" id="flashcardSpeakBtn">🔊</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-controls" id="flashcardControls" style="display: none;">
+                    <button class="fc-btn fc-again" data-quality="0">
+                        <span class="fc-emoji">😅</span>
+                        <span class="fc-label">Igen / مرة أخرى</span>
+                    </button>
+                    <button class="fc-btn fc-hard" data-quality="2">
+                        <span class="fc-emoji">🤔</span>
+                        <span class="fc-label">Svårt / صعب</span>
+                    </button>
+                    <button class="fc-btn fc-good" data-quality="4">
+                        <span class="fc-emoji">👍</span>
+                        <span class="fc-label">Bra / جيد</span>
+                    </button>
+                    <button class="fc-btn fc-easy" data-quality="5">
+                        <span class="fc-emoji">🌟</span>
+                        <span class="fc-label">Lätt / سهل</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flashcard-stats">
+                <span>📖 <span id="fcReviewedCount">0</span> granskade</span>
+                <span>✅ <span id="fcCorrectCount">0</span> rätt</span>
             </div>
         </div>
     </div>

@@ -187,3 +187,36 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('notificationclose', (event) => {
     console.log('[SW] Notification closed');
 });
+
+// Handle Word of the Day notification
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SHOW_WOD_NOTIFICATION') {
+        const { word, translation, wordId } = event.data;
+
+        self.registration.showNotification('📚 Dagens Ord / كلمة اليوم', {
+            body: `${word}\n${translation}`,
+            icon: './icon.png',
+            badge: './icon.png',
+            tag: 'word-of-day',
+            data: { url: `./details.html?id=${wordId}` },
+            vibrate: [100, 50, 100],
+            requireInteraction: false,
+            actions: [
+                { action: 'view', title: 'Visa / عرض' },
+                { action: 'dismiss', title: 'Stäng / إغلاق' }
+            ]
+        }).then(() => {
+            console.log('[SW] WOD Notification shown:', word);
+        }).catch(err => {
+            console.error('[SW] Error showing WOD notification:', err);
+        });
+    }
+});
+
+// Handle periodic background sync (if supported by browser)
+self.addEventListener('periodicsync', (event) => {
+    if (event.tag === 'word-of-day-sync') {
+        console.log('[SW] Periodic sync triggered for Word of Day');
+        // This will be handled by the main page ReminderManager
+    }
+});

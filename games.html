@@ -591,6 +591,11 @@
             </button>
             <h3>Svenska Wordle / ووردل</h3>
             <div class="game-controls-header">
+                <select id="wordleDifficulty" class="game-filter-select" onchange="startWordleGame()">
+                    <option value="easy">🟢 Lätt / سهل</option>
+                    <option value="medium" selected>🟡 Medel / متوسط</option>
+                    <option value="hard">🔴 Svår / صعب</option>
+                </select>
                 <select id="wordleTypeFilter" class="game-filter-select" onchange="startWordleGame()">
                     <option value="all">Alla typer / الكل</option>
                     <option value="substantiv">Substantiv / اسم</option>

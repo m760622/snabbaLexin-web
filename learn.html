@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lär dig Svenska - تعلم السويدية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        /* Mobile View Mode */
+        html.iphone-mode {
+            background: var(--bg-color);
+        }
+
+        body.iphone-view {
+            max-width: 430px;
+            margin: 0 auto;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-toggle-btn {
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid #6366f1;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 1px;
+        }
+
+        .mobile-toggle-btn:hover {
+            background: rgba(99, 102, 241, 0.4);
+        }
+
+        .mobile-toggle-btn.active {
+            background: #6366f1;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        header h1 {
+            flex: 1;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        main {
+            padding: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Lesson Cards */
+        .lessons-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .lesson-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.3);
+        }
+
+        .lesson-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .lesson-icon {
+            font-size: 2.5rem;
+        }
+
+        .lesson-title {
+            flex: 1;
+        }
+
+        .lesson-title h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .lesson-title h4 {
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        .lesson-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .lesson-badge {
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Lesson Content Modal */
+        .lesson-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-color);
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .lesson-modal.active {
+            display: block;
+        }
+
+        .lesson-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .lesson-content h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .lesson-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .lesson-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lesson-section p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .example-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 3px solid var(--primary);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 0.75rem 0;
+        }
+
+        .example-box .swe {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .example-box .arb {
+            color: var(--text-muted);
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            direction: rtl;
+        }
+
+        .rule-highlight {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--success);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.75rem 0;
+        }
+
+        .rule-highlight strong {
+            color: var(--success);
+        }
+
+        .close-lesson {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 300;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+            title="وضع الموبايل">📱</button>
+        <h1>Lär dig Svenska / تعلم السويدية</h1>
+    </header>
+
+    <main>
+        <div class="lessons-grid">
+            <!-- Lesson 1: Word Order -->
+            <div class="lesson-card" onclick="openLesson('wordOrder')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">📝</span>
+                    <div class="lesson-title">
+                        <h3>Ordföljd (V2-regeln)</h3>
+                        <h4>ترتيب الكلمات</h4>
+                    </div>
+                    <span class="lesson-badge">Viktig</span>
+                </div>
+                <p class="lesson-desc">Lär dig hur svenska meningar är uppbyggda och den viktiga V2-regeln.</p>
+            </div>
+
+            <!-- Lesson 2: Pronouns -->
+            <div class="lesson-card" onclick="openLesson('pronouns')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">👤</span>
+                    <div class="lesson-title">
+                        <h3>Pronomen</h3>
+                        <h4>الضمائر</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">Personliga pronomen: jag, du, han, hon, vi, ni, de</p>
+            </div>
+
+            <!-- Lesson 3: Verbs -->
+            <div class="lesson-card" onclick="openLesson('verbs')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">🏃</span>
+                    <div class="lesson-title">
+                        <h3>Verb och tempus</h3>
+                        <h4>الأفعال والأزمنة</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">Presens, preteritum, perfekt och futurum</p>
+            </div>
+
+            <!-- Lesson 4: Adjectives -->
+            <div class="lesson-card" onclick="openLesson('adjectives')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">🎨</span>
+                    <div class="lesson-title">
+                        <h3>Adjektiv</h3>
+                        <h4>الصفات</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">Hur adjektiv böjs: en stor bil, ett stort hus, stora bilar</p>
+            </div>
+
+            <!-- Lesson 5: Prepositions -->
+            <div class="lesson-card" onclick="openLesson('prepositions')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">📍</span>
+                    <div class="lesson-title">
+                        <h3>Prepositioner</h3>
+                        <h4>حروف الجر</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">i, på, till, från, med, utan, för, av...</p>
+            </div>
+
+            <!-- Lesson 6: En/Ett -->
+            <div class="lesson-card" onclick="openLesson('gender')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">⚖️</span>
+                    <div class="lesson-title">
+                        <h3>En-ord och Ett-ord</h3>
+                        <h4>المذكر والمؤنث</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">Genus i svenska: en bok, ett bord</p>
+            </div>
+
+            <!-- Lesson 7: Questions & Negation -->
+            <div class="lesson-card" onclick="openLesson('questions')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">❓</span>
+                    <div class="lesson-title">
+                        <h3>Frågor och Nekande</h3>
+                        <h4>الأسئلة والنفي</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">Hur man ställer frågor och säger nej på svenska</p>
+            </div>
+
+            <!-- Lesson 8: Numbers & Time -->
+            <div class="lesson-card" onclick="openLesson('numbers')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">🔢</span>
+                    <div class="lesson-title">
+                        <h3>Tal och Tid</h3>
+                        <h4>الأرقام والوقت</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">1-100, klockan, dagar och månader</p>
+            </div>
+
+            <!-- Lesson 9: Common Phrases -->
+            <div class="lesson-card" onclick="openLesson('phrases')">
+                <div class="lesson-header">
+                    <span class="lesson-icon">💬</span>
+                    <div class="lesson-title">
+                        <h3>Vanliga Fraser</h3>
+                        <h4>عبارات شائعة</h4>
+                    </div>
+                    <span class="lesson-badge">Nyttig</span>
+                </div>
+                <p class="lesson-desc">Hälsningar, artighetsfraser och vardagsuttryck</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Lesson Modals -->
+    <div id="wordOrderModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('wordOrder')">×</button>
+        <div class="lesson-content">
+            <h2>📝 Ordföljd - V2-regeln / ترتيب الكلمات</h2>
+
+            <div class="lesson-section">
+                <h3>🎯 Vad är V2-regeln?</h3>
+                <p>I svenska huvudsatser står verbet ALLTID på plats 2. Det spelar ingen roll vad som kommer först!</p>
+                <p dir="rtl">في الجمل السويدية الرئيسية، يأتي الفعل دائماً في الموضع الثاني!</p>
+            </div>
+
+            <div class="lesson-section">
+                <h3>📚 Struktur</h3>
+                <div class="rule-highlight">
+                    <strong>Plats 1</strong> + <strong>VERB</strong> + Subjekt + Resten
+                </div>
+
+                <div class="example-box">
+                    <div class="swe">Jag äter frukost.</div>
+                    <div class="arb">أنا آكل الفطور.</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="swe">Idag äter jag frukost.</div>
+                    <div class="arb">اليوم آكل الفطور. (الفعل يبقى في الموضع الثاني)</div>
+                </div>
+
+                <div class="example-box">
+                    <div class="swe">På morgonen dricker vi kaffe.</div>
+                    <div class="arb">في الصباح نشرب القهوة.</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>⚠️ Vanliga misstag</h3>
+                <div class="example-box" style="border-color: #ef4444;">
+                    <div class="swe">❌ Idag jag äter frukost.</div>
+                    <div class="swe">✅ Idag äter jag frukost.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pronounsModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('pronouns')">×</button>
+        <div class="lesson-content">
+            <h2>👤 Pronomen / الضمائر</h2>
+
+            <div class="lesson-section">
+                <h3>📋 Personliga pronomen - Subjekt</h3>
+                <div class="example-box">
+                    <div class="swe">jag = أنا | du = أنت | han = هو | hon = هي</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">vi = نحن | ni = أنتم | de = هم</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>📋 Personliga pronomen - Objekt</h3>
+                <div class="example-box">
+                    <div class="swe">mig = لي | dig = لك | honom = له | henne = لها</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">oss = لنا | er = لكم | dem = لهم</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>💡 Exempel</h3>
+                <div class="example-box">
+                    <div class="swe">Han ser mig. = هو يراني</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Jag hjälper henne. = أنا أساعدها</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="verbsModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('verbs')">×</button>
+        <div class="lesson-content">
+            <h2>🏃 Verb och tempus / الأفعال والأزمنة</h2>
+
+            <div class="lesson-section">
+                <h3>⏰ Tempus (الأزمنة)</h3>
+                <div class="example-box">
+                    <div class="swe"><strong>Infinitiv:</strong> att tala (أن يتكلم)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>Presens:</strong> talar (يتكلم - الآن)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>Preteritum:</strong> talade (تكلم - في الماضي)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>Perfekt:</strong> har talat (قد تكلم)</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>📊 Verbgrupper</h3>
+                <div class="rule-highlight">
+                    <strong>Grupp 1:</strong> tala → talar → talade → har talat (-ar)<br>
+                    <strong>Grupp 2:</strong> läsa → läser → läste → har läst (-er)<br>
+                    <strong>Grupp 3:</strong> bo → bor → bodde → har bott (-r)<br>
+                    <strong>Grupp 4:</strong> skriva → skriver → skrev → har skrivit (oregelbundna)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adjectivesModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('adjectives')">×</button>
+        <div class="lesson-content">
+            <h2>🎨 Adjektiv / الصفات</h2>
+
+            <div class="lesson-section">
+                <h3>📋 Böjning efter genus</h3>
+                <div class="rule-highlight">
+                    <strong>En-ord:</strong> en stor bil (سيارة كبيرة)<br>
+                    <strong>Ett-ord:</strong> ett stort hus (بيت كبير)<br>
+                    <strong>Plural:</strong> stora bilar / stora hus (كبار)
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>💡 Exempel</h3>
+                <div class="example-box">
+                    <div class="swe">en röd blomma → ett rött äpple → röda blommor</div>
+                    <div class="arb">زهرة حمراء → تفاحة حمراء → زهور حمراء</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="prepositionsModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('prepositions')">×</button>
+        <div class="lesson-content">
+            <h2>📍 Prepositioner / حروف الجر</h2>
+
+            <div class="lesson-section">
+                <h3>📋 Vanliga prepositioner</h3>
+                <div class="example-box">
+                    <div class="swe"><strong>i</strong> = في (i huset = في البيت)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>på</strong> = على (på bordet = على الطاولة)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>till</strong> = إلى (till skolan = إلى المدرسة)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>från</strong> = من (från Sverige = من السويد)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>med</strong> = مع (med mig = معي)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="genderModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('gender')">×</button>
+        <div class="lesson-content">
+            <h2>⚖️ En-ord och Ett-ord / المذكر والمؤنث</h2>
+
+            <div class="lesson-section">
+                <h3>📋 Regler</h3>
+                <p>Svenska har två genus: <strong>utrum (en)</strong> och <strong>neutrum (ett)</strong></p>
+                <p dir="rtl">السويدية لها نوعان: (en) و (ett)</p>
+
+                <div class="rule-highlight">
+                    <strong>En-ord (≈75%):</strong> en bok, en stol, en bil<br>
+                    <strong>Ett-ord (≈25%):</strong> ett bord, ett hus, ett äpple
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>💡 Tips</h3>
+                <div class="example-box">
+                    <div class="swe">Levande varelser är oftast EN-ord</div>
+                    <div class="arb">الكائنات الحية غالباً (en)</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Ord som slutar på -tion, -ing är EN-ord</div>
+                    <div class="arb">الكلمات التي تنتهي بـ -tion, -ing هي (en)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Questions & Negation Modal -->
+    <div id="questionsModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('questions')">×</button>
+        <div class="lesson-content">
+            <h2>❓ Frågor och Nekande / الأسئلة والنفي</h2>
+
+            <div class="lesson-section">
+                <h3>🔄 Frågeord (كلمات الاستفهام)</h3>
+                <div class="example-box">
+                    <div class="swe"><strong>Vad</strong> = ماذا | <strong>Vem</strong> = من | <strong>Var</strong> =
+                        أين</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe"><strong>När</strong> = متى | <strong>Hur</strong> = كيف | <strong>Varför</strong> =
+                        لماذا</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>📝 Frågesatser (صياغة الأسئلة)</h3>
+                <div class="rule-highlight">
+                    <strong>Verb + Subjekt + Resten?</strong><br>
+                    الفعل يأتي في البداية للأسئلة بنعم/لا
+                </div>
+                <div class="example-box">
+                    <div class="swe">Talar du svenska? = هل تتحدث السويدية؟</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Var bor du? = أين تسكن؟</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>🚫 Nekande (النفي)</h3>
+                <div class="rule-highlight">
+                    <strong>INTE</strong> = ليس / لا<br>
+                    يوضع بعد الفعل مباشرة
+                </div>
+                <div class="example-box">
+                    <div class="swe">Jag talar <strong>inte</strong> svenska. = لا أتحدث السويدية</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Han kommer <strong>inte</strong> idag. = لن يأتي اليوم</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Numbers & Time Modal -->
+    <div id="numbersModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('numbers')">×</button>
+        <div class="lesson-content">
+            <h2>🔢 Tal och Tid / الأرقام والوقت</h2>
+
+            <div class="lesson-section">
+                <h3>🔢 Grundtal 1-20</h3>
+                <div class="example-box">
+                    <div class="swe">1 = ett | 2 = två | 3 = tre | 4 = fyra | 5 = fem</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">6 = sex | 7 = sju | 8 = åtta | 9 = nio | 10 = tio</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">11 = elva | 12 = tolv | 13 = tretton | 20 = tjugo</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>⏰ Klockan (الساعة)</h3>
+                <div class="example-box">
+                    <div class="swe">Vad är klockan? = كم الساعة؟</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Klockan är tre. = الساعة الثالثة</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Halv fyra = الثالثة والنصف (نصف الرابعة)</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>📅 Dagar (الأيام)</h3>
+                <div class="example-box">
+                    <div class="swe">måndag الاثنين | tisdag الثلاثاء | onsdag الأربعاء</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">torsdag الخميس | fredag الجمعة | lördag السبت | söndag الأحد</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Phrases Modal -->
+    <div id="phrasesModal" class="lesson-modal">
+        <button class="close-lesson" onclick="closeLesson('phrases')">×</button>
+        <div class="lesson-content">
+            <h2>💬 Vanliga Fraser / عبارات شائعة</h2>
+
+            <div class="lesson-section">
+                <h3>👋 Hälsningar (التحيات)</h3>
+                <div class="example-box">
+                    <div class="swe">Hej! = مرحبا! | God morgon! = صباح الخير!</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Hej då! = مع السلامة! | Vi ses! = نراك لاحقاً!</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>🙏 Artighetsfraser (عبارات المجاملة)</h3>
+                <div class="example-box">
+                    <div class="swe">Tack! = شكراً! | Tack så mycket! = شكراً جزيلاً!</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Varsågod! = عفواً! | Ursäkta! = عذراً! / المعذرة!</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Förlåt! = آسف! | Det gör inget. = لا بأس.</div>
+                </div>
+            </div>
+
+            <div class="lesson-section">
+                <h3>💡 Vardagsuttryck (تعابير يومية)</h3>
+                <div class="example-box">
+                    <div class="swe">Hur mår du? = كيف حالك؟</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Jag mår bra, tack! = أنا بخير، شكراً!</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Vad heter du? = ما اسمك؟</div>
+                </div>
+                <div class="example-box">
+                    <div class="swe">Jag heter... = اسمي...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Mobile View
+        function toggleMobileView() {
+            document.documentElement.classList.toggle('iphone-mode');
+            document.body.classList.toggle('iphone-view');
+            const isActive = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+            const btn = document.getElementById('mobileToggle');
+            if (btn) btn.classList.toggle('active', isActive);
+        }
+
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.documentElement.classList.add('iphone-mode');
+            document.body.classList.add('iphone-view');
+            document.getElementById('mobileToggle')?.classList.add('active');
+        }
+
+        // Lesson modals
+        function openLesson(lessonId) {
+            document.getElementById(lessonId + 'Modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLesson(lessonId) {
+            document.getElementById(lessonId + 'Modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.lesson-modal.active').forEach(m => {
+                    m.classList.remove('active');
+                });
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

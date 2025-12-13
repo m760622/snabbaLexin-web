@@ -462,6 +462,18 @@ function startWordleGame() {
     const messageEl = document.getElementById('wordleMessage');
     const nextBtn = document.getElementById('nextWordleBtn');
     const typeFilter = document.getElementById('wordleTypeFilter').value;
+    const difficultyEl = document.getElementById('wordleDifficulty');
+    const difficulty = difficultyEl ? difficultyEl.value : 'medium';
+
+    // Difficulty settings: word length range
+    let minLen = 5, maxLen = 5;
+    if (difficulty === 'easy') {
+        minLen = 4; maxLen = 4; // Short 4-letter words
+    } else if (difficulty === 'medium') {
+        minLen = 5; maxLen = 5; // Standard 5-letter words
+    } else if (difficulty === 'hard') {
+        minLen = 6; maxLen = 6; // Longer 6-letter words
+    }
 
     // Reset State
     wordleGuesses = [];
@@ -472,12 +484,13 @@ function startWordleGame() {
     grid.innerHTML = '';
     keyboard.innerHTML = '';
 
-    // Select Target Word (5 letters)
+    // Select Target Word based on difficulty
     let candidate = null;
     let attempts = 0;
     while (!candidate && attempts < 500) {
         const item = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
-        if (item && item[COL_SWE] && item[COL_SWE].length === 5 && !item[COL_SWE].includes(' ') && !item[COL_SWE].includes('-')) {
+        if (item && item[COL_SWE] && item[COL_SWE].length >= minLen && item[COL_SWE].length <= maxLen &&
+            !item[COL_SWE].includes(' ') && !item[COL_SWE].includes('-') && /^[a-zA-ZåäöÅÄÖ]+$/.test(item[COL_SWE])) {
             // Filter by type if selected
             if (typeFilter !== 'all') {
                 if (item[COL_TYPE] && item[COL_TYPE].toLowerCase().includes(typeFilter)) {
@@ -496,7 +509,8 @@ function startWordleGame() {
     }
 
     wordleTarget = candidate[COL_SWE].toUpperCase();
-    console.log("Wordle Target:", wordleTarget); // Debug
+    const wordLength = wordleTarget.length;
+    console.log("Wordle Target:", wordleTarget, "Difficulty:", difficulty);
 
     // Create Grid (6 rows, 5 cols) - FIXED: use wordle-tile not wordle-cell
     for (let i = 0; i < 30; i++) {

@@ -1160,6 +1160,26 @@ if (filterModeSelect) {
     });
 }
 
+// Category Keywords for filtering
+const CATEGORY_KEYWORDS = {
+    food: ['mat', 'äta', 'dricka', 'kök', 'maträtt', 'frukt', 'grönsak', 'kött', 'fisk', 'bröd', 'ost', 'mjölk', 'kaffe', 'te', 'vatten', 'vin', 'öl', 'lunch', 'middag', 'frukost', 'måltid', 'restaurang', 'recept', 'طعام', 'أكل', 'شرب'],
+    work: ['arbete', 'jobb', 'kontor', 'chef', 'kollega', 'möte', 'lön', 'företag', 'affär', 'ekonomi', 'عمل', 'وظيفة', 'مكتب'],
+    health: ['hälsa', 'sjuk', 'läkare', 'sjukhus', 'medicin', 'kropp', 'smärta', 'ont', 'feber', 'صحة', 'مريض', 'طبيب', 'مستشفى'],
+    family: ['familj', 'mamma', 'pappa', 'barn', 'bror', 'syster', 'förälder', 'عائلة', 'أم', 'أب', 'أخ', 'أخت'],
+    travel: ['resa', 'flyg', 'tåg', 'buss', 'bil', 'flygplats', 'station', 'biljett', 'hotell', 'سفر', 'طائرة', 'قطار'],
+    school: ['skola', 'lärare', 'elev', 'student', 'lektion', 'läxa', 'prov', 'betyg', 'مدرسة', 'معلم', 'طالب'],
+    home: ['hem', 'hus', 'lägenhet', 'rum', 'kök', 'sovrum', 'badrum', 'möbel', 'منزل', 'بيت', 'غرفة'],
+    nature: ['natur', 'skog', 'träd', 'blomma', 'djur', 'fågel', 'sol', 'regn', 'snö', 'طبيعة', 'شجرة', 'حيوان']
+};
+
+// Handle Category Selection
+const categorySelect = document.getElementById('categorySelect');
+if (categorySelect) {
+    categorySelect.addEventListener('change', () => {
+        handleSearch({ target: searchInput });
+    });
+}
+
 function updateSearchPlaceholder(mode) {
     const placeholders = {
         'start': 'Sök ord (börjar med...) / ابحث (يبدأ بـ...)',

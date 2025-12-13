@@ -1814,14 +1814,11 @@ const TTSManager = {
         // Stop current
         this.stop();
 
-        // On iOS, try local TTS first (more reliable), fallback to Google
-        if (this.isIOS) {
-            this.playLocalTTS(cleanText, lang === 'sv' ? 'sv-SE' : lang);
-        } else {
-            // On desktop/Android, try Google TTS first (better quality)
-            this.playGoogleTTS(cleanText, lang);
-        }
+        // Always try Google TTS first (better quality for Swedish)
+        // Falls back to local TTS if Google fails
+        this.playGoogleTTS(cleanText, lang);
     },
+
 
     stop() {
         if (this.audio) {

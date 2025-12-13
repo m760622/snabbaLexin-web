@@ -2500,7 +2500,35 @@ document.addEventListener('DOMContentLoaded', () => {
         emptyState.style.display = 'block';
         if (document.getElementById('searchResults')) document.getElementById('searchResults').style.display = 'none';
     }
+
+    // Initialize Voice Search
+    const voiceSearchBtn = document.getElementById('voiceSearchBtn');
+    if (voiceSearchBtn && typeof VoiceSearchManager !== 'undefined') {
+        if (VoiceSearchManager.isSupported()) {
+            // Initialize with result callback
+            VoiceSearchManager.init((transcript, isFinal) => {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.value = transcript;
+                    searchInput.dispatchEvent(new Event('input'));
+
+                    if (isFinal) {
+                        showToast('🎤 ' + transcript);
+                    }
+                }
+            });
+
+            // Add click handler
+            voiceSearchBtn.addEventListener('click', () => {
+                VoiceSearchManager.toggle('sv-SE');
+            });
+        } else {
+            // Hide button if not supported
+            voiceSearchBtn.style.display = 'none';
+        }
+    }
 });
+
 
 // Handle PWA shortcut navigation via URL hash/params
 function handleShortcutNavigation() {

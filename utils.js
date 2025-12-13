@@ -4,6 +4,120 @@
  */
 
 // ========================================
+// Voice Search Manager - Web Speech API
+// ========================================
+const VoiceSearchManager = {
+    recognition: null,
+    isListening: false,
+    onResult: null,
+
+    // Check if voice search is supported
+    isSupported() {
+        return 'webkitSpeechRecognition' in window || 'SpeechRecognition' in window;
+    },
+
+    // Initialize speech recognition
+    init(onResultCallback) {
+        if (!this.isSupported()) {
+            console.warn('Voice search not supported in this browser');
+            return false;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        this.recognition = new SpeechRecognition();
+        this.recognition.continuous = false;
+        this.recognition.interimResults = true;
+        this.recognition.maxAlternatives = 1;
+
+        // Default to Swedish
+        this.recognition.lang = 'sv-SE';
+
+        this.onResult = onResultCallback;
+
+        // Handle results
+        this.recognition.onresult = (event) => {
+            const last = event.results.length - 1;
+            const transcript = event.results[last][0].transcript;
+            const isFinal = event.results[last].isFinal;
+
+            if (this.onResult) {
+                this.onResult(transcript, isFinal);
+            }
+        };
+
+        // Handle end of speech
+        this.recognition.onend = () => {
+            this.isListening = false;
+            this.updateUI(false);
+        };
+
+        // Handle errors
+        this.recognition.onerror = (event) => {
+            console.error('Voice search error:', event.error);
+            this.isListening = false;
+            this.updateUI(false);
+
+            if (event.error === 'not-allowed') {
+                showToast('Mikrofon nekad / الميكروفون مرفوض 🎤❌');
+            } else if (event.error === 'no-speech') {
+                showToast('Inget tal detekterat / لم يتم اكتشاف صوت 🔇');
+            }
+        };
+
+        return true;
+    },
+
+    // Start listening
+    start(lang = 'sv-SE') {
+        if (!this.recognition) {
+            if (!this.init(this.onResult)) return;
+        }
+
+        this.recognition.lang = lang;
+
+        try {
+            this.recognition.start();
+            this.isListening = true;
+            this.updateUI(true);
+
+            // Haptic feedback
+            if (typeof HapticManager !== 'undefined') {
+                HapticManager.light();
+            }
+        } catch (e) {
+            console.error('Voice start error:', e);
+        }
+    },
+
+    // Stop listening
+    stop() {
+        if (this.recognition && this.isListening) {
+            this.recognition.stop();
+            this.isListening = false;
+            this.updateUI(false);
+        }
+    },
+
+    // Toggle listening
+    toggle(lang = 'sv-SE') {
+        if (this.isListening) {
+            this.stop();
+        } else {
+            this.start(lang);
+        }
+    },
+
+    // Update microphone button UI
+    updateUI(isActive) {
+        const micBtn = document.getElementById('voiceSearchBtn');
+        if (micBtn) {
+            micBtn.classList.toggle('listening', isActive);
+            micBtn.setAttribute('aria-pressed', isActive);
+        }
+    }
+};
+
+// ========================================
 // Toast Notification System
 // ========================================
 function showToast(message, duration = 3000) {
@@ -120,6 +234,19 @@ const ThemeManager = {
         } else {
             document.body.classList.remove('dark-mode');
         }
+
+        // Load color theme
+        const colorTheme = localStorage.getItem('colorTheme') || 'default';
+        this.setColorTheme(colorTheme, false);
+
+        // Initialize color theme selector if exists
+        const colorSelect = document.getElementById('colorThemeSelect');
+        if (colorSelect) {
+            colorSelect.value = colorTheme;
+            colorSelect.addEventListener('change', (e) => {
+                this.setColorTheme(e.target.value, true);
+            });
+        }
     },
 
     toggle() {
@@ -138,6 +265,150 @@ const ThemeManager = {
         }
 
         return newTheme;
+    },
+
+    // Color Theme Management
+    setColorTheme(theme, showMessage = true) {
+        if (theme === 'default') {
+            document.documentElement.removeAttribute('data-color-theme');
+        } else {
+            document.documentElement.setAttribute('data-color-theme', theme);
+        }
+        localStorage.setItem('colorTheme', theme);
+
+        if (showMessage) {
+            const themeNames = {
+                'default': 'Standard / افتراضي 🎨',
+                'ocean': 'Ocean Blue / أزرق محيطي 🌊',
+                'sunset': 'Sunset Orange / برتقالي غروب 🌅',
+                'forest': 'Forest Green / أخضر غابي 🌲',
+                'purple': 'Purple Haze / بنفسجي ضبابي 💜'
+            };
+            showToast(themeNames[theme] || theme);
+        }
+    },
+
+    getColorTheme() {
+        return localStorage.getItem('colorTheme') || 'default';
+    }
+};
+
+// ========================================
+// Export/Import Manager
+// ========================================
+const ExportManager = {
+    // Collect all user data for export
+    collectData() {
+        return {
+            exportDate: new Date().toISOString(),
+            version: '1.0',
+            data: {
+                // Favorites
+                favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
+
+                // Custom words
+                customWords: JSON.parse(localStorage.getItem('customWords') || '[]'),
+
+                // Learning progress
+                learningProgress: JSON.parse(localStorage.getItem('learningProgress') || '{}'),
+
+                // Spaced repetition data
+                spacedRepetition: JSON.parse(localStorage.getItem('spacedRepetition') || '{}'),
+
+                // Achievements
+                achievements: JSON.parse(localStorage.getItem('achievements') || '{}'),
+
+                // Settings
+                settings: {
+                    theme: localStorage.getItem('theme') || 'dark',
+                    colorTheme: localStorage.getItem('colorTheme') || 'default',
+                    ttsSpeed: localStorage.getItem('ttsSpeed') || '0.85',
+                    mobileView: localStorage.getItem('mobileView') || 'false',
+                    reminderEnabled: localStorage.getItem('reminderEnabled') || 'false',
+                    reminderTime: localStorage.getItem('reminderTime') || '09:00'
+                }
+            }
+        };
+    },
+
+    // Export to JSON file
+    exportToJSON() {
+        const data = this.collectData();
+        const jsonString = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        // Create download link
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `snabba-lexin-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showToast('Data exporterad! / تم تصدير البيانات! 📥');
+
+        if (typeof HapticManager !== 'undefined') {
+            HapticManager.success();
+        }
+    },
+
+    // Import from JSON file
+    importFromJSON(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+
+                if (!data.version || !data.data) {
+                    throw new Error('Invalid backup format');
+                }
+
+                // Import data
+                if (data.data.favorites) {
+                    localStorage.setItem('favorites', JSON.stringify(data.data.favorites));
+                }
+                if (data.data.customWords) {
+                    localStorage.setItem('customWords', JSON.stringify(data.data.customWords));
+                }
+                if (data.data.learningProgress) {
+                    localStorage.setItem('learningProgress', JSON.stringify(data.data.learningProgress));
+                }
+                if (data.data.spacedRepetition) {
+                    localStorage.setItem('spacedRepetition', JSON.stringify(data.data.spacedRepetition));
+                }
+                if (data.data.achievements) {
+                    localStorage.setItem('achievements', JSON.stringify(data.data.achievements));
+                }
+                if (data.data.settings) {
+                    Object.entries(data.data.settings).forEach(([key, value]) => {
+                        localStorage.setItem(key, value);
+                    });
+                }
+
+                showToast('Data importerad! Laddar om... / تم استيراد البيانات! ⬇️');
+
+                // Reload page to apply changes
+                setTimeout(() => window.location.reload(), 1500);
+
+            } catch (err) {
+                console.error('Import error:', err);
+                showToast('Import misslyckades / فشل الاستيراد ❌');
+            }
+        };
+        reader.readAsText(file);
+    },
+
+    // Get summary of current data for display
+    getSummary() {
+        const data = this.collectData().data;
+        return {
+            favoritesCount: data.favorites.length,
+            customWordsCount: data.customWords.length,
+            hasProgress: Object.keys(data.learningProgress).length > 0,
+            hasAchievements: Object.keys(data.achievements).length > 0
+        };
     }
 };
 

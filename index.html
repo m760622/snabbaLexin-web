@@ -78,6 +78,17 @@
                     </span>
                     <span>Tema / المظهر</span>
                 </button>
+                <div class="menu-item color-theme-selector">
+                    <span class="icon-box">🎨</span>
+                    <select id="colorThemeSelect" aria-label="Färgtema / لون الثيم">
+                        <option value="default">Standard / افتراضي</option>
+                        <option value="ocean">🌊 Ocean Blue</option>
+                        <option value="sunset">🌅 Sunset Orange</option>
+                        <option value="forest">🌲 Forest Green</option>
+                        <option value="purple">💜 Purple Haze</option>
+                    </select>
+                </div>
+
                 <button id="mobileViewToggle" class="menu-item" aria-label="Mobilvy / عرض الجوال">
                     <span class="icon-box"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -389,13 +400,7 @@
         <div class="search-container">
             <div class="search-row">
                 <div class="search-wrapper">
-                    <span class="search-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </span>
+
                     <input type="text" id="searchInput" placeholder="Sök ord / ابحث عن كلمة..." autocomplete="off"
                         autocorrect="off" spellcheck="false">
                     <button id="clearSearch" class="clear-btn" aria-label="Rensa / مسح" style="display: none;">
@@ -405,7 +410,18 @@
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
                     </button>
+                    <button id="voiceSearchBtn" class="voice-search-btn" aria-label="Röstinmatning / البحث الصوتي"
+                        aria-pressed="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </button>
                 </div>
+
                 <button id="filterToggleBtn" class="filter-toggle-btn" aria-label="Filter">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -803,6 +819,23 @@
                         Dela min progress / شارك تقدمي
                     </button>
                 </div>
+
+                <!-- Export/Import Section -->
+                <div class="progress-section export-section">
+                    <h4>📁 Säkerhetskopia / نسخة احتياطية</h4>
+                    <div class="export-buttons">
+                        <button id="exportDataBtn" class="export-btn"
+                            onclick="if(typeof ExportManager !== 'undefined') ExportManager.exportToJSON();">
+                            📥 Exportera data
+                        </button>
+                        <label class="import-btn">
+                            📤 Importera data
+                            <input type="file" id="importDataFile" accept=".json" style="display: none;"
+                                onchange="if(typeof ExportManager !== 'undefined' && this.files[0]) ExportManager.importFromJSON(this.files[0]);">
+                        </label>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

@@ -1000,6 +1000,20 @@ body::after {
 /* ========================================
    FLASHCARD MODAL
    ======================================== */
+.flashcard-modal {
+    z-index: 9999 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
 .flashcard-modal-content {
     max-width: 420px;
     width: 95%;
@@ -1008,6 +1022,27 @@ body::after {
     background: var(--surface);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     overflow: hidden;
+    position: relative;
+}
+
+.flashcard-modal .close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(128, 128, 128, 0.2);
+    color: var(--text-main);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.flashcard-modal .close-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #EF4444;
 }
 
 .flashcard-header {

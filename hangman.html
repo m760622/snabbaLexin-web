@@ -362,13 +362,11 @@
 
         /* Score */
         .score-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-weight: 700;
+            margin-left: 0.5rem;
         }
     </style>
 </head>
@@ -389,6 +387,7 @@
         </button>
         <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
             title="وضع الموبايل">📱</button>
+        <div class="score-badge" id="scoreBadge">0</div>
         <div class="lives" id="lives">
             <span class="heart">❤️</span>
             <span class="heart">❤️</span>
@@ -397,7 +396,6 @@
             <span class="heart">❤️</span>
             <span class="heart">❤️</span>
         </div>
-        <div class="score-badge" id="scoreBadge">0</div>
     </header>
 
     <div class="title-bar">

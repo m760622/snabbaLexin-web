@@ -762,7 +762,60 @@ const FlashcardManager = {
                 }
             });
         }
+
+        // Attach front speak button
+        const speakFrontBtn = document.getElementById('flashcardSpeakFrontInline');
+        if (speakFrontBtn && !speakFrontBtn.hasAttribute('data-speak-attached')) {
+            speakFrontBtn.setAttribute('data-speak-attached', 'true');
+            speakFrontBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const currentWord = FlashcardManager.currentCards[FlashcardManager.currentIndex];
+                if (currentWord && typeof TTSManager !== 'undefined') {
+                    TTSManager.speak(currentWord[2], 'sv'); // COL_SWE = 2
+                }
+            });
+        }
+
+        // Attach favorite button - Always visible
+        const favBtn = document.getElementById('flashcardFavBtn');
+        if (favBtn && !favBtn.hasAttribute('data-fav-attached')) {
+            favBtn.setAttribute('data-fav-attached', 'true');
+            favBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const currentWord = FlashcardManager.currentCards[FlashcardManager.currentIndex];
+                if (!currentWord) return;
+
+                const wordId = String(currentWord[0]); // COL_ID = 0
+                const isNowFavorite = FavoritesManager.toggle(wordId, favBtn);
+
+                // Update button emoji
+                favBtn.textContent = isNowFavorite ? '❤️' : '🤍';
+
+                // Trigger animation
+                if (isNowFavorite) {
+                    favBtn.classList.add('active');
+                    setTimeout(() => favBtn.classList.remove('active'), 600);
+                }
+            });
+        }
+
+        // Update favorite state for current card
+        this.updateFavButtonState();
     },
+
+    // Update favorite button state based on current card
+    updateFavButtonState() {
+        const favBtn = document.getElementById('flashcardFavBtn');
+        if (!favBtn) return;
+
+        const currentWord = this.currentCards[this.currentIndex];
+        if (!currentWord) return;
+
+        const wordId = String(currentWord[0]);
+        const isFav = FavoritesManager.isFavorite(wordId);
+        favBtn.textContent = isFav ? '❤️' : '🤍';
+    },
+
 
     updateUIInline() {
         const currentWord = this.currentCards[this.currentIndex];
@@ -772,7 +825,11 @@ const FlashcardManager = {
         document.getElementById('flashcardBackInline').textContent = currentWord[3] || ''; // COL_ARB = 3
         document.getElementById('flashcardCurrentInline').textContent = this.currentIndex + 1;
         document.getElementById('flashcardTotalInline').textContent = this.currentCards.length;
+
+        // Update favorite button state for current card
+        this.updateFavButtonState();
     },
+
 
     rateCardInline(quality) {
         const currentWord = this.currentCards[this.currentIndex];

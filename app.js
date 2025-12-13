@@ -1869,9 +1869,13 @@ function initWordOfTheDay() {
         else if (sweText.length > 9) wodSwe.classList.add('very-long-text');
         else if (sweText.length > 5) wodSwe.classList.add('long-text');
 
-        // Badge
+        // Badge - Max 9 characters
         if (word[COL_TYPE] && wodTypeBadge) {
-            wodTypeBadge.textContent = word[COL_TYPE].replace('.', '');
+            let typeText = word[COL_TYPE].replace('.', '').trim();
+            if (typeText.length > 9) {
+                typeText = typeText.substring(0, 9);
+            }
+            wodTypeBadge.textContent = typeText;
         }
 
         // Forms

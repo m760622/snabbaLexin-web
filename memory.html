@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Memory Match - الذاكرة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #38bdf8;
+            --primary-dark: #0284c7;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --error: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ambient Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            top: -50px;
+            left: -50px;
+            background: #a855f7;
+            animation: float 10s infinite alternate;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            right: -100px;
+            background: #38bdf8;
+            animation: float 12s infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .stats {
+            display: flex;
+            gap: 1rem;
+            font-weight: 600;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Game Container */
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            gap: 1rem;
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.6rem;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Card */
+        .card {
+            aspect-ratio: 1;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.3rem;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            font-size: 2rem;
+        }
+
+        .card-back {
+            background: var(--card-bg);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transform: rotateY(180deg);
+            font-size: 0.85rem;
+            line-height: 1.2;
+        }
+
+        .card-back.swedish {
+            color: var(--primary);
+        }
+
+        .card-back.arabic {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            color: #fbbf24;
+            direction: rtl;
+        }
+
+        .card.matched .card-inner {
+            transform: rotateY(180deg) scale(0.95);
+            opacity: 0.7;
+        }
+
+        .card.matched .card-back {
+            border-color: var(--success);
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        /* Result */
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .result-overlay.visible {
+            display: flex;
+        }
+
+        .result-emoji {
+            font-size: 5rem;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .play-again-btn {
+            padding: 1rem 2rem;
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Difficulty */
+        .difficulty-select {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .diff-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .diff-btn.active,
+        .diff-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <header>
+        <button class="back-btn" onclick="window.location.href='games.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <div class="stats">
+            <div class="stat">⏱️ <span id="timer">0:00</span></div>
+            <div class="stat">🔄 <span id="moves">0</span></div>
+            <div class="stat">✅ <span id="matched">0</span>/<span id="total">8</span></div>
+        </div>
+    </header>
+
+    <div class="game-container">
+        <div class="difficulty-select">
+            <button class="diff-btn active" data-pairs="6" onclick="setDifficulty(6, this)">Lätt (6)</button>
+            <button class="diff-btn" data-pairs="8" onclick="setDifficulty(8, this)">Medel (8)</button>
+            <button class="diff-btn" data-pairs="12" onclick="setDifficulty(12, this)">Svår (12)</button>
+        </div>
+
+        <div class="card-grid" id="cardGrid"></div>
+    </div>
+
+    <div class="result-overlay" id="resultOverlay">
+        <div class="result-emoji">🎉</div>
+        <div class="result-text" id="resultText">Bra jobbat!</div>
+        <div id="resultStats"></div>
+        <button class="play-again-btn" onclick="startNewGame()">Spela igen 🔄</button>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="data.js"></script>
+    <script>
+        // Game state
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let timerInterval = null;
+        let seconds = 0;
+        let numPairs = 6;
+        let isProcessing = false;
+
+        const COL_SWE = 2;
+        const COL_ARB = 3;
+
+        // Get random words
+        function getRandomWords(count) {
+            const suitable = window.dictionaryData.filter(entry => {
+                const word = entry[COL_SWE];
+                return word && word.length >= 2 && word.length <= 10;
+            });
+
+            const shuffled = suitable.sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count).map(entry => ({
+                swedish: entry[COL_SWE],
+                arabic: entry[COL_ARB]
+            }));
+        }
+
+        // Create cards array
+        function createCards() {
+            const words = getRandomWords(numPairs);
+            cards = [];
+
+            words.forEach((word, i) => {
+                // Swedish card
+                cards.push({
+                    id: `swe-${i}`,
+                    pairId: i,
+                    type: 'swedish',
+                    content: word.swedish
+                });
+                // Arabic card
+                cards.push({
+                    id: `arb-${i}`,
+                    pairId: i,
+                    type: 'arabic',
+                    content: word.arabic
+                });
+            });
+
+            // Shuffle
+            cards.sort(() => Math.random() - 0.5);
+        }
+
+        // Render grid
+        function renderGrid() {
+            const grid = document.getElementById('cardGrid');
+            grid.innerHTML = '';
+
+            // Adjust grid columns based on card count
+            const cols = cards.length <= 12 ? 4 : cards.length <= 16 ? 4 : 6;
+            grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+            cards.forEach((card, i) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card';
+                cardEl.dataset.index = i;
+                cardEl.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">🃏</div>
+                        <div class="card-back ${card.type}">${card.content}</div>
+                    </div>
+                `;
+                cardEl.onclick = () => flipCard(i);
+                grid.appendChild(cardEl);
+            });
+        }
+
+        // Flip card
+        function flipCard(index) {
+            if (isProcessing) return;
+
+            const cardEl = document.querySelectorAll('.card')[index];
+            const card = cards[index];
+
+            // Skip if already flipped or matched
+            if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+            if (flippedCards.length >= 2) return;
+
+            // Flip
+            cardEl.classList.add('flipped');
+            flippedCards.push({ index, card, el: cardEl });
+
+            // Speak Swedish words
+            if (card.type === 'swedish' && typeof TTSManager !== 'undefined') {
+                TTSManager.speak(card.content, 'sv');
+            }
+
+            // Check for match
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                checkMatch();
+            }
+        }
+
+        // Check match
+        function checkMatch() {
+            isProcessing = true;
+            const [first, second] = flippedCards;
+
+            if (first.card.pairId === second.card.pairId) {
+                // Match!
+                setTimeout(() => {
+                    first.el.classList.add('matched');
+                    second.el.classList.add('matched');
+                    matchedPairs++;
+                    document.getElementById('matched').textContent = matchedPairs;
+                    flippedCards = [];
+                    isProcessing = false;
+
+                    // Check win
+                    if (matchedPairs === numPairs) {
+                        clearInterval(timerInterval);
+                        setTimeout(showResult, 500);
+                    }
+                }, 500);
+            } else {
+                // No match - flip back
+                setTimeout(() => {
+                    first.el.classList.remove('flipped');
+                    second.el.classList.remove('flipped');
+                    flippedCards = [];
+                    isProcessing = false;
+                }, 1000);
+            }
+        }
+
+        // Timer
+        function startTimer() {
+            seconds = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                seconds++;
+                const min = Math.floor(seconds / 60);
+                const sec = seconds % 60;
+                document.getElementById('timer').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        // Set difficulty
+        function setDifficulty(pairs, btn) {
+            numPairs = pairs;
+            document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            startNewGame();
+        }
+
+        // Show result
+        function showResult() {
+            const overlay = document.getElementById('resultOverlay');
+            document.getElementById('resultText').textContent = 'Grattis! / مبروك! 🎉';
+            document.getElementById('resultStats').innerHTML = `
+                <div>⏱️ Tid: ${document.getElementById('timer').textContent}</div>
+                <div>🔄 Drag: ${moves}</div>
+            `;
+            overlay.classList.add('visible');
+
+            if (typeof ProgressManager !== 'undefined') {
+                ProgressManager.trackGame();
+            }
+        }
+
+        // Start new game
+        function startNewGame() {
+            document.getElementById('resultOverlay').classList.remove('visible');
+            matchedPairs = 0;
+            moves = 0;
+            flippedCards = [];
+            isProcessing = false;
+
+            document.getElementById('moves').textContent = '0';
+            document.getElementById('matched').textContent = '0';
+            document.getElementById('total').textContent = numPairs;
+
+            createCards();
+            renderGrid();
+            startTimer();
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof ThemeManager !== 'undefined') ThemeManager.init();
+            startNewGame();
+        });
+    </script>
+</body>
+
+</html>

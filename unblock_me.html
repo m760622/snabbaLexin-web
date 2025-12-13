@@ -115,6 +115,37 @@
             background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%238d6e63' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
         }
 
+        /* iPhone View Mode */
+        body.iphone-view {
+            max-width: 430px;
+            margin: 0 auto;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Mobile Toggle Button */
+        .mobile-toggle-btn {
+            background: rgba(143, 110, 99, 0.3);
+            border: 2px solid var(--header-border);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text-color);
+            margin-left: 0.25px;
+        }
+
+
+        .mobile-toggle-btn:hover {
+            background: rgba(143, 110, 99, 0.5);
+            transform: scale(1.1);
+        }
+
+        .mobile-toggle-btn.active {
+            background: var(--header-border);
+            box-shadow: 0 0 15px rgba(143, 110, 99, 0.5);
+        }
+
         /* --- Header --- */
         header {
             width: 100%;
@@ -474,7 +505,10 @@
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </button>
+        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+            title="وضع الموبايل">📱</button>
         <h1>Lås Upp / فك القفل</h1>
+
         <button class="icon-btn" onclick="game.toggleNightMode()" aria-label="Toggle Night Mode">
             <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1026,7 +1060,26 @@
         window.onload = () => {
             game = new UnblockGame();
         };
+
+        // Toggle Mobile View Function
+        function toggleMobileView() {
+            document.body.classList.toggle('iphone-view');
+            const isActive = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+            const btn = document.getElementById('mobileToggle');
+            if (btn) btn.classList.toggle('active', isActive);
+        }
+
+        // Apply mobile view from localStorage
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.body.classList.add('iphone-view');
+            document.addEventListener('DOMContentLoaded', () => {
+                const btn = document.getElementById('mobileToggle');
+                if (btn) btn.classList.add('active');
+            });
+        }
     </script>
 </body>
+
 
 </html>

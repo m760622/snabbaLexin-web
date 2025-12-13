@@ -514,10 +514,11 @@ async function init() {
     if (mobileViewToggle) {
         mobileViewToggle.addEventListener('click', () => {
             document.body.classList.toggle('iphone-view');
-            // Optional: Save state
+            // Save state as string for consistency across all pages
             const isMobileView = document.body.classList.contains('iphone-view');
-            localStorage.setItem('mobileView', isMobileView);
+            localStorage.setItem('mobileView', isMobileView ? 'true' : 'false');
         });
+
 
         // Restore state
         if (localStorage.getItem('mobileView') === 'true') {

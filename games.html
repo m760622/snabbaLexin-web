@@ -33,9 +33,12 @@
                     <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
             </a>
+            <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+                title="وضع الموبايل">📱</button>
             <h1>Spelzon / منطقة الألعاب</h1>
 
         </header>
+
 
         <!-- Game Menu -->
         <div id="gameMenu" class="game-menu-container">
@@ -847,7 +850,26 @@
                     });
             });
         }
+
+        // Toggle Mobile View Function
+        function toggleMobileView() {
+            document.body.classList.toggle('iphone-view');
+            const isActive = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+            const btn = document.getElementById('mobileToggle');
+            if (btn) btn.classList.toggle('active', isActive);
+        }
+
+        // Apply mobile view from localStorage
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.body.classList.add('iphone-view');
+            document.addEventListener('DOMContentLoaded', () => {
+                const btn = document.getElementById('mobileToggle');
+                if (btn) btn.classList.add('active');
+            });
+        }
     </script>
 </body>
+
 
 </html>

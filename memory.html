@@ -48,6 +48,63 @@
             flex-direction: column;
         }
 
+        /* iPhone view mode */
+        html.iphone-mode {
+            background: var(--bg-color);
+        }
+
+        body.iphone-view {
+            max-width: 430px;
+            margin: 0 auto;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.iphone-view .ambient-bg {
+            position: absolute;
+        }
+
+        /* Mobile Toggle Button */
+        .mobile-toggle-btn {
+            background: rgba(56, 189, 248, 0.2);
+            border: 2px solid #38bdf8;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 0.25px;
+        }
+
+
+        .mobile-toggle-btn:hover {
+            background: rgba(56, 189, 248, 0.4);
+            transform: scale(1.1);
+        }
+
+        .mobile-toggle-btn.active {
+            background: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+        }
+
+        /* Title Bar */
+        .title-bar {
+            background: rgba(56, 189, 248, 0.1);
+            padding: 12px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .game-title {
+            color: var(--text-color);
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+
         /* Ambient Background */
         .ambient-bg {
             position: fixed;
@@ -97,11 +154,16 @@
         header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 0.25rem;
             padding: 1rem;
             background: rgba(30, 41, 59, 0.8);
             backdrop-filter: blur(10px);
         }
+
+        .stats {
+            margin-left: auto;
+        }
+
 
         .back-btn {
             background: rgba(255, 255, 255, 0.1);
@@ -290,6 +352,8 @@
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </button>
+        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+            title="وضع الموبايل">📱</button>
         <div class="stats">
             <div class="stat">⏱️ <span id="timer">0:00</span></div>
             <div class="stat">🔄 <span id="moves">0</span></div>
@@ -297,7 +361,12 @@
         </div>
     </header>
 
+    <div class="title-bar">
+        <h1 class="game-title">🃏 Memory / الذاكرة</h1>
+    </div>
+
     <div class="game-container">
+
         <div class="difficulty-select">
             <button class="diff-btn active" data-pairs="6" onclick="setDifficulty(6, this)">Lätt (6)</button>
             <button class="diff-btn" data-pairs="8" onclick="setDifficulty(8, this)">Medel (8)</button>
@@ -318,7 +387,28 @@
         // Apply saved theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Toggle Mobile View Function
+        function toggleMobileView() {
+            document.documentElement.classList.toggle('iphone-mode');
+            document.body.classList.toggle('iphone-view');
+            const isActive = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+            const btn = document.getElementById('mobileToggle');
+            if (btn) btn.classList.toggle('active', isActive);
+        }
+
+        // Apply mobile view from localStorage
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.documentElement.classList.add('iphone-mode');
+            document.body.classList.add('iphone-view');
+            document.addEventListener('DOMContentLoaded', () => {
+                const btn = document.getElementById('mobileToggle');
+                if (btn) btn.classList.add('active');
+            });
+        }
     </script>
+
     <script src="utils.js"></script>
 
     <script src="data.js"></script>
@@ -338,7 +428,7 @@
 
         // Get random words
         function getRandomWords(count) {
-            const suitable = window.dictionaryData.filter(entry => {
+            const suitable = dictionaryData.filter(entry => {
                 const word = entry[COL_SWE];
                 return word && word.length >= 2 && word.length <= 10;
             });

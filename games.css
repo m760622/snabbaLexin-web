@@ -65,6 +65,36 @@ body {
     overflow: hidden;
 }
 
+/* iPhone View Mode */
+body.iphone-view {
+    max-width: 430px;
+    margin: 0 auto;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Mobile Toggle Button */
+.mobile-toggle-btn {
+    background: rgba(56, 189, 248, 0.2);
+    border: 2px solid #38bdf8;
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 0.25px;
+}
+
+.mobile-toggle-btn:hover {
+    background: rgba(56, 189, 248, 0.4);
+    transform: scale(1.1);
+}
+
+.mobile-toggle-btn.active {
+    background: #38bdf8;
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+
 body.dark-mode {
     background: var(--bg-gradient-dark);
     color: var(--text-main-dark);

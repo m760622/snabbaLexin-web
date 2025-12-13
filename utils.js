@@ -638,7 +638,7 @@ const FlashcardManager = {
                 e.stopPropagation();
                 const currentWord = self.currentCards[self.currentIndex];
                 if (currentWord && typeof TTSManager !== 'undefined') {
-                    TTSManager.speak(currentWord[1], 'sv'); // COL_SWE = 1
+                    TTSManager.speak(currentWord[2], 'sv'); // COL_SWE = 2
                 }
             });
         }
@@ -758,7 +758,7 @@ const FlashcardManager = {
                 e.stopPropagation();
                 const currentWord = FlashcardManager.currentCards[FlashcardManager.currentIndex];
                 if (currentWord && typeof TTSManager !== 'undefined') {
-                    TTSManager.speak(currentWord[1], 'sv');
+                    TTSManager.speak(currentWord[2], 'sv'); // COL_SWE = 2
                 }
             });
         }
@@ -768,8 +768,8 @@ const FlashcardManager = {
         const currentWord = this.currentCards[this.currentIndex];
         if (!currentWord) return;
 
-        document.getElementById('flashcardFrontInline').textContent = currentWord[1] || ''; // COL_SWE
-        document.getElementById('flashcardBackInline').textContent = currentWord[2] || ''; // COL_ARB
+        document.getElementById('flashcardFrontInline').textContent = currentWord[2] || ''; // COL_SWE = 2
+        document.getElementById('flashcardBackInline').textContent = currentWord[3] || ''; // COL_ARB = 3
         document.getElementById('flashcardCurrentInline').textContent = this.currentIndex + 1;
         document.getElementById('flashcardTotalInline').textContent = this.currentCards.length;
     },
@@ -888,8 +888,8 @@ const FlashcardManager = {
         const currentWord = this.currentCards[this.currentIndex];
         if (!currentWord) return;
 
-        document.getElementById('flashcardFront').textContent = currentWord[1] || ''; // COL_SWE
-        document.getElementById('flashcardBack').textContent = currentWord[2] || ''; // COL_ARB
+        document.getElementById('flashcardFront').textContent = currentWord[2] || ''; // COL_SWE = 2
+        document.getElementById('flashcardBack').textContent = currentWord[3] || ''; // COL_ARB = 3
         document.getElementById('flashcardCurrent').textContent = this.currentIndex + 1;
         document.getElementById('flashcardTotal').textContent = this.currentCards.length;
     },

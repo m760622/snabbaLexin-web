@@ -300,7 +300,60 @@
     </div>
     <!-- <h3>Snabba Lexin</h3> -->
     <!-- <p class="subtitle">Svensk-Arabiskt Lexikon / القاموس السويدي العربي</p> -->
+
+    <!-- Flashcard Inline Container (moved above search bar) -->
+    <div class="container" style="max-width: 700px; margin: 0 auto; position: relative; z-index: 29;">
+        <div id="flashcardInlineContainer" class="game-container flashcard-inline" style="display: none;">
+            <div class="quiz-header-compact">
+                <div class="flashcard-progress-inline">
+                    <span id="flashcardCurrentInline">1</span>/<span id="flashcardTotalInline">10</span>
+                </div>
+                <h2>🃏 Flashcards</h2>
+                <div class="quiz-header-right">
+                    <span class="flashcard-stats-inline">
+                        ✅ <span id="fcCorrectInline">0</span>
+                    </span>
+                    <button id="closeFlashcardInline" class="close-btn">&times;</button>
+                </div>
+            </div>
+            <div class="flashcard-body-inline">
+                <div class="flashcard-container-inline">
+                    <div class="flashcard-inline-card" id="flashcardInline">
+                        <div class="flashcard-face flashcard-front-inline">
+                            <span class="flashcard-text-inline" id="flashcardFrontInline">Hej</span>
+                            <span class="flashcard-hint-inline">Tryck för att vända / اضغط للقلب</span>
+                        </div>
+                        <div class="flashcard-face flashcard-back-inline">
+                            <span class="flashcard-text-inline" id="flashcardBackInline">مرحبا</span>
+                            <button class="flashcard-speak-btn-inline" id="flashcardSpeakBtnInline">🔊</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard-controls-inline" id="flashcardControlsInline" style="display: none;">
+                    <button class="fc-btn-inline fc-again" data-quality="0">
+                        <span class="fc-emoji">😅</span>
+                        <span class="fc-label">Igen</span>
+                    </button>
+                    <button class="fc-btn-inline fc-hard" data-quality="2">
+                        <span class="fc-emoji">🤔</span>
+                        <span class="fc-label">Svårt</span>
+                    </button>
+                    <button class="fc-btn-inline fc-good" data-quality="4">
+                        <span class="fc-emoji">👍</span>
+                        <span class="fc-label">Bra</span>
+                    </button>
+                    <button class="fc-btn-inline fc-easy" data-quality="5">
+                        <span class="fc-emoji">🌟</span>
+                        <span class="fc-label">Lätt</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="sticky-header">
+
         <div class="search-container">
             <div class="search-row">
                 <div class="search-wrapper">
@@ -573,58 +626,8 @@
         </div>
     </div>
 
-    <!-- Flashcard Inline Container -->
-    <div class="container" style="max-width: 700px; margin: 0 auto; position: relative; z-index: 29;">
-        <div id="flashcardInlineContainer" class="game-container flashcard-inline" style="display: none;">
-            <div class="quiz-header-compact">
-                <div class="flashcard-progress-inline">
-                    <span id="flashcardCurrentInline">1</span>/<span id="flashcardTotalInline">10</span>
-                </div>
-                <h2>🃏 Flashcards</h2>
-                <div class="quiz-header-right">
-                    <span class="flashcard-stats-inline">
-                        ✅ <span id="fcCorrectInline">0</span>
-                    </span>
-                    <button id="closeFlashcardInline" class="close-btn">&times;</button>
-                </div>
-            </div>
-            <div class="flashcard-body-inline">
-                <div class="flashcard-container-inline">
-                    <div class="flashcard-inline-card" id="flashcardInline">
-                        <div class="flashcard-face flashcard-front-inline">
-                            <span class="flashcard-text-inline" id="flashcardFrontInline">Hej</span>
-                            <span class="flashcard-hint-inline">Tryck för att vända / اضغط للقلب</span>
-                        </div>
-                        <div class="flashcard-face flashcard-back-inline">
-                            <span class="flashcard-text-inline" id="flashcardBackInline">مرحبا</span>
-                            <button class="flashcard-speak-btn-inline" id="flashcardSpeakBtnInline">🔊</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flashcard-controls-inline" id="flashcardControlsInline" style="display: none;">
-                    <button class="fc-btn-inline fc-again" data-quality="0">
-                        <span class="fc-emoji">😅</span>
-                        <span class="fc-label">Igen</span>
-                    </button>
-                    <button class="fc-btn-inline fc-hard" data-quality="2">
-                        <span class="fc-emoji">🤔</span>
-                        <span class="fc-label">Svårt</span>
-                    </button>
-                    <button class="fc-btn-inline fc-good" data-quality="4">
-                        <span class="fc-emoji">👍</span>
-                        <span class="fc-label">Bra</span>
-                    </button>
-                    <button class="fc-btn-inline fc-easy" data-quality="5">
-                        <span class="fc-emoji">🌟</span>
-                        <span class="fc-label">Lätt</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Word of the Day Modal -->
+
     <div id="wodModal" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">

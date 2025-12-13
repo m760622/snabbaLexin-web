@@ -21,6 +21,13 @@
             --error: #ef4444;
         }
 
+        /* Light mode */
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+        }
+
         * {
             box-sizing: border-box;
             user-select: none;
@@ -318,6 +325,11 @@
         <button class="play-again-btn" onclick="startNewGame()">Spela igen 🔄</button>
     </div>
 
+    <script>
+        // Apply saved theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
     <script src="utils.js"></script>
     <script src="data.js"></script>
     <script>

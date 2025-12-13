@@ -298,70 +298,113 @@ body.dark-mode .theme-toggle-btn {
 
 /* Individual Game Colors via nth-child */
 .game-card-item:nth-child(1) .game-icon-large {
-    color: var(--color-grammar);
-    filter: drop-shadow(0 4px 6px rgba(79, 70, 229, 0.3));
+    color: #6366f1;
+    /* Indigo */
+    filter: drop-shadow(0 4px 8px rgba(99, 102, 241, 0.4));
 }
 
 .game-card-item:nth-child(2) .game-icon-large {
-    color: var(--color-missing);
-    filter: drop-shadow(0 4px 6px rgba(234, 88, 12, 0.3));
+    color: #f97316;
+    /* Orange */
+    filter: drop-shadow(0 4px 8px rgba(249, 115, 22, 0.4));
 }
 
 .game-card-item:nth-child(3) .game-icon-large {
-    color: var(--color-flashcards);
-    filter: drop-shadow(0 4px 6px rgba(5, 150, 105, 0.3));
+    color: #10b981;
+    /* Emerald */
+    filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.4));
 }
 
 .game-card-item:nth-child(4) .game-icon-large {
-    color: var(--color-spelling);
-    filter: drop-shadow(0 4px 6px rgba(219, 39, 119, 0.3));
-}
-
-/* Night Mode Override for Game Cards */
-body.dark-mode .game-card-item {
-    background: var(--card-bg-dark);
-    border-color: var(--glass-border-dark);
-    /* Very Light Magical Sky Blue Glow */
-    box-shadow:
-        0 0 10px rgba(56, 189, 248, 0.1),
-        0 0 15px rgba(14, 165, 233, 0.05),
-        inset 0 0 5px rgba(56, 189, 248, 0.05);
-    animation: cardPulseNight 4s infinite ease-in-out;
-}
-
-body.dark-mode .game-card-item:hover {
-    box-shadow:
-        0 0 15px rgba(56, 189, 248, 0.2),
-        0 0 25px rgba(14, 165, 233, 0.1),
-        inset 0 0 10px rgba(56, 189, 248, 0.1);
-    border-color: rgba(56, 189, 248, 0.3);
-    transform: translateY(-5px) scale(1.03);
+    color: #ef4444;
+    /* Red */
+    filter: drop-shadow(0 4px 8px rgba(239, 68, 68, 0.4));
 }
 
 .game-card-item:nth-child(5) .game-icon-large {
-    color: var(--color-wheel);
-    filter: drop-shadow(0 4px 6px rgba(124, 58, 237, 0.3));
+    color: #8b5cf6;
+    /* Violet */
+    filter: drop-shadow(0 4px 8px rgba(139, 92, 246, 0.4));
 }
 
 .game-card-item:nth-child(6) .game-icon-large {
-    color: var(--color-sentence);
-    filter: drop-shadow(0 4px 6px rgba(2, 132, 199, 0.3));
+    color: #06b6d4;
+    /* Cyan */
+    filter: drop-shadow(0 4px 8px rgba(6, 182, 212, 0.4));
 }
 
 .game-card-item:nth-child(7) .game-icon-large {
-    color: var(--color-rain);
-    filter: drop-shadow(0 4px 6px rgba(37, 99, 235, 0.3));
+    color: #ec4899;
+    /* Pink */
+    filter: drop-shadow(0 4px 8px rgba(236, 72, 153, 0.4));
 }
 
 .game-card-item:nth-child(8) .game-icon-large {
-    color: var(--color-wordle);
-    filter: drop-shadow(0 4px 6px rgba(101, 163, 13, 0.3));
+    color: #84cc16;
+    /* Lime */
+    filter: drop-shadow(0 4px 8px rgba(132, 204, 22, 0.4));
 }
 
 .game-card-item:nth-child(9) .game-icon-large {
-    color: var(--color-pronunciation);
-    filter: drop-shadow(0 4px 6px rgba(220, 38, 38, 0.3));
+    color: #f59e0b;
+    /* Amber */
+    filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.4));
 }
+
+.game-card-item:nth-child(10) .game-icon-large {
+    color: #3b82f6;
+    /* Blue */
+    filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.4));
+}
+
+.game-card-item:nth-child(11) .game-icon-large {
+    color: #14b8a6;
+    /* Teal */
+    filter: drop-shadow(0 4px 8px rgba(20, 184, 166, 0.4));
+}
+
+.game-card-item:nth-child(12) .game-icon-large {
+    color: #a855f7;
+    /* Purple */
+    filter: drop-shadow(0 4px 8px rgba(168, 85, 247, 0.4));
+}
+
+.game-card-item:nth-child(13) .game-icon-large {
+    color: #22d3ee;
+    /* Sky */
+    filter: drop-shadow(0 4px 8px rgba(34, 211, 238, 0.4));
+}
+
+.game-card-item:nth-child(14) .game-icon-large {
+    color: #fb923c;
+    /* Orange Light */
+    filter: drop-shadow(0 4px 8px rgba(251, 146, 60, 0.4));
+}
+
+.game-card-item:nth-child(15) .game-icon-large {
+    color: #4ade80;
+    /* Green */
+    filter: drop-shadow(0 4px 8px rgba(74, 222, 128, 0.4));
+}
+
+.game-card-item:nth-child(16) .game-icon-large {
+    color: #f472b6;
+    /* Pink Light */
+    filter: drop-shadow(0 4px 8px rgba(244, 114, 182, 0.4));
+}
+
+.game-card-item:nth-child(17) .game-icon-large {
+    color: #60a5fa;
+    /* Blue Light */
+    filter: drop-shadow(0 4px 8px rgba(96, 165, 250, 0.4));
+}
+
+/* Ensure colors stay vibrant in dark mode */
+[data-theme="dark"] .game-card-item .game-icon-large,
+body.dark-mode .game-card-item .game-icon-large {
+    filter: drop-shadow(0 0 12px currentColor) brightness(1.1);
+}
+
 
 .game-card-item:active {
     transform: scale(0.95);
@@ -591,6 +634,117 @@ body.dark-mode .high-score {
     background: rgba(99, 102, 241, 0.2);
     color: #818cf8;
 }
+
+/* ========================================
+   DATA-THEME DARK MODE SUPPORT
+   ======================================== */
+
+/* Game Cards - Dark Theme (Glassmorphism - Transparent Glass) */
+[data-theme="dark"] .game-card-item {
+    /* Very transparent glass effect */
+    background: rgba(30, 41, 59, 0.35) !important;
+    backdrop-filter: blur(16px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(150%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 15px rgba(56, 189, 248, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .game-card-item:hover {
+    background: rgba(30, 41, 59, 0.5) !important;
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(56, 189, 248, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+
+
+[data-theme="dark"] .game-card-item h3 {
+    color: var(--text-main-dark);
+}
+
+[data-theme="dark"] .game-card-item p {
+    color: var(--text-sub-dark);
+}
+
+[data-theme="dark"] .high-score {
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+}
+
+[data-theme="dark"] .back-btn,
+[data-theme="dark"] .theme-toggle-btn {
+    background: var(--card-bg-dark);
+    color: var(--text-main-dark);
+}
+
+/* ========================================
+   DATA-THEME LIGHT MODE SUPPORT
+   ======================================== */
+
+/* Body - Light Theme: Override the dark gradient background */
+[data-theme="light"] body,
+html[data-theme="light"] body {
+    background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 50%, #bcccdc 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* Game Cards - Light Theme (Glassmorphism - Transparent Glass) */
+[data-theme="light"] .game-card-item {
+    /* Very transparent glass effect */
+    background: rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(16px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    box-shadow:
+        0 8px 32px rgba(31, 38, 135, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+}
+
+[data-theme="light"] .game-card-item:hover {
+    background: rgba(255, 255, 255, 0.5) !important;
+    box-shadow:
+        0 12px 40px rgba(31, 38, 135, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+    border-color: rgba(99, 102, 241, 0.4) !important;
+    transform: translateY(-5px) scale(1.02);
+}
+
+
+
+
+[data-theme="light"] .game-card-item h3 {
+    color: #1f2937;
+}
+
+[data-theme="light"] .game-card-item p {
+    color: #6b7280;
+}
+
+[data-theme="light"] .high-score {
+    background: rgba(99, 102, 241, 0.1);
+    color: #4f46e5;
+}
+
+[data-theme="light"] .back-btn,
+[data-theme="light"] .theme-toggle-btn {
+    background: white;
+    color: #1f2937;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .games-header h1 {
+    background: linear-gradient(45deg, #4f46e5, #7c3aed, #db2777);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 
 /* ========================================
    PREMIUM BUTTON SYSTEM

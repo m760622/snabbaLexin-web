@@ -24,7 +24,89 @@ function showToast(message, duration = 3000) {
 }
 
 // ========================================
+// Text Size Manager - Dynamic Font Sizing
+// ========================================
+const TextSizeManager = {
+    // Size classes that can be applied
+    SIZES: ['text-xs', 'text-sm', 'text-md', 'text-lg', 'text-xl'],
+
+    // Thresholds for different container types
+    THRESHOLDS: {
+        // For flashcards (smaller container)
+        flashcard: { xs: 50, sm: 30, md: 20, lg: 10 },
+        // For cards (medium container)
+        card: { xs: 80, sm: 50, md: 30, lg: 15 },
+        // For modals (larger container)
+        modal: { xs: 120, sm: 80, md: 50, lg: 25 },
+        // Default
+        default: { xs: 50, sm: 30, md: 20, lg: 10 }
+    },
+
+    /**
+     * Apply dynamic font size to an element based on text length
+     * @param {HTMLElement} element - The element to adjust
+     * @param {string} text - The text content
+     * @param {string} containerType - Type of container: 'flashcard', 'card', 'modal', or 'default'
+     */
+    apply(element, text, containerType = 'default') {
+        if (!element || !text) return;
+
+        // Remove all size classes first
+        this.SIZES.forEach(size => element.classList.remove(size));
+
+        const len = text.length;
+        const thresholds = this.THRESHOLDS[containerType] || this.THRESHOLDS.default;
+
+        // Determine appropriate size
+        if (len > thresholds.xs) {
+            element.classList.add('text-xs');
+        } else if (len > thresholds.sm) {
+            element.classList.add('text-sm');
+        } else if (len > thresholds.md) {
+            element.classList.add('text-md');
+        } else if (len > thresholds.lg) {
+            element.classList.add('text-lg');
+        } else {
+            element.classList.add('text-xl');
+        }
+    },
+
+    /**
+     * Auto-apply sizing to all elements with data-auto-size attribute
+     * Usage: <span data-auto-size="flashcard">Long text here</span>
+     */
+    autoApply() {
+        const elements = document.querySelectorAll('[data-auto-size]');
+        elements.forEach(el => {
+            const containerType = el.getAttribute('data-auto-size') || 'default';
+            this.apply(el, el.textContent, containerType);
+        });
+    },
+
+    /**
+     * Observe an element and auto-resize when content changes
+     * @param {HTMLElement} element - Element to observe
+     * @param {string} containerType - Container type for thresholds
+     */
+    observe(element, containerType = 'default') {
+        if (!element) return;
+
+        // Initial apply
+        this.apply(element, element.textContent, containerType);
+
+        // Create mutation observer for content changes
+        const observer = new MutationObserver(() => {
+            this.apply(element, element.textContent, containerType);
+        });
+
+        observer.observe(element, { childList: true, characterData: true, subtree: true });
+        return observer;
+    }
+};
+
+// ========================================
 // Theme Manager
+
 // ========================================
 const ThemeManager = {
     init() {
@@ -831,29 +913,6 @@ const FlashcardManager = {
         favBtn.textContent = isFav ? '❤️' : '🤍';
     },
 
-    // Dynamic font size adjustment based on text length
-    adjustFontSize(element, text) {
-        if (!element || !text) return;
-
-        // Remove previous size classes
-        element.classList.remove('text-xs', 'text-sm', 'text-md', 'text-lg', 'text-xl');
-
-        const len = text.length;
-
-        // Determine size based on character count
-        if (len > 50) {
-            element.classList.add('text-xs');
-        } else if (len > 30) {
-            element.classList.add('text-sm');
-        } else if (len > 20) {
-            element.classList.add('text-md');
-        } else if (len > 10) {
-            element.classList.add('text-lg');
-        } else {
-            element.classList.add('text-xl');
-        }
-    },
-
     updateUIInline() {
         const currentWord = this.currentCards[this.currentIndex];
         if (!currentWord) return;
@@ -866,12 +925,13 @@ const FlashcardManager = {
 
         if (frontEl) {
             frontEl.textContent = frontText;
-            this.adjustFontSize(frontEl, frontText);
+            // Use global TextSizeManager for dynamic sizing
+            TextSizeManager.apply(frontEl, frontText, 'flashcard');
         }
 
         if (backEl) {
             backEl.textContent = backText;
-            this.adjustFontSize(backEl, backText);
+            TextSizeManager.apply(backEl, backText, 'flashcard');
         }
 
         document.getElementById('flashcardCurrentInline').textContent = this.currentIndex + 1;

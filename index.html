@@ -234,6 +234,10 @@
         </div>
 
         <div class="nav-right">
+            <!-- Results Count (moved above stats) -->
+            <div class="word-count-bubble">
+                <span id="resultCount">0</span>
+            </div>
             <!-- Progress Stats Badge -->
             <div class="progress-stats-badge" id="progressBadge" title="Dagens framsteg / تقدم اليوم"
                 onclick="var m=document.getElementById('progressModal'); if(m) m.style.display='flex';">
@@ -246,9 +250,6 @@
                     <span class="stat-icon">🔥</span>
                     <span id="currentStreak">0</span>
                 </span>
-            </div>
-            <div class="word-count-bubble">
-                <span id="resultCount">0</span>
             </div>
         </div>
 

@@ -1595,18 +1595,23 @@ const TTSManager = {
         const speed = this.getSpeed();
 
         setTimeout(() => {
-            // iOS Fix: Add punctuation for better pronunciation
+            // Add natural pauses for better pronunciation
             let speakText = text;
+
+            // iOS Fix: Add punctuation for better pronunciation
             if (this.isIOS && !text.match(/[.!?]$/)) {
                 speakText = text + '.';
             }
 
             const utterance = new SpeechSynthesisUtterance(speakText);
             utterance.lang = lang;
-            utterance.rate = speed;
+
+            // More natural speaking parameters
+            utterance.rate = speed * 0.9; // Slightly slower for clarity
+            utterance.pitch = 1.0; // Natural pitch
             utterance.volume = 1.0;
 
-            // Find best voice
+            // Find best voice with priority for natural-sounding voices
             if (lang === 'sv-SE' || lang.startsWith('sv')) {
                 const voice = this.getBestSwedishVoice();
                 if (voice) utterance.voice = voice;
@@ -1637,7 +1642,7 @@ const TTSManager = {
                 setTimeout(checkAndResume, 500);
             }
 
-            console.log('Playing Local TTS:', speakText, 'lang:', lang);
+            console.log('Playing Local TTS:', speakText, 'lang:', lang, 'rate:', speed * 0.9);
         }, delay);
     },
 
@@ -1649,16 +1654,21 @@ const TTSManager = {
 
         if (svVoices.length === 0) return null;
 
-        // Priority: Alva (iOS), Klara, Google, etc.
+        // Priority: Premium/Natural sounding voices first
+        // Alva (iOS premium), Klara, Oskar, then Google, then any
         this.cachedSwedishVoice =
             svVoices.find(v => v.name.includes('Alva')) ||
+            svVoices.find(v => v.name.includes('Premium') || v.name.includes('Enhanced')) ||
             svVoices.find(v => v.name.includes('Klara')) ||
+            svVoices.find(v => v.name.includes('Oskar')) ||
             svVoices.find(v => v.name.includes('Google')) ||
+            svVoices.find(v => !v.name.includes('Compact')) || // Avoid compact/low quality
             svVoices[0];
 
         console.log('Selected Swedish voice:', this.cachedSwedishVoice?.name);
         return this.cachedSwedishVoice;
     }
+
 };
 
 // Initialize voices on load (needed for Chrome/Safari async voice loading)

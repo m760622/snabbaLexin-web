@@ -666,14 +666,27 @@ function renderDetails(item) {
     // Use COL_GENDER if available, fallback to detection (disabled, see detectNounGender below)
     const nounGender = isNoun ? (item[COL_GENDER] || null) : null;
 
-    // Dynamic Font Size Calculation based on Word Length
+    // Dynamic Font Size using TextSizeManager (from utils.js)
+    // Returns CSS font-size value based on text length for details page
     const getDynamicFontSize = (text) => {
         const len = text.length;
-        if (len < 7) return '3.5rem';
-        if (len < 9) return '3.0rem';
-        if (len < 11) return '2.5rem';
-        if (len < 13) return '2.0rem';
-        return '1.8rem';
+        // Details page uses larger base sizes
+        if (len <= 6) return '3.5rem';
+        if (len <= 10) return '2.8rem';
+        if (len <= 15) return '2.3rem';
+        if (len <= 20) return '1.9rem';
+        if (len <= 30) return '1.5rem';
+        return '1.2rem';
+    };
+
+    // Arabic text size (slightly smaller due to character density)
+    const getArabicFontSize = (text) => {
+        const len = text.length;
+        if (len <= 8) return '2.5rem';
+        if (len <= 15) return '2rem';
+        if (len <= 25) return '1.6rem';
+        if (len <= 40) return '1.3rem';
+        return '1.1rem';
     };
 
 
@@ -729,7 +742,7 @@ function renderDetails(item) {
                     <div class="word-with-audio">
                         <h1 class="word-swe-hero" style="font-size: ${getDynamicFontSize(swe)}">${swe}</h1>
                     </div>
-                    ${arb ? `<div class="word-arb-hero">${arb}</div>` : ''}
+                    ${arb ? `<div class="word-arb-hero" style="font-size: ${getArabicFontSize(arb)}">${arb}</div>` : ''}
                     ${type ? `
                     <div class="word-type-row" style="justify-content: center;">
                         <span class="word-type-badge clickable" onclick="navigateToTypeFilter('${rawType}')" title="اضغط لرؤية جميع الكلمات من هذا النوع">${type}</span>
@@ -739,6 +752,7 @@ function renderDetails(item) {
             </div>
         </div>
     `;
+
 
     // Definitions Section
     let definitionsHtml = '';

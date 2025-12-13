@@ -831,13 +831,49 @@ const FlashcardManager = {
         favBtn.textContent = isFav ? '❤️' : '🤍';
     },
 
+    // Dynamic font size adjustment based on text length
+    adjustFontSize(element, text) {
+        if (!element || !text) return;
+
+        // Remove previous size classes
+        element.classList.remove('text-xs', 'text-sm', 'text-md', 'text-lg', 'text-xl');
+
+        const len = text.length;
+
+        // Determine size based on character count
+        if (len > 50) {
+            element.classList.add('text-xs');
+        } else if (len > 30) {
+            element.classList.add('text-sm');
+        } else if (len > 20) {
+            element.classList.add('text-md');
+        } else if (len > 10) {
+            element.classList.add('text-lg');
+        } else {
+            element.classList.add('text-xl');
+        }
+    },
 
     updateUIInline() {
         const currentWord = this.currentCards[this.currentIndex];
         if (!currentWord) return;
 
-        document.getElementById('flashcardFrontInline').textContent = currentWord[2] || ''; // COL_SWE = 2
-        document.getElementById('flashcardBackInline').textContent = currentWord[3] || ''; // COL_ARB = 3
+        const frontText = currentWord[2] || ''; // COL_SWE = 2
+        const backText = currentWord[3] || ''; // COL_ARB = 3
+
+        const frontEl = document.getElementById('flashcardFrontInline');
+        const backEl = document.getElementById('flashcardBackInline');
+
+        if (frontEl) {
+            frontEl.textContent = frontText;
+            this.adjustFontSize(frontEl, frontText);
+        }
+
+        if (backEl) {
+            backEl.textContent = backText;
+            this.adjustFontSize(backEl, backText);
+        }
+
         document.getElementById('flashcardCurrentInline').textContent = this.currentIndex + 1;
         document.getElementById('flashcardTotalInline').textContent = this.currentCards.length;
 

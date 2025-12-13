@@ -1135,7 +1135,34 @@ body::after {
     font-size: 1.75rem;
     font-weight: 700;
     text-align: center;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.3;
+    transition: font-size 0.2s ease;
 }
+
+/* Dynamic text sizing for flashcards */
+.flashcard-text-inline.text-xl {
+    font-size: 1.75rem;
+}
+
+.flashcard-text-inline.text-lg {
+    font-size: 1.4rem;
+}
+
+.flashcard-text-inline.text-md {
+    font-size: 1.15rem;
+}
+
+.flashcard-text-inline.text-sm {
+    font-size: 0.95rem;
+}
+
+.flashcard-text-inline.text-xs {
+    font-size: 0.8rem;
+}
+
 
 .flashcard-hint-inline {
     font-size: 0.75rem;

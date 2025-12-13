@@ -332,7 +332,9 @@ async function init() {
             progressBadge.addEventListener('click', () => {
                 progressModal.style.display = 'flex';
                 updateProgressDashboard();
-                HapticManager.trigger('light');
+                if (typeof HapticManager !== 'undefined') {
+                    HapticManager.trigger('light');
+                }
             });
 
             closeProgressBtn?.addEventListener('click', () => {

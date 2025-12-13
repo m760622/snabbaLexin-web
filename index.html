@@ -235,7 +235,8 @@
 
         <div class="nav-right">
             <!-- Progress Stats Badge -->
-            <div class="progress-stats-badge" id="progressBadge" title="Dagens framsteg / تقدم اليوم">
+            <div class="progress-stats-badge" id="progressBadge" title="Dagens framsteg / تقدم اليوم"
+                onclick="var m=document.getElementById('progressModal'); if(m) m.style.display='flex';">
                 <span class="progress-stat">
                     <span class="stat-icon">📖</span>
                     <span id="dailyWordsCount">0</span>
@@ -293,8 +294,33 @@
 
             // Apply only to Swedish title (Arabic letters need to stay connected)
             splitLetters(document.querySelector('.brand-title-swe'));
+
+            // Progress Badge Click Handler
+            const progressBadge = document.getElementById('progressBadge');
+            const progressModal = document.getElementById('progressModal');
+            const closeProgressBtn = document.getElementById('closeProgress');
+
+            if (progressBadge && progressModal) {
+                progressBadge.addEventListener('click', function () {
+                    console.log('[Progress] Badge clicked');
+                    progressModal.style.display = 'flex';
+                });
+            }
+
+            if (closeProgressBtn && progressModal) {
+                closeProgressBtn.addEventListener('click', function () {
+                    progressModal.style.display = 'none';
+                });
+
+                progressModal.addEventListener('click', function (e) {
+                    if (e.target === progressModal) {
+                        progressModal.style.display = 'none';
+                    }
+                });
+            }
         });
     </script>
+
 
 
     </div>

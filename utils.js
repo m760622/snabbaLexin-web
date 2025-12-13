@@ -655,8 +655,8 @@ const FlashcardManager = {
     },
 
     startSession(source = 'favorites') {
-        const modal = document.getElementById('flashcardModal');
-        if (!modal) return;
+        const container = document.getElementById('flashcardInlineContainer');
+        if (!container) return;
 
         // Get cards based on source
         if (source === 'favorites') {
@@ -694,30 +694,32 @@ const FlashcardManager = {
         this.correctCount = 0;
         this.isFlipped = false;
 
-        // Update UI
-        this.updateUI();
-        document.getElementById('flashcard')?.classList.remove('flipped');
-        document.getElementById('flashcardControls').style.display = 'none';
+        // Update UI with inline IDs
+        this.updateUIInline();
+        document.getElementById('flashcardInline')?.classList.remove('flipped');
+        document.getElementById('flashcardControlsInline').style.display = 'none';
 
-        // Show modal
-        modal.style.display = 'flex';
+        // Show container
+        container.style.display = 'block';
 
         // Close settings menu
         const settingsMenu = document.getElementById('settingsMenu');
         if (settingsMenu) settingsMenu.style.display = 'none';
 
-        // Attach flip listener (ensure it works even if init wasn't called)
-        const flashcardEl = document.getElementById('flashcard');
+        // Scroll to flashcard
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Attach flip listener for inline card
+        const flashcardEl = document.getElementById('flashcardInline');
         if (flashcardEl && !flashcardEl.hasAttribute('data-flip-attached')) {
             flashcardEl.setAttribute('data-flip-attached', 'true');
             flashcardEl.addEventListener('click', (e) => {
-                // Don't flip if clicking speak button
-                if (e.target.closest('.flashcard-speak-btn')) return;
+                if (e.target.closest('.flashcard-speak-btn-inline')) return;
 
                 const isFlipped = flashcardEl.classList.contains('flipped');
                 if (!isFlipped) {
                     flashcardEl.classList.add('flipped');
-                    const controlsEl = document.getElementById('flashcardControls');
+                    const controlsEl = document.getElementById('flashcardControlsInline');
                     if (controlsEl) controlsEl.style.display = 'grid';
                     FlashcardManager.isFlipped = true;
                     if (typeof HapticManager !== 'undefined') {
@@ -725,6 +727,103 @@ const FlashcardManager = {
                     }
                 }
             });
+        }
+
+        // Attach close button listener
+        const closeBtn = document.getElementById('closeFlashcardInline');
+        if (closeBtn && !closeBtn.hasAttribute('data-close-attached')) {
+            closeBtn.setAttribute('data-close-attached', 'true');
+            closeBtn.addEventListener('click', () => {
+                container.style.display = 'none';
+            });
+        }
+
+        // Attach rating buttons listeners
+        const controlsEl = document.getElementById('flashcardControlsInline');
+        if (controlsEl && !controlsEl.hasAttribute('data-controls-attached')) {
+            controlsEl.setAttribute('data-controls-attached', 'true');
+            controlsEl.querySelectorAll('.fc-btn-inline').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const quality = parseInt(e.currentTarget.dataset.quality);
+                    FlashcardManager.rateCardInline(quality);
+                });
+            });
+        }
+
+        // Attach speak button
+        const speakBtn = document.getElementById('flashcardSpeakBtnInline');
+        if (speakBtn && !speakBtn.hasAttribute('data-speak-attached')) {
+            speakBtn.setAttribute('data-speak-attached', 'true');
+            speakBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const currentWord = FlashcardManager.currentCards[FlashcardManager.currentIndex];
+                if (currentWord && typeof TTSManager !== 'undefined') {
+                    TTSManager.speak(currentWord[1], 'sv');
+                }
+            });
+        }
+    },
+
+    updateUIInline() {
+        const currentWord = this.currentCards[this.currentIndex];
+        if (!currentWord) return;
+
+        document.getElementById('flashcardFrontInline').textContent = currentWord[1] || ''; // COL_SWE
+        document.getElementById('flashcardBackInline').textContent = currentWord[2] || ''; // COL_ARB
+        document.getElementById('flashcardCurrentInline').textContent = this.currentIndex + 1;
+        document.getElementById('flashcardTotalInline').textContent = this.currentCards.length;
+    },
+
+    rateCardInline(quality) {
+        const currentWord = this.currentCards[this.currentIndex];
+        if (!currentWord) return;
+
+        const wordId = String(currentWord[0]);
+        SpacedRepetitionManager.calculateNextReview(quality, wordId);
+
+        this.reviewedCount++;
+        if (quality >= 3) {
+            this.correctCount++;
+        }
+
+        document.getElementById('fcCorrectInline').textContent = this.correctCount;
+
+        this.currentIndex++;
+        if (this.currentIndex >= this.currentCards.length) {
+            this.endSessionInline();
+        } else {
+            this.showNextCardInline();
+        }
+    },
+
+    showNextCardInline() {
+        const flashcard = document.getElementById('flashcardInline');
+        const controls = document.getElementById('flashcardControlsInline');
+
+        flashcard?.classList.remove('flipped');
+        controls.style.display = 'none';
+        this.isFlipped = false;
+
+        this.updateUIInline();
+    },
+
+    endSessionInline() {
+        const container = document.getElementById('flashcardInlineContainer');
+        const percentage = this.reviewedCount > 0 ?
+            Math.round((this.correctCount / this.reviewedCount) * 100) : 0;
+
+        let emoji = '🎉';
+        if (percentage < 50) emoji = '💪';
+        else if (percentage < 80) emoji = '👍';
+
+        showToast(`${emoji} ${this.correctCount}/${this.reviewedCount} rätt (${percentage}%)`);
+
+        setTimeout(() => {
+            if (container) container.style.display = 'none';
+        }, 1500);
+
+        if (typeof ProgressManager !== 'undefined') {
+            ProgressManager.trackGame('flashcards', this.correctCount);
         }
     },
 

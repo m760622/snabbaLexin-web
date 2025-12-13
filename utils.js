@@ -714,20 +714,35 @@ const FlashcardManager = {
         if (flashcardEl && !flashcardEl.hasAttribute('data-flip-attached')) {
             flashcardEl.setAttribute('data-flip-attached', 'true');
             flashcardEl.addEventListener('click', (e) => {
+                // Don't flip if clicking speak button
                 if (e.target.closest('.flashcard-speak-btn-inline')) return;
 
                 const isFlipped = flashcardEl.classList.contains('flipped');
-                if (!isFlipped) {
+
+                // Toggle flip state
+                if (isFlipped) {
+                    // Flip back to Swedish
+                    flashcardEl.classList.remove('flipped');
+                    FlashcardManager.isFlipped = false;
+                } else {
+                    // Flip to Arabic
                     flashcardEl.classList.add('flipped');
-                    const controlsEl = document.getElementById('flashcardControlsInline');
-                    if (controlsEl) controlsEl.style.display = 'grid';
                     FlashcardManager.isFlipped = true;
-                    if (typeof HapticManager !== 'undefined') {
-                        HapticManager.trigger('light');
-                    }
+                }
+
+                // Show controls when first flipped
+                const controlsEl = document.getElementById('flashcardControlsInline');
+                if (controlsEl && FlashcardManager.isFlipped) {
+                    controlsEl.style.display = 'grid';
+                }
+
+                // Haptic feedback
+                if (typeof HapticManager !== 'undefined') {
+                    HapticManager.trigger('light');
                 }
             });
         }
+
 
         // Attach close button listener
         const closeBtn = document.getElementById('closeFlashcardInline');

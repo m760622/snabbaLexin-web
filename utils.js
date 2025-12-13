@@ -705,6 +705,27 @@ const FlashcardManager = {
         // Close settings menu
         const settingsMenu = document.getElementById('settingsMenu');
         if (settingsMenu) settingsMenu.style.display = 'none';
+
+        // Attach flip listener (ensure it works even if init wasn't called)
+        const flashcardEl = document.getElementById('flashcard');
+        if (flashcardEl && !flashcardEl.hasAttribute('data-flip-attached')) {
+            flashcardEl.setAttribute('data-flip-attached', 'true');
+            flashcardEl.addEventListener('click', (e) => {
+                // Don't flip if clicking speak button
+                if (e.target.closest('.flashcard-speak-btn')) return;
+
+                const isFlipped = flashcardEl.classList.contains('flipped');
+                if (!isFlipped) {
+                    flashcardEl.classList.add('flipped');
+                    const controlsEl = document.getElementById('flashcardControls');
+                    if (controlsEl) controlsEl.style.display = 'grid';
+                    FlashcardManager.isFlipped = true;
+                    if (typeof HapticManager !== 'undefined') {
+                        HapticManager.trigger('light');
+                    }
+                }
+            });
+        }
     },
 
     flipCard() {

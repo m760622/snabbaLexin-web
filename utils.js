@@ -637,23 +637,54 @@ const ProgressManager = {
 
     // Achievement definitions
     ACHIEVEMENTS: [
+        // Word viewing achievements
         { id: 'first_search', name: 'Första sökning', nameAr: 'البحث الأول', icon: '🔍', condition: (d) => d.allTime.totalSearches >= 1 },
+        { id: 'first_step', name: 'Första steget', nameAr: 'الخطوة الأولى', icon: '🌟', condition: (d) => d.allTime.uniqueWordsViewed.length >= 1 },
         { id: 'word_explorer', name: '10 ord', nameAr: '10 كلمات', icon: '📚', condition: (d) => d.allTime.uniqueWordsViewed.length >= 10 },
         { id: 'word_collector', name: '50 ord', nameAr: '50 كلمة', icon: '📖', condition: (d) => d.allTime.uniqueWordsViewed.length >= 50 },
-        { id: 'word_master', name: '100 ord', nameAr: '100 كلمة', icon: '🏆', condition: (d) => d.allTime.uniqueWordsViewed.length >= 100 },
+        { id: 'bookworm', name: 'Bokmal', nameAr: 'دودة كتب', icon: '🐛', condition: (d) => d.allTime.uniqueWordsViewed.length >= 100 },
         { id: 'word_legend', name: '500 ord', nameAr: '500 كلمة', icon: '👑', condition: (d) => d.allTime.uniqueWordsViewed.length >= 500 },
         { id: 'word_expert', name: '1000 ord', nameAr: '1000 كلمة', icon: '🎓', condition: (d) => d.allTime.uniqueWordsViewed.length >= 1000 },
+
+        // Streak achievements
         { id: 'streak_3', name: '3 dagars streak', nameAr: 'سلسلة 3 أيام', icon: '🔥', condition: (d) => d.allTime.currentStreak >= 3 },
-        { id: 'streak_7', name: 'Veckans streak', nameAr: 'سلسلة أسبوع', icon: '⚡', condition: (d) => d.allTime.currentStreak >= 7 },
-        { id: 'streak_30', name: 'Månads streak', nameAr: 'سلسلة شهر', icon: '💎', condition: (d) => d.allTime.currentStreak >= 30 },
-        { id: 'streak_100', name: '100 dagars streak', nameAr: 'سلسلة 100 يوم', icon: '🌟', condition: (d) => d.allTime.currentStreak >= 100 },
+        { id: 'streak_7', name: 'Veckans krigare', nameAr: 'محارب الأسبوع', icon: '⚡', condition: (d) => d.allTime.currentStreak >= 7 },
+        { id: 'streak_30', name: 'Månads proffs', nameAr: 'محترف الشهر', icon: '💎', condition: (d) => d.allTime.currentStreak >= 30 },
+        { id: 'streak_100', name: '100 dagars legend', nameAr: 'أسطورة 100 يوم', icon: '🌠', condition: (d) => d.allTime.currentStreak >= 100 },
+
+        // Daily achievements
         { id: 'daily_10', name: '10 ord idag', nameAr: '10 كلمات اليوم', icon: '⭐', condition: (d) => d.daily.wordsViewed.length >= 10 },
         { id: 'daily_goal', name: 'Dagligt mål', nameAr: 'الهدف اليومي', icon: '🎯', condition: (d) => d.daily.wordsViewed.length >= (parseInt(localStorage.getItem('dailyGoal')) || 10) },
+
+        // Gaming achievements
         { id: 'gamer', name: 'Spelaren', nameAr: 'اللاعب', icon: '🎮', condition: (d) => d.allTime.totalGamesPlayed >= 10 },
         { id: 'super_gamer', name: '50 spel', nameAr: '50 لعبة', icon: '🏅', condition: (d) => d.allTime.totalGamesPlayed >= 50 },
+
+        // TTS achievements
+        { id: 'tts_beginner', name: '10 uttal', nameAr: '10 نطق', icon: '🔊', condition: (d) => d.allTime.totalTtsUsed >= 10 },
+        { id: 'polyglot', name: 'Polyglott', nameAr: 'متعدد اللغات', icon: '🗣️', condition: (d) => d.allTime.totalTtsUsed >= 50 },
         { id: 'tts_master', name: '100 uttal', nameAr: '100 نطق', icon: '🎙️', condition: (d) => d.allTime.totalTtsUsed >= 100 },
-        { id: 'search_pro', name: '500 sökningar', nameAr: '500 بحث', icon: '🔎', condition: (d) => d.allTime.totalSearches >= 500 }
+
+        // Search achievements
+        { id: 'search_pro', name: '500 sökningar', nameAr: '500 بحث', icon: '🔎', condition: (d) => d.allTime.totalSearches >= 500 },
+
+        // Favorites achievements
+        { id: 'favorite_first', name: 'Första favorit', nameAr: 'المفضلة الأولى', icon: '❤️', condition: () => (JSON.parse(localStorage.getItem('favorites') || '[]')).length >= 1 },
+        { id: 'collector', name: 'Samlare', nameAr: 'جامع', icon: '💖', condition: () => (JSON.parse(localStorage.getItem('favorites') || '[]')).length >= 50 },
+        { id: 'hoarder', name: '100 favoriter', nameAr: '100 مفضلة', icon: '💝', condition: () => (JSON.parse(localStorage.getItem('favorites') || '[]')).length >= 100 },
+
+        // Explorer achievement (use multiple features)
+        { id: 'explorer', name: 'Utforskare', nameAr: 'مستكشف', icon: '🌐', condition: (d) => d.allTime.totalSearches >= 10 && d.allTime.totalGamesPlayed >= 5 && d.allTime.totalTtsUsed >= 5 },
+
+        // Ultimate achievement
+        {
+            id: 'master', name: 'Mästare', nameAr: 'سيد', icon: '👑', condition: function (d) {
+                const favs = (JSON.parse(localStorage.getItem('favorites') || '[]')).length;
+                return d.allTime.uniqueWordsViewed.length >= 200 && d.allTime.currentStreak >= 14 && favs >= 25 && d.allTime.totalGamesPlayed >= 25;
+            }
+        }
     ],
+
 
     // Daily goal management
     DAILY_GOAL_KEY: 'dailyGoal',

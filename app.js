@@ -1562,6 +1562,23 @@ function handleSearch(e) {
         });
     }
 
+    // Category Filter (Topics like food, work, health, etc.)
+    const selectedCategory = categorySelect ? categorySelect.value : 'all';
+    if (selectedCategory !== 'all') {
+        const keywords = CATEGORY_KEYWORDS[selectedCategory] || [];
+        if (keywords.length > 0) {
+            results = results.filter(item => {
+                const content = (
+                    (item[COL_SWE] || '') + ' ' +
+                    (item[COL_ARB] || '') + ' ' +
+                    (item[COL_DEF] || '') + ' ' +
+                    (item[COL_ARB_DEF] || '')
+                ).toLowerCase();
+                return keywords.some(kw => content.includes(kw.toLowerCase()));
+            });
+        }
+    }
+
     currentResults = results;
     currentPage = 1;
 

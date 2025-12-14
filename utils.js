@@ -278,11 +278,19 @@ const ThemeManager = {
 
         if (showMessage) {
             const themeNames = {
-                'default': 'Standard / افتراضي 🎨',
-                'ocean': 'Ocean Blue / أزرق محيطي 🌊',
-                'sunset': 'Sunset Orange / برتقالي غروب 🌅',
-                'forest': 'Forest Green / أخضر غابي 🌲',
-                'purple': 'Purple Haze / بنفسجي ضبابي 💜'
+                'default': 'Standard ⚪',
+                'ocean': 'Ocean Blue 🌊',
+                'sunset': 'Sunset Orange 🌅',
+                'forest': 'Forest Green 🌲',
+                'purple': 'Purple Haze 💜',
+                'rose': 'Rose Pink 🌸',
+                'midnight': 'Midnight Blue 🌙',
+                'mint': 'Mint Green 🍃',
+                'coral': 'Coral Red 🪸',
+                'neon': 'Neon Cyber ⚡',
+                'stealth': 'Stealth Black 🖤',
+                'aurora': 'Aurora Night 🌌',
+                'ember': 'Ember Glow 🔥'
             };
             showToast(themeNames[theme] || theme);
         }

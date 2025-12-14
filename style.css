@@ -127,6 +127,148 @@
     --border: rgba(168, 85, 247, 0.2);
 }
 
+/* ========== 5 NEW THEMES ========== */
+
+/* Rose Pink Theme - وردي */
+[data-color-theme="rose"] {
+    --primary: #ec4899;
+    --primary-hover: #f472b6;
+    --accent: #ec4899;
+    --theme-gradient-start: #ec4899;
+    --theme-gradient-end: #db2777;
+}
+
+[data-color-theme="rose"][data-theme="dark"] {
+    --background: #1f1318;
+    --surface: #2d1a22;
+    --border: rgba(236, 72, 153, 0.2);
+}
+
+/* Midnight Blue Theme - أزرق ليلي */
+[data-color-theme="midnight"] {
+    --primary: #3b82f6;
+    --primary-hover: #60a5fa;
+    --accent: #3b82f6;
+    --theme-gradient-start: #3b82f6;
+    --theme-gradient-end: #2563eb;
+}
+
+[data-color-theme="midnight"][data-theme="dark"] {
+    --background: #0a0f1a;
+    --surface: #111827;
+    --border: rgba(59, 130, 246, 0.2);
+}
+
+/* Mint Green Theme - نعناعي */
+[data-color-theme="mint"] {
+    --primary: #10b981;
+    --primary-hover: #34d399;
+    --accent: #10b981;
+    --theme-gradient-start: #10b981;
+    --theme-gradient-end: #059669;
+}
+
+[data-color-theme="mint"][data-theme="dark"] {
+    --background: #0d1f17;
+    --surface: #132f23;
+    --border: rgba(16, 185, 129, 0.2);
+}
+
+/* Coral Theme - مرجاني */
+[data-color-theme="coral"] {
+    --primary: #f43f5e;
+    --primary-hover: #fb7185;
+    --accent: #f43f5e;
+    --theme-gradient-start: #f43f5e;
+    --theme-gradient-end: #e11d48;
+}
+
+[data-color-theme="coral"][data-theme="dark"] {
+    --background: #1f1014;
+    --surface: #2d171c;
+    --border: rgba(244, 63, 94, 0.2);
+}
+
+/* Neon Cyber Theme - نيون سايبر */
+[data-color-theme="neon"] {
+    --primary: #06b6d4;
+    --primary-hover: #22d3ee;
+    --accent: #06b6d4;
+    --theme-gradient-start: #06b6d4;
+    --theme-gradient-end: #0891b2;
+}
+
+[data-color-theme="neon"][data-theme="dark"] {
+    --background: #0a1a1e;
+    --surface: #0f252b;
+    --border: rgba(6, 182, 212, 0.2);
+}
+
+/* ========== 3 DARK-ONLY THEMES ========== */
+
+/* Stealth Black Theme - أسود خفي */
+[data-color-theme="stealth"] {
+    --primary: #71717a;
+    --primary-hover: #a1a1aa;
+    --accent: #71717a;
+    --theme-gradient-start: #52525b;
+    --theme-gradient-end: #3f3f46;
+    --background: #09090b;
+    --surface: #18181b;
+    --border: rgba(113, 113, 122, 0.15);
+    --text-main: #e4e4e7;
+    --text-secondary: #a1a1aa;
+}
+
+[data-color-theme="stealth"][data-theme="light"] {
+    --background: #fafafa;
+    --surface: #f4f4f5;
+    --text-main: #18181b;
+    --text-secondary: #52525b;
+}
+
+/* Aurora Night Theme - شفق ليلي */
+[data-color-theme="aurora"] {
+    --primary: #4ade80;
+    --primary-hover: #86efac;
+    --accent: #4ade80;
+    --theme-gradient-start: #22c55e;
+    --theme-gradient-end: #059669;
+    --background: #020617;
+    --surface: #0f172a;
+    --border: rgba(74, 222, 128, 0.15);
+    --text-main: #e2e8f0;
+    --text-secondary: #94a3b8;
+}
+
+[data-color-theme="aurora"][data-theme="light"] {
+    --background: #f0fdf4;
+    --surface: #dcfce7;
+    --text-main: #14532d;
+    --text-secondary: #166534;
+}
+
+/* Ember Glow Theme - جمر متوهج */
+[data-color-theme="ember"] {
+    --primary: #ef4444;
+    --primary-hover: #f87171;
+    --accent: #ef4444;
+    --theme-gradient-start: #dc2626;
+    --theme-gradient-end: #b91c1c;
+    --background: #0c0a09;
+    --surface: #1c1917;
+    --border: rgba(239, 68, 68, 0.15);
+    --text-main: #fafaf9;
+    --text-secondary: #a8a29e;
+}
+
+[data-color-theme="ember"][data-theme="light"] {
+    --background: #fef2f2;
+    --surface: #fee2e2;
+    --text-main: #450a0a;
+    --text-secondary: #991b1b;
+}
+
 /* ========================================
    LOADING SKELETONS
    ======================================== */
@@ -2959,19 +3101,57 @@ header {
     position: absolute;
     top: 120%;
     left: 0;
-    width: 220px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    width: 280px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-radius: 1rem;
     padding: 0.5rem;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.15), 0 8px 20px -6px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.15rem;
     z-index: 100;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    animation: slideDown 0.2s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    animation: slideDown 0.25s ease-out;
+}
+
+[data-theme="dark"] .settings-menu {
+    background: rgba(15, 23, 42, 0.98);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.6);
+}
+
+/* Section Headers */
+.settings-section-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 0.75rem 1rem 0.25rem 1rem;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+    border-top: 1px solid var(--border);
+}
+
+.settings-section-header:first-child {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 0.5rem;
+}
+
+/* Version Badge */
+.settings-version {
+    text-align: center;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    border-top: 1px solid var(--border);
 }
 
 [data-theme="dark"] .settings-menu {

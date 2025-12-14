@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Changelog - SnabbaLexin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        /* Mobile View Mode */
+        html.iphone-mode {
+            background: var(--bg-color);
+        }
+
+        body.iphone-view {
+            max-width: 430px;
+            margin: 0 auto;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-toggle-btn {
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid #6366f1;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 1px;
+        }
+
+        .mobile-toggle-btn:hover {
+            background: rgba(99, 102, 241, 0.4);
+        }
+
+        .mobile-toggle-btn.active {
+            background: #6366f1;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        header h1 {
+            flex: 1;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* Main Content */
+        main {
+            padding: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid var(--bg-color);
+        }
+
+        .timeline-date {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-version {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .change-list {
+            list-style: none;
+        }
+
+        .change-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .change-list li::before {
+            flex-shrink: 0;
+        }
+
+        .change-type {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .feature {
+            color: var(--success);
+        }
+
+        .improvement {
+            color: var(--info);
+        }
+
+        .fix {
+            color: var(--warning);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+            title="وضع الموبايل">📱</button>
+        <h1>Changelog / سجل التحديثات</h1>
+    </header>
+
+    <main>
+        <div class="hero">
+            <h2>📋 Nyheter</h2>
+            <p>Alla uppdateringar och förbättringar</p>
+            <div class="version-badge">v2.5.0</div>
+        </div>
+
+        <div class="timeline">
+            <!-- Version 2.5.0 -->
+            <div class="timeline-item">
+                <span class="timeline-date">14 Dec 2024</span>
+                <div class="timeline-version">v2.5.0</div>
+                <div class="timeline-title">Stora förbättringar! / تحسينات كبيرة!</div>
+                <ul class="change-list">
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>IndexedDB Cache:</strong> Snabbare laddning vid upprepade besök</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>90 nya exempel:</strong> 10 exempel per grammatiklektion</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Falska vänner:</strong> Ord som liknar arabiska men har annan betydelse</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Situationsfraser:</strong> På sjukhuset, jobbet och banken</span>
+                    </li>
+                    <li>
+                        <span class="change-type improvement">🔧</span>
+                        <span><strong>TTS förbättrad:</strong> Bättre svenskt uttal på iPhone</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Version 2.4.0 -->
+            <div class="timeline-item">
+                <span class="timeline-date">13 Dec 2024</span>
+                <div class="timeline-version">v2.4.0</div>
+                <div class="timeline-title">TTS & Spel / النطق والألعاب</div>
+                <ul class="change-list">
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Unified TTS:</strong> Enhetligt tal-system över hela appen</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Progress Dashboard:</strong> Visa din lärningsprogress</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Nya spel:</strong> Ordhjulet, Ordregn och mer</span>
+                    </li>
+                    <li>
+                        <span class="change-type fix">🐛</span>
+                        <span><strong>Flashcards:</strong> Fixade flip-funktionen</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Version 2.3.0 -->
+            <div class="timeline-item">
+                <span class="timeline-date">12 Dec 2024</span>
+                <div class="timeline-version">v2.3.0</div>
+                <div class="timeline-title">Mobilvy & UI / واجهة الموبايل</div>
+                <ul class="change-list">
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Mobile View:</strong> Simulera iPhone-vy på desktop</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Stage Map:</strong> Visa alla spelsteg</span>
+                    </li>
+                    <li>
+                        <span class="change-type improvement">🔧</span>
+                        <span><strong>Design:</strong> Uppdaterade färgteman</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Version 2.2.0 -->
+            <div class="timeline-item">
+                <span class="timeline-date">11 Dec 2024</span>
+                <div class="timeline-version">v2.2.0</div>
+                <div class="timeline-title">Exempel & Data / أمثلة وبيانات</div>
+                <ul class="change-list">
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>6500+ exempel:</strong> Svenska och arabiska exempelmeningar</span>
+                    </li>
+                    <li>
+                        <span class="change-type improvement">🔧</span>
+                        <span><strong>Projektrensning:</strong> Borttog onödiga filer</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Version 2.1.0 -->
+            <div class="timeline-item">
+                <span class="timeline-date">10 Dec 2024</span>
+                <div class="timeline-version">v2.1.0</div>
+                <div class="timeline-title">Sökfilter / فلاتر البحث</div>
+                <ul class="change-list">
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Ordtypsfilter:</strong> Filtrera verb, substantiv, adjektiv</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Favoriter:</strong> Spara dina favoritord</span>
+                    </li>
+                    <li>
+                        <span class="change-type improvement">🔧</span>
+                        <span><strong>Sökfunktion:</strong> Snabbare och mer exakt</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Version 2.0.0 -->
+            <div class="timeline-item">
+                <span class="timeline-date">9 Dec 2024</span>
+                <div class="timeline-version">v2.0.0</div>
+                <div class="timeline-title">Stor uppdatering! / تحديث كبير!</div>
+                <ul class="change-list">
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Ny design:</strong> Modern och premium UI</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>PWA:</strong> Installera som app på din telefon</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>Offline:</strong> Fungerar utan internet</span>
+                    </li>
+                    <li>
+                        <span class="change-type feature">✨</span>
+                        <span><strong>34 000+ ord:</strong> Stor ordbok</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Mobile View
+        function toggleMobileView() {
+            document.documentElement.classList.toggle('iphone-mode');
+            document.body.classList.toggle('iphone-view');
+            const isActive = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+            const btn = document.getElementById('mobileToggle');
+            if (btn) btn.classList.toggle('active', isActive);
+        }
+
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.documentElement.classList.add('iphone-mode');
+            document.body.classList.add('iphone-view');
+            document.getElementById('mobileToggle')?.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

@@ -41,7 +41,22 @@
       "purpose": "any"
     }
   ],
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1290x2796",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Dictionary Search - Ordbok Sök"
+    },
+    {
+      "src": "screenshot2.png",
+      "sizes": "1290x2796",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Learning Games - Lärandespel"
+    }
+  ],
   "shortcuts": [
     {
       "name": "📅 Dagens Ord / كلمة اليوم",

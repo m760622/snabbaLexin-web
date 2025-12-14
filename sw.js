@@ -1,10 +1,21 @@
-const CACHE_NAME = 'snabba-lexin-v3';
+const CACHE_NAME = 'snabba-lexin-v4';
 const STATIC_ASSETS = [
     './',
     './index.html',
     './games.html',
     './details.html',
     './add.html',
+    './learn.html',
+    './profile.html',
+    './changelog.html',
+    './vowel_game.html',
+    './word_search.html',
+    './block_puzzle.html',
+    './listening.html',
+    './memory.html',
+    './fill_blank.html',
+    './hangman.html',
+    './unblock_me.html',
     './style.css',
     './games.css',
     './details-premium.css',
@@ -35,6 +46,7 @@ const DYNAMIC_ASSETS = [
     './pronunciationGame.js',
     './js/lessonsData.js',
     './js/learn.js',
+    './js/profile.js',
     './js/utils.js',
 ];
 

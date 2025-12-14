@@ -50,7 +50,7 @@ function showToast(message, type = 'default') {
     }
 }
 
-// Global Start Game Function
+// Global Start Game Function with Error Boundary
 window.startGame = function (gameType) {
     try {
         console.log("window.startGame called with:", gameType);
@@ -116,27 +116,46 @@ window.startGame = function (gameType) {
             initWordConnect();
         }
     } catch (error) {
-        console.error("CRITICAL ERROR in startGame:", error);
+        console.error("❌ Game Error:", error);
+        // Show user-friendly error message
+        showToast("Spelet kunde inte laddas. Försök igen! / اللعبة لم تحمل، حاول مجددًا", 'error');
+        // Fallback: return to game menu
+        setTimeout(() => {
+            try {
+                showGameMenu();
+            } catch (e) {
+                // Last resort: reload page
+                window.location.reload();
+            }
+        }, 2000);
     }
 }
 
 window.showGameMenu = function () {
-    document.getElementById('gameMenu').style.display = 'block';
-    document.getElementById('missingWordGame').style.display = 'none';
-    document.getElementById('flashcardsGame').style.display = 'none';
-    document.getElementById('pronunciationGame').style.display = 'none';
-    document.getElementById('spellingGame').style.display = 'none';
-    document.getElementById('wordWheelGame').style.display = 'none';
+    try {
+        const gameMenu = document.getElementById('gameMenu');
+        const gameElements = [
+            'missingWordGame', 'flashcardsGame', 'pronunciationGame',
+            'spellingGame', 'wordWheelGame', 'sentenceGame',
+            'rainGame', 'wordleGame', 'grammarGame', 'word-game-module'
+        ];
 
-    document.getElementById('wordWheelGame').style.display = 'none';
-    document.getElementById('sentenceGame').style.display = 'none';
-    document.getElementById('rainGame').style.display = 'none';
-    document.getElementById('wordleGame').style.display = 'none';
-    document.getElementById('grammarGame').style.display = 'none';
-    document.getElementById('word-game-module').style.display = 'none';
+        // Show menu
+        if (gameMenu) gameMenu.style.display = 'block';
 
-    // Refresh scores
-    loadScores();
+        // Hide all games safely
+        gameElements.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+
+        // Refresh scores
+        loadScores();
+    } catch (error) {
+        console.error("❌ Error showing game menu:", error);
+        // Fallback: reload page if menu fails
+        window.location.href = 'games.html';
+    }
 }
 
 

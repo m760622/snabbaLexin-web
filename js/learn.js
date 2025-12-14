@@ -288,6 +288,9 @@ function renderQuizQuestion() {
         { text: wrongAnswers[1]?.arb || 'N/A', correct: false }
     ].sort(() => 0.5 - Math.random());
 
+    // Store correct answer for feedback
+    currentQuiz.currentCorrectAnswer = q.arb;
+
     let html = `
         <div class="quiz-container">
             <div class="quiz-header">
@@ -297,13 +300,14 @@ function renderQuizQuestion() {
             
             <div class="question-card">
                 <p class="question-text">${q.swe}</p>
-                <div class="options-grid">
+                <div class="options-grid" id="quizOptions">
                     ${options.map((opt, i) => `
-                        <button class="option-btn" onclick="checkAnswer(${opt.correct})">
+                        <button class="option-btn" data-correct="${opt.correct}" data-text="${escapeSquote(opt.text)}" onclick="checkAnswer(${opt.correct}, this, '${escapeSquote(q.arb)}')">
                             ${opt.text}
                         </button>
                     `).join('')}
                 </div>
+                <div id="answerFeedback" class="answer-feedback" style="display: none;"></div>
             </div>
         </div>
     `;
@@ -312,7 +316,34 @@ function renderQuizQuestion() {
 }
 
 
-window.checkAnswer = function (isCorrect) {
+window.checkAnswer = function (isCorrect, clickedBtn, correctAnswer) {
+    // Prevent multiple clicks
+    const allBtns = document.querySelectorAll('.option-btn');
+    allBtns.forEach(btn => btn.disabled = true);
+
+    // Show feedback on buttons
+    allBtns.forEach(btn => {
+        const btnIsCorrect = btn.getAttribute('data-correct') === 'true';
+        if (btnIsCorrect) {
+            btn.classList.add('correct-answer');
+        } else if (btn === clickedBtn && !isCorrect) {
+            btn.classList.add('wrong-answer');
+        }
+    });
+
+    // Show feedback message
+    const feedbackDiv = document.getElementById('answerFeedback');
+    if (feedbackDiv) {
+        feedbackDiv.style.display = 'block';
+        if (isCorrect) {
+            feedbackDiv.innerHTML = `<span class="feedback-correct">✅ Rätt! / صحيح!</span>`;
+            feedbackDiv.className = 'answer-feedback feedback-correct-box';
+        } else {
+            feedbackDiv.innerHTML = `<span class="feedback-wrong">❌ Fel! / خطأ!</span><br><small>Rätt svar: ${correctAnswer}</small>`;
+            feedbackDiv.className = 'answer-feedback feedback-wrong-box';
+        }
+    }
+
     if (isCorrect) {
         currentQuiz.score++;
     } else {
@@ -321,12 +352,15 @@ window.checkAnswer = function (isCorrect) {
         logMistake(q, currentQuiz.lessonId);
     }
 
-    currentQuiz.index++;
-    if (currentQuiz.index < currentQuiz.questions.length) {
-        renderQuizQuestion();
-    } else {
-        showQuizResults();
-    }
+    // Wait 1.5 seconds then move to next question
+    setTimeout(() => {
+        currentQuiz.index++;
+        if (currentQuiz.index < currentQuiz.questions.length) {
+            renderQuizQuestion();
+        } else {
+            showQuizResults();
+        }
+    }, 1500);
 }
 
 function logMistake(question, lessonId) {

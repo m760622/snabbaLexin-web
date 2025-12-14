@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snabba-lexin-v4';
+const CACHE_NAME = 'snabba-lexin-v5';
 const STATIC_ASSETS = [
     './',
     './index.html',
@@ -17,7 +17,9 @@ const STATIC_ASSETS = [
     './hangman.html',
     './unblock_me.html',
     './style.css',
+    './style.min.css',
     './games.css',
+    './games.min.css',
     './details-premium.css',
     './manifest.json',
     './icon.svg',

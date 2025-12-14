@@ -14,11 +14,13 @@ const STATIC_ASSETS = [
 ];
 
 const DYNAMIC_ASSETS = [
+    './db.js',
     './app.js',
     './games.js',
     './details.js',
     './add.js',
     './data.js',
+    './utils.js',
     './wordConnectData.js',
     './wordConnectGame_v2.js',
     './grammarData.js',

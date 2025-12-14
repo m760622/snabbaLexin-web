@@ -676,16 +676,73 @@ async function init() {
     }
 
     try {
-        // ... (Loading logic remains the same)
-        // Show loading spinner
-        statsElement.innerHTML = `
-            <div class="loading-container">
-                <div class="spinner"></div>
-                <div>Laddar ordbok... / جاري تحميل القاموس...</div>
+        // Show loading spinner with progress indicator
+        const loadingContainer = document.createElement('div');
+        loadingContainer.id = 'dataLoadingIndicator';
+        loadingContainer.className = 'loading-container';
+        loadingContainer.innerHTML = `
+            <div class="spinner"></div>
+            <div class="loading-text">Laddar ordbok... / جاري تحميل القاموس...</div>
+            <div class="loading-progress" id="loadingProgress" style="display:none;">
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="loadingProgressBar"></div>
+                </div>
+                <div class="progress-text" id="loadingProgressText">0%</div>
             </div>
         `;
+        statsElement.innerHTML = '';
+        statsElement.appendChild(loadingContainer);
 
-        // Data is loaded via data.js as a global variable 'dictionaryData'
+        // Try to use IndexedDB cache first (via DataLoader)
+        let dataLoaded = false;
+        if (typeof DataLoader !== 'undefined') {
+            try {
+                console.log('[App] Checking IndexedDB cache...');
+                await DictionaryDB.init();
+                const hasCached = await DictionaryDB.hasCachedData();
+                const cachedVersion = await DictionaryDB.getDataVersion();
+
+                if (hasCached && cachedVersion === DATA_VERSION) {
+                    // Use cached data - much faster!
+                    loadingContainer.querySelector('.loading-text').textContent =
+                        'Laddar från cache... / جاري التحميل من الذاكرة...';
+
+                    const cachedData = await DictionaryDB.getAllWords();
+                    if (cachedData && cachedData.length > 0) {
+                        // Replace global dictionaryData with cached data
+                        if (typeof dictionaryData !== 'undefined') {
+                            dictionaryData.length = 0; // Clear existing
+                            dictionaryData.push(...cachedData);
+                        }
+                        dataLoaded = true;
+                        console.log(`[App] Loaded ${cachedData.length} words from IndexedDB cache`);
+                    }
+                } else if (typeof dictionaryData !== 'undefined' && dictionaryData.length > 0) {
+                    // Need to cache fresh data.js
+                    console.log('[App] Caching data.js to IndexedDB...');
+                    loadingContainer.querySelector('.loading-text').textContent =
+                        'Sparar i cache... / جاري حفظ الذاكرة...';
+
+                    // Show progress bar for caching
+                    const progressContainer = document.getElementById('loadingProgress');
+                    const progressBar = document.getElementById('loadingProgressBar');
+                    const progressText = document.getElementById('loadingProgressText');
+                    if (progressContainer) progressContainer.style.display = 'block';
+
+                    await DictionaryDB.saveWords(dictionaryData, (progress) => {
+                        if (progressBar) progressBar.style.width = `${progress}%`;
+                        if (progressText) progressText.textContent = `${progress}%`;
+                    });
+                    await DictionaryDB.setDataVersion(DATA_VERSION);
+                    dataLoaded = true;
+                    console.log('[App] Data cached successfully');
+                }
+            } catch (dbError) {
+                console.warn('[App] IndexedDB error, falling back to data.js:', dbError);
+            }
+        }
+
+        // Fallback: ensure dictionaryData is available from data.js
         if (typeof dictionaryData === 'undefined' || dictionaryData.length === 0) {
             throw new Error('Data file not loaded or empty');
         }

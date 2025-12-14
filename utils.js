@@ -1973,21 +1973,39 @@ const TTSManager = {
     },
 
     // ========================================
-    // PROVIDER CHAIN
+    // PROVIDER CHAIN (Priority: Local → VoiceRSS → Google)
+    // Local TTS is primary because:
+    // 1. Works offline
+    // 2. No rate limits
+    // 3. Cannot be blocked
     // ========================================
 
     async _speakWithProviders(text, lang, options) {
+        // Check if online for external providers
+        const isOnline = navigator.onLine;
+
+        // Provider chain - Local first (most reliable)
         const providers = [
-            () => this._playGoogleTTS(text, lang, options),
-            () => this._playLocalTTS(text, lang, options)
+            { name: 'Local TTS', fn: () => this._playLocalTTS(text, lang, options) },
+            { name: 'VoiceRSS', fn: () => this._playVoiceRSS(text, lang, options), requiresOnline: true },
+            { name: 'Google TTS', fn: () => this._playGoogleTTS(text, lang, options), requiresOnline: true }
         ];
 
         for (let i = 0; i < providers.length; i++) {
+            const provider = providers[i];
+
+            // Skip online-only providers if offline
+            if (provider.requiresOnline && !isOnline) {
+                console.log(`🔊 Skipping ${provider.name} (offline)`);
+                continue;
+            }
+
             try {
-                await providers[i]();
+                await provider.fn();
+                console.log(`✅ ${provider.name} success`);
                 return; // Success
             } catch (e) {
-                console.warn(`🔊 Provider ${i + 1} failed:`, e.message);
+                console.warn(`🔊 ${provider.name} failed:`, e.message);
                 if (i === providers.length - 1) {
                     // All providers failed
                     this.isPlaying = false;
@@ -1997,6 +2015,71 @@ const TTSManager = {
             }
         }
     },
+
+    // ========================================
+    // VoiceRSS TTS (Free tier: 350 requests/day)
+    // ========================================
+
+    _playVoiceRSS(text, lang, options = {}) {
+        return new Promise((resolve, reject) => {
+            // VoiceRSS free API key (you can get your own at voicerss.org)
+            const API_KEY = 'demo'; // Replace with actual key for production
+
+            // Language mapping for VoiceRSS
+            const langMap = {
+                'sv-SE': 'sv-se',
+                'sv': 'sv-se',
+                'ar-SA': 'ar-sa',
+                'ar': 'ar-sa',
+                'en-US': 'en-us',
+                'en': 'en-us'
+            };
+
+            const voiceLang = langMap[lang] || 'sv-se';
+
+            this.audio = new Audio();
+            const url = `https://api.voicerss.org/?key=${API_KEY}&hl=${voiceLang}&src=${encodeURIComponent(text)}&c=MP3&f=44khz_16bit_stereo`;
+
+            this.audio.src = url;
+            this.audio.volume = options.volume || 1.0;
+
+            const speed = options.speed || this.getSpeed();
+
+            this.audio.oncanplay = () => {
+                try {
+                    this.audio.playbackRate = speed;
+                } catch (e) { }
+            };
+
+            this.audio.onended = () => {
+                this.isPlaying = false;
+                if (options.onEnd) options.onEnd();
+                resolve();
+            };
+
+            this.audio.onerror = () => {
+                this.isPlaying = false;
+                reject(new Error('VoiceRSS audio error'));
+            };
+
+            // Timeout
+            const timeoutId = setTimeout(() => {
+                if (this.audio && (this.audio.readyState < 2 || this.audio.paused)) {
+                    this.audio.pause();
+                    reject(new Error('VoiceRSS timeout'));
+                }
+            }, this.config.timeoutMs);
+
+            const playPromise = this.audio.play();
+            if (playPromise) {
+                playPromise.then(() => {
+                    clearTimeout(timeoutId);
+                    console.log('🔊 Playing VoiceRSS TTS');
+                }).catch(reject);
+            }
+        });
+    },
+
 
     // ========================================
     // GOOGLE TRANSLATE TTS (Best Quality)

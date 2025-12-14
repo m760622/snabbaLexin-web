@@ -42,7 +42,9 @@
 
     <nav class="top-nav">
         <div class="nav-left">
-            <div class="settings-dropdown" style="display: flex; flex-direction: column; gap: 0.5rem;">
+
+            <div class="settings-dropdown"
+                style="display: flex; flex-direction: column; gap: 0.5rem; align-items: center;">
                 <button id="settingsBtn" class="theme-toggle" aria-label="Inställningar / الإعدادات">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -52,6 +54,7 @@
                         </path>
                     </svg>
                 </button>
+
                 <button class="theme-toggle" onclick="window.location.href='games.html'" aria-label="Spel / الألعاب"
                     title="Spel / الألعاب">
                     🎮
@@ -308,10 +311,14 @@
         </div>
 
         <div class="nav-right">
-            <!-- Results Count (moved above stats) -->
-            <div class="word-count-bubble">
-                <span id="resultCount">0</span>
-            </div>
+
+
+
+            <a href="profile.html" class="icon-btn" aria-label="Min Profil / ملفي الشخصي"
+                style="text-decoration: none; margin-bottom: 0.5rem; margin-right: 12px;">
+                👤
+            </a>
+
             <!-- Progress Stats Badge -->
             <div class="progress-stats-badge" id="progressBadge" title="Dagens framsteg / تقدم اليوم"
                 onclick="var m=document.getElementById('progressModal'); if(m) m.style.display='flex';">
@@ -464,6 +471,8 @@
             <div class="search-row">
                 <div class="search-wrapper">
 
+
+
                     <input type="text" id="searchInput" placeholder="Sök ord / ابحث عن كلمة..." autocomplete="off"
                         autocorrect="off" spellcheck="false">
                     <button id="clearSearch" class="clear-btn" aria-label="Rensa / مسح" style="display: none;">
@@ -473,6 +482,10 @@
                             <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
                     </button>
+
+                    <!-- New Result Count Badge -->
+                    <span id="resultCount" class="search-result-badge">0</span>
+
                     <button id="voiceSearchBtn" class="voice-search-btn" aria-label="Röstinmatning / البحث الصوتي"
                         aria-pressed="false">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -854,7 +867,19 @@
                 <!-- Stats Cards -->
                 <div class="progress-section stats-section">
                     <h4>📊 Statistik / الإحصائيات</h4>
-                    <div class="stats-grid">
+                    <!-- Daily Challenges -->
+                    <section class="challenges-section" style="max-width: 1200px; margin: 1rem auto; padding: 0 1rem;">
+                        <div class="challenges-card"
+                            style="background: var(--surface); padding: 1rem; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <h3 style="margin-bottom: 1rem; color: var(--text);"><i class="fas fa-tasks"></i> Dagens
+                                Utmaningar / تحديات اليوم</h3>
+                            <div id="challengesList" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                                <!-- Rendered by JS -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="games-grid">
                         <div class="stat-card">
                             <span class="stat-icon">📖</span>
                             <span class="stat-value" id="statUniqueWords">0</span>

@@ -512,11 +512,74 @@ const grammarDatabase = {
             explanationAr: 'حرف الجر: På (على سطح)'
         },
         {
-            words: ['Katten', 'sitter', 'under', 'stolen'],
-            correct: ['Katten', 'sitter', 'under', 'stolen'],
-            hint: 'Översätt: القطة تجلس تحت الكرسي',
+            words: ['Katten', 'sover', 'under', 'stolen'],
+            correct: ['Katten', 'sover', 'under', 'stolen'],
+            hint: 'Översätt: القطة تنام تحت الكرسي',
             explanation: 'Preposition: Under',
             explanationAr: 'حرف الجر: Under (تحت)'
+        },
+        {
+            words: ['Tavlan', 'hänger', 'på', 'väggen'],
+            correct: ['Tavlan', 'hänger', 'på', 'väggen'],
+            hint: 'Översätt: اللوحة معلقة على الحائط',
+            explanation: 'Preposition: På (yta)',
+            explanationAr: 'حرف الجر: På (على سطح)'
+        },
+        {
+            words: ['Han', 'går', 'in', 'i', 'rummet'],
+            correct: ['Han', 'går', 'in', 'i', 'rummet'],
+            hint: 'Översätt: هو يدخل إلى الغرفة',
+            explanation: 'Preposition: I (rörelse inåt)',
+            explanationAr: 'حرف الجر: I (حركة للداخل)'
+        },
+        {
+            words: ['Lampan', 'hänger', 'över', 'bordet'],
+            correct: ['Lampan', 'hänger', 'över', 'bordet'],
+            hint: 'Översätt: المصباح معلق فوق الطاولة',
+            explanation: 'Preposition: Över (ovanför utan kontakt)',
+            explanationAr: 'حرف الجر: Över (فوق بدون تلامس)'
+        },
+        {
+            words: ['Vi', 'sitter', 'vid', 'bordet'],
+            correct: ['Vi', 'sitter', 'vid', 'bordet'],
+            hint: 'Översätt: نحن نجلس عند الطاولة',
+            explanation: 'Preposition: Vid (bredvid/nära)',
+            explanationAr: 'حرف الجر: Vid (عند/بجانب)'
+        },
+        {
+            words: ['Hon', 'springer', 'mot', 'bussen'],
+            correct: ['Hon', 'springer', 'mot', 'bussen'],
+            hint: 'Översätt: هي تركض نحو الحافلة',
+            explanation: 'Preposition: Mot (riktning)',
+            explanationAr: 'حرف الجر: Mot (نحو)'
+        },
+        {
+            words: ['Han', 'gömmer', 'sig', 'bakom', 'trädet'],
+            correct: ['Han', 'gömmer', 'sig', 'bakom', 'trädet'],
+            hint: 'Översätt: هو يختبئ خلف الشجرة',
+            explanation: 'Preposition: Bakom',
+            explanationAr: 'حرف الجر: Bakom (خلف)'
+        },
+        {
+            words: ['Bilen', 'står', 'framför', 'huset'],
+            correct: ['Bilen', 'står', 'framför', 'huset'],
+            hint: 'Översätt: السيارة واقفة أمام المنزل',
+            explanation: 'Preposition: Framför',
+            explanationAr: 'حرف الجر: Framför (أمام)'
+        },
+        {
+            words: ['De', 'promenerar', 'längs', 'stranden'],
+            correct: ['De', 'promenerar', 'längs', 'stranden'],
+            hint: 'Översätt: هم يتنزهون على طول الشاطئ',
+            explanation: 'Preposition: Längs',
+            explanationAr: 'حرف الجر: Längs (على طول)'
+        },
+        {
+            words: ['Fågeln', 'flyger', 'mellan', 'träden'],
+            correct: ['Fågeln', 'flyger', 'mellan', 'träden'],
+            hint: 'Översätt: الطائر يطير بين الأشجار',
+            explanation: 'Preposition: Mellan',
+            explanationAr: 'حرف الجر: Mellan (بين)'
         },
         {
             words: ['Han', 'tittar', 'på', 'TV'],

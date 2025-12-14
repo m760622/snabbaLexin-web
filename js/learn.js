@@ -33,10 +33,60 @@ function applyMobileView(isActive) {
     }
 }
 
+
 function initLearnPage() {
     renderLessonCards();
+
     setupModalListeners();
+    initLessonSearch();
     updateProgressUI();
+
+    // Check for ID in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lessonId = urlParams.get('lesson');
+    if (lessonId) {
+        setTimeout(() => {
+            openMethodModal(lessonId);
+        }, 500); // Small delay to ensure rendering
+    }
+}
+
+
+function initLessonSearch() {
+    const searchInput = document.getElementById('lessonSearchInput');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.lesson-card');
+
+        cards.forEach(card => {
+            const lessonId = card.getAttribute('data-lesson');
+            const lesson = lessonsData.find(l => l.id === lessonId);
+
+            if (!lesson) return;
+
+            // Search in title and description (simple first pass)
+            const titleMatch = lesson.title.toLowerCase().includes(term);
+            const descMatch = (lesson.sections[0]?.content[0]?.html || '').toLowerCase().includes(term);
+
+            // Advanced: Search in all content and examples
+            const contentMatch = lesson.sections.some(sec =>
+                sec.content.some(item => item.html.toLowerCase().includes(term)) ||
+                (sec.examples && sec.examples.some(ex =>
+                    ex.swe.toLowerCase().includes(term) ||
+                    ex.arb.toLowerCase().includes(term)
+                ))
+            );
+
+            if (titleMatch || descMatch || contentMatch) {
+                card.style.display = 'block';
+                // Highlight logic could go here
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
 }
 
 function renderLessonCards() {
@@ -72,7 +122,24 @@ window.openMethodModal = function (lessonId) {
     if (titleHeader) titleHeader.innerText = lesson.title;
 
     // Build Content HTML
-    let htmlContent = '';
+    const highScore = localStorage.getItem(`lesson_score_${lesson.id}`);
+    const isCompleted = localStorage.getItem('completedLessons') && JSON.parse(localStorage.getItem('completedLessons')).includes(lesson.id);
+
+    let completionStatus = '';
+    if (isCompleted) {
+        completionStatus = `<div style="font-size: 0.9rem; color: var(--success); margin-top: 0.5rem; font-weight: 600;">✅ Avklarad ${highScore ? `(Bästa: ${highScore}%)` : ''}</div>`;
+    } else {
+        completionStatus = `<div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">Ej startad / لم يبدأ</div>`;
+    }
+
+    let htmlContent = `
+        <div class="lesson-completion" style="margin-bottom: 2rem;">
+            <button class="quiz-start-btn" onclick="startQuiz('${lesson.id}')">
+                <i class="fas fa-question-circle"></i> ${isCompleted ? 'Gör om Quiz / أعد الاختبار' : 'Starta Quiz / ابدأ الاختبار'}
+            </button>
+            ${completionStatus}
+        </div>
+    `;
 
     lesson.sections.forEach(section => {
         htmlContent += `<div class="lesson-section">`;
@@ -128,7 +195,7 @@ window.openMethodModal = function (lessonId) {
                     <div class="example-content">
                         <p class="swe">
                             ${ex.swe}
-                            <i class="fas fa-volume-up speaker-icon"></i>
+                            <span class="speaker-icon">🔊</span>
                         </p>
                         <p class="arb">${ex.arb}</p>
                     </div>
@@ -141,18 +208,26 @@ window.openMethodModal = function (lessonId) {
 
 
     // Add "Start Quiz" button instead of direct completion
-    htmlContent += `
-        <div class="lesson-completion">
-            <button class="quiz-start-btn" onclick="startQuiz('${lesson.id}')">
-                <i class="fas fa-question-circle"></i> Starta Quiz / ابدأ الاختبار
-            </button>
-        </div>
-    `;
+
 
     contentDiv.innerHTML = htmlContent;
     modal.style.display = 'block';
 
     // Push history state to handle back button closing
+    const swipeHintShown = localStorage.getItem('swipeHintShown');
+    if (!swipeHintShown && window.innerWidth <= 768) {
+        const hint = document.createElement('div');
+        hint.className = 'swipe-hint';
+        hint.innerHTML = '<span class="swipe-hand-icon">👆</span> <span>Swipe to navigate</span>';
+        document.body.appendChild(hint);
+
+        localStorage.setItem('swipeHintShown', 'true');
+
+        setTimeout(() => {
+            hint.remove();
+        }, 3000);
+    }
+
     history.pushState({ modalOpen: true }, '', '#lesson');
 };
 
@@ -236,12 +311,15 @@ function renderQuizQuestion() {
     contentDiv.innerHTML = html;
 }
 
-window.checkAnswer = function (isCorrect) {
-    if (isCorrect) currentQuiz.score++;
 
-    // Show feedback (optional, for speed we skip to next or show toast)
-    // Let's just go to next for now with a small visual feedback if possible, 
-    // but rewriting DOM is expensive. 
+window.checkAnswer = function (isCorrect) {
+    if (isCorrect) {
+        currentQuiz.score++;
+    } else {
+        // Log mistake
+        const q = currentQuiz.questions[currentQuiz.index];
+        logMistake(q, currentQuiz.lessonId);
+    }
 
     currentQuiz.index++;
     if (currentQuiz.index < currentQuiz.questions.length) {
@@ -251,25 +329,123 @@ window.checkAnswer = function (isCorrect) {
     }
 }
 
-function showQuizResults() {
+function logMistake(question, lessonId) {
+    let mistakes = JSON.parse(localStorage.getItem('mistakesLog')) || [];
+    // Avoid duplicates
+    if (!mistakes.some(m => m.swe === question.swe)) {
+        mistakes.push({
+            swe: question.swe,
+            arb: question.arb,
+            lessonId: lessonId,
+            date: new Date().toISOString()
+        });
+        localStorage.setItem('mistakesLog', JSON.stringify(mistakes));
+    }
+}
+
+window.openMistakesReview = function () {
+    let mistakes = JSON.parse(localStorage.getItem('mistakesLog')) || [];
+    const modal = document.getElementById('lessonModal');
     const contentDiv = document.getElementById('lessonContent');
-    const passed = currentQuiz.score >= Math.ceil(currentQuiz.questions.length * 0.6); // 60% pass
+    const titleHeader = document.getElementById('modalTitle');
+
+    if (!modal || !contentDiv) return;
+
+    if (titleHeader) titleHeader.innerText = "Dina Misstag / أخطاؤك";
+
+    if (mistakes.length === 0) {
+        contentDiv.innerHTML = `
+            <div class="lesson-section" style="text-align: center; padding: 2rem;">
+                <h3>Bra jobbat! 🎉</h3>
+                <p>Du har inga registrerade misstag just nu.</p>
+                <p>لا توجد أخطاء مسجلة حالياً.</p>
+            </div>
+        `;
+        modal.style.display = 'block';
+        return;
+    }
 
     let html = `
-        <div class="quiz-results">
-            <div class="result-icon">${passed ? '🎉' : '😕'}</div>
-            <h3>${passed ? 'Grattis! / مبروك!' : 'Försök igen / حاول مرة أخرى'}</h3>
-            <p>Du fick ${currentQuiz.score} av ${currentQuiz.questions.length} rätt.</p>
-            
-            <div class="result-actions">
-                ${passed ?
-            `<button class="result-btn success" onclick="completeLesson('${currentQuiz.lessonId}')">Avsluta & Spara</button>` :
-            `<button class="result-btn retry" onclick="startQuiz('${currentQuiz.lessonId}')">Försök igen</button>
-                     <button class="result-btn secondary" onclick="openMethodModal('${currentQuiz.lessonId}')">Gå tillbaka till lektionen</button>`
-        }
+        <div class="lesson-section">
+            <p>Här är orden och fraserna du behöver öva mer på:</p>
+            <div class="mistakes-list">
+    `;
+
+    mistakes.forEach((m, index) => {
+        html += `
+            <div class="example-box" id="mistake-${index}">
+                <div class="example-content">
+                    <p class="swe">${m.swe}</p>
+                    <p class="arb">${m.arb}</p>
+                    <small style="color: var(--text-muted)">Från lektion: ${lessonsData.find(l => l.id === m.lessonId)?.title || 'Okänd'}</small>
+                </div>
+                <button class="remove-mistake-btn" onclick="removeMistake(${index})" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">❌</button>
+            </div>
+        `;
+    });
+
+    html += `
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                 <button class="quiz-start-btn" onclick="clearAllMistakes()">
+                    Rensa alla / مسح الكل
+                </button>
             </div>
         </div>
     `;
+
+    contentDiv.innerHTML = html;
+    modal.style.display = 'block';
+
+    history.pushState({ modalOpen: true }, '', '#mistakes');
+}
+
+window.removeMistake = function (index) {
+    let mistakes = JSON.parse(localStorage.getItem('mistakesLog')) || [];
+    mistakes.splice(index, 1);
+    localStorage.setItem('mistakesLog', JSON.stringify(mistakes));
+    openMistakesReview(); // Re-render
+}
+
+window.clearAllMistakes = function () {
+    if (confirm("Är du säker? / هل أنت متأكد؟")) {
+        localStorage.removeItem('mistakesLog');
+        openMistakesReview();
+    }
+}
+
+function showQuizResults() {
+    const contentDiv = document.getElementById('lessonContent');
+    const passed = currentQuiz.score >= Math.ceil(currentQuiz.questions.length * 0.6); // 60% pass
+    const percentage = Math.round((currentQuiz.score / currentQuiz.questions.length) * 100);
+
+    // Save Score
+    const currentHigh = parseInt(localStorage.getItem(`lesson_score_${currentQuiz.lessonId}`) || '0');
+    if (percentage > currentHigh) {
+        localStorage.setItem(`lesson_score_${currentQuiz.lessonId}`, percentage);
+    }
+
+    // Check Daily Challenge: Complete 1 Quiz
+    if (passed && window.handleDailyChallenge) {
+        window.handleDailyChallenge('quiz');
+    }
+
+    let html = `
+        <div class="result-container" style="text-align: center; padding: 2rem;">
+            <div class="result-icon">${passed ? '🎉' : '😕'}</div>
+            <h3>${passed ? 'Grattis! / مبروك!' : 'Försök igen / حاول مرة أخرى'}</h3>
+            <p>Du fick ${currentQuiz.score} av ${currentQuiz.questions.length} rätt (${percentage}%)</p>
+            
+            <div class="result-actions" style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+                ${passed ?
+            `<button class="quiz-primary-btn" onclick="completeLesson('${currentQuiz.lessonId}')">Avsluta & Spara / إنهاء وحفظ</button>` :
+            `<button class="quiz-primary-btn" onclick="startQuiz('${currentQuiz.lessonId}')">Försök igen / حاول مرة أخرى</button>`
+        }
+                <button class="quiz-secondary-btn" onclick="openMethodModal('${currentQuiz.lessonId}')">Gå tillbaka till lektionen / العودة للدرس</button>
+            </div>
+        </div>
+    `;
+
     contentDiv.innerHTML = html;
 }
 
@@ -336,6 +512,49 @@ function setupModalListeners() {
             modal.style.display = 'none';
         }
     });
+
+    // Swipe Navigation
+    const modalContent = document.getElementById('lessonContent') || document.querySelector('.lesson-modal');
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    if (modalContent) {
+        modalContent.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        modalContent.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+    }
+
+    function handleSwipe() {
+        if (!document.getElementById('lessonModal') || document.getElementById('lessonModal').style.display === 'none') return;
+
+        const SWIPE_THRESHOLD = 50;
+        if (touchEndX < touchStartX - SWIPE_THRESHOLD) {
+            // Swipe Left -> Next Lesson
+            navigateLesson(1);
+        }
+        if (touchEndX > touchStartX + SWIPE_THRESHOLD) {
+            // Swipe Right -> Prev Lesson
+            navigateLesson(-1);
+        }
+    }
+}
+
+function navigateLesson(direction) {
+    const currentTitle = document.getElementById('modalTitle').innerText;
+    const currentIndex = lessonsData.findIndex(l => l.title === currentTitle);
+
+    if (currentIndex === -1) return;
+
+    const nextIndex = currentIndex + direction;
+    if (nextIndex >= 0 && nextIndex < lessonsData.length) {
+        const nextLesson = lessonsData[nextIndex];
+        openMethodModal(nextLesson.id);
+    }
 }
 
 function escapeSquote(str) {

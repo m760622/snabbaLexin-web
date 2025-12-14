@@ -107,6 +107,55 @@
             margin: 0 auto;
         }
 
+
+        .search-container {
+            margin-top: 1.5rem;
+            position: relative;
+        }
+
+        #lessonSearchInput {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-color);
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+
+        .review-btn {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            width: 100%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .review-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+            transform: translateY(-1px);
+        }
+
+        #lessonSearchInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
         /* Lesson Cards */
         .lessons-grid {
             display: grid;
@@ -167,6 +216,32 @@
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        .lesson-card.completed {
+            border-color: var(--success);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .completion-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--success);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .lesson-card {
+            position: relative;
+            /* Ensure relative for absolute badge */
         }
 
         /* Lesson Content Modal */
@@ -434,6 +509,19 @@
             border: 1px solid var(--text-muted);
             color: var(--text-muted);
         }
+
+        .speaker-icon {
+            margin-left: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .speaker-icon:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 
@@ -452,6 +540,13 @@
     </header>
 
     <main>
+        <div class="search-container">
+            <input type="search" id="lessonSearchInput"
+                placeholder="Sök efter regel, ord eller exempel... / ابحث عن قاعدة" autocomplete="off">
+            <button class="review-btn" onclick="openMistakesReview()">
+                <span>⚠️</span> Review Mistakes / راجع أخطائك
+            </button>
+        </div>
         <div class="lessons-grid">
             <!-- Lesson 1: Word Order -->
             <div class="lesson-card" onclick="openMethodModal('wordOrder')">
@@ -479,7 +574,7 @@
             </div>
 
             <!-- Lesson 3: Verbs -->
-            <div class="lesson-card" onclick="openMethodModal('verbs')">
+            <div class="lesson-card" onclick="openMethodModal('verbs')" data-lesson="verbs">
                 <div class="lesson-header">
                     <span class="lesson-icon">🏃</span>
                     <div class="lesson-title">

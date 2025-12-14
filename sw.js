@@ -32,10 +32,14 @@ const DYNAMIC_ASSETS = [
     './wordRainGame.js',
     './wordleGame.js',
     './missingWordGame.js',
-    './pronunciationGame.js'
+    './pronunciationGame.js',
+    './js/lessonsData.js',
+    './js/learn.js',
+    './js/utils.js',
 ];
 
 const ALL_ASSETS = [...STATIC_ASSETS, ...DYNAMIC_ASSETS];
+
 
 // Install Event - Cache all assets
 self.addEventListener('install', (event) => {

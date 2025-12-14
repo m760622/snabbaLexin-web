@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Profil / ملفك الشخصي - SnabbaLexin</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            padding-bottom: 80px;
+            /* Space for nav */
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem;
+            border-radius: 20px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-circle {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .section-title {
+            margin: 2rem 0 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .badge-item {
+            background: var(--surface);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            opacity: 0.5;
+            filter: grayscale(1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .badge-item.unlocked {
+            opacity: 1;
+            filter: grayscale(0);
+            background: linear-gradient(to bottom right, #fff, #f0f9ff);
+            border: 1px solid #e0e0e0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .chart-container {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            border: 1px solid var(--border);
+        }
+
+        .bar {
+            width: 12%;
+            background: var(--primary);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: height 1s ease;
+        }
+
+        .bar span {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <button class="icon-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="logo-container">
+                <span class="logo-text">Profil / الملف الشخصي</span>
+            </div>
+            <div style="width: 40px;"></div> <!-- Spacer -->
+        </div>
+    </header>
+
+    <div class="profile-container">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-circle">🎓</div>
+            <h2 id="userName">Student</h2>
+            <p id="userRank">Nybörjare / مبتدأ</p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="streakValue">0</div>
+                <div class="stat-label">Dagar i rad<br>أيام متتالية</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="lessonsValue">0/14</div>
+                <div class="stat-label">Avklarade Le.<br>دروس مكتملة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pointsValue">0</div>
+                <div class="stat-label">Totala Poäng<br>مجموع النقاط</div>
+            </div>
+        </div>
+
+        <!-- Badges Section -->
+        <h3 class="section-title"><i class="fas fa-medal"></i> Utmärkelser (Badges)</h3>
+        <div class="badges-grid" id="badgesContainer">
+            <!-- Badges rendered by JS -->
+        </div>
+
+        <!-- Progress Chart (Visual Only for now) -->
+        <h3 class="section-title"><i class="fas fa-chart-bar"></i> Veckoaktivitet</h3>
+        <div class="chart-container" id="activityChart">
+            <!-- Bars rendered by JS -->
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Hem</span>
+        </a>
+        <a href="learn.html" class="nav-item">
+            <i class="fas fa-book-reader"></i>
+            <span>Lär dig</span>
+        </a>
+        <a href="games.html" class="nav-item">
+            <i class="fas fa-gamepad"></i>
+            <span>Spela</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <i class="fas fa-user"></i>
+            <span>Profil</span>
+        </a>
+    </nav>
+
+    <script src="js/lessonsData.js"></script>
+    <script src="js/profile.js"></script>
+    <script>
+        // Check for theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+</body>
+
+</html>

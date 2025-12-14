@@ -144,6 +144,30 @@ function startGrammarGame() {
     nextBtn.onclick = startGrammarGame;
 }
 
+// Speak helper
+function speakSentence(text) {
+    if (typeof TTSManager !== 'undefined') {
+        TTSManager.speak(text);
+    } else {
+        console.warn('TTSManager not found');
+    }
+}
+
+// Category to Lesson ID Mapping
+const categoryToLessonId = {
+    'word-order': 'wordOrder',
+    'v2-rule': 'v2Rule',
+    'questions': 'questions',
+    'adverbs': 'wordOrder', // Covered in word order usually
+    'time-manner-place': 'wordOrder',
+    'bisatser': 'wordOrder', // Or specific lesson if exists
+    'possessiva': 'pronouns',
+    'prepositioner': 'prepositions',
+    'passiv': 'verbs',
+    'imperativ': 'verbs',
+    'komparativ': 'adjectives'
+};
+
 window.showGrammarAnswer = function () {
     const dropZone = document.getElementById('grammarDropZone');
     const wordBank = document.getElementById('grammarWordBank');
@@ -171,13 +195,21 @@ window.showGrammarAnswer = function () {
     feedbackEl.textContent = "Här är rätt svar! / إليك الإجابة الصحيحة!";
     feedbackEl.className = 'game-feedback';
 
-    // Construct Explanation HTML with Listen Button
+    // Construct Explanation HTML with Listen Button AND Learn Link
     const sentenceText = grammarTarget.join(' ');
+    const lessonId = categoryToLessonId[currentGrammarRule.category];
+    let learnLinkHtml = '';
+
+    if (lessonId) {
+        learnLinkHtml = `<a href="learn.html?lesson=${lessonId}" class="learn-link-btn" style="display:inline-block; margin-top:10px; padding:5px 10px; background:var(--primary); color:white; border-radius:15px; text-decoration:none; font-size:0.9rem;">📖 Läs regeln / اقرأ القاعدة</a>`;
+    }
+
     explanationEl.innerHTML = `
         <strong>ℹ️ Förklaring:</strong><br>
         <button class="grammar-listen-btn" onclick="speakSentence('${sentenceText.replace(/'/g, "\\'")}')" style="background:none; border:none; cursor:pointer; font-size:1.2rem; float:right;">🔊 Lyssna</button>
         ${currentGrammarRule.explanation}<br>
         <span style="direction: rtl; display: block; margin-top: 0.5rem;">${currentGrammarRule.explanationAr}</span>
+        ${learnLinkHtml}
     `;
 
     explanationEl.style.display = 'block';
@@ -188,15 +220,6 @@ window.showGrammarAnswer = function () {
     nextBtn.style.display = 'inline-block';
     checkBtn.disabled = true;
     if (showAnswerBtn) showAnswerBtn.disabled = true;
-}
-
-// Speak helper
-function speakSentence(text) {
-    if (typeof TTSManager !== 'undefined') {
-        TTSManager.speak(text);
-    } else {
-        console.warn('TTSManager not found');
-    }
 }
 
 // Initialize on load

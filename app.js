@@ -26,6 +26,104 @@ const unlockAudioOnFirstTouch = () => {
 document.addEventListener('touchstart', unlockAudioOnFirstTouch, { once: true, passive: true });
 document.addEventListener('click', unlockAudioOnFirstTouch, { once: true });
 
+// Daily Streaks Logic
+function initStreaks() {
+    const lastVisitKey = 'lastVisitDate';
+    const streakKey = 'dailyStreak';
+
+    const today = new Date().toISOString().split('T')[0];
+    const lastVisit = localStorage.getItem(lastVisitKey);
+    let streak = parseInt(localStorage.getItem(streakKey) || '0');
+
+    if (lastVisit === today) {
+        // Already visited today, do nothing
+    } else {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+        if (lastVisit === yesterdayStr) {
+            streak++;
+        } else {
+            streak = 1; // Reset or start new
+        }
+
+        localStorage.setItem(lastVisitKey, today);
+        localStorage.setItem(streakKey, streak.toString());
+    }
+
+    // Update UI if element exists
+    const streakEl = document.getElementById('streakCounter');
+    if (streakEl) {
+        streakEl.innerHTML = `🔥 ${streak} Dag${streak > 1 ? 'ar' : ''}`;
+        streakEl.title = `${streak} dagar i rad!`;
+        if (streak > 0) streakEl.style.display = 'inline-block';
+    }
+}
+
+// Daily Challenges Logic
+function initChallenges() {
+    const today = new Date().toISOString().split('T')[0];
+    const stored = JSON.parse(localStorage.getItem('dailyChallenges') || '{}');
+
+    if (stored.date !== today) {
+        // Generate new challenges
+        const newChallenges = [
+            { id: 'quiz', text: 'Klara ett quiz / أكمل اختباراً', done: false, icon: '📝' },
+            { id: 'game', text: 'Spela ett spel / العب لعبة', done: false, icon: '🎮' },
+            { id: 'learn', text: 'Läs en lektion / اقرأ درساً', done: false, icon: '📖' }
+        ];
+        localStorage.setItem('dailyChallenges', JSON.stringify({ date: today, tasks: newChallenges }));
+    }
+
+    renderChallenges();
+}
+
+function renderChallenges() {
+    const container = document.getElementById('challengesList');
+    if (!container) return;
+
+    const data = JSON.parse(localStorage.getItem('dailyChallenges') || '{}');
+    const tasks = data.tasks || [];
+
+    container.innerHTML = tasks.map(t => `
+        <div class="challenge-item ${t.done ? 'done' : ''}">
+            <span class="challenge-icon">${t.icon}</span>
+            <span class="challenge-text">${t.text}</span>
+            <span class="challenge-status">${t.done ? '✅' : '⭕️'}</span>
+        </div>
+    `).join('');
+}
+
+window.handleDailyChallenge = function (type) {
+    const data = JSON.parse(localStorage.getItem('dailyChallenges') || '{}');
+    if (!data.tasks) return;
+
+    let changed = false;
+    data.tasks.forEach(t => {
+        if (t.id === type && !t.done) {
+            t.done = true;
+            changed = true;
+            // Show toast or celebration?
+        }
+    });
+
+    if (changed) {
+        localStorage.setItem('dailyChallenges', JSON.stringify(data));
+        renderChallenges();
+
+        // Add bonus points?
+        let points = parseInt(localStorage.getItem('totalPoints') || '0');
+        points += 50;
+        localStorage.setItem('totalPoints', points.toString());
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initStreaks();
+    initChallenges();
+});
+
 // Quiz State
 let quizQuestions = [];
 let currentQuestionIndex = 0;
@@ -38,6 +136,29 @@ const resultsArea = document.getElementById('resultsArea');
 const statsElement = document.getElementById('resultCount');
 const themeToggle = document.getElementById('themeToggle');
 const typeSelect = document.getElementById('typeSelect');
+
+// Helper to update result count and visibility
+function updateResultCount(count) {
+    if (!statsElement) return;
+
+    // Handle error or loading states (non-numeric)
+    if (typeof count === 'string' && (count.includes('Err') || count.includes('<'))) {
+        statsElement.innerHTML = count;
+        statsElement.setAttribute('data-count', 'error');
+        statsElement.classList.add('pulse');
+        setTimeout(() => statsElement.classList.remove('pulse'), 300);
+        return;
+    }
+
+    const num = typeof count === 'number' ? count : parseInt(count.toString().replace(/\D/g, '')) || 0;
+    statsElement.textContent = num.toLocaleString();
+    statsElement.setAttribute('data-count', num);
+
+    // Animation
+    statsElement.classList.remove('pulse');
+    void statsElement.offsetWidth; // Trigger reflow
+    statsElement.classList.add('pulse');
+}
 
 // Column Indices
 const COL_ID = 0;
@@ -827,7 +948,7 @@ async function init() {
                 if (resultsGrid) resultsGrid.style.display = 'grid';
 
                 // Update stats
-                statsElement.textContent = currentResults.length.toLocaleString();
+                updateResultCount(currentResults.length);
 
                 // Show toast notification
                 const displayName = matchingOption ? matchingOption.textContent.split(' (')[0] : filterType;
@@ -921,7 +1042,7 @@ async function init() {
 
         isLoading = false;
 
-        statsElement.textContent = `${dictionaryData.length.toLocaleString()}`;
+        updateResultCount(dictionaryData.length);
         statsElement.classList.add('fade-in');
 
         // Enable search and sort
@@ -1114,7 +1235,7 @@ async function loadDictionaryData() {
         await buildSearchIndex();
 
         isLoading = false;
-        statsElement.textContent = `${dictionaryData.length.toLocaleString()}`;
+        updateResultCount(dictionaryData.length);
         statsElement.classList.add('fade-in');
 
         // Initial Search if query exists
@@ -1280,7 +1401,7 @@ function handleSearch(e) {
             }
             if (resultsGrid) resultsGrid.style.display = 'none';
             // Show total dictionary count when on landing page
-            statsElement.textContent = dictionaryData.length.toLocaleString();
+            updateResultCount(dictionaryData.length);
             if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = dictionaryData.length.toLocaleString();
 
             // Clear the results area
@@ -1302,9 +1423,9 @@ function handleSearch(e) {
             if (resultsGrid) resultsGrid.style.display = 'grid';
 
             if (currentResults.length === 0) {
-                statsElement.textContent = "0";
+                updateResultCount(0);
             } else {
-                statsElement.textContent = currentResults.length.toLocaleString();
+                updateResultCount(currentResults.length);
             }
             return;
         }
@@ -1329,7 +1450,7 @@ function handleSearch(e) {
 
         if (emptyState) emptyState.style.display = 'none';
         if (resultsGrid) resultsGrid.style.display = 'grid';
-        statsElement.textContent = currentResults.length.toLocaleString();
+        updateResultCount(currentResults.length);
         if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = currentResults.length.toLocaleString();
 
         return;
@@ -1492,7 +1613,7 @@ function handleSearch(e) {
     renderResults();
 
     // Update Stats - always show the count, even if 0
-    statsElement.textContent = currentResults.length.toLocaleString();
+    updateResultCount(currentResults.length);
 }
 
 // Global variable to debounce dropdown updates slightly if needed, or just run sync
@@ -1614,7 +1735,7 @@ function renderResults() {
                 Inga resultat hittades / لم يتم العثور على نتائج
             </div>
         `;
-        statsElement.textContent = "0";
+        updateResultCount(0);
         return;
     }
 

@@ -1750,231 +1750,590 @@ const ReminderManager = {
 };
 
 // ========================================
-// TTS Manager (Text-to-Speech)
+// Premium TTS Manager (Text-to-Speech)
+// Global Unified Speech System with iOS Optimizations
 // ========================================
 const TTSManager = {
+    // State Management
     audio: null,
     lastSpokenText: '',
     cachedSwedishVoice: null,
-    isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1),
+    cachedVoices: {},
+    audioUnlocked: false,
     timeoutId: null,
-    audioUnlocked: false, // iOS audio unlock state
+    isPlaying: false,
+    audioCache: new Map(), // Cache audio URLs for faster playback
 
-    // Speed settings (0.5 = slow, 1.0 = normal, 1.5 = fast)
+    // Device Detection
+    isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1),
+    isSafari: /^((?!chrome|android).)*safari/i.test(navigator.userAgent),
+    isAndroid: /Android/i.test(navigator.userAgent),
+
+    // Provider Priority (order matters - first is tried first)
+    PROVIDERS: {
+        GOOGLE_TTS: 'google',
+        RESPONSIVE_VOICE: 'responsive',
+        LOCAL_TTS: 'local'
+    },
+
+    // Configuration
+    config: {
+        defaultLang: 'sv-SE',
+        fallbackLang: 'en-US',
+        maxCacheSize: 50,
+        timeoutMs: 3500,
+        retryAttempts: 2
+    },
+
+    // ========================================
+    // INITIALIZATION
+    // ========================================
+
+    init() {
+        console.log('🔊 TTSManager initializing...', {
+            isIOS: this.isIOS,
+            isSafari: this.isSafari,
+            isAndroid: this.isAndroid
+        });
+
+        // Preload voices
+        this._loadVoices();
+
+        // Listen for voice changes
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                this._loadVoices();
+            };
+        }
+
+        // Auto-unlock on first interaction (iOS requirement)
+        const unlockOnInteraction = () => {
+            this.unlockAudio();
+            document.removeEventListener('touchstart', unlockOnInteraction);
+            document.removeEventListener('click', unlockOnInteraction);
+        };
+        document.addEventListener('touchstart', unlockOnInteraction, { passive: true });
+        document.addEventListener('click', unlockOnInteraction, { passive: true });
+
+        console.log('🔊 TTSManager initialized successfully');
+    },
+
+    _loadVoices() {
+        if (!window.speechSynthesis) return;
+
+        const voices = window.speechSynthesis.getVoices();
+        if (!voices.length) return;
+
+        // Cache voices by language
+        this.cachedVoices = {};
+        voices.forEach(voice => {
+            const lang = voice.lang.substring(0, 2);
+            if (!this.cachedVoices[lang]) {
+                this.cachedVoices[lang] = [];
+            }
+            this.cachedVoices[lang].push(voice);
+        });
+
+        // Find best Swedish voice
+        this.cachedSwedishVoice = this._findBestVoice('sv');
+
+        console.log('🔊 Voices loaded:', Object.keys(this.cachedVoices).length, 'languages');
+        if (this.cachedSwedishVoice) {
+            console.log('🔊 Best Swedish voice:', this.cachedSwedishVoice.name);
+        }
+    },
+
+    // ========================================
+    // SPEED SETTINGS
+    // ========================================
+
     getSpeed() {
         const saved = localStorage.getItem('ttsSpeed');
-        return saved ? parseFloat(saved) : 0.85; // Default: slightly slower for clarity
+        return saved ? parseFloat(saved) : 0.85;
     },
 
     setSpeed(speed) {
         const clamped = Math.min(1.5, Math.max(0.5, speed));
         localStorage.setItem('ttsSpeed', clamped.toString());
-        showToast(`Uttalshastighet: ${Math.round(clamped * 100)}% / سرعة النطق`);
+        if (typeof showToast === 'function') {
+            showToast(`Uttalshastighet: ${Math.round(clamped * 100)}% / سرعة النطق`);
+        }
         return clamped;
     },
 
-    // iOS requires user gesture to unlock audio - call this on first touch/click
+    // ========================================
+    // iOS AUDIO UNLOCK (CRITICAL)
+    // ========================================
+
     unlockAudio() {
         if (this.audioUnlocked) return;
 
-        // Unlock HTML5 Audio
-        const silentAudio = new Audio();
-        silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-        silentAudio.play().then(() => {
-            silentAudio.pause();
-            console.log('iOS Audio unlocked (HTML5)');
-        }).catch(() => { });
+        console.log('🔓 Attempting audio unlock...');
 
-        // Unlock Web Speech API
+        // Method 1: HTML5 Audio with silent audio
+        try {
+            const silentAudio = new Audio();
+            silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+            silentAudio.volume = 0.01;
+            const playPromise = silentAudio.play();
+            if (playPromise) {
+                playPromise.then(() => {
+                    silentAudio.pause();
+                    console.log('✅ HTML5 Audio unlocked');
+                }).catch(() => { });
+            }
+        } catch (e) { }
+
+        // Method 2: Web Audio API unlock
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            gainNode.gain.value = 0;
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.start(0);
+            oscillator.stop(0.001);
+            setTimeout(() => audioContext.close(), 100);
+            console.log('✅ Web Audio API unlocked');
+        } catch (e) { }
+
+        // Method 3: SpeechSynthesis unlock
         if (window.speechSynthesis) {
-            const silentUtterance = new SpeechSynthesisUtterance('');
-            silentUtterance.volume = 0;
-            window.speechSynthesis.speak(silentUtterance);
-            console.log('iOS SpeechSynthesis unlocked');
+            try {
+                const silentUtterance = new SpeechSynthesisUtterance('');
+                silentUtterance.volume = 0;
+                silentUtterance.rate = 10;
+                window.speechSynthesis.speak(silentUtterance);
+                window.speechSynthesis.cancel();
+                console.log('✅ SpeechSynthesis unlocked');
+            } catch (e) { }
         }
 
         this.audioUnlocked = true;
+        console.log('🔓 Audio unlock complete');
     },
 
-    speak(text, lang = 'sv') {
-        if (!text || text.trim() === '') return;
-        const cleanText = text.replace(/\'/g, "\'").trim();
+    // ========================================
+    // MAIN SPEAK FUNCTION (PUBLIC API)
+    // ========================================
 
-        // Prevent rapid repeats of the same text
-        if (cleanText === this.lastSpokenText && this.audio && !this.audio.paused) {
-            return;
+    /**
+     * Speak text in the specified language
+     * @param {string} text - Text to speak
+     * @param {string} lang - Language code ('sv', 'sv-SE', 'ar', etc.)
+     * @param {object} options - Optional: { speed, volume, onStart, onEnd, onError }
+     */
+    speak(text, lang = 'sv', options = {}) {
+        if (!text || text.trim() === '') return Promise.resolve();
+
+        const cleanText = text.replace(/['']/g, "'").trim();
+
+        // Prevent rapid repeats
+        if (cleanText === this.lastSpokenText && this.isPlaying) {
+            return Promise.resolve();
         }
+
         this.lastSpokenText = cleanText;
 
-        // Track TTS usage in ProgressManager
+        // Normalize language code
+        const normalizedLang = this._normalizeLang(lang);
+
+        // Track TTS usage
         if (typeof ProgressManager !== 'undefined') {
             ProgressManager.trackTTS(cleanText);
         }
 
-        // Stop current
+        // Stop current playback
         this.stop();
 
-        // Always try Google TTS first (better quality for Swedish)
-        // Falls back to local TTS if Google fails
-        this.playGoogleTTS(cleanText, lang);
+        // Set playing state
+        this.isPlaying = true;
+
+        // Call onStart callback
+        if (options.onStart) options.onStart();
+
+        // Try providers in order
+        return this._speakWithProviders(cleanText, normalizedLang, options);
     },
 
+    /**
+     * Alias for speak - for backwards compatibility
+     */
+    speakSwedish(text, options = {}) {
+        return this.speak(text, 'sv-SE', options);
+    },
+
+    /**
+     * Speak Arabic text
+     */
+    speakArabic(text, options = {}) {
+        return this.speak(text, 'ar', options);
+    },
+
+    // ========================================
+    // PROVIDER CHAIN
+    // ========================================
+
+    async _speakWithProviders(text, lang, options) {
+        const providers = [
+            () => this._playGoogleTTS(text, lang, options),
+            () => this._playLocalTTS(text, lang, options)
+        ];
+
+        for (let i = 0; i < providers.length; i++) {
+            try {
+                await providers[i]();
+                return; // Success
+            } catch (e) {
+                console.warn(`🔊 Provider ${i + 1} failed:`, e.message);
+                if (i === providers.length - 1) {
+                    // All providers failed
+                    this.isPlaying = false;
+                    if (options.onError) options.onError(e);
+                    console.error('🔊 All TTS providers failed');
+                }
+            }
+        }
+    },
+
+    // ========================================
+    // GOOGLE TRANSLATE TTS (Best Quality)
+    // ========================================
+
+    _playGoogleTTS(text, lang, options = {}) {
+        return new Promise((resolve, reject) => {
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+                this.timeoutId = null;
+            }
+
+            // Create audio element
+            this.audio = new Audio();
+
+            // Google Translate TTS URL
+            const langCode = lang.substring(0, 2);
+            const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${langCode}&client=tw-ob&q=${encodeURIComponent(text)}`;
+
+            // Check cache first
+            if (this.audioCache.has(url)) {
+                this.audio.src = this.audioCache.get(url);
+            } else {
+                this.audio.src = url;
+            }
+
+            this.audio.volume = options.volume || 1.0;
+
+            const speed = options.speed || this.getSpeed();
+
+            // iOS-specific: Set playback rate after canplay
+            this.audio.oncanplay = () => {
+                try {
+                    this.audio.playbackRate = speed;
+                } catch (e) { }
+
+                if (this.timeoutId) {
+                    clearTimeout(this.timeoutId);
+                    this.timeoutId = null;
+                }
+            };
+
+            this.audio.onended = () => {
+                this.isPlaying = false;
+                if (options.onEnd) options.onEnd();
+                resolve();
+            };
+
+            this.audio.onerror = (e) => {
+                this.isPlaying = false;
+                reject(new Error('Google TTS audio error'));
+            };
+
+            // Timeout fallback
+            this.timeoutId = setTimeout(() => {
+                if (this.audio && (this.audio.readyState < 2 || this.audio.paused)) {
+                    this.audio.pause();
+                    reject(new Error('Google TTS timeout'));
+                }
+            }, this.config.timeoutMs);
+
+            // Play
+            const playPromise = this.audio.play();
+            if (playPromise) {
+                playPromise.then(() => {
+                    console.log('🔊 Playing Google TTS:', text.substring(0, 30) + '...');
+
+                    // Cache successful URL
+                    if (!this.audioCache.has(url)) {
+                        if (this.audioCache.size >= this.config.maxCacheSize) {
+                            const firstKey = this.audioCache.keys().next().value;
+                            this.audioCache.delete(firstKey);
+                        }
+                        this.audioCache.set(url, url);
+                    }
+                }).catch(reject);
+            }
+        });
+    },
+
+    // ========================================
+    // LOCAL TTS (Web Speech API - Fallback)
+    // ========================================
+
+    _playLocalTTS(text, lang, options = {}) {
+        return new Promise((resolve, reject) => {
+            if (!window.speechSynthesis) {
+                reject(new Error('SpeechSynthesis not supported'));
+                return;
+            }
+
+            // Cancel any pending speech
+            window.speechSynthesis.cancel();
+
+            // iOS delay fix
+            const delay = this.isIOS ? 150 : 50;
+
+            setTimeout(() => {
+                // Prepare text for better pronunciation
+                let speakText = this._prepareTextForSpeech(text, lang);
+
+                const utterance = new SpeechSynthesisUtterance(speakText);
+                utterance.lang = lang;
+
+                const speed = options.speed || this.getSpeed();
+
+                // iOS-optimized settings
+                if (this.isIOS) {
+                    utterance.rate = Math.max(0.7, speed * 0.85);
+                    utterance.pitch = 1.0;
+                } else {
+                    utterance.rate = speed * 0.9;
+                    utterance.pitch = 1.0;
+                }
+
+                utterance.volume = options.volume || 1.0;
+
+                // Find best voice
+                const voice = this._findBestVoice(lang.substring(0, 2));
+                if (voice) {
+                    utterance.voice = voice;
+                    console.log('🔊 Using voice:', voice.name);
+                }
+
+                utterance.onend = () => {
+                    this.isPlaying = false;
+                    if (options.onEnd) options.onEnd();
+                    resolve();
+                };
+
+                utterance.onerror = (e) => {
+                    this.isPlaying = false;
+                    reject(new Error('Local TTS error: ' + e.error));
+                };
+
+                // Speak
+                window.speechSynthesis.speak(utterance);
+
+                // iOS fix: Force resume if stuck
+                if (this.isIOS) {
+                    this._iosResumePolyfill();
+                }
+
+                console.log('🔊 Playing Local TTS:', speakText.substring(0, 30) + '...');
+
+            }, delay);
+        });
+    },
+
+    // ========================================
+    // TEXT PREPARATION FOR BETTER PRONUNCIATION
+    // ========================================
+
+    _prepareTextForSpeech(text, lang) {
+        let prepared = text;
+
+        if (lang.startsWith('sv')) {
+            // Swedish-specific improvements
+
+            // Add slight pauses at punctuation
+            prepared = prepared.replace(/,/g, ', ');
+            prepared = prepared.replace(/\./g, '. ');
+
+            // Improve number pronunciation
+            prepared = prepared.replace(/(\d+)/g, ' $1 ');
+
+            // iOS fix: Add period for better sentence ending
+            if (this.isIOS && !prepared.match(/[.!?]$/)) {
+                prepared = prepared + '.';
+            }
+
+            // Handle Swedish specific characters better
+            // Some TTS engines struggle with these
+            prepared = prepared
+                .replace(/å/g, 'å')
+                .replace(/ä/g, 'ä')
+                .replace(/ö/g, 'ö');
+        }
+
+        if (lang.startsWith('ar')) {
+            // Arabic-specific improvements
+            prepared = prepared.replace(/،/g, ', ');
+        }
+
+        return prepared.trim();
+    },
+
+    // ========================================
+    // VOICE SELECTION (Quality Priority)
+    // ========================================
+
+    _findBestVoice(langCode) {
+        if (langCode === 'sv' && this.cachedSwedishVoice) {
+            return this.cachedSwedishVoice;
+        }
+
+        const voices = this.cachedVoices[langCode] || [];
+        if (!voices.length) return null;
+
+        // Priority list for high-quality voices
+        const premiumKeywords = [
+            'Premium', 'Enhanced', 'Neural', 'Natural',
+            'Alva', 'Maja', 'Astrid', // Swedish premium voices
+            'Samantha', 'Karen', 'Daniel', // English premium
+            'Maged', 'Majed', 'Tarik' // Arabic voices
+        ];
+
+        const lowQualityKeywords = ['Compact', 'eSpeak', 'Android'];
+
+        // Find premium voice
+        for (const keyword of premiumKeywords) {
+            const match = voices.find(v =>
+                v.name.includes(keyword) &&
+                !lowQualityKeywords.some(lq => v.name.includes(lq))
+            );
+            if (match) return match;
+        }
+
+        // Find any non-compact voice
+        const nonCompact = voices.find(v =>
+            !lowQualityKeywords.some(lq => v.name.includes(lq))
+        );
+        if (nonCompact) return nonCompact;
+
+        // Fallback to first voice
+        return voices[0];
+    },
+
+    // ========================================
+    // iOS WORKAROUNDS
+    // ========================================
+
+    _iosResumePolyfill() {
+        const checkAndResume = () => {
+            if (window.speechSynthesis && window.speechSynthesis.paused) {
+                window.speechSynthesis.resume();
+                console.log('🔄 iOS: Resumed paused speech');
+            }
+        };
+
+        // Check multiple times since iOS can pause randomly
+        setTimeout(checkAndResume, 100);
+        setTimeout(checkAndResume, 300);
+        setTimeout(checkAndResume, 500);
+        setTimeout(checkAndResume, 1000);
+    },
+
+    // ========================================
+    // UTILITY FUNCTIONS
+    // ========================================
+
+    _normalizeLang(lang) {
+        const langMap = {
+            'sv': 'sv-SE',
+            'ar': 'ar-SA',
+            'en': 'en-US',
+            'de': 'de-DE',
+            'fr': 'fr-FR'
+        };
+        return langMap[lang] || lang;
+    },
 
     stop() {
         if (this.audio) {
-            this.audio.pause();
-            this.audio.currentTime = 0;
+            try {
+                this.audio.pause();
+                this.audio.currentTime = 0;
+            } catch (e) { }
         }
-        if (window.speechSynthesis) {
-            window.speechSynthesis.cancel();
-        }
-    },
 
-    playGoogleTTS(text, lang) {
-        // Clear previous timeout
+        if (window.speechSynthesis) {
+            try {
+                window.speechSynthesis.cancel();
+            } catch (e) { }
+        }
+
         if (this.timeoutId) {
             clearTimeout(this.timeoutId);
             this.timeoutId = null;
         }
 
-        this.audio = new Audio();
-        const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${lang}&client=tw-ob&q=${encodeURIComponent(text)}`;
-        this.audio.src = url;
-        this.audio.volume = 1.0;
-
-        const speed = this.getSpeed();
-
-        // iOS Fix: Adjust rate only after metadata is loaded to avoid errors
-        this.audio.oncanplay = () => {
-            this.audio.playbackRate = speed;
-            // Clear timeout on successful load
-            if (this.timeoutId) {
-                clearTimeout(this.timeoutId);
-                this.timeoutId = null;
-            }
-        };
-
-        // Timeout fallback: if audio doesn't start within 3 seconds, use local TTS
-        this.timeoutId = setTimeout(() => {
-            if (this.audio && (this.audio.readyState < 2 || this.audio.paused)) {
-                console.warn('Google TTS timeout (3s), falling back to local.');
-                this.audio.pause();
-                this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
-            }
-        }, 3000);
-
-        const playPromise = this.audio.play();
-
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                console.log('Playing Google TTS:', text, 'at speed:', speed);
-            }).catch(err => {
-                console.warn('Google TTS failed/blocked, falling back to local:', err);
-                if (this.timeoutId) clearTimeout(this.timeoutId);
-                this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
-            });
-        }
-
-        this.audio.onerror = () => {
-            console.warn('Google TTS audio error, falling back.');
-            if (this.timeoutId) clearTimeout(this.timeoutId);
-            this.playLocalTTS(text, lang === 'sv' ? 'sv-SE' : lang);
-        };
+        this.isPlaying = false;
     },
 
-    playLocalTTS(text, lang) {
-        if (!window.speechSynthesis) {
-            console.warn('SpeechSynthesis not available');
-            return;
-        }
-
-        // iOS Fix: Cancel any pending speech and add delay
-        window.speechSynthesis.cancel();
-        const delay = this.isIOS ? 100 : 0;
-        const speed = this.getSpeed();
-
-        setTimeout(() => {
-            // Add natural pauses for better pronunciation
-            let speakText = text;
-
-            // iOS Fix: Add punctuation for better pronunciation
-            if (this.isIOS && !text.match(/[.!?]$/)) {
-                speakText = text + '.';
-            }
-
-            const utterance = new SpeechSynthesisUtterance(speakText);
-            utterance.lang = lang;
-
-            // More natural speaking parameters
-            utterance.rate = speed * 0.9; // Slightly slower for clarity
-            utterance.pitch = 1.0; // Natural pitch
-            utterance.volume = 1.0;
-
-            // Find best voice with priority for natural-sounding voices
-            if (lang === 'sv-SE' || lang.startsWith('sv')) {
-                const voice = this.getBestSwedishVoice();
-                if (voice) utterance.voice = voice;
-            }
-
-            // iOS Fix: Ensure voices are loaded
-            if (window.speechSynthesis.getVoices().length === 0) {
-                window.speechSynthesis.onvoiceschanged = () => {
-                    if (lang === 'sv-SE' || lang.startsWith('sv')) {
-                        const voice = this.getBestSwedishVoice();
-                        if (voice) utterance.voice = voice;
-                    }
-                    window.speechSynthesis.speak(utterance);
-                };
-            } else {
-                window.speechSynthesis.speak(utterance);
-            }
-
-            // iOS Fix: Force resume if it gets stuck (check multiple times)
-            if (this.isIOS) {
-                const checkAndResume = () => {
-                    if (window.speechSynthesis.paused) {
-                        window.speechSynthesis.resume();
-                    }
-                };
-                setTimeout(checkAndResume, 100);
-                setTimeout(checkAndResume, 300);
-                setTimeout(checkAndResume, 500);
-            }
-
-            console.log('Playing Local TTS:', speakText, 'lang:', lang, 'rate:', speed * 0.9);
-        }, delay);
+    /**
+     * Get available voices list
+     */
+    getVoices() {
+        return window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
     },
 
-    getBestSwedishVoice() {
-        if (this.cachedSwedishVoice) return this.cachedSwedishVoice;
+    /**
+     * Check if TTS is supported
+     */
+    isSupported() {
+        return 'speechSynthesis' in window || 'Audio' in window;
+    },
 
-        const voices = window.speechSynthesis.getVoices();
-        const svVoices = voices.filter(v => v.lang.startsWith('sv'));
-
-        if (svVoices.length === 0) return null;
-
-        // Priority: Premium/Natural sounding voices first
-        // Alva (iOS premium), Klara, Oskar, then Google, then any
-        this.cachedSwedishVoice =
-            svVoices.find(v => v.name.includes('Alva')) ||
-            svVoices.find(v => v.name.includes('Premium') || v.name.includes('Enhanced')) ||
-            svVoices.find(v => v.name.includes('Klara')) ||
-            svVoices.find(v => v.name.includes('Oskar')) ||
-            svVoices.find(v => v.name.includes('Google')) ||
-            svVoices.find(v => !v.name.includes('Compact')) || // Avoid compact/low quality
-            svVoices[0];
-
-        console.log('Selected Swedish voice:', this.cachedSwedishVoice?.name);
-        return this.cachedSwedishVoice;
+    /**
+     * Test TTS with a sample Swedish word
+     */
+    test() {
+        return this.speak('Hej, välkommen till SnabbaLexin!', 'sv-SE');
     }
-
 };
 
-// Initialize voices on load (needed for Chrome/Safari async voice loading)
-if (window.speechSynthesis) {
-    window.speechSynthesis.onvoiceschanged = () => {
-        TTSManager.cachedSwedishVoice = null; // Reset cache
-    };
+// ========================================
+// GLOBAL SPEAK FUNCTION (Convenience)
+// ========================================
+
+/**
+ * Global function to speak text from anywhere in the app
+ * Usage: speakText('hej', 'sv') or speakText('hello', 'en')
+ */
+function speakText(text, lang = 'sv') {
+    return TTSManager.speak(text, lang);
+}
+
+/**
+ * Global function to speak Swedish
+ */
+function speakSwedish(text) {
+    return TTSManager.speak(text, 'sv-SE');
+}
+
+/**
+ * Global function to speak Arabic
+ */
+function speakArabic(text) {
+    return TTSManager.speak(text, 'ar');
+}
+
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => TTSManager.init());
+} else {
+    TTSManager.init();
 }
 
 // ========================================

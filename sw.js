@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snabba-lexin-v6';
+const CACHE_NAME = 'snabba-lexin-v7';
 const STATIC_ASSETS = [
     './',
     './index.html',

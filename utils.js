@@ -2171,59 +2171,130 @@ const TTSManager = {
                 return;
             }
 
-            // Cancel any pending speech
+            // iOS FIX: Cancel any pending speech first
             window.speechSynthesis.cancel();
 
-            // iOS delay fix
-            const delay = this.isIOS ? 150 : 50;
+            // iOS FIX: Longer delay for iOS Safari
+            const delay = this.isIOS ? 250 : 50;
 
             setTimeout(() => {
                 // Prepare text for better pronunciation
                 let speakText = this._prepareTextForSpeech(text, lang);
 
                 const utterance = new SpeechSynthesisUtterance(speakText);
+
+                // iOS FIX: Always set both lang AND voice explicitly
                 utterance.lang = lang;
 
                 const speed = options.speed || this.getSpeed();
 
-                // iOS-optimized settings
+                // iOS-optimized settings - slower for better synthesis
                 if (this.isIOS) {
-                    utterance.rate = Math.max(0.7, speed * 0.85);
+                    utterance.rate = Math.max(0.6, speed * 0.75); // Slower on iOS
                     utterance.pitch = 1.0;
+                    utterance.volume = 1.0; // Max volume for iOS
                 } else {
                     utterance.rate = speed * 0.9;
                     utterance.pitch = 1.0;
+                    utterance.volume = options.volume || 1.0;
                 }
 
-                utterance.volume = options.volume || 1.0;
+                // iOS FIX: Wait for voices to be available
+                const setVoiceAndSpeak = () => {
+                    const voices = window.speechSynthesis.getVoices();
 
-                // Find best voice
-                const voice = this._findBestVoice(lang.substring(0, 2));
-                if (voice) {
-                    utterance.voice = voice;
-                    console.log('🔊 Using voice:', voice.name);
-                }
+                    // Find best voice for this language
+                    const langCode = lang.substring(0, 2);
+                    let voice = this._findBestVoice(langCode);
 
-                utterance.onend = () => {
-                    this.isPlaying = false;
-                    if (options.onEnd) options.onEnd();
-                    resolve();
+                    // iOS fallback: try any Swedish voice
+                    if (!voice && langCode === 'sv') {
+                        voice = voices.find(v => v.lang.startsWith('sv'));
+                    }
+
+                    if (voice) {
+                        utterance.voice = voice;
+                        console.log('🔊 iOS: Using voice:', voice.name, voice.lang);
+                    } else {
+                        console.warn('🔊 No voice found for:', lang);
+                    }
+
+                    // iOS FIX: Timeout safety - reject if speech doesn't end in 15s
+                    let isSpeaking = true;
+                    const safetyTimeout = setTimeout(() => {
+                        if (isSpeaking) {
+                            console.warn('🔊 iOS: Speech timeout - forcing end');
+                            window.speechSynthesis.cancel();
+                            this.isPlaying = false;
+                            resolve(); // Resolve instead of reject to avoid error cascading
+                        }
+                    }, 15000);
+
+                    utterance.onstart = () => {
+                        console.log('🔊 iOS: Speech started');
+                    };
+
+                    utterance.onend = () => {
+                        isSpeaking = false;
+                        clearTimeout(safetyTimeout);
+                        this.isPlaying = false;
+                        console.log('🔊 iOS: Speech ended successfully');
+                        if (options.onEnd) options.onEnd();
+                        resolve();
+                    };
+
+                    utterance.onerror = (e) => {
+                        isSpeaking = false;
+                        clearTimeout(safetyTimeout);
+                        this.isPlaying = false;
+                        console.error('🔊 iOS: Speech error:', e.error);
+                        // Don't reject on iOS - often recoverable
+                        if (this.isIOS) {
+                            resolve();
+                        } else {
+                            reject(new Error('Local TTS error: ' + e.error));
+                        }
+                    };
+
+                    // Speak now
+                    window.speechSynthesis.speak(utterance);
+                    console.log('🔊 Speaking:', speakText.substring(0, 30) + '...');
+
+                    // iOS FIX: Aggressive resume polyfill
+                    if (this.isIOS) {
+                        // Check and resume multiple times
+                        const resumeChecks = [100, 250, 500, 750, 1000, 1500, 2000, 3000];
+                        resumeChecks.forEach(ms => {
+                            setTimeout(() => {
+                                if (window.speechSynthesis.paused) {
+                                    console.log('🔄 iOS: Resuming at', ms, 'ms');
+                                    window.speechSynthesis.resume();
+                                }
+                                // iOS Safari bug: sometimes speaking but paused flag
+                                if (window.speechSynthesis.speaking && window.speechSynthesis.paused) {
+                                    window.speechSynthesis.resume();
+                                }
+                            }, ms);
+                        });
+                    }
                 };
 
-                utterance.onerror = (e) => {
-                    this.isPlaying = false;
-                    reject(new Error('Local TTS error: ' + e.error));
-                };
-
-                // Speak
-                window.speechSynthesis.speak(utterance);
-
-                // iOS fix: Force resume if stuck
-                if (this.isIOS) {
-                    this._iosResumePolyfill();
+                // iOS FIX: Voices might not be loaded yet
+                if (window.speechSynthesis.getVoices().length === 0) {
+                    console.log('🔊 iOS: Waiting for voices...');
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        setVoiceAndSpeak();
+                    };
+                    // Fallback if onvoiceschanged never fires
+                    setTimeout(() => {
+                        if (window.speechSynthesis.getVoices().length === 0) {
+                            console.warn('🔊 iOS: No voices after timeout, speaking anyway');
+                        }
+                        setVoiceAndSpeak();
+                    }, 500);
+                } else {
+                    setVoiceAndSpeak();
                 }
-
-                console.log('🔊 Playing Local TTS:', speakText.substring(0, 30) + '...');
 
             }, delay);
         });

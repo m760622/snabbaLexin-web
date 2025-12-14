@@ -373,6 +373,23 @@
             }
         }
 
+        /* Section Divider */
+        .section-divider {
+            text-align: center;
+            padding: 1.5rem 0 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .section-divider span {
+            background: linear-gradient(135deg, var(--primary), var(--cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
         /* Storage Card */
         .storage-bar {
             height: 8px;
@@ -626,6 +643,248 @@
                 </div>
                 <div class="stat-value" id="cpuInfo">-</div>
             </div>
+
+            <!-- ADVANCED DATA SECTION -->
+            <div class="section-divider">
+                <span>🔬 Avancerad Data / بيانات متقدمة</span>
+            </div>
+
+            <!-- Timezone -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🕐</span>
+                    <span class="stat-label">Tidszon / المنطقة الزمنية</span>
+                </div>
+                <div class="stat-value" id="timezoneInfo">-</div>
+            </div>
+
+            <!-- Color Depth -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🎨</span>
+                    <span class="stat-label">Färgdjup / عمق الألوان</span>
+                </div>
+                <div class="stat-value" id="colorDepthInfo">-</div>
+            </div>
+
+            <!-- Screen Orientation -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔄</span>
+                    <span class="stat-label">Skärmorientering / اتجاه الشاشة</span>
+                </div>
+                <div class="stat-value" id="orientationInfo">-</div>
+            </div>
+
+            <!-- Platform -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">💻</span>
+                    <span class="stat-label">Platform / المنصة</span>
+                </div>
+                <div class="stat-value" id="platformInfo">-</div>
+            </div>
+
+            <!-- Vendor -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🏭</span>
+                    <span class="stat-label">Browser Vendor / مصنع المتصفح</span>
+                </div>
+                <div class="stat-value" id="vendorInfo">-</div>
+            </div>
+
+            <!-- Cookies -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🍪</span>
+                    <span class="stat-label">Cookies</span>
+                </div>
+                <div class="stat-value" id="cookiesInfo">-</div>
+            </div>
+
+            <!-- Do Not Track -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🕵️</span>
+                    <span class="stat-label">Do Not Track / عدم التتبع</span>
+                </div>
+                <div class="stat-value" id="dntInfo">-</div>
+            </div>
+
+            <!-- PDF Support -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📄</span>
+                    <span class="stat-label">PDF Viewer / عارض PDF</span>
+                </div>
+                <div class="stat-value" id="pdfInfo">-</div>
+            </div>
+
+            <!-- WebGL -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🎮</span>
+                    <span class="stat-label">WebGL Renderer / عارض الرسوميات</span>
+                </div>
+                <div class="stat-value" id="webglInfo" style="font-size: 0.9rem;">-</div>
+            </div>
+
+            <!-- Canvas Fingerprint -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🖼️</span>
+                    <span class="stat-label">Canvas Hash / بصمة الرسم</span>
+                </div>
+                <div class="stat-value" id="canvasInfo" style="font-family: monospace; font-size: 0.85rem;">-</div>
+            </div>
+
+            <!-- Audio Context -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔊</span>
+                    <span class="stat-label">Audio Context / سياق الصوت</span>
+                </div>
+                <div class="stat-value" id="audioInfo">-</div>
+            </div>
+
+            <!-- Storage Quota -->
+            <div class="stat-card" id="storageCard">
+                <div class="stat-header">
+                    <span class="stat-icon">📦</span>
+                    <span class="stat-label">Storage Quota / مساحة التخزين</span>
+                </div>
+                <div class="stat-value" id="storageInfo">-</div>
+                <div class="storage-bar">
+                    <div class="storage-fill" id="storageFill" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Service Worker -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">⚡</span>
+                    <span class="stat-label">Service Worker</span>
+                </div>
+                <div class="stat-value" id="swInfo">-</div>
+            </div>
+
+            <!-- Notification Permission -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔔</span>
+                    <span class="stat-label">Notifications / الإشعارات</span>
+                </div>
+                <div class="stat-value" id="notifInfo">-</div>
+            </div>
+
+            <!-- Geolocation Permission -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📍</span>
+                    <span class="stat-label">Geolocation / الموقع الجغرافي</span>
+                </div>
+                <div class="stat-value" id="geoInfo">-</div>
+            </div>
+
+            <!-- Plugins Count -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔌</span>
+                    <span class="stat-label">Plugins / الإضافات</span>
+                </div>
+                <div class="stat-value" id="pluginsInfo">-</div>
+            </div>
+
+            <!-- User Agent Hash -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔐</span>
+                    <span class="stat-label">UA Fingerprint / بصمة المتصفح</span>
+                </div>
+                <div class="stat-value" id="uaHashInfo" style="font-family: monospace; font-size: 0.85rem;">-</div>
+            </div>
+
+            <!-- Connection Info -->
+            <div class="stat-card" id="connectionCard" style="display: none;">
+                <div class="stat-header">
+                    <span class="stat-icon">🌐</span>
+                    <span class="stat-label">Connection Details / تفاصيل الاتصال</span>
+                </div>
+                <div class="stat-value" id="connectionInfo">-</div>
+            </div>
+
+            <!-- Viewport -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📏</span>
+                    <span class="stat-label">Viewport Size / حجم العرض</span>
+                </div>
+                <div class="stat-value" id="viewportInfo">-</div>
+            </div>
+
+            <!-- Available Screen -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🖥️</span>
+                    <span class="stat-label">Available Screen / الشاشة المتاحة</span>
+                </div>
+                <div class="stat-value" id="availScreenInfo">-</div>
+            </div>
+
+            <!-- Local Storage Size -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">💾</span>
+                    <span class="stat-label">LocalStorage Used / التخزين المحلي</span>
+                </div>
+                <div class="stat-value" id="localStorageInfo">-</div>
+            </div>
+
+            <!-- Session Count -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📊</span>
+                    <span class="stat-label">Session Count / عدد الجلسات</span>
+                </div>
+                <div class="stat-value" id="sessionInfo">-</div>
+            </div>
+
+            <!-- WebRTC Support -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🎥</span>
+                    <span class="stat-label">WebRTC Support / دعم WebRTC</span>
+                </div>
+                <div class="stat-value" id="webrtcInfo">-</div>
+            </div>
+
+            <!-- Bluetooth -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📶</span>
+                    <span class="stat-label">Bluetooth API</span>
+                </div>
+                <div class="stat-value" id="bluetoothInfo">-</div>
+            </div>
+
+            <!-- USB -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔌</span>
+                    <span class="stat-label">USB API</span>
+                </div>
+                <div class="stat-value" id="usbInfo">-</div>
+            </div>
+
+            <!-- Gamepad -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🎮</span>
+                    <span class="stat-label">Gamepad API</span>
+                </div>
+                <div class="stat-value" id="gamepadInfo">-</div>
+            </div>
         </div>
 
         <!-- Refresh Button -->
@@ -789,6 +1048,205 @@
             // CPU
             const cores = navigator.hardwareConcurrency || 'Unknown';
             document.getElementById('cpuInfo').textContent = cores + (typeof cores === 'number' ? ' kärnor' : '');
+
+            // === ADVANCED DATA ===
+
+            // Timezone
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const offset = new Date().getTimezoneOffset();
+            const offsetHrs = Math.abs(offset / 60);
+            const offsetSign = offset <= 0 ? '+' : '-';
+            document.getElementById('timezoneInfo').textContent = `${tz} (UTC${offsetSign}${offsetHrs})`;
+
+            // Color Depth
+            const colorDepth = screen.colorDepth || screen.pixelDepth;
+            document.getElementById('colorDepthInfo').textContent = `${colorDepth}-bit (${Math.pow(2, colorDepth).toLocaleString()} colors)`;
+
+            // Screen Orientation
+            const orientation = screen.orientation ? screen.orientation.type :
+                (window.matchMedia("(orientation: portrait)").matches ? 'portrait' : 'landscape');
+            const orientationIcon = orientation.includes('portrait') ? '📱' : '🖥️';
+            document.getElementById('orientationInfo').textContent = `${orientationIcon} ${orientation}`;
+
+            // Platform
+            document.getElementById('platformInfo').textContent = navigator.platform || 'Unknown';
+
+            // Vendor
+            document.getElementById('vendorInfo').textContent = navigator.vendor || 'Unknown';
+
+            // Cookies
+            const cookiesEnabled = navigator.cookieEnabled;
+            document.getElementById('cookiesInfo').textContent = cookiesEnabled ? '✅ Enabled' : '❌ Disabled';
+
+            // Do Not Track
+            const dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+            let dntStatus = '❓ Unknown';
+            if (dnt === '1' || dnt === 'yes') dntStatus = '🛑 Enabled';
+            else if (dnt === '0' || dnt === 'no') dntStatus = '✅ Disabled';
+            document.getElementById('dntInfo').textContent = dntStatus;
+
+            // PDF Support
+            const pdfSupport = navigator.pdfViewerEnabled !== undefined ? navigator.pdfViewerEnabled :
+                (navigator.mimeTypes && navigator.mimeTypes['application/pdf']);
+            document.getElementById('pdfInfo').textContent = pdfSupport ? '✅ Inbyggd' : '❌ Ej stöd';
+
+            // WebGL Info
+            try {
+                const canvas = document.createElement('canvas');
+                const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (gl) {
+                    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                    if (debugInfo) {
+                        const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+                        const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                        document.getElementById('webglInfo').textContent = renderer;
+                    } else {
+                        document.getElementById('webglInfo').textContent = gl.getParameter(gl.RENDERER);
+                    }
+                } else {
+                    document.getElementById('webglInfo').textContent = '❌ Not supported';
+                }
+            } catch (e) {
+                document.getElementById('webglInfo').textContent = '❌ Error';
+            }
+
+            // Canvas Fingerprint
+            try {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = 200;
+                canvas.height = 50;
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillStyle = '#f60';
+                ctx.fillRect(0, 0, 200, 50);
+                ctx.fillStyle = '#069';
+                ctx.fillText('Canvas Fingerprint 🎨', 2, 15);
+                const dataURL = canvas.toDataURL();
+                // Simple hash
+                let hash = 0;
+                for (let i = 0; i < dataURL.length; i++) {
+                    hash = ((hash << 5) - hash) + dataURL.charCodeAt(i);
+                    hash = hash & hash;
+                }
+                document.getElementById('canvasInfo').textContent = Math.abs(hash).toString(16).toUpperCase();
+            } catch (e) {
+                document.getElementById('canvasInfo').textContent = 'N/A';
+            }
+
+            // Audio Context
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    const ctx = new AudioContext();
+                    document.getElementById('audioInfo').textContent = `✅ ${ctx.sampleRate} Hz`;
+                    ctx.close();
+                } else {
+                    document.getElementById('audioInfo').textContent = '❌ Not supported';
+                }
+            } catch (e) {
+                document.getElementById('audioInfo').textContent = '❌ Blocked';
+            }
+
+            // Storage Quota
+            if (navigator.storage && navigator.storage.estimate) {
+                navigator.storage.estimate().then(estimate => {
+                    const usage = estimate.usage || 0;
+                    const quota = estimate.quota || 0;
+                    const usedMB = (usage / 1024 / 1024).toFixed(2);
+                    const totalMB = (quota / 1024 / 1024 / 1024).toFixed(2);
+                    const percent = quota > 0 ? ((usage / quota) * 100).toFixed(1) : 0;
+                    document.getElementById('storageInfo').textContent = `${usedMB} MB / ${totalMB} GB`;
+                    document.getElementById('storageFill').style.width = percent + '%';
+                });
+            } else {
+                document.getElementById('storageInfo').textContent = 'N/A';
+            }
+
+            // Service Worker
+            document.getElementById('swInfo').textContent = 'serviceWorker' in navigator ? '✅ Supported' : '❌ Not supported';
+
+            // Notifications Permission
+            if ('Notification' in window) {
+                document.getElementById('notifInfo').textContent = Notification.permission === 'granted' ? '✅ Granted' :
+                    Notification.permission === 'denied' ? '🚫 Denied' : '❓ Not asked';
+            } else {
+                document.getElementById('notifInfo').textContent = '❌ Not supported';
+            }
+
+            // Geolocation
+            if ('geolocation' in navigator) {
+                if (navigator.permissions) {
+                    navigator.permissions.query({ name: 'geolocation' }).then(result => {
+                        document.getElementById('geoInfo').textContent = result.state === 'granted' ? '✅ Granted' :
+                            result.state === 'denied' ? '🚫 Denied' : '❓ Prompt';
+                    }).catch(() => {
+                        document.getElementById('geoInfo').textContent = '✅ Available';
+                    });
+                } else {
+                    document.getElementById('geoInfo').textContent = '✅ Available';
+                }
+            } else {
+                document.getElementById('geoInfo').textContent = '❌ Not supported';
+            }
+
+            // Plugins
+            const plugins = navigator.plugins ? navigator.plugins.length : 0;
+            document.getElementById('pluginsInfo').textContent = `${plugins} installerade`;
+
+            // UA Fingerprint (hash)
+            let uaHash = 0;
+            const uaString = ua + screen.width + screen.height + navigator.language + new Date().getTimezoneOffset();
+            for (let i = 0; i < uaString.length; i++) {
+                uaHash = ((uaHash << 5) - uaHash) + uaString.charCodeAt(i);
+                uaHash = uaHash & uaHash;
+            }
+            document.getElementById('uaHashInfo').textContent = Math.abs(uaHash).toString(16).toUpperCase().substring(0, 12);
+
+            // Connection Details
+            if (navigator.connection) {
+                const conn = navigator.connection;
+                document.getElementById('connectionCard').style.display = 'block';
+                const connInfo = [];
+                if (conn.effectiveType) connInfo.push(conn.effectiveType.toUpperCase());
+                if (conn.downlink) connInfo.push(`${conn.downlink} Mbps`);
+                if (conn.rtt) connInfo.push(`${conn.rtt}ms RTT`);
+                if (conn.saveData) connInfo.push('Data Saver');
+                document.getElementById('connectionInfo').textContent = connInfo.join(' • ') || 'N/A';
+            }
+
+            // Viewport
+            document.getElementById('viewportInfo').textContent = `${window.innerWidth} × ${window.innerHeight} px`;
+
+            // Available Screen
+            document.getElementById('availScreenInfo').textContent = `${screen.availWidth} × ${screen.availHeight} px`;
+
+            // LocalStorage Size
+            let localStorageSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    localStorageSize += localStorage[key].length * 2; // Approx bytes (UTF-16)
+                }
+            }
+            document.getElementById('localStorageInfo').textContent = `${(localStorageSize / 1024).toFixed(2)} KB`;
+
+            // Session Count
+            let sessionCount = parseInt(localStorage.getItem('deviceInfoSessionCount') || '0') + 1;
+            localStorage.setItem('deviceInfoSessionCount', sessionCount.toString());
+            document.getElementById('sessionInfo').textContent = `${sessionCount} visits`;
+
+            // WebRTC
+            const hasWebRTC = !!(window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection);
+            document.getElementById('webrtcInfo').textContent = hasWebRTC ? '✅ Supported' : '❌ Not supported';
+
+            // Bluetooth
+            document.getElementById('bluetoothInfo').textContent = 'bluetooth' in navigator ? '✅ Available' : '❌ Not available';
+
+            // USB
+            document.getElementById('usbInfo').textContent = 'usb' in navigator ? '✅ Available' : '❌ Not available';
+
+            // Gamepad
+            document.getElementById('gamepadInfo').textContent = 'getGamepads' in navigator ? '✅ Available' : '❌ Not available';
 
             // Timestamp
             const now = new Date();

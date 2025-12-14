@@ -15,34 +15,41 @@ try {
     const getData = new Function('return ' + arrayString + ';');
     const dictionaryData = getData();
 
+    // Create ID Map for fast lookup (ID is at column 0)
+    const idMap = new Map();
+    dictionaryData.forEach((row, idx) => {
+        if (row && row.length > 0) {
+            idMap.set(row[0], idx);
+        }
+    });
+
     // Read Batch
     const batchData = JSON.parse(fs.readFileSync(batchPath, 'utf8'));
 
     const COL_DEF = 5; // Target column for Swedish definition
 
     let updates = 0;
+    let notFound = 0;
 
     batchData.forEach(item => {
-        const { index, def } = item;
-        if (dictionaryData[index]) {
+        const { id, def } = item;
+
+        if (id && idMap.has(id)) {
+            const rowIndex = idMap.get(id);
             // Update the definition
-            dictionaryData[index][COL_DEF] = def;
+            dictionaryData[rowIndex][COL_DEF] = def;
             updates++;
         } else {
-            console.warn(`Index ${index} not found in dictionary data.`);
+            console.warn(`ID ${id} not found in dictionary data.`);
+            notFound++;
         }
     });
 
     console.log(`Applied ${updates} definition updates.`);
+    if (notFound > 0) console.log(`Warning: ${notFound} IDs were not found.`);
 
     // Write back
-    // Use JSON.stringify but we need to match the original formatting style ideally?
-    // The original file is a JS file assigning a variable.
-    // We can just dump it as strict JSON inside the variable assignment.
-    // Note: This might change indentation or quoting style (single vs double).
-    // The previous file used double quotes mostly. JSON.stringify uses double quotes.
-    // It should be safe.
-
+    // Use JSON.stringify but retain the variable assignment structure
     const newContent = prefix + JSON.stringify(dictionaryData, null, 2) + suffix;
     fs.writeFileSync(dataPath, newContent, 'utf8');
     console.log('Successfully saved data.js');

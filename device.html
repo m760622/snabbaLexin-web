@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Device Info / معلومات الجهاز</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.3);
+            --bg-color: #0a0a0f;
+            --card-bg: rgba(30, 41, 59, 0.8);
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --cyan: #06b6d4;
+            --purple: #a855f7;
+            --pink: #ec4899;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-animation::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.2) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(30px, 30px) scale(1.1);
+            }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        header h1 {
+            flex: 1;
+            font-size: 1.2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #06b6d4, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Main Content */
+        main {
+            padding: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Device Visual */
+        .device-visual {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .device-icon {
+            font-size: 6rem;
+            display: inline-block;
+            animation: pulse-glow 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px var(--primary-glow));
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 30px var(--primary-glow));
+            }
+
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 50px var(--primary-glow));
+            }
+        }
+
+        .device-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 1rem;
+            color: var(--cyan);
+        }
+
+        .device-type {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        /* Stat Card */
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 1.25rem;
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .stat-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .stat-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .stat-card:nth-child(7) {
+            animation-delay: 0.7s;
+        }
+
+        .stat-card:nth-child(8) {
+            animation-delay: 0.8s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--cyan), var(--primary));
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(99, 102, 241, 0.2));
+            border-radius: 12px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            word-break: break-all;
+        }
+
+        /* Special Cards */
+        .stat-card.screen-card .stat-value {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .screen-visual {
+            width: 60px;
+            height: 40px;
+            border: 2px solid var(--cyan);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: var(--cyan);
+        }
+
+        /* Battery Card */
+        .battery-visual {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .battery-bar {
+            flex: 1;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .battery-fill {
+            height: 100%;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #22c55e, #84cc16);
+            transition: width 1s ease-out;
+            position: relative;
+        }
+
+        .battery-fill.low {
+            background: linear-gradient(90deg, #ef4444, #f59e0b);
+        }
+
+        .battery-fill.medium {
+            background: linear-gradient(90deg, #f59e0b, #eab308);
+        }
+
+        .battery-text {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .battery-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Network Card */
+        .network-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .network-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        .network-dot.offline {
+            background: var(--error);
+            animation: none;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Storage Card */
+        .storage-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .storage-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--purple));
+            border-radius: 4px;
+        }
+
+        /* Touch Indicator */
+        .touch-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 20px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .touch-indicator.no-touch {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: var(--error);
+        }
+
+        /* Footer */
+        .footer-info {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .footer-info p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timestamp {
+            font-family: 'Courier New', monospace;
+            color: var(--cyan);
+            font-size: 0.9rem;
+        }
+
+        /* Mobile View Mode */
+        html.iphone-mode {
+            background: var(--bg-color);
+        }
+
+        body.iphone-view {
+            max-width: 430px;
+            margin: 0 auto;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .mobile-toggle-btn {
+            background: rgba(99, 102, 241, 0.2);
+            border: 2px solid #6366f1;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 1px;
+        }
+
+        .mobile-toggle-btn:hover {
+            background: rgba(99, 102, 241, 0.4);
+        }
+
+        .mobile-toggle-btn.active {
+            background: #6366f1;
+        }
+
+        /* Refresh Button */
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1.5rem auto 0;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+        }
+
+        .refresh-icon {
+            transition: transform 0.5s;
+        }
+
+        .refresh-btn:hover .refresh-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-animation"></div>
+
+    <header>
+        <button class="back-btn" onclick="window.location.href='index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+            title="وضع الموبايل">📱</button>
+        <h1>🖥️ Device Info / معلومات الجهاز</h1>
+    </header>
+
+    <main>
+        <!-- Device Visual -->
+        <div class="device-visual">
+            <div class="device-icon" id="deviceIcon">💻</div>
+            <div class="device-name" id="deviceName">Loading...</div>
+            <div class="device-type" id="deviceType">Detecting device...</div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <!-- Browser -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🌐</span>
+                    <span class="stat-label">Webbläsare / المتصفح</span>
+                </div>
+                <div class="stat-value" id="browserInfo">-</div>
+            </div>
+
+            <!-- OS -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">⚙️</span>
+                    <span class="stat-label">Operativsystem / نظام التشغيل</span>
+                </div>
+                <div class="stat-value" id="osInfo">-</div>
+            </div>
+
+            <!-- Screen -->
+            <div class="stat-card screen-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📐</span>
+                    <span class="stat-label">Skärmstorlek / حجم الشاشة</span>
+                </div>
+                <div class="stat-value">
+                    <div class="screen-visual" id="screenVisual">-</div>
+                    <span id="screenInfo">-</span>
+                </div>
+            </div>
+
+            <!-- Pixel Ratio -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🔍</span>
+                    <span class="stat-label">Pixel Density / كثافة البكسل</span>
+                </div>
+                <div class="stat-value" id="pixelRatio">-</div>
+            </div>
+
+            <!-- Battery -->
+            <div class="stat-card" id="batteryCard" style="display: none;">
+                <div class="stat-header">
+                    <span class="stat-icon">🔋</span>
+                    <span class="stat-label">Batteri / البطارية</span>
+                </div>
+                <div class="battery-visual">
+                    <span class="battery-icon" id="batteryIcon">🔋</span>
+                    <div class="battery-bar">
+                        <div class="battery-fill" id="batteryFill" style="width: 0%">
+                            <span class="battery-text" id="batteryText">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Network -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">📶</span>
+                    <span class="stat-label">Nätverk / الشبكة</span>
+                </div>
+                <div class="stat-value">
+                    <div class="network-status">
+                        <span class="network-dot" id="networkDot"></span>
+                        <span id="networkInfo">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Language -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🌍</span>
+                    <span class="stat-label">Språk / اللغة</span>
+                </div>
+                <div class="stat-value" id="languageInfo">-</div>
+            </div>
+
+            <!-- Touch Support -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">👆</span>
+                    <span class="stat-label">Touch / اللمس</span>
+                </div>
+                <div class="stat-value">
+                    <span class="touch-indicator" id="touchInfo">-</span>
+                </div>
+            </div>
+
+            <!-- Memory -->
+            <div class="stat-card" id="memoryCard" style="display: none;">
+                <div class="stat-header">
+                    <span class="stat-icon">💾</span>
+                    <span class="stat-label">Minne / الذاكرة</span>
+                </div>
+                <div class="stat-value" id="memoryInfo">-</div>
+            </div>
+
+            <!-- CPU Cores -->
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🧠</span>
+                    <span class="stat-label">CPU Kärnor / نوى المعالج</span>
+                </div>
+                <div class="stat-value" id="cpuInfo">-</div>
+            </div>
+        </div>
+
+        <!-- Refresh Button -->
+        <button class="refresh-btn" onclick="loadDeviceInfo()">
+            <span class="refresh-icon">🔄</span>
+            Uppdatera / تحديث
+        </button>
+
+        <!-- Footer -->
+        <div class="footer-info">
+            <p>Senast uppdaterad / آخر تحديث:</p>
+            <div class="timestamp" id="timestamp">-</div>
+        </div>
+    </main>
+
+    <script>
+        // Theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Mobile View
+        function toggleMobileView() {
+            document.documentElement.classList.toggle('iphone-mode');
+            document.body.classList.toggle('iphone-view');
+            const isActive = document.body.classList.contains('iphone-view');
+            localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+            const btn = document.getElementById('mobileToggle');
+            if (btn) btn.classList.toggle('active', isActive);
+        }
+
+        if (localStorage.getItem('mobileView') === 'true') {
+            document.documentElement.classList.add('iphone-mode');
+            document.body.classList.add('iphone-view');
+            document.getElementById('mobileToggle')?.classList.add('active');
+        }
+
+        // Device Detection
+        function loadDeviceInfo() {
+            const ua = navigator.userAgent;
+
+            // Device Type & Icon
+            let deviceIcon = '💻';
+            let deviceName = 'Desktop';
+            let deviceType = 'Stationär dator / حاسوب مكتبي';
+
+            if (/iPhone/i.test(ua)) {
+                deviceIcon = '📱';
+                deviceName = 'iPhone';
+                deviceType = 'Apple Smartphone / هاتف آيفون';
+            } else if (/iPad/i.test(ua)) {
+                deviceIcon = '📱';
+                deviceName = 'iPad';
+                deviceType = 'Apple Tablet / جهاز آيباد';
+            } else if (/Android/i.test(ua)) {
+                if (/Mobile/i.test(ua)) {
+                    deviceIcon = '📱';
+                    deviceName = 'Android Phone';
+                    deviceType = 'Android Smartphone / هاتف أندرويد';
+                } else {
+                    deviceIcon = '📱';
+                    deviceName = 'Android Tablet';
+                    deviceType = 'Android Tablet / جهاز لوحي أندرويد';
+                }
+            } else if (/Macintosh/i.test(ua)) {
+                deviceIcon = '💻';
+                deviceName = 'Mac';
+                deviceType = 'Apple Computer / حاسوب ماك';
+            } else if (/Windows/i.test(ua)) {
+                deviceIcon = '🖥️';
+                deviceName = 'Windows PC';
+                deviceType = 'Windows Computer / حاسوب ويندوز';
+            } else if (/Linux/i.test(ua)) {
+                deviceIcon = '🐧';
+                deviceName = 'Linux';
+                deviceType = 'Linux Computer / حاسوب لينكس';
+            }
+
+            document.getElementById('deviceIcon').textContent = deviceIcon;
+            document.getElementById('deviceName').textContent = deviceName;
+            document.getElementById('deviceType').textContent = deviceType;
+
+            // Browser
+            let browser = 'Unknown';
+            if (/Chrome/i.test(ua) && !/Edg/i.test(ua)) browser = 'Google Chrome';
+            else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) browser = 'Safari';
+            else if (/Firefox/i.test(ua)) browser = 'Firefox';
+            else if (/Edg/i.test(ua)) browser = 'Microsoft Edge';
+            else if (/Opera|OPR/i.test(ua)) browser = 'Opera';
+            document.getElementById('browserInfo').textContent = browser;
+
+            // OS
+            let os = 'Unknown';
+            if (/Windows 11/i.test(ua) || (/Windows NT 10/i.test(ua) && /Win64/i.test(ua))) os = 'Windows 11';
+            else if (/Windows NT 10/i.test(ua)) os = 'Windows 10';
+            else if (/iPhone OS (\d+)/i.test(ua)) os = 'iOS ' + ua.match(/iPhone OS (\d+)/i)[1];
+            else if (/Mac OS X/i.test(ua)) os = 'macOS';
+            else if (/Android (\d+)/i.test(ua)) os = 'Android ' + ua.match(/Android (\d+)/i)[1];
+            else if (/Linux/i.test(ua)) os = 'Linux';
+            document.getElementById('osInfo').textContent = os;
+
+            // Screen
+            const w = window.screen.width;
+            const h = window.screen.height;
+            document.getElementById('screenInfo').textContent = `${w} × ${h} px`;
+            document.getElementById('screenVisual').textContent = `${w}×${h}`;
+
+            // Pixel Ratio
+            const ratio = window.devicePixelRatio || 1;
+            document.getElementById('pixelRatio').textContent = `${ratio}x (${ratio > 1 ? 'Retina' : 'Standard'})`;
+
+            // Battery
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(battery => {
+                    document.getElementById('batteryCard').style.display = 'block';
+                    updateBattery(battery);
+                    battery.addEventListener('levelchange', () => updateBattery(battery));
+                    battery.addEventListener('chargingchange', () => updateBattery(battery));
+                });
+            }
+
+            // Network
+            const online = navigator.onLine;
+            const networkDot = document.getElementById('networkDot');
+            const networkInfo = document.getElementById('networkInfo');
+
+            if (online) {
+                networkDot.classList.remove('offline');
+                let connection = 'Online';
+                if (navigator.connection) {
+                    const conn = navigator.connection;
+                    if (conn.effectiveType) connection += ` (${conn.effectiveType.toUpperCase()})`;
+                }
+                networkInfo.textContent = connection;
+            } else {
+                networkDot.classList.add('offline');
+                networkInfo.textContent = 'Offline';
+            }
+
+            // Language
+            const lang = navigator.language || navigator.userLanguage;
+            const langNames = {
+                'sv': 'Svenska 🇸🇪', 'sv-SE': 'Svenska 🇸🇪',
+                'ar': 'العربية 🇸🇦', 'ar-SA': 'العربية 🇸🇦',
+                'en': 'English 🇬🇧', 'en-US': 'English 🇺🇸', 'en-GB': 'English 🇬🇧',
+                'de': 'Deutsch 🇩🇪', 'fr': 'Français 🇫🇷', 'es': 'Español 🇪🇸'
+            };
+            document.getElementById('languageInfo').textContent = langNames[lang] || lang;
+
+            // Touch
+            const touchEl = document.getElementById('touchInfo');
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            touchEl.textContent = hasTouch ? '✅ Touch stöds' : '❌ Ingen touch';
+            touchEl.className = 'touch-indicator' + (hasTouch ? '' : ' no-touch');
+
+            // Memory
+            if (navigator.deviceMemory) {
+                document.getElementById('memoryCard').style.display = 'block';
+                document.getElementById('memoryInfo').textContent = `${navigator.deviceMemory} GB RAM`;
+            }
+
+            // CPU
+            const cores = navigator.hardwareConcurrency || 'Unknown';
+            document.getElementById('cpuInfo').textContent = cores + (typeof cores === 'number' ? ' kärnor' : '');
+
+            // Timestamp
+            const now = new Date();
+            document.getElementById('timestamp').textContent = now.toLocaleString('sv-SE');
+        }
+
+        function updateBattery(battery) {
+            const level = Math.round(battery.level * 100);
+            const charging = battery.charging;
+
+            const fill = document.getElementById('batteryFill');
+            const text = document.getElementById('batteryText');
+            const icon = document.getElementById('batteryIcon');
+
+            fill.style.width = level + '%';
+            text.textContent = level + '%';
+
+            fill.className = 'battery-fill';
+            if (level <= 20) fill.classList.add('low');
+            else if (level <= 50) fill.classList.add('medium');
+
+            icon.textContent = charging ? '⚡' : (level <= 20 ? '🪫' : '🔋');
+        }
+
+        // Initial load
+        loadDeviceInfo();
+
+        // Update on visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) loadDeviceInfo();
+        });
+
+        // Update network status
+        window.addEventListener('online', loadDeviceInfo);
+        window.addEventListener('offline', loadDeviceInfo);
+    </script>
+</body>
+
+</html>

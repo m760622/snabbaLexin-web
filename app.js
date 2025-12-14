@@ -58,13 +58,7 @@ let learnedSuffixes = {
     ett: ['rum', 'kar', 'hus', 'tak', 'golv', 'bord', 'berg', 'land', 'ljus', 'block', 'kort', 'slag', 'spel', 'verk', 'djur', 'krig', 'krön', 'prov', 'test', 'tryck', 'vatten', 'fönster', 'papper', 'system', 'arbete', 'centrum', 'museum', 'program', 'dokument', 'dråp', 'brott', 'mord', 'skap', 'äktenskap', 'partnerskap'],
     en: ['gård', 'väg', 'gata', 'plats', 'dörr', 'bil', 'maskin', 'station', 'ventil', 'motor', 'pump', 'kabel', 'tid', 'dag', 'natt', 'stad', 'ning', 'tion', 'sion', 'het', 'else', 'ande', 'ende', 'ment', 'itet', 'dom', 'ism', 'ist', 'are', 'ler', 'rer', 'nar', 'mark', 'feber', 'handel', 'misshandel', 'konvention', 'habilitering', 'akut', 'queen', 'plikt', 'hiss', 'nad', 'sjukdom']
 };
-fetch('learned_suffixes.json')
-    .then(res => res.json())
-    .then(data => {
-        learnedSuffixes = data;
-        console.log(`[Suffixes] Loaded ${data.ett.length} Ett and ${data.en.length} En suffixes`);
-    })
-    .catch(err => console.warn('[Suffixes] Using fallback suffix lists'));
+// learned_suffixes.json fetch removed - using internal list
 
 // Helper: Normalize Arabic (Remove Tashkeel)
 function normalizeArabic(text) {

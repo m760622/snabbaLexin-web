@@ -2023,7 +2023,7 @@ const TTSManager = {
     _playVoiceRSS(text, lang, options = {}) {
         return new Promise((resolve, reject) => {
             // VoiceRSS free API key (you can get your own at voicerss.org)
-            const API_KEY = 'demo'; // Replace with actual key for production
+            const API_KEY = 'a28d3d026971413cba0c492136085fae'; // Replace with actual key for production
 
             // Language mapping for VoiceRSS
             const langMap = {
@@ -2418,6 +2418,16 @@ if (document.readyState === 'loading') {
 } else {
     TTSManager.init();
 }
+
+// ========================================
+// EXPOSE GLOBALLY (for console and cross-file access)
+// ========================================
+window.TTSManager = TTSManager;
+window.speakText = speakText;
+window.speakSwedish = speakSwedish;
+window.speakArabic = speakArabic;
+
+console.log('🔊 TTS System loaded globally. Use: speakSwedish("hej") or TTSManager.test()');
 
 // ========================================
 // Haptic Feedback Manager

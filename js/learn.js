@@ -38,8 +38,13 @@ function initLearnPage() {
     renderLessonCards();
 
     setupModalListeners();
+    setupModalListeners();
+    initLessonSearch();
+    setupModalListeners();
     initLessonSearch();
     updateProgressUI();
+    initFilterListeners();
+    updateDailyStats();
 
     // Check for ID in URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -89,19 +94,175 @@ function initLessonSearch() {
     });
 }
 
-function renderLessonCards() {
+function initFilterListeners() {
+    const chips = document.querySelectorAll('.filter-chip');
+    chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            // Remove active class from all
+            chips.forEach(c => c.classList.remove('active'));
+            // Add to clicked
+            chip.classList.add('active');
+
+            // Filter
+            const filter = chip.getAttribute('data-filter');
+            renderLessonCards(filter);
+        });
+    });
+}
+
+function renderLessonCards(filter = 'all') {
     const grid = document.querySelector('.lessons-grid');
     if (!grid) return;
 
-    // Clear existing static cards if any (though we plan to remove them from HTML)
-    // grid.innerHTML = ''; 
+    let html = '';
 
-    // We Assuming HTML structure is already cleaned up or we are appending/replacing.
-    // Ideally, the grid container should be empty in HTML.
+    // 1. Filter Lessons
+    const filteredLessons = lessonsData.filter(lesson => {
+        if (filter === 'all') return true;
+        return lesson.level === filter;
+    });
 
-    // Note: If we are keeping the existing container and just dynamicizing the content, 
-    // we should make sure we don't duplicate if called multiple times.
-    // For now, let's assume the HTML will be emptied or we strictly control this.
+    // 2. Generate Lesson Cards
+    filteredLessons.forEach(lesson => {
+        const isCompleted = isLessonCompleted(lesson.id);
+        const highScore = localStorage.getItem(`lesson_score_${lesson.id}`);
+        const isNew = ['hospital', 'work', 'bank'].includes(lesson.id);
+        const isImportant = ['wordOrder'].includes(lesson.id);
+
+        let badgeHtml = '';
+        if (isNew) badgeHtml = '<span class="lesson-badge">Ny</span>';
+        if (isImportant) badgeHtml = '<span class="lesson-badge">Viktig</span>';
+        if (lesson.id === 'phrases') badgeHtml = '<span class="lesson-badge">Nyttig</span>';
+        if (lesson.id === 'falseFriends') badgeHtml = '<span class="lesson-badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Varning</span>';
+        if (lesson.id === 'mistakes') badgeHtml = '<span class="lesson-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">Tips</span>';
+
+        // Score display
+        let scoreHtml = '';
+        if (highScore) {
+            scoreHtml = `<div style="font-size: 0.8rem; color: var(--success); margin-top: 0.25rem;">🏆 Bästa: ${highScore}%</div>`;
+        }
+
+        html += `
+            <div class="lesson-card ${isCompleted ? 'completed' : ''}" onclick="openMethodModal('${lesson.id}')" data-lesson="${lesson.id}">
+                ${isCompleted ? '<div class="completion-badge">✓</div>' : ''}
+                <div class="lesson-header">
+                    <span class="lesson-icon">${getIconForLesson(lesson.id)}</span>
+                    <div class="lesson-title">
+                        <h3>${lesson.title}</h3>
+                       ${getSubtitleForLesson(lesson.id) ? `<h4>${getSubtitleForLesson(lesson.id)}</h4>` : ''}
+                    </div>
+                    ${badgeHtml}
+                </div>
+                <p class="lesson-desc">${getDescForLesson(lesson.id)}</p>
+                ${scoreHtml}
+            </div>
+        `;
+    });
+
+    // 3. Add "Review Mistakes" Card if filter is 'all' or maybe 'intermediate'? 
+    // Let's show it only on 'all' to avoid clutter specific levels.
+    if (filter === 'all') {
+        html += `
+            <div class="lesson-card" onclick="openMistakesReview()">
+                <div class="lesson-header">
+                    <span class="lesson-icon">⚠️</span>
+                    <div class="lesson-title">
+                        <h3>Dina Misstag</h3>
+                        <h4>أخطاؤك السابقة</h4>
+                    </div>
+                </div>
+                <p class="lesson-desc">Repetera frågor du svarade fel på.</p>
+            </div>
+        `;
+    }
+
+    grid.innerHTML = html;
+}
+
+function isLessonCompleted(id) {
+    const progress = JSON.parse(localStorage.getItem('completedLessons')) || [];
+    return progress.includes(id);
+}
+
+// Helpers for missing data in JSON (Temporary until we enrich JSON)
+function getIconForLesson(id) {
+    const icons = {
+        wordOrder: '📝', pronouns: '👤', verbs: '🏃', adjectives: '🎨',
+        prepositions: '📍', gender: '⚖️', questions: '❓', numbers: '🔢',
+        phrases: '💬', falseFriends: '🎭', hospital: '🏥', work: '💼',
+        bank: '🏦', mistakes: '⚠️'
+    };
+    return icons[id] || '📚';
+}
+
+function getSubtitleForLesson(id) {
+    const subs = {
+        wordOrder: 'ترتيب الجملة - قاعدة V2', pronouns: 'الضمائر الشخصية', verbs: 'الأفعال والأزمنة',
+        adjectives: 'الصفات', prepositions: 'حروف الجر', gender: 'المذكر والمؤنث',
+        questions: 'الأسئلة والنفي', numbers: 'الأرقام والوقت', phrases: 'عبارات شائعة',
+        falseFriends: 'أصدقاء مخادعون', hospital: 'في المستشفى', work: 'في العمل',
+        bank: 'في البنك', mistakes: 'أخطاء شائعة'
+    };
+    return subs[id] || '';
+}
+
+function getDescForLesson(id) {
+    const descs = {
+        wordOrder: 'Lär dig hur svenska meningar är uppbyggda och den viktiga V2-regeln.',
+        pronouns: 'Personliga pronomen: jag, du, han, hon, vi, ni, de',
+        verbs: 'Presens, preteritum, perfekt och futurum',
+        adjectives: 'Hur adjektiv böjs: en stor bil, ett stort hus, stora bilar',
+        prepositions: 'i, på, till, från, med, utan, för, av...',
+        gender: 'Genus i svenska: en bok, ett bord',
+        questions: 'Hur man ställer frågor och säger nej på svenska',
+        numbers: '1-100, klockan, dagar och månader',
+        phrases: 'Hälsningar, artighetsfraser och vardagsuttryck',
+        falseFriends: 'Ord som liknar arabiska men har annan betydelse',
+        hospital: 'Fraser och ord du behöver på vårdcentralen',
+        work: 'Vanliga uttryck på arbetsplatsen',
+        bank: 'Ord och fraser för bankärenden',
+        mistakes: 'Typiska fel som arabisktalande gör'
+    };
+    return descs[id] || '';
+}
+
+function updateDailyStats() {
+    let stats = JSON.parse(localStorage.getItem('learningStats')) || {
+        streak: 0,
+        lastDate: '',
+        totalXP: 0
+    };
+
+    const today = new Date().toISOString().split('T')[0];
+    const streakEl = document.getElementById('streakCount');
+    const xpEl = document.getElementById('totalXP');
+
+    if (stats.lastDate !== today) {
+        // It's a new day or first time
+        const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+        if (stats.lastDate === yesterday) {
+            // Continued streak
+            // We only increment streak if they actually do something? 
+            // Or just logging in counts? Let's say visiting learn page counts.
+            stats.streak++;
+        } else if (stats.lastDate !== today) {
+            // Missed a day (or many), but if first time ever (lastDate empty), start at 1
+            // If missed day, reset to 1
+            if (stats.lastDate) {
+                stats.streak = 1;
+            } else {
+                stats.streak = 1;
+            }
+        }
+        stats.lastDate = today;
+        stats.totalXP += 10; // Login bonus
+        localStorage.setItem('learningStats', JSON.stringify(stats));
+    }
+
+    // Update UI
+    if (streakEl) streakEl.innerText = stats.streak;
+    if (xpEl) xpEl.innerText = stats.totalXP;
 }
 
 // Function to open a lesson modal and populate it dynamically
@@ -218,7 +379,7 @@ window.openMethodModal = function (lessonId) {
     if (!swipeHintShown && window.innerWidth <= 768) {
         const hint = document.createElement('div');
         hint.className = 'swipe-hint';
-        hint.innerHTML = '<span class="swipe-hand-icon">👆</span> <span>Swipe to navigate</span>';
+        hint.innerHTML = '<span class="swipe-hand-icon">👆</span> <span>Svep för att navigera / اسحب للتنقل</span>';
         document.body.appendChild(hint);
 
         localStorage.setItem('swipeHintShown', 'true');
@@ -245,7 +406,7 @@ window.startQuiz = function (lessonId) {
     });
 
     if (allExamples.length < 3) {
-        alert("Not enough examples for a quiz! Marking as done.");
+        alert("Inte tillräckligt med exempel för quiz! / لا توجد أمثلة كافية للاختبار!");
         completeLesson(lessonId);
         return;
     }
@@ -263,33 +424,83 @@ window.startQuiz = function (lessonId) {
     renderQuizQuestion();
 };
 
+
 function renderQuizQuestion() {
     const contentDiv = document.getElementById('lessonContent');
     const q = currentQuiz.questions[currentQuiz.index];
     const total = currentQuiz.questions.length;
-
-    // Generate simple wrong answers (randomly picked from other examples in the lesson is best, 
-    // but complexity is higher. For simplicity, we can fetch from other lessons or generic placeholders?
-    // Better: Pick 2 random wrong answers from the SAME lesson's other examples.
-
-    // Find wrong answers
     const lesson = lessonsData.find(l => l.id === currentQuiz.lessonId);
+
+    // Determine Question Type (randomly, but weighted)
+    // types: 'text' (default), 'audio', 'reverse'
+    const rand = Math.random();
+    let type = 'text';
+    if (rand > 0.6) type = 'audio';
+    else if (rand > 0.85) type = 'reverse';
+
+    // Prepare Question & Answer
+    let questionHtml = '';
+    let correctAnswer = '';
+    let options = [];
+
+    // Common: Get Wrong Answers
     let allEx = [];
     lesson.sections.forEach(sec => { if (sec.examples) allEx = allEx.concat(sec.examples); });
-
-    // Filter out current question
     const otherEx = allEx.filter(e => e.swe !== q.swe);
-    const wrongAnswers = otherEx.sort(() => 0.5 - Math.random()).slice(0, 2);
+    const wrongAnswers = otherEx.sort(() => 0.5 - Math.random()).slice(0, 3);
 
-    // Prepare options
-    const options = [
-        { text: q.arb, correct: true },
-        { text: wrongAnswers[0]?.arb || 'N/A', correct: false },
-        { text: wrongAnswers[1]?.arb || 'N/A', correct: false }
-    ].sort(() => 0.5 - Math.random());
+    if (type === 'audio') {
+        // Audio Question: Listen and pick Arabic translation
+        questionHtml = `
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button class="quiz-start-btn" onclick="playTTS('${escapeSquote(q.swe)}')" style="width: 80px; height: 80px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <span style="font-size: 2.5rem;">🔊</span>
+                </button>
+                <p style="margin-top: 1rem; color: var(--text-muted);">Lyssna och välj rätt översättning</p>
+            </div>
+        `;
+        correctAnswer = q.arb;
+        options = [
+            { text: q.arb, correct: true },
+            { text: wrongAnswers[0]?.arb || 'N/A', correct: false },
+            { text: wrongAnswers[1]?.arb || 'N/A', correct: false },
+            { text: wrongAnswers[2]?.arb || 'N/A', correct: false }
+        ];
+        // Auto-play audio
+        setTimeout(() => playTTS(q.swe), 500);
+
+    } else if (type === 'reverse') {
+        // Reverse: Show Arabic, pick Swedish
+        questionHtml = `<p class="question-text" dir="rtl" style="font-family: 'IBM Plex Sans Arabic'">${q.arb}</p>`;
+        correctAnswer = q.swe;
+        options = [
+            { text: q.swe, correct: true },
+            { text: wrongAnswers[0]?.swe || 'N/A', correct: false },
+            { text: wrongAnswers[1]?.swe || 'N/A', correct: false },
+            { text: wrongAnswers[2]?.swe || 'N/A', correct: false }
+        ];
+
+    } else {
+        // Default Text: Show Swedish, pick Arabic
+        questionHtml = `<p class="question-text">${q.swe}</p>`;
+        correctAnswer = q.arb;
+        options = [
+            { text: q.arb, correct: true },
+            { text: wrongAnswers[0]?.arb || 'N/A', correct: false },
+            { text: wrongAnswers[1]?.arb || 'N/A', correct: false },
+            { text: wrongAnswers[2]?.arb || 'N/A', correct: false }
+        ];
+    }
+
+    // Shuffle options
+    options = options.sort(() => 0.5 - Math.random()); // Keep 4 options? Original had 3. Let's use 3 or 4. 
+    // Wait, original code usage had 3. Let's stick to 3 options to fit screen better or user preference.
+    // Previous code: slice(0, 2) wrong answers -> total 3.
+    // Let's keep total 3 for consistency.
+    options = options.slice(0, 3).sort(() => 0.5 - Math.random());
 
     // Store correct answer for feedback
-    currentQuiz.currentCorrectAnswer = q.arb;
+    currentQuiz.currentCorrectAnswer = correctAnswer;
 
     let html = `
         <div class="quiz-container">
@@ -299,10 +510,10 @@ function renderQuizQuestion() {
             </div>
             
             <div class="question-card">
-                <p class="question-text">${q.swe}</p>
+                ${questionHtml}
                 <div class="options-grid" id="quizOptions">
                     ${options.map((opt, i) => `
-                        <button class="option-btn" data-correct="${opt.correct}" data-text="${escapeSquote(opt.text)}" onclick="checkAnswer(${opt.correct}, this, '${escapeSquote(q.arb)}')">
+                        <button class="option-btn" data-correct="${opt.correct}" onclick="checkAnswer(${opt.correct}, this, '${escapeSquote(correctAnswer)}')">
                             ${opt.text}
                         </button>
                     `).join('')}
@@ -436,7 +647,21 @@ window.openMistakesReview = function () {
 
 window.removeMistake = function (index) {
     let mistakes = JSON.parse(localStorage.getItem('mistakesLog')) || [];
-    mistakes.splice(index, 1);
+    // Helpers
+    window.playTTS = function (text) {
+        if (typeof TTSManager !== 'undefined') {
+            TTSManager.speak(text, 'sv');
+        } else {
+            // Fallback
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'sv-SE';
+            window.speechSynthesis.speak(u);
+        }
+    };
+
+    window.escapeSquote = function (str) {
+        return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    };
     localStorage.setItem('mistakesLog', JSON.stringify(mistakes));
     openMistakesReview(); // Re-render
 }
@@ -481,6 +706,15 @@ function showQuizResults() {
     `;
 
     contentDiv.innerHTML = html;
+
+    // Integare ProgressManager
+    if (typeof ProgressManager !== 'undefined') {
+        ProgressManager.trackGame('lesson_quiz', currentQuiz.score);
+        if (passed) {
+            // Bonus XP for passing?
+            // ProgressManager doesn't have explicit XP, but trackGame updates stats.
+        }
+    }
 }
 
 function closeLessonModal() {

@@ -2,6 +2,7 @@ const lessonsData = [
     {
         "id": "wordOrder",
         "title": "📝 Ordföljd - V2-regeln",
+        "level": "intermediate",
         "sections": [
             {
                 "title": "🎯 Vad är V2-regeln?",
@@ -243,6 +244,7 @@ const lessonsData = [
     {
         "id": "pronouns",
         "title": "👤 Pronomen",
+        "level": "beginner",
         "sections": [
             {
                 "title": "📋 Personliga pronomen - Subjekt",
@@ -465,6 +467,7 @@ const lessonsData = [
     {
         "id": "verbs",
         "title": "🏃 Verb och tempus",
+        "level": "beginner",
         "sections": [
             {
                 "title": "⏰ Tempus (الأزمنة)",
@@ -697,6 +700,7 @@ const lessonsData = [
     {
         "id": "adjectives",
         "title": "🎨 Adjektiv",
+        "level": "beginner",
         "sections": [
             {
                 "title": "📋 Böjning efter genus",
@@ -919,6 +923,7 @@ const lessonsData = [
     {
         "id": "prepositions",
         "title": "📍 Prepositioner",
+        "level": "intermediate",
         "sections": [
             {
                 "title": "📋 Vanliga prepositioner",
@@ -967,171 +972,171 @@ const lessonsData = [
                         "arb": "الكتاب مكتوب من قبل أستريد ليندغرين."
                     },
                     {
-                        "swe": "9. We talked about the trip.",
+                        "swe": "9. Vi pratade om resan.",
                         "arb": "تحدثنا عن الرحلة."
                     },
                     {
-                        "swe": "10. The cat sits under the table.",
+                        "swe": "10. Katten sitter under bordet.",
                         "arb": "القطة تجلس تحت الطاولة."
                     },
                     {
-                        "swe": "11. The lamp hangs over the table.",
+                        "swe": "11. Lampan hänger över bordet.",
                         "arb": "المصباح معلق فوق الطاولة."
                     },
                     {
-                        "swe": "12. He stands in front of the house.",
+                        "swe": "12. Han står framför huset.",
                         "arb": "يقف أمام البيت."
                     },
                     {
-                        "swe": "13. The car is parked behind the building.",
+                        "swe": "13. Bilen är parkerad bakom byggnaden.",
                         "arb": "السيارة واقفة خلف المبنى."
                     },
                     {
-                        "swe": "14. The shop is next to the bank.",
+                        "swe": "14. Affären ligger bredvid banken.",
                         "arb": "المتجر بجانب البنك."
                     },
                     {
-                        "swe": "15. We live near the station.",
+                        "swe": "15. Vi bor nära stationen.",
                         "arb": "نسكن قريباً من المحطة."
                     },
                     {
-                        "swe": "16. They live far from the city.",
+                        "swe": "16. De bor långt från staden.",
                         "arb": "يسكنون بعيداً عن المدينة."
                     },
                     {
-                        "swe": "17. I work for a big company.",
+                        "swe": "17. Jag arbetar för ett stort företag.",
                         "arb": "أعمل عند شركة كبيرة."
                     },
                     {
-                        "swe": "18. We meet after work.",
+                        "swe": "18. Vi träffas efter jobbet.",
                         "arb": "نتقابل بعد العمل."
                     },
                     {
-                        "swe": "19. I eat breakfast before school.",
+                        "swe": "19. Jag äter frukost före skolan.",
                         "arb": "آكل الفطور قبل المدرسة."
                     },
                     {
-                        "swe": "20. He arrived at midnight.",
+                        "swe": "20. Han kom vid midnatt.",
                         "arb": "وصل عند منتصف الليل."
                     },
                     {
-                        "swe": "21. We go through the tunnel.",
+                        "swe": "21. Vi går genom tunneln.",
                         "arb": "نمر عبر النفق."
                     },
                     {
-                        "swe": "22. The train goes north.",
+                        "swe": "22. Tåget går norrut.",
                         "arb": "القطار يتجه نحو الشمال."
                     },
                     {
-                        "swe": "23. She walked along the beach.",
+                        "swe": "23. Hon gick längs stranden.",
                         "arb": "مشت على طول الشاطئ."
                     },
                     {
-                        "swe": "24. The bird flew over the lake.",
+                        "swe": "24. Fågeln flög över sjön.",
                         "arb": "طار الطائر فوق البحيرة."
                     },
                     {
-                        "swe": "25. We work during the night.",
+                        "swe": "25. Vi arbetar under natten.",
                         "arb": "نعمل خلال الليل."
                     },
                     {
-                        "swe": "26. I live between the school and the park.",
+                        "swe": "26. Jag bor mellan skolan och parken.",
                         "arb": "أسكن بين المدرسة والحديقة."
                     },
                     {
-                        "swe": "27. Everyone except him came to the party.",
+                        "swe": "27. Alla utom han kom till festen.",
                         "arb": "الجميع ما عداه حضر الحفلة."
                     },
                     {
-                        "swe": "28. I live with my parents.",
+                        "swe": "28. Jag bor hos mina föräldrar.",
                         "arb": "أسكن عند والديّ."
                     },
                     {
-                        "swe": "29. The meeting ended at three.",
+                        "swe": "29. Mötet slutade klockan tre.",
                         "arb": "انتهى الاجتماع عند الثالثة."
                     },
                     {
-                        "swe": "30. She watches TV every evening.",
+                        "swe": "30. Hon tittar på TV varje kväll.",
                         "arb": "تشاهد التلفزيون كل مساء."
                     },
                     {
-                        "swe": "31. We are waiting for the bus.",
+                        "swe": "31. Vi väntar på bussen.",
                         "arb": "ننتظر الحافلة."
                     },
                     {
-                        "swe": "32. He thinks of you.",
+                        "swe": "32. Han tänker på dig.",
                         "arb": "يفكر فيك."
                     },
                     {
-                        "swe": "33. I am afraid of dogs.",
+                        "swe": "33. Jag är rädd för hundar.",
                         "arb": "أخاف من الكلاب."
                     },
                     {
-                        "swe": "34. We are on vacation in Spain.",
+                        "swe": "34. Vi är på semester i Spanien.",
                         "arb": "نحن في إجازة في إسبانيا."
                     },
                     {
-                        "swe": "35. She trains in the park.",
+                        "swe": "35. Hon tränar i parken.",
                         "arb": "تتدرب في الحديقة."
                     },
                     {
-                        "swe": "36. I sit on the sofa.",
+                        "swe": "36. Jag sitter i soffan.",
                         "arb": "أجلس في الأريكة."
                     },
                     {
-                        "swe": "37. He is interested in art.",
+                        "swe": "37. Han är intresserad av konst.",
                         "arb": "هو مهتم بالفن."
                     },
                     {
-                        "swe": "38. I dream of traveling.",
+                        "swe": "38. Jag drömmer om att resa.",
                         "arb": "أحلم بالسفر."
                     },
                     {
-                        "swe": "39. The party starts in an hour.",
+                        "swe": "39. Festen börjar om en timme.",
                         "arb": "الحفلة تبدأ بعد ساعة."
                     },
                     {
-                        "swe": "40. She is good at math.",
+                        "swe": "40. Hon är duktig på matte.",
                         "arb": "هي جيدة في الرياضيات."
                     },
                     {
-                        "swe": "41. I am tired of waiting.",
+                        "swe": "41. Jag är trött på att vänta.",
                         "arb": "أنا تعبان من الانتظار."
                     },
                     {
-                        "swe": "42. We go by train to Gothenburg.",
+                        "swe": "42. Vi åker med tåg till Göteborg.",
                         "arb": "نسافر بالقطار إلى يوتبوري."
                     },
                     {
-                        "swe": "43. He pays by card.",
+                        "swe": "43. Han betalar med kort.",
                         "arb": "يدفع بالبطاقة."
                     },
                     {
-                        "swe": "44. I am done with homework.",
+                        "swe": "44. Jag är klar med läxorna.",
                         "arb": "انتهيت من الواجبات."
                     },
                     {
-                        "swe": "45. She goes to the gym every day.",
+                        "swe": "45. Hon går till gymmet varje dag.",
                         "arb": "تذهب إلى الجيم كل يوم."
                     },
                     {
-                        "swe": "46. My brother lives in Södermalm.",
+                        "swe": "46. Min bror bor i Södermalm.",
                         "arb": "أخي يسكن في سودرمالم."
                     },
                     {
-                        "swe": "47. I work in a shop.",
+                        "swe": "47. Jag jobbar i en affär.",
                         "arb": "أعمل في محل."
                     },
                     {
-                        "swe": "48. The cat jumped on the table.",
+                        "swe": "48. Katten hoppade på bordet.",
                         "arb": "قفزت القطة على الطاولة."
                     },
                     {
-                        "swe": "49. She left the room.",
+                        "swe": "49. Hon lämnade rummet.",
                         "arb": "خرجت من الغرفة."
                     },
                     {
-                        "swe": "50. We walked around the lake.",
+                        "swe": "50. Vi gick runt sjön.",
                         "arb": "تمشينا حول البحيرة."
                     }
                 ]
@@ -1141,6 +1146,7 @@ const lessonsData = [
     {
         "id": "gender",
         "title": "⚖️ En-ord och Ett-ord",
+        "level": "beginner",
         "sections": [
             {
                 "title": "📋 Regler",
@@ -1385,6 +1391,7 @@ const lessonsData = [
     {
         "id": "questions",
         "title": "❓ Frågor och Nekande",
+        "level": "intermediate",
         "sections": [
             {
                 "title": "🔄 Frågeord (كلمات الاستفهام)",
@@ -1607,6 +1614,7 @@ const lessonsData = [
     {
         "id": "numbers",
         "title": "🔢 Tal och Tid",
+        "level": "beginner",
         "sections": [
             {
                 "title": "🔢 Grundtal / الأرقام الأساسية",
@@ -1829,6 +1837,7 @@ const lessonsData = [
     {
         "id": "phrases",
         "title": "💬 Vanliga Fraser",
+        "level": "beginner",
         "sections": [
             {
                 "title": "💡 50 Exempel / أمثلة",
@@ -2041,6 +2050,7 @@ const lessonsData = [
     {
         "id": "falseFriends",
         "title": "🎭 Falska vänner",
+        "level": "intermediate",
         "sections": [
             {
                 "title": "⚠️ Vad är Falska vänner?",
@@ -2384,6 +2394,7 @@ const lessonsData = [
     {
         "id": "hospital",
         "title": "🏥 På sjukhuset",
+        "level": "advanced",
         "sections": [
             {
                 "title": "📋 Viktiga ord / كلمات مهمة",
@@ -2606,6 +2617,7 @@ const lessonsData = [
     {
         "id": "work",
         "title": "💼 På jobbet",
+        "level": "advanced",
         "sections": [
             {
                 "title": "📋 Viktiga ord / كلمات مهمة",
@@ -2828,6 +2840,7 @@ const lessonsData = [
     {
         "id": "bank",
         "title": "🏦 På banken",
+        "level": "advanced",
         "sections": [
             {
                 "title": "📋 Viktiga ord / كلمات مهمة",
@@ -3050,6 +3063,7 @@ const lessonsData = [
     {
         "id": "mistakes",
         "title": "⚠️ Vanliga misstag",
+        "level": "intermediate",
         "sections": [
             {
                 "title": "📋 Typiska fel för arabisktalande",
@@ -3265,6 +3279,56 @@ const lessonsData = [
                         "swe": "50. ❌ \"Sluta att prata\" | ✅ \"Sluta prata\"",
                         "arb": "بعد sluta غالباً ما نحذف att، لكن يمكن استخدامها."
                     }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "shopping",
+        "title": "🛒 Handla & Shopping",
+        "level": "beginner",
+        "sections": [
+            {
+                "title": "🛍️ I affären / في المتجر",
+                "content": [
+                    {
+                        "type": "p",
+                        "html": "Här är viktiga fraser när du handlar mat eller kläder."
+                    }
+                ],
+                "examples": [
+                    { "swe": "Kan jag hjälpa dig?", "arb": "هل يمكنني مساعدتك؟" },
+                    { "swe": "Jag tittar bara, tack.", "arb": "أنا أتفرج فقط، شكراً." },
+                    { "swe": "Har ni den här i storlek Medium?", "arb": "هل لديكم هذا بمقاس متوسط؟" },
+                    { "swe": "Var är provrummet?", "arb": "أين غرفة القياس؟" },
+                    { "swe": "Vad kostar det?", "arb": "كم سعر هذا؟" },
+                    { "swe": "Det är för dyrt.", "arb": "هذا غالي جداً." },
+                    { "swe": "Har ni rea?", "arb": "هل لديكم تخفيضات؟" },
+                    { "swe": "Jag tar den.", "arb": "سآخذها." }
+                ]
+            },
+            {
+                "title": "🍞 Matvaror / مواد غذائية",
+                "content": [],
+                "examples": [
+                    { "swe": "Bröd och mjölk", "arb": "خبز وحليب" },
+                    { "swe": "Frukt och grönsaker", "arb": "فواكه وخضروات" },
+                    { "swe": "Kött och fisk", "arb": "لحم وسمك" },
+                    { "swe": "Ost och smör", "arb": "جبن وزبدة" },
+                    { "swe": "Ägg och ris", "arb": "بيض وأرز" },
+                    { "swe": "Jag behöver en kasse.", "arb": "أحتاج كيس تسوق." }
+                ]
+            },
+            {
+                "title": "💳 Betalning / الدفع",
+                "content": [],
+                "examples": [
+                    { "swe": "Kort eller kontant?", "arb": "بطاقة أم نقداً؟" },
+                    { "swe": "Jag betalar med kort.", "arb": "سأدفع بالبطاقة." },
+                    { "swe": "Slå din kod.", "arb": "أدخل الرمز السري." },
+                    { "swe": "Vill du ha kvittot?", "arb": "هل تريد الإيصال؟" },
+                    { "swe": "Nej tack, det är bra så.", "arb": "لا شكراً، هذا جيد هكذا." },
+                    { "swe": "Här är din växel.", "arb": "هنا باقي نقودك." }
                 ]
             }
         ]

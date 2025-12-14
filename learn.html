@@ -601,6 +601,43 @@
             color: var(--text-muted);
         }
 
+        .result-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Filter Styles */
+        .filter-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            margin: 1rem 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .filter-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-chip {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
         .speaker-icon {
             margin-left: 8px;
             cursor: pointer;
@@ -631,186 +668,31 @@
     </header>
 
     <main>
-        <div class="search-container">
-            <input type="search" id="lessonSearchInput"
-                placeholder="Sök efter regel, ord eller exempel... / ابحث عن قاعدة" autocomplete="off">
-            <button class="review-btn" onclick="openMistakesReview()">
-                <span>⚠️</span> Review Mistakes / راجع أخطائك
-            </button>
+        <div class="stats-container"
+            style="display: flex; gap: 1rem; margin-bottom: 1rem; background: var(--card-bg); padding: 1rem; border-radius: 12px; border: 1px solid rgba(99, 102, 241, 0.2);">
+            <div class="stat-item" style="flex: 1; text-align: center;">
+                <div style="font-size: 1.5rem;">🔥 <span id="streakCount">0</span></div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Dagar i rad / يوم متواصل</div>
+            </div>
+            <div class="stat-item" style="flex: 1; text-align: center; border-left: 1px solid rgba(255,255,255,0.1);">
+                <div style="font-size: 1.5rem;">⭐ <span id="totalXP">0</span></div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Total XP / نقاط الخبرة</div>
+            </div>
         </div>
+
+        <div class="search-container">
+            <input type="text" id="lessonSearchInput" placeholder="Sök lektioner / ابحث عن درس...">
+        </div>
+
+        <div class="filter-scroll-container">
+            <button class="filter-chip active" data-filter="all">Alla / الكل</button>
+            <button class="filter-chip" data-filter="beginner">Nybörjare / مبتدأ</button>
+            <button class="filter-chip" data-filter="intermediate">Medel / متوسط</button>
+            <button class="filter-chip" data-filter="advanced">Avancerad / متقدم</button>
+        </div>
+
         <div class="lessons-grid">
-            <!-- Lesson 1: Word Order -->
-            <div class="lesson-card" onclick="openMethodModal('wordOrder')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">📝</span>
-                    <div class="lesson-title">
-                        <h3>Ordföljd (V2-regeln)</h3>
-                        <h4>ترتيب الكلمات</h4>
-                    </div>
-                    <span class="lesson-badge">Viktig</span>
-                </div>
-                <p class="lesson-desc">Lär dig hur svenska meningar är uppbyggda och den viktiga V2-regeln.</p>
-            </div>
-
-            <!-- Lesson 2: Pronouns -->
-            <div class="lesson-card" onclick="openMethodModal('pronouns')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">👤</span>
-                    <div class="lesson-title">
-                        <h3>Pronomen</h3>
-                        <h4>الضمائر</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Personliga pronomen: jag, du, han, hon, vi, ni, de</p>
-            </div>
-
-            <!-- Lesson 3: Verbs -->
-            <div class="lesson-card" onclick="openMethodModal('verbs')" data-lesson="verbs">
-                <div class="lesson-header">
-                    <span class="lesson-icon">🏃</span>
-                    <div class="lesson-title">
-                        <h3>Verb och tempus</h3>
-                        <h4>الأفعال والأزمنة</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Presens, preteritum, perfekt och futurum</p>
-            </div>
-
-            <!-- Lesson 4: Adjectives -->
-            <div class="lesson-card" onclick="openMethodModal('adjectives')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">🎨</span>
-                    <div class="lesson-title">
-                        <h3>Adjektiv</h3>
-                        <h4>الصفات</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Hur adjektiv böjs: en stor bil, ett stort hus, stora bilar</p>
-            </div>
-
-            <!-- Lesson 5: Prepositions -->
-            <div class="lesson-card" onclick="openMethodModal('prepositions')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">📍</span>
-                    <div class="lesson-title">
-                        <h3>Prepositioner</h3>
-                        <h4>حروف الجر</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">i, på, till, från, med, utan, för, av...</p>
-            </div>
-
-            <!-- Lesson 6: En/Ett -->
-            <div class="lesson-card" onclick="openMethodModal('gender')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">⚖️</span>
-                    <div class="lesson-title">
-                        <h3>En-ord och Ett-ord</h3>
-                        <h4>المذكر والمؤنث</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Genus i svenska: en bok, ett bord</p>
-            </div>
-
-            <!-- Lesson 7: Questions & Negation -->
-            <div class="lesson-card" onclick="openMethodModal('questions')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">❓</span>
-                    <div class="lesson-title">
-                        <h3>Frågor och Nekande</h3>
-                        <h4>الأسئلة والنفي</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Hur man ställer frågor och säger nej på svenska</p>
-            </div>
-
-            <!-- Lesson 8: Numbers & Time -->
-            <div class="lesson-card" onclick="openMethodModal('numbers')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">🔢</span>
-                    <div class="lesson-title">
-                        <h3>Tal och Tid</h3>
-                        <h4>الأرقام والوقت</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">1-100, klockan, dagar och månader</p>
-            </div>
-
-            <!-- Lesson 9: Common Phrases -->
-            <div class="lesson-card" onclick="openMethodModal('phrases')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">💬</span>
-                    <div class="lesson-title">
-                        <h3>Vanliga Fraser</h3>
-                        <h4>عبارات شائعة</h4>
-                    </div>
-                    <span class="lesson-badge">Nyttig</span>
-                </div>
-                <p class="lesson-desc">Hälsningar, artighetsfraser och vardagsuttryck</p>
-            </div>
-
-            <!-- Lesson 10: False Friends -->
-            <div class="lesson-card" onclick="openMethodModal('falseFriends')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">🎭</span>
-                    <div class="lesson-title">
-                        <h3>Falska vänner</h3>
-                        <h4>أصدقاء مزيفون</h4>
-                    </div>
-                    <span class="lesson-badge"
-                        style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Varning</span>
-                </div>
-                <p class="lesson-desc">Ord som liknar arabiska men har annan betydelse</p>
-            </div>
-
-            <!-- Lesson 11: Hospital Phrases -->
-            <div class="lesson-card" onclick="openMethodModal('hospital')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">🏥</span>
-                    <div class="lesson-title">
-                        <h3>På sjukhuset</h3>
-                        <h4>في المستشفى</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Fraser och ord du behöver på vårdcentralen</p>
-            </div>
-
-            <!-- Lesson 12: Work Phrases -->
-            <div class="lesson-card" onclick="openMethodModal('work')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">💼</span>
-                    <div class="lesson-title">
-                        <h3>På jobbet</h3>
-                        <h4>في العمل</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Vanliga uttryck på arbetsplatsen</p>
-            </div>
-
-            <!-- Lesson 13: Bank Phrases -->
-            <div class="lesson-card" onclick="openMethodModal('bank')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">🏦</span>
-                    <div class="lesson-title">
-                        <h3>På banken</h3>
-                        <h4>في البنك</h4>
-                    </div>
-                </div>
-                <p class="lesson-desc">Ord och fraser för bankärenden</p>
-            </div>
-
-            <!-- Lesson 14: Common Mistakes -->
-            <div class="lesson-card" onclick="openMethodModal('mistakes')">
-                <div class="lesson-header">
-                    <span class="lesson-icon">⚠️</span>
-                    <div class="lesson-title">
-                        <h3>Vanliga misstag</h3>
-                        <h4>أخطاء شائعة</h4>
-                    </div>
-                    <span class="lesson-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">Tips</span>
-                </div>
-                <p class="lesson-desc">Typiska fel som arabisktalande gör</p>
-            </div>
+            <!-- Dynamic Content -->
         </div>
     </main>
 

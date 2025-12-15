@@ -10,7 +10,7 @@
     perspective: 1000px;
     width: 100%;
     margin: 20px 0;
-    margin-top: 60px;
+    margin-top: 10px;
     min-height: 360px;
     /* Increased to accommodate buttons */
     position: relative;
@@ -509,4 +509,55 @@
 .fc-autoplay-btn.muted {
     opacity: 0.5;
     text-decoration: line-through;
+}
+
+/* =========================================
+   Layout Overrides (Fixing Header & Spacing)
+   Applied here to override games.min.css
+   ========================================= */
+
+/* Fix layout spacing to maximize screen real estate */
+.games-container {
+    padding-top: 0.2rem !important;
+    /* Extremely minimal padding */
+    gap: 0.5rem !important;
+    /* Reduce grid gap */
+}
+
+/* Fix Header alignment and spacing */
+.games-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem !important;
+    /* Create tighter header group */
+    margin-bottom: 0.5rem !important;
+    /* Minimal space below header */
+    justify-content: flex-start !important;
+    /* Override space-between */
+}
+
+/* Ensure title doesn't break layout */
+.games-header h1 {
+    margin: 0;
+    font-size: clamp(1.2rem, 4vw, 2.2rem);
+    line-height: 1;
+    /* Tighter line height */
+}
+
+/* Reduce spacing for Stats Hero */
+.stats-hero {
+    margin-bottom: 0.5rem !important;
+    padding: 0.5rem !important;
+}
+
+/* Reduce spacing for Daily Banner */
+.daily-banner {
+    margin-bottom: 0.5rem !important;
+    padding: 0.5rem !important;
+}
+
+/* Reduce Flashcard Container spacing */
+.fc-container-pro {
+    margin-top: 0 !important;
+    /* No extra margin */
 }

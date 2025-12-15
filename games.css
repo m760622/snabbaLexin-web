@@ -103,7 +103,7 @@ body.dark-mode {
 .games-container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 1rem 1.5rem;
+    padding: 0.2rem 1.5rem;
     height: 100dvh;
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -126,12 +126,7 @@ body.dark-mode {
     /* Chrome/Safari */
 }
 
-.games-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-}
+
 
 .back-btn,
 .theme-toggle-btn {
@@ -167,13 +162,13 @@ body.dark-mode .theme-toggle-btn {
     transform: scale(1.1);
 }
 
+/* Consolidated .games-header */
 .games-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    /* Space out title and buttons */
     gap: 1rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
+    /* Removed justify-content: space-between to prevent scattering */
 }
 
 .games-header h1 {

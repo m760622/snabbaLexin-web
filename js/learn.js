@@ -204,7 +204,7 @@ function getIconForLesson(id) {
         wordOrder: '📝', pronouns: '👤', verbs: '🏃', adjectives: '🎨',
         prepositions: '📍', gender: '⚖️', questions: '❓', numbers: '🔢',
         phrases: '💬', falseFriends: '🎭', hospital: '🏥', work: '💼',
-        bank: '🏦', mistakes: '⚠️'
+        bank: '🏦', mistakes: '⚠️', airport: '✈️', onlineShopping: '🛒'
     };
     return icons[id] || '📚';
 }
@@ -215,7 +215,7 @@ function getSubtitleForLesson(id) {
         adjectives: 'الصفات', prepositions: 'حروف الجر', gender: 'المذكر والمؤنث',
         questions: 'الأسئلة والنفي', numbers: 'الأرقام والوقت', phrases: 'عبارات شائعة',
         falseFriends: 'أصدقاء مخادعون', hospital: 'في المستشفى', work: 'في العمل',
-        bank: 'في البنك', mistakes: 'أخطاء شائعة'
+        bank: 'في البنك', mistakes: 'أخطاء شائعة', airport: 'في المطار', onlineShopping: 'التسوق عبر الإنترنت'
     };
     return subs[id] || '';
 }
@@ -235,7 +235,9 @@ function getDescForLesson(id) {
         hospital: 'Fraser och ord du behöver på vårdcentralen',
         work: 'Vanliga uttryck på arbetsplatsen',
         bank: 'Ord och fraser för bankärenden',
-        mistakes: 'Typiska fel som arabisktalande gör'
+        mistakes: 'Typiska fel som arabisktalande gör',
+        airport: 'Incheckning, säkerhetskontroll, ombord, bagage',
+        onlineShopping: 'Beställa, betala, leverans och retur online'
     };
     return descs[id] || '';
 }

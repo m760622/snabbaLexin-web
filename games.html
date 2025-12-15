@@ -41,6 +41,82 @@
 
         </header>
 
+        <!-- Stats Hero -->
+        <div class="stats-hero"
+            style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 1rem; color: white;">
+            <div style="display: flex; justify-content: space-around; text-align: center;">
+                <div class="hero-stat">
+                    <div style="font-size: 1.5rem; font-weight: 700;" id="gamesPlayedStat">0</div>
+                    <div style="font-size: 0.75rem; opacity: 0.9;">🎮 Spelade</div>
+                </div>
+                <div class="hero-stat">
+                    <div style="font-size: 1.5rem; font-weight: 700;" id="winStreakStat">0</div>
+                    <div style="font-size: 0.75rem; opacity: 0.9;">🔥 Streak</div>
+                </div>
+                <div class="hero-stat">
+                    <div style="font-size: 1.5rem; font-weight: 700;" id="totalScoreStat">0</div>
+                    <div style="font-size: 0.75rem; opacity: 0.9;">⭐ Poäng</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Challenge Banner -->
+        <div id="dailyChallengeBanner" class="daily-banner"
+            style="margin: 1rem; padding: 1rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 12px; display: flex; align-items: center; gap: 1rem; cursor: pointer;"
+            onclick="openDailyChallenge()">
+            <div style="font-size: 2rem;">🏆</div>
+            <div style="flex: 1;">
+                <div style="font-weight: 600; color: #f59e0b;">Dagens Utmaning / تحدي اليوم</div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);">Spela 3 spel för bonus! / العب 3 ألعاب
+                    للمكافأة</div>
+            </div>
+            <div id="dailyProgress" style="font-size: 1.2rem; font-weight: 700; color: #f59e0b;">0/3</div>
+        </div>
+
+        <!-- Category Filter -->
+        <div style="padding: 0 1rem; margin-bottom: 0.5rem;">
+            <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.5rem 0;">
+                <button class="category-chip active" onclick="filterGames('all')" data-cat="all">🌐 Alla</button>
+                <button class="category-chip" onclick="filterGames('vocab')" data-cat="vocab">📚 Ordförråd</button>
+                <button class="category-chip" onclick="filterGames('grammar')" data-cat="grammar">📖 Grammatik</button>
+                <button class="category-chip" onclick="filterGames('listening')" data-cat="listening">🎧 Lyssna</button>
+                <button class="category-chip" onclick="filterGames('puzzle')" data-cat="puzzle">🧩 Pussel</button>
+            </div>
+        </div>
+
+        <style>
+            .category-chip {
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                background: var(--card-bg);
+                border: 1px solid rgba(99, 102, 241, 0.2);
+                color: var(--text-muted);
+                font-size: 0.85rem;
+                white-space: nowrap;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .category-chip.active {
+                background: #6366f1;
+                color: white;
+                border-color: #6366f1;
+            }
+
+            .daily-banner:hover {
+                background: rgba(245, 158, 11, 0.25) !important;
+            }
+
+            .daily-banner.completed {
+                opacity: 0.6;
+                pointer-events: none;
+            }
+
+            .daily-banner.completed::after {
+                content: '✅';
+                font-size: 1.5rem;
+            }
+        </style>
 
         <!-- Game Menu -->
         <div id="gameMenu" class="game-menu-container">
@@ -883,7 +959,113 @@
                 if (btn) btn.classList.add('active');
             });
         }
+
+        // ========== GAMES STATS ==========
+        function loadGamesStats() {
+            const stats = JSON.parse(localStorage.getItem('gamesStats') || '{"gamesPlayed": 0, "winStreak": 0, "totalScore": 0}');
+            document.getElementById('gamesPlayedStat').textContent = stats.gamesPlayed || 0;
+            document.getElementById('winStreakStat').textContent = stats.winStreak || 0;
+            document.getElementById('totalScoreStat').textContent = stats.totalScore || 0;
+        }
+
+        function updateGamesStats(won, score = 0) {
+            const stats = JSON.parse(localStorage.getItem('gamesStats') || '{"gamesPlayed": 0, "winStreak": 0, "totalScore": 0}');
+            stats.gamesPlayed++;
+            stats.totalScore += score;
+            if (won) {
+                stats.winStreak++;
+            } else {
+                stats.winStreak = 0;
+            }
+            localStorage.setItem('gamesStats', JSON.stringify(stats));
+            loadGamesStats();
+
+            // Update daily challenge
+            updateDailyChallenge();
+        }
+
+        // ========== DAILY CHALLENGE ==========
+        function loadDailyChallenge() {
+            const today = new Date().toISOString().split('T')[0];
+            let daily = JSON.parse(localStorage.getItem('dailyGameChallenge') || '{}');
+
+            if (daily.date !== today) {
+                daily = { date: today, gamesPlayed: 0, completed: false };
+                localStorage.setItem('dailyGameChallenge', JSON.stringify(daily));
+            }
+
+            document.getElementById('dailyProgress').textContent = `${daily.gamesPlayed}/3`;
+
+            if (daily.completed) {
+                document.getElementById('dailyChallengeBanner').classList.add('completed');
+            }
+        }
+
+        function updateDailyChallenge() {
+            const today = new Date().toISOString().split('T')[0];
+            let daily = JSON.parse(localStorage.getItem('dailyGameChallenge') || '{}');
+
+            if (daily.date !== today) {
+                daily = { date: today, gamesPlayed: 0, completed: false };
+            }
+
+            if (!daily.completed) {
+                daily.gamesPlayed++;
+                if (daily.gamesPlayed >= 3) {
+                    daily.completed = true;
+                    // Add bonus
+                    const stats = JSON.parse(localStorage.getItem('gamesStats') || '{}');
+                    stats.totalScore = (stats.totalScore || 0) + 100;
+                    localStorage.setItem('gamesStats', JSON.stringify(stats));
+                    if (typeof showToast !== 'undefined') {
+                        showToast('🎉 Daglig utmaning klar! +100 poäng / تحدي اليوم مكتمل!');
+                    }
+                }
+                localStorage.setItem('dailyGameChallenge', JSON.stringify(daily));
+            }
+
+            loadDailyChallenge();
+        }
+
+        function openDailyChallenge() {
+            // Just scroll to games or open first available
+            const gameCards = document.querySelector('.game-cards-grid');
+            if (gameCards) gameCards.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ========== CATEGORY FILTER ==========
+        const gameCategories = {
+            'vocab': ['Vokaler', 'Neon Search', 'Hangman', 'Memory', 'Minneskor', 'Ord-Pussel', 'Ord Hjulet', 'Svenska Wordle', 'Gissa Ordet'],
+            'grammar': ['Grammatik', 'Bygg Meningen', 'Fyll i'],
+            'listening': ['Lyssna', 'Uttalscoach'],
+            'puzzle': ['Lås Upp', 'Neon Blocks', 'Ord-Regn']
+        };
+
+        function filterGames(category) {
+            document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[data-cat="${category}"]`).classList.add('active');
+
+            const cards = document.querySelectorAll('.game-card-item');
+            cards.forEach(card => {
+                const title = card.querySelector('h3')?.textContent || '';
+
+                if (category === 'all') {
+                    card.style.display = '';
+                } else {
+                    const categoryGames = gameCategories[category] || [];
+                    const matches = categoryGames.some(g => title.includes(g));
+                    card.style.display = matches ? '' : 'none';
+                }
+            });
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGamesStats();
+            loadDailyChallenge();
+        });
     </script>
+
 </body>
 
 

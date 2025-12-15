@@ -684,6 +684,12 @@ const ProgressManager = {
         // Explorer achievement (use multiple features)
         { id: 'explorer', name: 'Utforskare', nameAr: 'مستكشف', icon: '🌐', condition: (d) => d.allTime.totalSearches >= 10 && d.allTime.totalGamesPlayed >= 5 && d.allTime.totalTtsUsed >= 5 },
 
+        // Lesson achievements
+        { id: 'lesson_first', name: 'Första lektion', nameAr: 'الدرس الأول', icon: '📝', condition: () => (JSON.parse(localStorage.getItem('completedLessons') || '[]')).length >= 1 },
+        { id: 'lesson_5', name: '5 lektioner', nameAr: '5 دروس', icon: '📕', condition: () => (JSON.parse(localStorage.getItem('completedLessons') || '[]')).length >= 5 },
+        { id: 'lesson_10', name: '10 lektioner', nameAr: '10 دروس', icon: '📚', condition: () => (JSON.parse(localStorage.getItem('completedLessons') || '[]')).length >= 10 },
+        { id: 'quiz_perfect', name: 'Quiz 100%', nameAr: 'اختبار 100%', icon: '💯', condition: () => { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith('lesson_score_') && parseInt(localStorage.getItem(k)) === 100) return true; } return false; } },
+
         // Ultimate achievement
         {
             id: 'master', name: 'Mästare', nameAr: 'سيد', icon: '👑', condition: function (d) {

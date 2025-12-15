@@ -3332,6 +3332,152 @@ const lessonsData = [
                 ]
             }
         ]
+    },
+    {
+        "id": "airport",
+        "title": "✈️ På flygplatsen",
+        "level": "intermediate",
+        "sections": [
+            {
+                "title": "🛫 Incheckning / تسجيل الوصول",
+                "content": [
+                    { "type": "p", "html": "Fraser du behöver vid incheckning på flygplatsen." },
+                    { "type": "p", "html": "عبارات تحتاجها عند تسجيل الوصول في المطار." }
+                ],
+                "examples": [
+                    { "swe": "Jag vill checka in.", "arb": "أريد تسجيل الوصول." },
+                    { "swe": "Här är mitt pass.", "arb": "هنا جواز سفري." },
+                    { "swe": "Har du baggage att checka in?", "arb": "هل لديك أمتعة لتسجيلها؟" },
+                    { "swe": "Endast handbagage.", "arb": "حقيبة يد فقط." },
+                    { "swe": "Jag har en väska att checka in.", "arb": "لدي حقيبة واحدة للتسجيل." },
+                    { "swe": "Var kan jag checka in bagaget?", "arb": "أين يمكنني تسجيل الأمتعة؟" },
+                    { "swe": "Kan jag få ett fönsterplats?", "arb": "هل يمكنني الحصول على مقعد بجانب النافذة؟" },
+                    { "swe": "Jag vill sitta vid gången.", "arb": "أريد الجلوس بجانب الممر." }
+                ]
+            },
+            {
+                "title": "🛂 Säkerhetskontroll / التفتيش الأمني",
+                "content": [],
+                "examples": [
+                    { "swe": "Ta av dig skorna.", "arb": "اخلع حذاءك." },
+                    { "swe": "Lägg din väska på bandet.", "arb": "ضع حقيبتك على الحزام." },
+                    { "swe": "Har du vätska med dig?", "arb": "هل معك سوائل؟" },
+                    { "swe": "Ta ut datorn ur väskan.", "arb": "أخرج الحاسوب من الحقيبة." },
+                    { "swe": "Gå igenom detektorn.", "arb": "امشِ عبر جهاز الكشف." },
+                    { "swe": "Öppna din väska, tack.", "arb": "افتح حقيبتك، من فضلك." }
+                ]
+            },
+            {
+                "title": "🚪 Boardinggate / بوابة الصعود",
+                "content": [],
+                "examples": [
+                    { "swe": "Vilken gate flyger planet från?", "arb": "من أي بوابة تقلع الطائرة؟" },
+                    { "swe": "Boarding startar klockan 14:30.", "arb": "يبدأ الصعود الساعة 14:30." },
+                    { "swe": "Sista anrop för flight SK123.", "arb": "النداء الأخير للرحلة SK123." },
+                    { "swe": "Var är gate B12?", "arb": "أين البوابة B12؟" },
+                    { "swe": "Planet är försenat.", "arb": "الطائرة متأخرة." },
+                    { "swe": "Ny avgångstid är 16:00.", "arb": "وقت الإقلاع الجديد هو 16:00." }
+                ]
+            },
+            {
+                "title": "✈️ Ombord / على متن الطائرة",
+                "content": [],
+                "examples": [
+                    { "swe": "Var är min plats?", "arb": "أين مقعدي؟" },
+                    { "swe": "Kan du hjälpa mig med väskan?", "arb": "هل يمكنك مساعدتي بالحقيبة؟" },
+                    { "swe": "Spänn fast säkerhetsbältet.", "arb": "اربط حزام الأمان." },
+                    { "swe": "Kaffe eller te?", "arb": "قهوة أم شاي؟" },
+                    { "swe": "Jag vill ha vatten, tack.", "arb": "أريد ماء، من فضلك." },
+                    { "swe": "Var är toaletten?", "arb": "أين الحمام؟" },
+                    { "swe": "Vi landar om 30 minuter.", "arb": "نهبط بعد 30 دقيقة." }
+                ]
+            },
+            {
+                "title": "🧳 Bagageuthämtning / استلام الأمتعة",
+                "content": [],
+                "examples": [
+                    { "swe": "Var hämtar man bagaget?", "arb": "أين أستلم الأمتعة؟" },
+                    { "swe": "Mitt bagage har försvunnit.", "arb": "أمتعتي مفقودة." },
+                    { "swe": "Hur anmäler jag förlorat bagage?", "arb": "كيف أبلغ عن أمتعة مفقودة؟" },
+                    { "swe": "Min väska är skadad.", "arb": "حقيبتي متضررة." },
+                    { "swe": "Var är tullen?", "arb": "أين الجمارك؟" },
+                    { "swe": "Har du något att förtulla?", "arb": "هل لديك شيء للتصريح الجمركي؟" }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "onlineShopping",
+        "title": "🛒 Handla online",
+        "level": "intermediate",
+        "sections": [
+            {
+                "title": "🔍 Söka produkter / البحث عن المنتجات",
+                "content": [
+                    { "type": "p", "html": "Ord och fraser för att handla på nätet." },
+                    { "type": "p", "html": "كلمات وعبارات للتسوق عبر الإنترنت." }
+                ],
+                "examples": [
+                    { "swe": "Sök efter produkter", "arb": "ابحث عن المنتجات" },
+                    { "swe": "Filtrera efter pris", "arb": "فلتر حسب السعر" },
+                    { "swe": "Sortera efter betyg", "arb": "رتب حسب التقييم" },
+                    { "swe": "Visa endast rabatterade varor", "arb": "اعرض المنتجات المخفضة فقط" },
+                    { "swe": "Läs kundrecensioner", "arb": "اقرأ آراء العملاء" },
+                    { "swe": "Produkten finns i lager.", "arb": "المنتج متوفر في المخزون." },
+                    { "swe": "Produkten är slut.", "arb": "المنتج نفد." }
+                ]
+            },
+            {
+                "title": "🛒 Varukorgen / سلة التسوق",
+                "content": [],
+                "examples": [
+                    { "swe": "Lägg i varukorgen", "arb": "أضف إلى السلة" },
+                    { "swe": "Ta bort från varukorgen", "arb": "احذف من السلة" },
+                    { "swe": "Ändra antal", "arb": "غيّر الكمية" },
+                    { "swe": "Gå till kassan", "arb": "انتقل للدفع" },
+                    { "swe": "Totalt pris: 299 kr", "arb": "السعر الإجمالي: 299 كرون" },
+                    { "swe": "Fri frakt vid köp över 500 kr", "arb": "شحن مجاني للطلبات فوق 500 كرون" }
+                ]
+            },
+            {
+                "title": "💳 Betalning / الدفع",
+                "content": [],
+                "examples": [
+                    { "swe": "Välj betalningsmetod", "arb": "اختر طريقة الدفع" },
+                    { "swe": "Betala med kort", "arb": "ادفع بالبطاقة" },
+                    { "swe": "Betala med Swish", "arb": "ادفع بـ Swish" },
+                    { "swe": "Faktura", "arb": "فاتورة" },
+                    { "swe": "Delbetalning", "arb": "الدفع بالتقسيط" },
+                    { "swe": "Ange rabattkod", "arb": "أدخل كود الخصم" },
+                    { "swe": "Betalningen godkänd", "arb": "تمت الموافقة على الدفع" }
+                ]
+            },
+            {
+                "title": "📦 Leverans / التوصيل",
+                "content": [],
+                "examples": [
+                    { "swe": "Välj leveransadress", "arb": "اختر عنوان التوصيل" },
+                    { "swe": "Hemleverans", "arb": "توصيل للمنزل" },
+                    { "swe": "Hämta i butik", "arb": "استلام من المتجر" },
+                    { "swe": "Leveranstid: 2-4 arbetsdagar", "arb": "وقت التوصيل: 2-4 أيام عمل" },
+                    { "swe": "Spåra din beställning", "arb": "تتبع طلبك" },
+                    { "swe": "Paketet är på väg.", "arb": "الطرد في الطريق." },
+                    { "swe": "Din beställning har levererats.", "arb": "تم تسليم طلبك." }
+                ]
+            },
+            {
+                "title": "↩️ Retur och reklamation / الإرجاع والشكوى",
+                "content": [],
+                "examples": [
+                    { "swe": "Jag vill returnera varan.", "arb": "أريد إرجاع المنتج." },
+                    { "swe": "Ångerrätt i 14 dagar.", "arb": "حق الإلغاء خلال 14 يوماً." },
+                    { "swe": "Skriv ut retursedeln.", "arb": "اطبع ورقة الإرجاع." },
+                    { "swe": "Varan är defekt.", "arb": "المنتج معطل." },
+                    { "swe": "Jag fick fel vara.", "arb": "استلمت منتجاً خاطئاً." },
+                    { "swe": "Pengarna återbetalas inom 5 dagar.", "arb": "يتم استرداد المبلغ خلال 5 أيام." }
+                ]
+            }
+        ]
     }
 ];
 

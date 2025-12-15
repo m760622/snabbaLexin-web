@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hangman - الرجل المشنوق</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Pro - الرجل المشنوق</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -20,9 +20,9 @@
             --text-muted: #94a3b8;
             --success: #22c55e;
             --error: #ef4444;
+            --warning: #f59e0b;
         }
 
-        /* Light mode */
         [data-theme="light"] {
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
@@ -30,16 +30,15 @@
             --text-muted: #64748b;
         }
 
-
         * {
             box-sizing: border-box;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
             font-family: 'Inter', sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
@@ -49,7 +48,6 @@
             overflow-x: hidden;
         }
 
-        /* iPhone view mode - constrains to mobile width */
         html.iphone-mode {
             background: var(--bg-color);
         }
@@ -58,53 +56,7 @@
             max-width: 430px;
             margin: 0 auto;
             box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow-x: hidden;
         }
-
-        body.iphone-view .ambient-bg {
-            position: absolute;
-        }
-
-        /* Mobile Toggle Button */
-        .mobile-toggle-btn {
-            background: rgba(56, 189, 248, 0.2);
-            border: 2px solid #38bdf8;
-            border-radius: 12px;
-            padding: 8px 12px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-left: 0.25px;
-        }
-
-
-        .mobile-toggle-btn:hover {
-            background: rgba(56, 189, 248, 0.4);
-            transform: scale(1.1);
-        }
-
-        .mobile-toggle-btn.active {
-            background: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
-        }
-
-        /* Title Bar */
-        .title-bar {
-            background: rgba(56, 189, 248, 0.1);
-            padding: 12px 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-        }
-
-        .game-title {
-            color: var(--text-color);
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
 
         /* Ambient Background */
         .ambient-bg {
@@ -156,34 +108,97 @@
         header {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
-            padding: 1rem;
-            background: rgba(30, 41, 59, 0.8);
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.9);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
 
-        .lives {
-            margin-left: auto;
-        }
-
-
-        .back-btn {
+        .back-btn,
+        .hint-btn,
+        .sound-btn {
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: white;
             padding: 0.5rem;
             border-radius: 50%;
             cursor: pointer;
+            font-size: 1.2rem;
         }
 
-        .lives {
+        .header-stats {
             display: flex;
-            gap: 0.25rem;
-            font-size: 1.5rem;
+            align-items: center;
+            gap: 0.75rem;
+            margin-left: auto;
         }
 
-        .heart.lost {
-            opacity: 0.3;
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: rgba(56, 189, 248, 0.2);
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .stat-badge.coins {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .stat-badge.streak {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        /* Controls Bar */
+        .controls-bar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: rgba(30, 41, 59, 0.6);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-select {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            background: var(--card-bg);
+            color: var(--text-color);
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .daily-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 2px solid var(--warning);
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+            font-weight: 600;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+
+        .daily-btn.completed {
+            opacity: 0.5;
+            animation: none;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+            }
         }
 
         /* Game Container */
@@ -192,15 +207,61 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 1rem;
-            gap: 1.5rem;
+            gap: 1rem;
+        }
+
+        /* Lives Bar */
+        .lives-bar {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border-radius: 30px;
+            font-size: 1.5rem;
+        }
+
+        .heart {
+            transition: all 0.3s;
+        }
+
+        .heart.lost {
+            opacity: 0.2;
+            transform: scale(0.8);
+            filter: grayscale(1);
+        }
+
+        .heart.breaking {
+            animation: heartBreak 0.5s;
+        }
+
+        @keyframes heartBreak {
+            0% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.2) rotate(-10deg);
+            }
+
+            50% {
+                transform: scale(0.8) rotate(10deg);
+            }
+
+            100% {
+                transform: scale(0.8);
+                opacity: 0.2;
+            }
         }
 
         /* Hangman SVG */
+        .hangman-container {
+            position: relative;
+        }
+
         .hangman-svg {
-            width: 200px;
-            height: 200px;
+            width: 180px;
+            height: 180px;
         }
 
         .hangman-part {
@@ -214,26 +275,113 @@
 
         .hangman-part.visible {
             opacity: 1;
+            animation: partAppear 0.4s ease-out;
         }
 
-        /* Word Display */
-        .word-display {
+        @keyframes partAppear {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Face expressions */
+        .face {
+            transition: all 0.3s;
+        }
+
+        .face-happy {
+            fill: var(--success);
+        }
+
+        .face-worried {
+            fill: var(--warning);
+        }
+
+        .face-sad {
+            fill: var(--error);
+        }
+
+        /* Hint Area */
+        .hint-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .main-hint {
+            background: rgba(56, 189, 248, 0.15);
+            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            font-size: 1.1rem;
+            text-align: center;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+        }
+
+        .extra-hints {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
             justify-content: center;
         }
 
+        .hint-chip {
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--card-bg);
+            transition: all 0.2s;
+        }
+
+        .hint-chip:hover {
+            background: rgba(56, 189, 248, 0.2);
+        }
+
+        .hint-chip.used {
+            background: rgba(56, 189, 248, 0.3);
+            border-color: var(--primary);
+        }
+
+        .hint-chip .cost {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        /* Word Display */
+        .word-display {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0.5rem 0;
+        }
+
         .letter-slot {
-            width: 40px;
-            height: 50px;
+            width: 36px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            border-bottom: 4px solid var(--primary);
+            border-bottom: 3px solid var(--primary);
             text-transform: uppercase;
+            transition: all 0.3s;
         }
 
         .letter-slot.revealed {
@@ -245,28 +393,23 @@
             color: var(--error);
         }
 
+        .letter-slot.hint-revealed {
+            color: var(--warning);
+            border-color: var(--warning);
+        }
+
         @keyframes popIn {
             0% {
-                transform: scale(0);
+                transform: scale(0) rotate(-10deg);
             }
 
             50% {
-                transform: scale(1.2);
+                transform: scale(1.3) rotate(5deg);
             }
 
             100% {
-                transform: scale(1);
+                transform: scale(1) rotate(0);
             }
-        }
-
-        /* Hint */
-        .hint {
-            background: rgba(56, 189, 248, 0.2);
-            padding: 0.75rem 1.5rem;
-            border-radius: 20px;
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            font-size: 1.2rem;
-            text-align: center;
         }
 
         /* Keyboard */
@@ -274,44 +417,62 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.4rem;
-            max-width: 400px;
+            gap: 0.35rem;
+            max-width: 380px;
+            padding: 0.5rem;
         }
 
         .key {
-            width: 38px;
-            height: 44px;
+            width: 34px;
+            height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             background: var(--card-bg);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             border-radius: 8px;
             color: var(--text-color);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
         }
 
         .key:hover:not(.used) {
             background: var(--primary);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .key:active:not(.used) {
+            transform: translateY(0);
         }
 
         .key.correct {
             background: var(--success);
             border-color: var(--success);
+            animation: correctKey 0.4s;
         }
 
         .key.wrong {
             background: var(--error);
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
         .key.used {
             pointer-events: none;
-            opacity: 0.3;
+        }
+
+        @keyframes correctKey {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.15);
+            }
         }
 
         /* Result Overlay */
@@ -321,7 +482,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: none;
             align-items: center;
             justify-content: center;
@@ -332,10 +493,34 @@
 
         .result-overlay.visible {
             display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .result-emoji {
             font-size: 5rem;
+            animation: bounce 0.6s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
         }
 
         .result-text {
@@ -344,29 +529,166 @@
         }
 
         .result-word {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--primary);
         }
 
-        .play-again-btn {
-            padding: 1rem 2rem;
-            background: var(--primary);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 1rem;
+        .result-example {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 300px;
+            text-align: center;
         }
 
-        /* Score */
-        .score-badge {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+        .result-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .result-stat {
+            text-align: center;
+        }
+
+        .result-stat-value {
+            font-size: 1.5rem;
             font-weight: 700;
-            margin-left: 0.5rem;
+            color: var(--primary);
+        }
+
+        .result-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 101;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        /* Stats Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(56, 189, 248, 0.1);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-card .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Category badge */
+        .category-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: rgba(99, 102, 241, 0.2);
+            border-radius: 10px;
+            color: #a5b4fc;
         }
     </style>
 </head>
@@ -378,51 +700,75 @@
     </div>
 
     <header>
-        <button class="back-btn" onclick="window.location.href='games.html'">
+        <button class="back-btn" onclick="window.location.href='games.html'" title="Tillbaka">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </button>
-        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
-            title="وضع الموبايل">📱</button>
-        <div class="score-badge" id="scoreBadge">0</div>
-        <div class="lives" id="lives">
-            <span class="heart">❤️</span>
-            <span class="heart">❤️</span>
-            <span class="heart">❤️</span>
-            <span class="heart">❤️</span>
-            <span class="heart">❤️</span>
-            <span class="heart">❤️</span>
+        <button class="sound-btn" onclick="toggleSound()" title="Ljud">🔊</button>
+        <div class="header-stats">
+            <div class="stat-badge coins" id="coinsBadge">🪙 <span id="coinsValue">100</span></div>
+            <div class="stat-badge streak" id="streakBadge">🔥 <span id="streakValue">0</span></div>
+            <button class="hint-btn" onclick="openStatsModal()" title="Statistik">📊</button>
         </div>
     </header>
 
-    <div class="title-bar">
-        <h1 class="game-title">🎯 Hangman / الرجل المشنوق</h1>
+    <div class="controls-bar">
+        <select class="control-select" id="difficultySelect" onchange="changeDifficulty()">
+            <option value="easy">🟢 Lätt / سهل</option>
+            <option value="medium" selected>🟡 Medel / متوسط</option>
+            <option value="hard">🔴 Svår / صعب</option>
+        </select>
+        <select class="control-select" id="categorySelect" onchange="changeCategory()">
+            <option value="all">📚 Alla / الكل</option>
+            <option value="substantiv">📦 Substantiv / أسماء</option>
+            <option value="verb">🏃 Verb / أفعال</option>
+            <option value="adjektiv">🎨 Adjektiv / صفات</option>
+        </select>
+        <button class="daily-btn" id="dailyBtn" onclick="startDailyChallenge()">⭐ Dagens / اليوم</button>
     </div>
 
     <div class="game-container">
+        <!-- Lives -->
+        <div class="lives-bar" id="livesBar"></div>
 
         <!-- Hangman SVG -->
-        <svg class="hangman-svg" viewBox="0 0 200 200">
-            <!-- Gallows -->
-            <line x1="20" y1="190" x2="100" y2="190" stroke="#64748b" stroke-width="4" />
-            <line x1="60" y1="190" x2="60" y2="20" stroke="#64748b" stroke-width="4" />
-            <line x1="60" y1="20" x2="130" y2="20" stroke="#64748b" stroke-width="4" />
-            <line x1="130" y1="20" x2="130" y2="40" stroke="#64748b" stroke-width="4" />
+        <div class="hangman-container">
+            <svg class="hangman-svg" viewBox="0 0 200 200">
+                <!-- Gallows -->
+                <line x1="20" y1="190" x2="100" y2="190" stroke="#64748b" stroke-width="4" />
+                <line x1="60" y1="190" x2="60" y2="20" stroke="#64748b" stroke-width="4" />
+                <line x1="60" y1="20" x2="130" y2="20" stroke="#64748b" stroke-width="4" />
+                <line x1="130" y1="20" x2="130" y2="40" stroke="#64748b" stroke-width="4" />
+                <!-- Hangman Parts -->
+                <circle id="head" class="hangman-part" cx="130" cy="55" r="15" />
+                <!-- Face -->
+                <g id="face" class="face">
+                    <circle id="leftEye" cx="124" cy="52" r="2" fill="currentColor" opacity="0" />
+                    <circle id="rightEye" cx="136" cy="52" r="2" fill="currentColor" opacity="0" />
+                    <path id="mouth" d="M124,60 Q130,65 136,60" fill="none" stroke="currentColor" stroke-width="2"
+                        opacity="0" />
+                </g>
+                <line id="body" class="hangman-part" x1="130" y1="70" x2="130" y2="120" />
+                <line id="leftArm" class="hangman-part" x1="130" y1="85" x2="100" y2="100" />
+                <line id="rightArm" class="hangman-part" x1="130" y1="85" x2="160" y2="100" />
+                <line id="leftLeg" class="hangman-part" x1="130" y1="120" x2="100" y2="160" />
+                <line id="rightLeg" class="hangman-part" x1="130" y1="120" x2="160" y2="160" />
+            </svg>
+        </div>
 
-            <!-- Hangman Parts (hidden initially) -->
-            <circle id="head" class="hangman-part" cx="130" cy="55" r="15" />
-            <line id="body" class="hangman-part" x1="130" y1="70" x2="130" y2="120" />
-            <line id="leftArm" class="hangman-part" x1="130" y1="85" x2="100" y2="100" />
-            <line id="rightArm" class="hangman-part" x1="130" y1="85" x2="160" y2="100" />
-            <line id="leftLeg" class="hangman-part" x1="130" y1="120" x2="100" y2="160" />
-            <line id="rightLeg" class="hangman-part" x1="130" y1="120" x2="160" y2="160" />
-        </svg>
-
-        <!-- Hint (Arabic Translation) -->
-        <div class="hint" id="hint">🔍 التلميح</div>
+        <!-- Hint Area -->
+        <div class="hint-area">
+            <div class="main-hint" id="mainHint">🔍 التلميح</div>
+            <span class="category-badge" id="categoryBadge"></span>
+            <div class="extra-hints" id="extraHints">
+                <button class="hint-chip" onclick="useHint('first')">أول حرف <span class="cost">-10🪙</span></button>
+                <button class="hint-chip" onclick="useHint('type')">نوع <span class="cost">-5🪙</span></button>
+                <button class="hint-chip" onclick="useHint('example')">مثال <span class="cost">-20🪙</span></button>
+            </div>
+        </div>
 
         <!-- Word Display -->
         <div class="word-display" id="wordDisplay"></div>
@@ -436,80 +782,180 @@
         <div class="result-emoji" id="resultEmoji">🎉</div>
         <div class="result-text" id="resultText">Bra jobbat!</div>
         <div class="result-word" id="resultWord"></div>
-        <button class="play-again-btn" onclick="startNewGame()">Spela igen 🔄</button>
+        <div class="result-example" id="resultExample"></div>
+        <div class="result-stats">
+            <div class="result-stat">
+                <div class="result-stat-value" id="resultScore">+0</div>
+                <div class="result-stat-label">Poäng</div>
+            </div>
+            <div class="result-stat">
+                <div class="result-stat-value" id="resultStreak">0</div>
+                <div class="result-stat-label">Streak</div>
+            </div>
+        </div>
+        <div class="result-actions">
+            <button class="action-btn primary" onclick="startNewGame()">Nästa ord ➜</button>
+            <button class="action-btn secondary" onclick="learnMore()">📖 Lär mer</button>
+        </div>
     </div>
 
-    <script>
-        // Apply saved theme
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+    <!-- Confetti -->
+    <div class="confetti-container" id="confettiContainer"></div>
 
-        // Toggle Mobile View Function
-        function toggleMobileView() {
-            document.documentElement.classList.toggle('iphone-mode');
-            document.body.classList.toggle('iphone-view');
-            const isActive = document.body.classList.contains('iphone-view');
-            localStorage.setItem('mobileView', isActive ? 'true' : 'false');
-
-            const btn = document.getElementById('mobileToggle');
-            if (btn) btn.classList.toggle('active', isActive);
-        }
-
-        // Apply mobile view from localStorage
-        if (localStorage.getItem('mobileView') === 'true') {
-            document.documentElement.classList.add('iphone-mode');
-            document.body.classList.add('iphone-view');
-            document.addEventListener('DOMContentLoaded', () => {
-                const btn = document.getElementById('mobileToggle');
-                if (btn) btn.classList.add('active');
-            });
-        }
-    </script>
-
-
+    <!-- Stats Modal -->
+    <div class="modal-overlay" id="statsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Statistik / الإحصائيات</h2>
+                <button class="modal-close" onclick="closeStatsModal()">×</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="value" id="statGamesPlayed">0</div>
+                    <div class="label">Spelade / ألعاب</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="statWinRate">0%</div>
+                    <div class="label">Vinster / فوز</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="statBestStreak">0</div>
+                    <div class="label">Bästa streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value" id="statTotalScore">0</div>
+                    <div class="label">Total poäng</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="utils.js"></script>
-
     <script src="data.js"></script>
     <script>
-        // Swedish alphabet including special characters
+        // ========== CONFIGURATION ==========
         const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÅÄÖ'.split('');
         const HANGMAN_PARTS = ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'];
-        const MAX_WRONG = 6;
 
-        // Game state
+        const DIFFICULTY = {
+            easy: { minLen: 3, maxLen: 5, lives: 8, scoreMultiplier: 1 },
+            medium: { minLen: 4, maxLen: 8, lives: 6, scoreMultiplier: 1.5 },
+            hard: { minLen: 6, maxLen: 12, lives: 4, scoreMultiplier: 2 }
+        };
+
+        const CATEGORIES = {
+            all: null,
+            substantiv: 'Substantiv',
+            verb: 'Verb',
+            adjektiv: 'Adjektiv'
+        };
+
+        const HINT_COSTS = { first: 10, type: 5, example: 20 };
+
+        // ========== GAME STATE ==========
         let currentWord = '';
         let currentHint = '';
+        let currentEntry = null;
         let guessedLetters = [];
         let wrongGuesses = 0;
-        let score = 0;
+        let maxLives = 6;
         let gameOver = false;
+        let currentDifficulty = 'medium';
+        let currentCategory = 'all';
+        let isDailyMode = false;
+        let dailyWordsCompleted = 0;
+        let soundEnabled = true;
 
-        // Column indices from data.js
-        const COL_SWE = 2;
-        const COL_ARB = 3;
+        // Persistent state
+        let coins = parseInt(localStorage.getItem('hangman_coins')) || 100;
+        let currentStreak = parseInt(localStorage.getItem('hangman_streak')) || 0;
+        let stats = JSON.parse(localStorage.getItem('hangman_stats')) || {
+            gamesPlayed: 0, wins: 0, bestStreak: 0, totalScore: 0
+        };
 
-        // Get random word from data.js
+        // Column indices
+        const COL_ID = 0, COL_TYPE = 1, COL_SWE = 2, COL_ARB = 3, COL_SWE_EX = 7;
+
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+
+            // Mobile view
+            if (localStorage.getItem('mobileView') === 'true') {
+                document.documentElement.classList.add('iphone-mode');
+                document.body.classList.add('iphone-view');
+            }
+
+            updateUI();
+            checkDailyStatus();
+            startNewGame();
+        });
+
+        // ========== GAME FUNCTIONS ==========
         function getRandomWord() {
-            // Filter words that are suitable (not too short, not too long)
-            const suitableWords = dictionaryData.filter(entry => {
+            const diff = DIFFICULTY[currentDifficulty];
+            const catFilter = CATEGORIES[currentCategory];
+
+            const pool = dictionaryData.filter(entry => {
                 const word = entry[COL_SWE];
-                return word && word.length >= 3 && word.length <= 12 && /^[a-zA-ZåäöÅÄÖ]+$/.test(word);
+                const type = entry[COL_TYPE];
+                if (!word || !/^[a-zA-ZåäöÅÄÖ]+$/.test(word)) return false;
+                if (word.length < diff.minLen || word.length > diff.maxLen) return false;
+                if (catFilter && !type.toLowerCase().includes(catFilter.toLowerCase())) return false;
+                return true;
             });
 
+            if (pool.length === 0) return getRandomWord(); // Fallback
 
-            const randomEntry = suitableWords[Math.floor(Math.random() * suitableWords.length)];
+            const entry = pool[Math.floor(Math.random() * pool.length)];
+            currentEntry = entry;
             return {
-                word: randomEntry[COL_SWE].toUpperCase(),
-                hint: randomEntry[COL_ARB]
+                word: entry[COL_SWE].toUpperCase(),
+                hint: entry[COL_ARB],
+                type: entry[COL_TYPE],
+                example: entry[COL_SWE_EX] || '',
+                id: entry[COL_ID]
             };
         }
 
-        // Initialize keyboard
+        function startNewGame() {
+            const wordData = getRandomWord();
+            currentWord = wordData.word;
+            currentHint = wordData.hint;
+            guessedLetters = [];
+            wrongGuesses = 0;
+            gameOver = false;
+            maxLives = DIFFICULTY[currentDifficulty].lives;
+
+            document.getElementById('mainHint').textContent = `🔍 ${currentHint}`;
+            document.getElementById('categoryBadge').textContent = wordData.type.replace('.', '');
+            document.getElementById('resultOverlay').classList.remove('visible');
+
+            resetHangman();
+            resetHints();
+            initLives();
+            initKeyboard();
+            initWordDisplay();
+            updateFace('happy');
+        }
+
+        function initLives() {
+            const bar = document.getElementById('livesBar');
+            bar.innerHTML = '';
+            for (let i = 0; i < maxLives; i++) {
+                const heart = document.createElement('span');
+                heart.className = 'heart';
+                heart.id = `heart-${i}`;
+                heart.textContent = '❤️';
+                bar.appendChild(heart);
+            }
+        }
+
         function initKeyboard() {
             const keyboard = document.getElementById('keyboard');
             keyboard.innerHTML = '';
-
             ALPHABET.forEach(letter => {
                 const key = document.createElement('button');
                 key.className = 'key';
@@ -519,48 +965,17 @@
             });
         }
 
-        // Initialize word display
         function initWordDisplay() {
             const display = document.getElementById('wordDisplay');
             display.innerHTML = '';
-
-            currentWord.split('').forEach((letter, i) => {
+            currentWord.split('').forEach((_, i) => {
                 const slot = document.createElement('div');
                 slot.className = 'letter-slot';
                 slot.id = `slot-${i}`;
-                slot.textContent = '';
                 display.appendChild(slot);
             });
         }
 
-        // Update lives display
-        function updateLives() {
-            const livesEl = document.getElementById('lives');
-            livesEl.innerHTML = '';
-
-            for (let i = 0; i < MAX_WRONG; i++) {
-                const heart = document.createElement('span');
-                heart.className = `heart ${i < MAX_WRONG - wrongGuesses ? '' : 'lost'}`;
-                heart.textContent = '❤️';
-                livesEl.appendChild(heart);
-            }
-        }
-
-        // Show hangman part
-        function showHangmanPart(index) {
-            if (index < HANGMAN_PARTS.length) {
-                document.getElementById(HANGMAN_PARTS[index]).classList.add('visible');
-            }
-        }
-
-        // Reset hangman
-        function resetHangman() {
-            HANGMAN_PARTS.forEach(part => {
-                document.getElementById(part).classList.remove('visible');
-            });
-        }
-
-        // Guess letter
         function guessLetter(letter, keyEl) {
             if (gameOver || guessedLetters.includes(letter)) return;
 
@@ -568,56 +983,90 @@
             keyEl.classList.add('used');
 
             if (currentWord.includes(letter)) {
-                // Correct guess
                 keyEl.classList.add('correct');
+                revealLetter(letter);
+                playSound('correct');
 
-                // Reveal letters
-                currentWord.split('').forEach((char, i) => {
-                    if (char === letter) {
-                        const slot = document.getElementById(`slot-${i}`);
-                        slot.textContent = letter;
-                        slot.classList.add('revealed');
-                    }
-                });
-
-                // Play sound
-                if (typeof TTSManager !== 'undefined') {
-                    TTSManager.speak(letter.toLowerCase(), 'sv');
-                }
-
-                // Check win
                 if (checkWin()) {
                     gameOver = true;
-                    score += 100 + (MAX_WRONG - wrongGuesses) * 20;
-                    document.getElementById('scoreBadge').textContent = score;
-                    setTimeout(() => showResult(true), 500);
+                    handleWin();
                 }
             } else {
-                // Wrong guess
                 keyEl.classList.add('wrong');
                 wrongGuesses++;
                 showHangmanPart(wrongGuesses - 1);
-                updateLives();
+                loseHeart();
+                playSound('wrong');
+                updateFace(wrongGuesses >= maxLives - 2 ? 'worried' : 'normal');
 
-                // Vibrate
-                if (navigator.vibrate) navigator.vibrate(100);
-
-                // Check lose
-                if (wrongGuesses >= MAX_WRONG) {
+                if (wrongGuesses >= maxLives) {
                     gameOver = true;
-                    revealWord();
-                    setTimeout(() => showResult(false), 500);
+                    handleLose();
                 }
             }
         }
 
-        // Check win
-        function checkWin() {
-            return currentWord.split('').every(letter => guessedLetters.includes(letter));
+        function revealLetter(letter, isHint = false) {
+            currentWord.split('').forEach((char, i) => {
+                if (char === letter) {
+                    const slot = document.getElementById(`slot-${i}`);
+                    slot.textContent = letter;
+                    slot.classList.add(isHint ? 'hint-revealed' : 'revealed');
+                }
+            });
+
+            if (typeof TTSManager !== 'undefined' && soundEnabled) {
+                TTSManager.speak(letter.toLowerCase(), 'sv');
+            }
         }
 
-        // Reveal word on lose
-        function revealWord() {
+        function checkWin() {
+            return currentWord.split('').every(l => guessedLetters.includes(l));
+        }
+
+        function handleWin() {
+            const baseScore = 100;
+            const livesBonus = (maxLives - wrongGuesses) * 20;
+            const diffBonus = DIFFICULTY[currentDifficulty].scoreMultiplier;
+            const totalScore = Math.round((baseScore + livesBonus) * diffBonus);
+
+            currentStreak++;
+            coins += totalScore;
+            stats.wins++;
+            stats.gamesPlayed++;
+            stats.totalScore += totalScore;
+            if (currentStreak > stats.bestStreak) stats.bestStreak = currentStreak;
+
+            saveState();
+            updateUI();
+
+            if (isDailyMode) {
+                dailyWordsCompleted++;
+                if (dailyWordsCompleted >= 5) {
+                    completeDailyChallenge();
+                }
+            }
+
+            showResult(true, totalScore);
+            createConfetti();
+            updateFace('happy');
+
+            if (typeof ProgressManager !== 'undefined') {
+                ProgressManager.trackGame('hangman', totalScore);
+            }
+        }
+
+        function handleLose() {
+            currentStreak = 0;
+            stats.gamesPlayed++;
+            saveState();
+            updateUI();
+            revealAllLetters();
+            showResult(false, 0);
+            updateFace('sad');
+        }
+
+        function revealAllLetters() {
             currentWord.split('').forEach((char, i) => {
                 const slot = document.getElementById(`slot-${i}`);
                 if (!guessedLetters.includes(char)) {
@@ -627,44 +1076,226 @@
             });
         }
 
-        // Show result
-        function showResult(won) {
+        function showHangmanPart(index) {
+            if (index < HANGMAN_PARTS.length) {
+                const part = document.getElementById(HANGMAN_PARTS[index]);
+                part.classList.add('visible');
+
+                // Show face after head
+                if (index === 0) {
+                    document.getElementById('leftEye').style.opacity = '1';
+                    document.getElementById('rightEye').style.opacity = '1';
+                    document.getElementById('mouth').style.opacity = '1';
+                }
+            }
+        }
+
+        function resetHangman() {
+            HANGMAN_PARTS.forEach(part => {
+                document.getElementById(part).classList.remove('visible');
+            });
+            document.getElementById('leftEye').style.opacity = '0';
+            document.getElementById('rightEye').style.opacity = '0';
+            document.getElementById('mouth').style.opacity = '0';
+        }
+
+        function updateFace(mood) {
+            const mouth = document.getElementById('mouth');
+            if (mood === 'happy') {
+                mouth.setAttribute('d', 'M124,58 Q130,65 136,58');
+            } else if (mood === 'worried') {
+                mouth.setAttribute('d', 'M124,62 L136,62');
+            } else if (mood === 'sad') {
+                mouth.setAttribute('d', 'M124,65 Q130,58 136,65');
+            }
+        }
+
+        function loseHeart() {
+            const index = maxLives - wrongGuesses;
+            const heart = document.getElementById(`heart-${index}`);
+            if (heart) {
+                heart.classList.add('breaking');
+                setTimeout(() => heart.classList.add('lost'), 400);
+            }
+            if (navigator.vibrate) navigator.vibrate(100);
+        }
+
+        // ========== HINTS ==========
+        function useHint(type) {
+            if (gameOver) return;
+            const cost = HINT_COSTS[type];
+            if (coins < cost) {
+                if (typeof showToast !== 'undefined') showToast('Inte tillräckligt med mynt! / لا يوجد عملات كافية!');
+                return;
+            }
+
+            const btn = event.target.closest('.hint-chip');
+            if (btn.classList.contains('used')) return;
+
+            coins -= cost;
+            btn.classList.add('used');
+            saveState();
+            updateUI();
+
+            if (type === 'first') {
+                // Reveal first unrevealed letter
+                for (const char of currentWord) {
+                    if (!guessedLetters.includes(char)) {
+                        guessedLetters.push(char);
+                        revealLetter(char, true);
+                        break;
+                    }
+                }
+            } else if (type === 'type') {
+                document.getElementById('mainHint').textContent += ` (${currentEntry[COL_TYPE]})`;
+            } else if (type === 'example') {
+                const example = currentEntry[COL_SWE_EX];
+                if (example) {
+                    document.getElementById('mainHint').textContent = `📝 ${example}`;
+                } else {
+                    document.getElementById('mainHint').textContent += ' (Inget exempel)';
+                }
+            }
+        }
+
+        function resetHints() {
+            document.querySelectorAll('.hint-chip').forEach(chip => chip.classList.remove('used'));
+        }
+
+        // ========== DAILY CHALLENGE ==========
+        function getTodayKey() {
+            const d = new Date();
+            return `hangman_daily_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;
+        }
+
+        function checkDailyStatus() {
+            const completed = localStorage.getItem(getTodayKey()) === 'completed';
+            const btn = document.getElementById('dailyBtn');
+            if (completed) {
+                btn.classList.add('completed');
+                btn.textContent = '✅ Klar!';
+            }
+        }
+
+        function startDailyChallenge() {
+            if (localStorage.getItem(getTodayKey()) === 'completed') return;
+            isDailyMode = true;
+            dailyWordsCompleted = 0;
+            currentDifficulty = 'medium';
+            document.getElementById('difficultySelect').value = 'medium';
+            startNewGame();
+            if (typeof showToast !== 'undefined') showToast('🌟 Dagens utmaning! Klara 5 ord! / تحدي اليوم!');
+        }
+
+        function completeDailyChallenge() {
+            localStorage.setItem(getTodayKey(), 'completed');
+            coins += 50; // Bonus
+            saveState();
+            updateUI();
+            checkDailyStatus();
+            isDailyMode = false;
+            if (typeof showToast !== 'undefined') showToast('🏆 Dagens utmaning klar! +50 mynt! / أكملت تحدي اليوم!');
+        }
+
+        // ========== UI & STATE ==========
+        function updateUI() {
+            document.getElementById('coinsValue').textContent = coins;
+            document.getElementById('streakValue').textContent = currentStreak;
+        }
+
+        function saveState() {
+            localStorage.setItem('hangman_coins', coins);
+            localStorage.setItem('hangman_streak', currentStreak);
+            localStorage.setItem('hangman_stats', JSON.stringify(stats));
+        }
+
+        function showResult(won, score) {
             const overlay = document.getElementById('resultOverlay');
             document.getElementById('resultEmoji').textContent = won ? '🎉' : '😢';
             document.getElementById('resultText').textContent = won ? 'Bra jobbat! / أحسنت!' : 'Tyvärr! / للأسف!';
             document.getElementById('resultWord').textContent = `${currentWord} = ${currentHint}`;
+            document.getElementById('resultExample').textContent = currentEntry[COL_SWE_EX] || '';
+            document.getElementById('resultScore').textContent = won ? `+${score}` : '0';
+            document.getElementById('resultStreak').textContent = currentStreak;
             overlay.classList.add('visible');
 
-            // Speak the word
-            if (typeof TTSManager !== 'undefined') {
+            if (typeof TTSManager !== 'undefined' && soundEnabled) {
                 setTimeout(() => TTSManager.speak(currentWord.toLowerCase(), 'sv'), 500);
             }
+        }
 
-            // Track progress
-            if (typeof ProgressManager !== 'undefined') {
-                ProgressManager.trackGame();
+        function learnMore() {
+            if (currentEntry) {
+                window.location.href = `details.html?id=${currentEntry[COL_ID]}`;
             }
         }
 
-        // Start new game
-        function startNewGame() {
-            const wordData = getRandomWord();
-            currentWord = wordData.word;
-            currentHint = wordData.hint;
-            guessedLetters = [];
-            wrongGuesses = 0;
-            gameOver = false;
-
-            document.getElementById('hint').textContent = `🔍 ${currentHint}`;
-            document.getElementById('resultOverlay').classList.remove('visible');
-
-            resetHangman();
-            updateLives();
-            initKeyboard();
-            initWordDisplay();
+        // ========== STATS MODAL ==========
+        function openStatsModal() {
+            document.getElementById('statGamesPlayed').textContent = stats.gamesPlayed;
+            document.getElementById('statWinRate').textContent = stats.gamesPlayed > 0 ? Math.round((stats.wins / stats.gamesPlayed) * 100) + '%' : '0%';
+            document.getElementById('statBestStreak').textContent = stats.bestStreak;
+            document.getElementById('statTotalScore').textContent = stats.totalScore;
+            document.getElementById('statsModal').classList.add('visible');
         }
 
-        // Physical keyboard support
+        function closeStatsModal() {
+            document.getElementById('statsModal').classList.remove('visible');
+        }
+
+        // ========== SETTINGS ==========
+        function changeDifficulty() {
+            currentDifficulty = document.getElementById('difficultySelect').value;
+            if (!gameOver) startNewGame();
+        }
+
+        function changeCategory() {
+            currentCategory = document.getElementById('categorySelect').value;
+            if (!gameOver) startNewGame();
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.querySelector('.sound-btn').textContent = soundEnabled ? '🔊' : '🔇';
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            // Could add actual sound effects here
+        }
+
+        // ========== CONFETTI ==========
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#6c5ce7', '#a29bfe'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.animation = `confettiFall ${Math.random() * 2 + 2}s linear forwards`;
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                container.appendChild(confetti);
+            }
+
+            setTimeout(() => container.innerHTML = '', 4000);
+        }
+
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                0% { transform: translateY(-100%) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ========== KEYBOARD SUPPORT ==========
         document.addEventListener('keydown', (e) => {
             const letter = e.key.toUpperCase();
             if (ALPHABET.includes(letter) && !gameOver) {
@@ -673,12 +1304,6 @@
                     guessLetter(letter, keyEl);
                 }
             }
-        });
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof ThemeManager !== 'undefined') ThemeManager.init();
-            startNewGame();
         });
     </script>
 </body>

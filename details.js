@@ -862,12 +862,87 @@ function renderDetails(item) {
         `;
     }
 
+    // Related Words Section
+    let relatedWordsHtml = '';
+    if (typeof dictionaryData !== 'undefined' && swe) {
+        const firstLetter = swe.charAt(0).toLowerCase();
+        const currentId = item[COL_ID];
+        const relatedWords = dictionaryData
+            .filter(w => w[COL_SWE] &&
+                w[COL_SWE].charAt(0).toLowerCase() === firstLetter &&
+                w[COL_ID] !== currentId &&
+                w[COL_TYPE] === rawType)
+            .slice(0, 5);
+
+        if (relatedWords.length > 0) {
+            relatedWordsHtml = `
+                <div class="details-section related-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🔗</span>
+                        Relaterade ord / كلمات مشابهة
+                    </h2>
+                    <div class="related-words-grid">
+                        ${relatedWords.map(w => `
+                            <a href="details.html?id=${w[COL_ID]}" class="related-word-chip">
+                                <span class="related-swe">${w[COL_SWE]}</span>
+                                <span class="related-arb">${w[COL_ARB] || ''}</span>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // Quick Quiz Section
+    let quizHtml = '';
+    if (arb) {
+        // Generate 3 wrong answers from dictionary
+        let wrongAnswers = [];
+        if (typeof dictionaryData !== 'undefined') {
+            const filteredData = dictionaryData.filter(w =>
+                w[COL_ARB] &&
+                w[COL_ID] !== item[COL_ID] &&
+                w[COL_ARB] !== arb
+            );
+            for (let i = 0; i < 3 && filteredData.length > 0; i++) {
+                const idx = Math.floor(Math.random() * filteredData.length);
+                wrongAnswers.push(filteredData.splice(idx, 1)[0][COL_ARB]);
+            }
+        }
+
+        if (wrongAnswers.length >= 3) {
+            const allOptions = [arb, ...wrongAnswers].sort(() => Math.random() - 0.5);
+            quizHtml = `
+                <div class="details-section quiz-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🧠</span>
+                        Snabbtest / اختبار سريع
+                    </h2>
+                    <div class="mini-quiz" id="miniQuiz">
+                        <p class="quiz-question">Vad betyder <strong>${swe}</strong>?</p>
+                        <div class="quiz-options-mini">
+                            ${allOptions.map(opt => `
+                                <button class="quiz-option-mini" data-correct="${opt === arb}" onclick="checkMiniQuiz(this, '${opt === arb}')">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div class="quiz-result" id="quizResult" style="display: none;"></div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
     const html = `
         ${heroHtml}
         ${definitionsHtml}
         ${formsHtml}
         ${examplesHtml}
         ${idiomsHtml}
+        ${relatedWordsHtml}
+        ${quizHtml}
         ${dataQualityHtml}
     `;
 
@@ -1057,6 +1132,40 @@ function navigateToTypeFilter(type) {
 
     // Navigate to main page with filter parameter
     window.location.href = `index.html?filterType=${encodeURIComponent(filterValue)}`;
+}
+
+// ========================================
+// Mini Quiz Checker
+// ========================================
+function checkMiniQuiz(button, isCorrect) {
+    const miniQuiz = document.getElementById('miniQuiz');
+    if (!miniQuiz) return;
+
+    // Disable all buttons
+    const allBtns = miniQuiz.querySelectorAll('.quiz-option-mini');
+    allBtns.forEach(btn => {
+        btn.disabled = true;
+        if (btn.dataset.correct === 'true') {
+            btn.classList.add('correct');
+        } else if (btn === button && isCorrect === 'false') {
+            btn.classList.add('wrong');
+        }
+    });
+
+    // Show result
+    const result = document.getElementById('quizResult');
+    if (result) {
+        if (isCorrect === 'true') {
+            result.innerHTML = '<span style="color: #22c55e;">✅ Rätt! / صحيح!</span>';
+            // Track XP
+            const stats = JSON.parse(localStorage.getItem('learningStats') || '{}');
+            stats.totalXP = (stats.totalXP || 0) + 5;
+            localStorage.setItem('learningStats', JSON.stringify(stats));
+        } else {
+            result.innerHTML = '<span style="color: #ef4444;">❌ Fel! / خطأ - حاول مرة أخرى</span>';
+        }
+        result.style.display = 'block';
+    }
 }
 
 init();

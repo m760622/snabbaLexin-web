@@ -421,8 +421,89 @@ function initDarkMode() {
 // Update game end logic to save scores
 // We need to inject saveScore calls into the existing game logic
 
+// ========================================
+// Game Prioritization Logic
+// ========================================
+
+function trackGameUsage(gameId) {
+    if (!gameId) return;
+
+    try {
+        const usageData = JSON.parse(localStorage.getItem('gameUsageCounts') || '{}');
+        usageData[gameId] = (usageData[gameId] || 0) + 1;
+        localStorage.setItem('gameUsageCounts', JSON.stringify(usageData));
+        console.log(`Tracked usage for ${gameId}: ${usageData[gameId]}`);
+    } catch (e) {
+        console.error("Error tracking game usage:", e);
+    }
+}
+
+function prioritizePopularGames() {
+    try {
+        const usageData = JSON.parse(localStorage.getItem('gameUsageCounts') || '{}');
+        const threshold = 3; // Games with > 3 clicks are prioritized
+
+        // Find games that meet the threshold
+        const popularGames = Object.entries(usageData)
+            .filter(([id, count]) => count > threshold)
+            .sort((a, b) => b[1] - a[1]); // Sort by count descending
+
+        if (popularGames.length === 0) return;
+
+        const grid = document.querySelector('.game-cards-grid');
+        if (!grid) return;
+
+        console.log("Prioritizing games:", popularGames);
+
+        // Move popular games to the top
+        // We reverse iterate so the most popular (first in array) ends up at the very top
+        // when we prepend them one by one. Or actually, let's append them in order to a document fragment 
+        // and then prepend the whole fragment.
+
+        // Better strategy: Select the Flashcard card (it should stay first usually, unless we want popular ones ABOVE it?)
+        // The user asked "جعل اللعبة التي يتم فتحها أكثر من ٣ مرات تتصدر أول الألعاب" -> Make the game opened > 3 times TOP the list.
+        // So yes, they should go to the very top.
+
+        // Let's reverse the array so we prepend the least popular of the popular ones first, 
+        // and finally the most popular one, so it ends up at index 0.
+        [...popularGames].reverse().forEach(([gameId, count]) => {
+            const card = document.querySelector(`.game-card-item[data-game-id="${gameId}"]`);
+            if (card) {
+                // Add a visual indicator of popularity? Maybe not needed.
+                // grid.prepend(card);
+
+                // If we use prepend, it moves to the top.
+                // If we have multiple popular games, say A(10), B(5).
+                // Array: [[A, 10], [B, 5]]
+                // Reverse: [[B, 5], [A, 10]]
+                // 1. Prepend B. Grid: B, ...
+                // 2. Prepend A. Grid: A, B, ...
+                // This preserves the sorted order.
+
+                grid.prepend(card);
+                card.classList.add('popular-game-highlight'); // Optional: CSS class if we want to style it
+            }
+        });
+
+    } catch (e) {
+        console.error("Error prioritizing games:", e);
+    }
+}
+
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize prioritization
+    prioritizePopularGames();
+
+    // Add tracking to all game cards
+    document.querySelectorAll('.game-card-item').forEach(card => {
+        card.addEventListener('click', () => {
+            const gameId = card.getAttribute('data-game-id');
+            if (gameId) trackGameUsage(gameId);
+        });
+    });
+
     loadScores();
     initDarkMode();
 

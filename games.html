@@ -42,40 +42,36 @@
         </header>
 
         <!-- Stats Hero -->
-        <div class="stats-hero"
-            style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); padding: 1rem; color: white;">
-            <div style="display: flex; justify-content: space-around; text-align: center;">
+        <div class="stats-hero">
+            <div class="stats-hero-inner">
                 <div class="hero-stat">
-                    <div style="font-size: 1.5rem; font-weight: 700;" id="gamesPlayedStat">0</div>
-                    <div style="font-size: 0.75rem; opacity: 0.9;">🎮 Spelade</div>
+                    <div class="hero-stat-value" id="gamesPlayedStat">0</div>
+                    <div class="hero-stat-label">🎮 Spelade</div>
                 </div>
                 <div class="hero-stat">
-                    <div style="font-size: 1.5rem; font-weight: 700;" id="winStreakStat">0</div>
-                    <div style="font-size: 0.75rem; opacity: 0.9;">🔥 Streak</div>
+                    <div class="hero-stat-value" id="winStreakStat">0</div>
+                    <div class="hero-stat-label">🔥 Streak</div>
                 </div>
                 <div class="hero-stat">
-                    <div style="font-size: 1.5rem; font-weight: 700;" id="totalScoreStat">0</div>
-                    <div style="font-size: 0.75rem; opacity: 0.9;">⭐ Poäng</div>
+                    <div class="hero-stat-value" id="totalScoreStat">0</div>
+                    <div class="hero-stat-label">⭐ Poäng</div>
                 </div>
             </div>
         </div>
 
         <!-- Daily Challenge Banner -->
-        <div id="dailyChallengeBanner" class="daily-banner"
-            style="margin: 1rem; padding: 1rem; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 12px; display: flex; align-items: center; gap: 1rem; cursor: pointer;"
-            onclick="openDailyChallenge()">
-            <div style="font-size: 2rem;">🏆</div>
-            <div style="flex: 1;">
-                <div style="font-weight: 600; color: #f59e0b;">Dagens Utmaning / تحدي اليوم</div>
-                <div style="font-size: 0.85rem; color: var(--text-muted);">Spela 3 spel för bonus! / العب 3 ألعاب
-                    للمكافأة</div>
+        <div id="dailyChallengeBanner" class="daily-banner" onclick="openDailyChallenge()">
+            <div class="daily-banner-icon">🏆</div>
+            <div class="daily-banner-content">
+                <div class="daily-banner-title">Dagens Utmaning / تحدي اليوم</div>
+                <div class="daily-banner-subtitle">Spela 3 spel för bonus! / العب 3 ألعاب للمكافأة</div>
             </div>
-            <div id="dailyProgress" style="font-size: 1.2rem; font-weight: 700; color: #f59e0b;">0/3</div>
+            <div class="daily-banner-progress" id="dailyProgress">0/3</div>
         </div>
 
         <!-- Category Filter -->
-        <div style="padding: 0 1rem; margin-bottom: 0.5rem;">
-            <div style="display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.5rem 0;">
+        <div class="category-filter-container">
+            <div class="category-filter-scroll">
                 <button class="category-chip active" onclick="filterGames('all')" data-cat="all">🌐 Alla</button>
                 <button class="category-chip" onclick="filterGames('vocab')" data-cat="vocab">📚 Ordförråd</button>
                 <button class="category-chip" onclick="filterGames('grammar')" data-cat="grammar">📖 Grammatik</button>
@@ -84,45 +80,27 @@
             </div>
         </div>
 
-        <style>
-            .category-chip {
-                padding: 0.5rem 1rem;
-                border-radius: 20px;
-                background: var(--card-bg);
-                border: 1px solid rgba(99, 102, 241, 0.2);
-                color: var(--text-muted);
-                font-size: 0.85rem;
-                white-space: nowrap;
-                cursor: pointer;
-                transition: all 0.2s;
-            }
 
-            .category-chip.active {
-                background: #6366f1;
-                color: white;
-                border-color: #6366f1;
-            }
-
-            .daily-banner:hover {
-                background: rgba(245, 158, 11, 0.25) !important;
-            }
-
-            .daily-banner.completed {
-                opacity: 0.6;
-                pointer-events: none;
-            }
-
-            .daily-banner.completed::after {
-                content: '✅';
-                font-size: 1.5rem;
-            }
-        </style>
 
         <!-- Game Menu -->
         <div id="gameMenu" class="game-menu-container">
             <div class="game-cards-grid">
-                <!-- Vokaler (Vowel Game) - FIRST -->
-                <div class="game-card-item" onclick="window.location.href='vowel_game.html'">
+                <!-- Minneskort (Flashcards) - MOVED TO TOP -->
+                <div class="game-card-item" onclick="startGame('flashcards')" data-game-id="flashcards">
+                    <div class="game-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                        </svg>
+                    </div>
+                    <h3>Minneskort</h3>
+                    <p>بطاقات الذاكرة</p>
+                    <div class="high-score">Klarade: <span id="score-flashcards">0</span></div>
+                </div>
+
+                <!-- Vokaler (Vowel Game) -->
+                <div class="game-card-item" onclick="window.location.href='vowel_game.html'" data-game-id="vokaler">
                     <div class="game-icon-large">🔤</div>
                     <h3>Vokaler</h3>
                     <p>المتشابهات الصوتية</p>
@@ -130,7 +108,7 @@
                 </div>
 
                 <!-- Unblock Me (New) -->
-                <div class="game-card-item" onclick="window.location.href='unblock_me.html'">
+                <div class="game-card-item" onclick="window.location.href='unblock_me.html'" data-game-id="unblock-me">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -145,7 +123,8 @@
                 </div>
 
                 <!-- Neon Blocks (New) -->
-                <div class="game-card-item" onclick="window.location.href='block_puzzle.html'">
+                <div class="game-card-item" onclick="window.location.href='block_puzzle.html'"
+                    data-game-id="block-puzzle">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -161,7 +140,8 @@
                 </div>
 
                 <!-- Neon Word Search (New) -->
-                <div class="game-card-item" onclick="window.location.href='word_search.html'">
+                <div class="game-card-item" onclick="window.location.href='word_search.html'"
+                    data-game-id="word-search">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -178,7 +158,7 @@
                 </div>
 
                 <!-- Hangman (NEW) -->
-                <div class="game-card-item" onclick="window.location.href='hangman.html'">
+                <div class="game-card-item" onclick="window.location.href='hangman.html'" data-game-id="hangman">
                     <div class="game-icon-large">🎯</div>
                     <h3>Hangman</h3>
                     <p>الرجل المشنوق</p>
@@ -186,7 +166,7 @@
                 </div>
 
                 <!-- Memory Match (NEW) -->
-                <div class="game-card-item" onclick="window.location.href='memory.html'">
+                <div class="game-card-item" onclick="window.location.href='memory.html'" data-game-id="memory">
                     <div class="game-icon-large">🃏</div>
                     <h3>Memory</h3>
                     <p>مطابقة الذاكرة</p>
@@ -194,7 +174,7 @@
                 </div>
 
                 <!-- Fill-in-blank (NEW) -->
-                <div class="game-card-item" onclick="window.location.href='fill_blank.html'">
+                <div class="game-card-item" onclick="window.location.href='fill_blank.html'" data-game-id="fill-blank">
                     <div class="game-icon-large">📝</div>
                     <h3>Fyll i</h3>
                     <p>أكمل الفراغ</p>
@@ -202,7 +182,7 @@
                 </div>
 
                 <!-- Listening Test (NEW) -->
-                <div class="game-card-item" onclick="window.location.href='listening.html'">
+                <div class="game-card-item" onclick="window.location.href='listening.html'" data-game-id="listening">
                     <div class="game-icon-large">🎧</div>
                     <h3>Lyssna</h3>
                     <p>اختبار السمع</p>
@@ -210,7 +190,7 @@
                 </div>
 
                 <!-- Word Connect Game Card (New) -->
-                <div class="game-card-item" onclick="startGame('word-connect')">
+                <div class="game-card-item" onclick="startGame('word-connect')" data-game-id="word-connect">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -223,7 +203,7 @@
                     <p>لغز الكلمات</p>
                     <div class="high-score">Nivå: <span id="score-word-connect">1</span></div>
                 </div>
-                <div class="game-card-item" onclick="startGame('grammar')">
+                <div class="game-card-item" onclick="startGame('grammar')" data-game-id="grammar">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -237,7 +217,7 @@
                 </div>
 
 
-                <div class="game-card-item" onclick="startGame('missing-word')">
+                <div class="game-card-item" onclick="startGame('missing-word')" data-game-id="missing-word">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -250,19 +230,8 @@
                     <p>تحدي الكلمة المفقودة</p>
                     <div class="high-score">Bästa: <span id="score-missing-word">0</span></div>
                 </div>
-                <div class="game-card-item" onclick="startGame('flashcards')">
-                    <div class="game-icon-large">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-                        </svg>
-                    </div>
-                    <h3>Minneskort</h3>
-                    <p>بطاقات الذاكرة</p>
-                    <div class="high-score">Klarade: <span id="score-flashcards">0</span></div>
-                </div>
-                <div class="game-card-item" onclick="startGame('spelling')">
+
+                <div class="game-card-item" onclick="startGame('spelling')" data-game-id="spelling">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -273,7 +242,7 @@
                     <p>اكتب الكلمة</p>
                     <div class="high-score">Bästa: <span id="score-spelling">0</span></div>
                 </div>
-                <div class="game-card-item" onclick="startGame('word-wheel')">
+                <div class="game-card-item" onclick="startGame('word-wheel')" data-game-id="word-wheel">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -287,7 +256,7 @@
                     <p>عجلة الكلمات</p>
                     <div class="high-score">Bästa: <span id="score-word-wheel">0</span></div>
                 </div>
-                <div class="game-card-item" onclick="startGame('sentence-builder')">
+                <div class="game-card-item" onclick="startGame('sentence-builder')" data-game-id="sentence-builder">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -303,7 +272,7 @@
                     <p>بناء الجملة</p>
                     <div class="high-score">Bästa: <span id="score-sentence">0</span></div>
                 </div>
-                <div class="game-card-item" onclick="startGame('word-rain')">
+                <div class="game-card-item" onclick="startGame('word-rain')" data-game-id="word-rain">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -317,7 +286,7 @@
                     <p>مطر الكلمات</p>
                     <div class="high-score">Bästa: <span id="score-rain">0</span></div>
                 </div>
-                <div class="game-card-item" onclick="startGame('wordle')">
+                <div class="game-card-item" onclick="startGame('wordle')" data-game-id="wordle">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -332,7 +301,7 @@
                     <p>ووردل السويدية</p>
                     <div class="high-score">Bästa: <span id="score-wordle">0</span></div>
                 </div>
-                <div class="game-card-item" onclick="startGame('pronunciation')">
+                <div class="game-card-item" onclick="startGame('pronunciation')" data-game-id="pronunciation">
                     <div class="game-icon-large">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -384,7 +353,7 @@
         <button id="nextQuestionBtn" class="next-btn" style="display: none;">Nästa / التالي ➜</button>
     </div>
 
-    <!-- Flashcards Game Container -->
+    <!-- Flashcards Game Container - Professional Edition -->
     <div id="flashcardsGame" class="active-game-container" style="display: none;">
         <div class="game-header-inner">
             <button class="game-back-btn" onclick="showGameMenu()">
@@ -395,57 +364,76 @@
                 </svg>
             </button>
             <h3>Minneskort / بطاقات الذاكرة</h3>
-        </div>
-        <div class="game-controls-header" style="justify-content: center; margin-bottom: 1rem;">
-            <select id="flashcardTypeFilter" class="game-filter-select" onchange="initFlashcards()">
-                <option value="all_dict">📚 Alla (Ordbok) / الكل</option>
-                <option value="substantiv">Substantiv / اسم</option>
-                <option value="verb">Verb / فعل</option>
-                <option value="adjektiv">Adjektiv / صفة</option>
-                <option value="adverb">Adverb / ظرف</option>
-                <option value="preposition">Preposition / حرف جر</option>
-                <option value="pronomen">Pronomen / ضمير</option>
-                <option value="konjunktion">Konjunktion / أداة ربط</option>
-            </select>
-            <div class="score-badge"><span id="flashcardProgress">0/0</span></div>
+            <!-- Progress Ring -->
+            <div class="fc-progress-ring-wrapper">
+                <svg class="fc-progress-ring" width="44" height="44">
+                    <circle class="fc-progress-ring-bg" stroke-width="4" fill="transparent" r="18" cx="22" cy="22" />
+                    <circle class="fc-progress-ring-circle" stroke-width="4" fill="transparent" r="18" cx="22" cy="22"
+                        stroke-dasharray="113.1" stroke-dashoffset="113.1" />
+                </svg>
+                <span class="fc-progress-text" id="flashcardProgress">0/0</span>
+            </div>
         </div>
 
-        <div class="flashcard-container">
-            <div class="flashcard" id="flashcard">
-                <div class="flashcard-front">
-                    <h2 id="flashcardWord">...</h2>
-                    <p class="hint-text">Klicka för att vända / اضغط للقلب</p>
+        <div class="game-controls-header fc-controls-header">
+            <select id="flashcardTypeFilter" class="game-filter-select" onchange="initFlashcards()"
+                title="Filter by word type">
+                <option value="all">📚 Alla ord / كل الكلمات</option>
+                <option value="substantiv">📦 Substantiv / اسم</option>
+                <option value="verb">⚡ Verb / فعل</option>
+                <option value="adjektiv">🎨 Adjektiv / صفة</option>
+                <option value="adverb">🏃 Adverb / ظرف</option>
+                <option value="preposition">📍 Preposition / حرف جر</option>
+            </select>
+            <div class="fc-mastery-badge" id="flashcardMastery">❄️ Box 1</div>
+        </div>
+
+        <!-- Swipe Hint -->
+        <div class="fc-swipe-hint" id="swipeHint">
+            <span>👈 لا أعرفها</span>
+            <span>اسحب / Svep</span>
+            <span>أعرفها 👉</span>
+        </div>
+
+        <div class="flashcard-container fc-container-pro">
+            <div class="flashcard fc-card-pro" id="flashcard">
+                <div class="fc-front-pro">
+                    <span class="fc-type-badge" id="flashcardType"></span>
+                    <h2 id="flashcardWord" class="fc-word-pro">...</h2>
+                    <p class="hint-text fc-hint-pro">👆 Tryck för att vända / اضغط للقلب</p>
+                    <button class="fc-speak-btn"
+                        onclick="event.stopPropagation(); TTSManager?.speak(document.getElementById('flashcardWord').textContent, 'sv')">🔊</button>
                 </div>
-                <div class="flashcard-back">
-                    <h2 id="flashcardTranslation">...</h2>
-                    <p id="flashcardExample" class="example-text"></p>
+                <div class="fc-back-pro">
+                    <h2 id="flashcardTranslation" class="fc-translation-pro">...</h2>
+                    <p id="flashcardExample" class="fc-example-pro"></p>
                 </div>
             </div>
         </div>
 
-        <div class="flashcard-next-wrapper" style="display: flex; justify-content: center; margin-bottom: 1rem;">
-            <button id="flashcardNextBtn" class="next-btn" style="display: none; width: 100%; max-width: 300px;">Nästa /
-                التالي ➜</button>
+        <!-- Simple Know / Don't Know Buttons -->
+        <div class="fc-rating-container" id="flashcardRatingBtns" style="display: none;">
+            <button class="fc-simple-btn fc-dont-know" onclick="handleFlashcardRating(0)">
+                <span class="fc-btn-icon">❌</span>
+                <span class="fc-btn-text">Inte än<br>لا أعرفها</span>
+            </button>
+            <button class="fc-simple-btn fc-know" onclick="handleFlashcardRating(4)">
+                <span class="fc-btn-icon">✅</span>
+                <span class="fc-btn-text">Kan det<br>أعرفها</span>
+            </button>
         </div>
 
-        <div class="flashcard-controls">
-            <button id="fcWrongBtn" class="fc-btn wrong">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-                Inte än / لا أعرفها
-            </button>
-            <button id="fcCorrectBtn" class="fc-btn correct">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Kan det / أعرفها
-            </button>
+        <!-- Quick Actions -->
+        <div class="fc-quick-actions">
+            <button class="fc-quick-btn"
+                onclick="if (typeof FavoritesManager !== 'undefined') { const id = flashcardCards[flashcardIndex]?.[0]; if(id) FavoritesManager.toggle(id); }"
+                title="Favorit">❤️</button>
+            <button class="fc-quick-btn"
+                onclick="TTSManager?.speak(document.getElementById('flashcardWord').textContent, 'sv')"
+                title="Lyssna">🔊</button>
         </div>
     </div>
+
 
     <!-- Pronunciation Game Container -->
     <div id="pronunciationGame" class="active-game-container" style="display: none;">

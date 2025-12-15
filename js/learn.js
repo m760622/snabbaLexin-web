@@ -125,7 +125,7 @@ function renderLessonCards(filter = 'all') {
     // 2. Generate Lesson Cards
     filteredLessons.forEach(lesson => {
         const isCompleted = isLessonCompleted(lesson.id);
-        const highScore = localStorage.getItem(`lesson_score_${lesson.id}`);
+        const highScore = parseInt(localStorage.getItem(`lesson_score_${lesson.id}`)) || 0;
         const isNew = ['hospital', 'work', 'bank'].includes(lesson.id);
         const isImportant = ['wordOrder'].includes(lesson.id);
 
@@ -133,17 +133,30 @@ function renderLessonCards(filter = 'all') {
         if (isNew) badgeHtml = '<span class="lesson-badge">Ny</span>';
         if (isImportant) badgeHtml = '<span class="lesson-badge">Viktig</span>';
         if (lesson.id === 'phrases') badgeHtml = '<span class="lesson-badge">Nyttig</span>';
-        if (lesson.id === 'falseFriends') badgeHtml = '<span class="lesson-badge" style="background: rgba(239, 68, 68, 0.2); color: #ef4444;">Varning</span>';
-        if (lesson.id === 'mistakes') badgeHtml = '<span class="lesson-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b;">Tips</span>';
+        if (lesson.id === 'falseFriends') badgeHtml = '<span class="lesson-badge warning-badge">Varning</span>';
+        if (lesson.id === 'mistakes') badgeHtml = '<span class="lesson-badge tips-badge">Tips</span>';
 
-        // Score display
-        let scoreHtml = '';
-        if (highScore) {
-            scoreHtml = `<div style="font-size: 0.8rem; color: var(--success); margin-top: 0.25rem;">🏆 Bästa: ${highScore}%</div>`;
+        // Star rating based on high score
+        let starsHtml = '';
+        if (isCompleted && highScore > 0) {
+            let starCount = 1;
+            if (highScore >= 80) starCount = 3;
+            else if (highScore >= 50) starCount = 2;
+
+            const filledStars = '⭐'.repeat(starCount);
+            const emptyStars = '☆'.repeat(3 - starCount);
+            starsHtml = `<div class="lesson-stars">${filledStars}${emptyStars}</div>`;
         }
 
+        // Progress ring for lesson (based on quiz attempts)
+        const attempts = parseInt(localStorage.getItem(`lesson_attempts_${lesson.id}`)) || 0;
+        let progressClass = '';
+        if (attempts >= 5) progressClass = 'mastered';
+        else if (attempts >= 3) progressClass = 'practiced';
+        else if (attempts >= 1) progressClass = 'started';
+
         html += `
-            <div class="lesson-card ${isCompleted ? 'completed' : ''}" onclick="openMethodModal('${lesson.id}')" data-lesson="${lesson.id}">
+            <div class="lesson-card ${isCompleted ? 'completed' : ''} ${progressClass}" onclick="openMethodModal('${lesson.id}')" data-lesson="${lesson.id}">
                 ${isCompleted ? '<div class="completion-badge">✓</div>' : ''}
                 <div class="lesson-header">
                     <span class="lesson-icon">${getIconForLesson(lesson.id)}</span>
@@ -154,7 +167,7 @@ function renderLessonCards(filter = 'all') {
                     ${badgeHtml}
                 </div>
                 <p class="lesson-desc">${getDescForLesson(lesson.id)}</p>
-                ${scoreHtml}
+                ${starsHtml}
             </div>
         `;
     });
@@ -174,7 +187,30 @@ function renderLessonCards(filter = 'all') {
         </div>
     `;
 
-    // 4. Add "Review Mistakes" Card if filter is 'all'
+    // 4. Add "Due for Review" Card (Spaced Repetition) if there are due words
+    if (filter === 'all' && typeof SpacedRepetition !== 'undefined') {
+        const dueCount = SpacedRepetition.getDueCount();
+        if (dueCount > 0) {
+            html = `
+                <div class="lesson-card review-due" onclick="openSpacedReview()">
+                    <div class="lesson-header">
+                        <span class="lesson-icon">🔄</span>
+                        <div class="lesson-title">
+                            <h3>Tid att Repetera!</h3>
+                            <h4>حان وقت المراجعة!</h4>
+                        </div>
+                        <span class="review-count">${dueCount}</span>
+                    </div>
+                    <p class="lesson-desc">Du har ${dueCount} ord som väntar på repetition.</p>
+                    <div class="review-progress">
+                        <div class="review-bar"></div>
+                    </div>
+                </div>
+            ` + html;
+        }
+    }
+
+    // 5. Add "Review Mistakes" Card if filter is 'all'
     if (filter === 'all') {
         html += `
             <div class="lesson-card" onclick="openMistakesReview()">
@@ -448,16 +484,20 @@ function renderQuizQuestion() {
     const lesson = lessonsData.find(l => l.id === currentQuiz.lessonId);
 
     // Determine Question Type (randomly, but weighted)
-    // types: 'text' (default), 'audio', 'reverse'
+    // types: 'text' (default), 'audio', 'reverse', 'writing', 'sentenceFill', 'wordOrder'
     const rand = Math.random();
     let type = 'text';
-    if (rand > 0.6) type = 'audio';
-    else if (rand > 0.85) type = 'reverse';
+    if (rand > 0.85) type = 'audio';
+    else if (rand > 0.70) type = 'reverse';
+    else if (rand > 0.55) type = 'writing';
+    else if (rand > 0.40) type = 'sentenceFill';
+    else if (rand > 0.25) type = 'wordOrder';
 
     // Prepare Question & Answer
     let questionHtml = '';
     let correctAnswer = '';
     let options = [];
+    let isWritingQuiz = false;
 
     // Common: Get Wrong Answers
     let allEx = [];
@@ -485,6 +525,24 @@ function renderQuizQuestion() {
         // Auto-play audio
         setTimeout(() => playTTS(q.swe), 500);
 
+    } else if (type === 'writing') {
+        // Writing Quiz: Show Arabic, type Swedish
+        isWritingQuiz = true;
+        questionHtml = `
+            <div class="writing-quiz">
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">✍️ Skriv ordet på svenska / اكتب الكلمة بالسويدية</p>
+                <p class="question-text" dir="rtl" style="font-family: 'IBM Plex Sans Arabic'; font-size: 1.8rem;">${q.arb}</p>
+                <div class="writing-input-container">
+                    <input type="text" id="writingAnswer" class="writing-input" placeholder="Skriv här..." autocomplete="off" autocapitalize="off" spellcheck="false">
+                    <button class="check-writing-btn" onclick="checkWritingAnswer('${escapeSquote(q.swe)}')">
+                        Kontrollera ➜
+                    </button>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem;">Tips: ${q.swe.charAt(0)}...</p>
+            </div>
+        `;
+        correctAnswer = q.swe;
+
     } else if (type === 'reverse') {
         // Reverse: Show Arabic, pick Swedish
         questionHtml = `<p class="question-text" dir="rtl" style="font-family: 'IBM Plex Sans Arabic'">${q.arb}</p>`;
@@ -495,6 +553,57 @@ function renderQuizQuestion() {
             { text: wrongAnswers[1]?.swe || 'N/A', correct: false },
             { text: wrongAnswers[2]?.swe || 'N/A', correct: false }
         ];
+
+    } else if (type === 'sentenceFill') {
+        // Sentence Fill: Show sentence with blank, pick the missing word
+        const word = q.swe;
+        const blank = '______';
+        // Create a simple sentence using the word
+        const sentences = [
+            `Jag kan se ${blank} där borta.`,
+            `Det är en vacker ${blank}.`,
+            `Vi använder ${blank} varje dag.`,
+            `${blank} är mycket viktigt.`
+        ];
+        const sentence = sentences[Math.floor(Math.random() * sentences.length)];
+
+        questionHtml = `
+            <div class="sentence-fill-quiz">
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">📝 Välj rätt ord / اختر الكلمة الصحيحة</p>
+                <p class="question-text" style="font-size: 1.2rem; line-height: 1.6;">${sentence.replace(blank, '<span class="fill-blank">' + blank + '</span>')}</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;" dir="rtl">المعنى: ${q.arb}</p>
+            </div>
+        `;
+        correctAnswer = word;
+        options = [
+            { text: word, correct: true },
+            { text: wrongAnswers[0]?.swe || 'ord', correct: false },
+            { text: wrongAnswers[1]?.swe || 'sak', correct: false },
+            { text: wrongAnswers[2]?.swe || 'det', correct: false }
+        ];
+
+    } else if (type === 'wordOrder') {
+        // Word Order: Scramble letters of the word, user picks correct order
+        const word = q.swe.toUpperCase();
+        const letters = word.split('').sort(() => 0.5 - Math.random());
+
+        questionHtml = `
+            <div class="word-order-quiz">
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">🔤 Ordna bokstäverna / رتب الحروف</p>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;" dir="rtl">المعنى: ${q.arb}</p>
+                <div class="scrambled-letters">
+                    ${letters.map(l => `<span class="letter-tile">${l}</span>`).join('')}
+                </div>
+                <div class="word-order-input-container">
+                    <input type="text" id="wordOrderAnswer" class="writing-input" placeholder="Skriv ordet..." autocomplete="off" autocapitalize="characters" spellcheck="false" style="text-transform: uppercase;">
+                    <button class="check-writing-btn" onclick="checkWordOrderAnswer('${escapeSquote(q.swe)}')">
+                        Kontrollera ➜
+                    </button>
+                </div>
+            </div>
+        `;
+        correctAnswer = q.swe;
+        isWritingQuiz = true; // Use writing quiz flow
 
     } else {
         // Default Text: Show Swedish, pick Arabic
@@ -590,6 +699,135 @@ window.checkAnswer = function (isCorrect, clickedBtn, correctAnswer) {
     }, 1500);
 }
 
+// Check Writing Answer
+window.checkWritingAnswer = function (correctAnswer) {
+    const input = document.getElementById('writingAnswer');
+    if (!input) return;
+
+    const userAnswer = input.value.trim().toLowerCase();
+    const correct = correctAnswer.toLowerCase();
+
+    // Check exact match or close match (allow 1 char difference for typos)
+    const isCorrect = userAnswer === correct ||
+        levenshteinDistance(userAnswer, correct) <= 1;
+
+    // Visual feedback
+    input.disabled = true;
+    const btn = document.querySelector('.check-writing-btn');
+    if (btn) btn.disabled = true;
+
+    // Create feedback
+    const container = document.querySelector('.writing-input-container');
+    const feedbackDiv = document.createElement('div');
+    feedbackDiv.className = 'writing-feedback';
+
+    if (isCorrect) {
+        input.classList.add('correct-input');
+        feedbackDiv.innerHTML = `<span style="color: #22c55e;">✅ Rätt! / صحيح!</span>`;
+        currentQuiz.score++;
+    } else {
+        input.classList.add('wrong-input');
+        feedbackDiv.innerHTML = `
+            <span style="color: #ef4444;">❌ Fel! / خطأ!</span><br>
+            <small>Rätt svar: <strong>${correctAnswer}</strong></small>
+        `;
+        // Log mistake
+        const q = currentQuiz.questions[currentQuiz.index];
+        logMistake(q, currentQuiz.lessonId);
+    }
+
+    container.after(feedbackDiv);
+
+    // Move to next question
+    setTimeout(() => {
+        currentQuiz.index++;
+        if (currentQuiz.index < currentQuiz.questions.length) {
+            renderQuizQuestion();
+        } else {
+            showQuizResults();
+        }
+    }, 2000);
+};
+
+// Check Word Order Answer
+window.checkWordOrderAnswer = function (correctAnswer) {
+    const input = document.getElementById('wordOrderAnswer');
+    if (!input) return;
+
+    const userAnswer = input.value.trim().toLowerCase();
+    const correct = correctAnswer.toLowerCase();
+
+    // Check exact match or close match
+    const isCorrect = userAnswer === correct ||
+        levenshteinDistance(userAnswer, correct) <= 1;
+
+    // Visual feedback
+    input.disabled = true;
+    const btn = document.querySelector('.check-writing-btn');
+    if (btn) btn.disabled = true;
+
+    // Create feedback
+    const container = document.querySelector('.word-order-input-container');
+    const feedbackDiv = document.createElement('div');
+    feedbackDiv.className = 'writing-feedback';
+
+    if (isCorrect) {
+        input.classList.add('correct-input');
+        feedbackDiv.innerHTML = `<span style="color: #22c55e;">✅ Rätt! / صحيح!</span>`;
+        currentQuiz.score++;
+        // Highlight all letter tiles as correct
+        document.querySelectorAll('.letter-tile').forEach(tile => {
+            tile.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+        });
+    } else {
+        input.classList.add('wrong-input');
+        feedbackDiv.innerHTML = `
+            <span style="color: #ef4444;">❌ Fel! / خطأ!</span><br>
+            <small>Rätt svar: <strong>${correctAnswer}</strong></small>
+        `;
+        // Log mistake
+        const q = currentQuiz.questions[currentQuiz.index];
+        logMistake(q, currentQuiz.lessonId);
+    }
+
+    container.after(feedbackDiv);
+
+    // Move to next question
+    setTimeout(() => {
+        currentQuiz.index++;
+        if (currentQuiz.index < currentQuiz.questions.length) {
+            renderQuizQuestion();
+        } else {
+            showQuizResults();
+        }
+    }, 2000);
+};
+
+// Levenshtein distance for fuzzy matching
+function levenshteinDistance(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
 function logMistake(question, lessonId) {
     let mistakes = JSON.parse(localStorage.getItem('mistakesLog')) || [];
     // Avoid duplicates
@@ -602,8 +840,228 @@ function logMistake(question, lessonId) {
         });
         localStorage.setItem('mistakesLog', JSON.stringify(mistakes));
     }
+
+    // Also add to spaced repetition review system
+    addToReviewQueue(question, false);
 }
 
+// ========================================
+// Spaced Repetition System
+// ========================================
+const SpacedRepetition = {
+    // Get all words due for review
+    getDueWords: function () {
+        const reviewData = JSON.parse(localStorage.getItem('spacedRepetitionData')) || {};
+        const now = new Date();
+        const dueWords = [];
+
+        Object.keys(reviewData).forEach(key => {
+            const word = reviewData[key];
+            const nextReview = new Date(word.nextReview);
+            if (nextReview <= now) {
+                dueWords.push({ id: key, ...word });
+            }
+        });
+
+        // Sort by urgency (most overdue first)
+        return dueWords.sort((a, b) => new Date(a.nextReview) - new Date(b.nextReview));
+    },
+
+    // Get count of due words
+    getDueCount: function () {
+        return this.getDueWords().length;
+    },
+
+    // Update word after review
+    updateWord: function (wordId, wasCorrect) {
+        const reviewData = JSON.parse(localStorage.getItem('spacedRepetitionData')) || {};
+        const word = reviewData[wordId];
+
+        if (!word) return;
+
+        if (wasCorrect) {
+            // Increase interval using SM-2 principles
+            word.correctStreak = (word.correctStreak || 0) + 1;
+            word.easeFactor = Math.max(1.3, word.easeFactor + 0.1);
+
+            // Calculate next review interval (1, 3, 7, 14, 30 days progression)
+            const intervals = [1, 3, 7, 14, 30, 60];
+            const intervalIndex = Math.min(word.correctStreak, intervals.length - 1);
+            word.interval = intervals[intervalIndex];
+        } else {
+            // Reset on wrong answer
+            word.correctStreak = 0;
+            word.easeFactor = Math.max(1.3, word.easeFactor - 0.2);
+            word.interval = 1; // Review tomorrow
+        }
+
+        // Set next review date
+        const nextDate = new Date();
+        nextDate.setDate(nextDate.getDate() + word.interval);
+        word.nextReview = nextDate.toISOString();
+        word.lastReview = new Date().toISOString();
+
+        reviewData[wordId] = word;
+        localStorage.setItem('spacedRepetitionData', JSON.stringify(reviewData));
+    }
+};
+
+// Add word to review queue
+function addToReviewQueue(question, wasCorrect) {
+    const wordId = question.swe.toLowerCase().replace(/\s+/g, '_');
+    const reviewData = JSON.parse(localStorage.getItem('spacedRepetitionData')) || {};
+
+    if (!reviewData[wordId]) {
+        // New word - schedule for tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        reviewData[wordId] = {
+            swe: question.swe,
+            arb: question.arb,
+            nextReview: tomorrow.toISOString(),
+            interval: 1,
+            easeFactor: 2.5,
+            correctStreak: 0,
+            addedDate: new Date().toISOString()
+        };
+    } else if (!wasCorrect) {
+        // Wrong answer - reset to review tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        reviewData[wordId].nextReview = tomorrow.toISOString();
+        reviewData[wordId].correctStreak = 0;
+    }
+
+    localStorage.setItem('spacedRepetitionData', JSON.stringify(reviewData));
+}
+
+// Make SpacedRepetition available globally
+window.SpacedRepetition = SpacedRepetition;
+
+// Open Spaced Repetition Review
+window.openSpacedReview = function () {
+    const dueWords = SpacedRepetition.getDueWords();
+    if (dueWords.length === 0) return;
+
+    const modal = document.getElementById('lessonModal');
+    const contentDiv = document.getElementById('lessonContent');
+    const title = document.getElementById('lessonModalTitle');
+
+    if (!modal || !contentDiv) return;
+
+    modal.classList.add('active');
+    title.textContent = 'Tid att Repetera! / حان وقت المراجعة!';
+
+    // Start review quiz with due words
+    currentQuiz = {
+        lessonId: 'spaced_review',
+        questions: dueWords.slice(0, 10).map(w => ({ swe: w.swe, arb: w.arb, wordId: w.id })),
+        index: 0,
+        score: 0
+    };
+
+    renderSpacedReviewQuestion();
+};
+
+function renderSpacedReviewQuestion() {
+    const contentDiv = document.getElementById('lessonContent');
+    const q = currentQuiz.questions[currentQuiz.index];
+    const total = currentQuiz.questions.length;
+
+    const rand = Math.random();
+    let questionHtml = '';
+    let correctAnswer = '';
+    let options = [];
+
+    // Simple: Show Swedish, pick Arabic (can expand later)
+    if (rand > 0.5) {
+        questionHtml = `<p class="question-text">${q.swe}</p>`;
+        correctAnswer = q.arb;
+        // Get wrong answers from other due words
+        const otherWords = currentQuiz.questions.filter(w => w.swe !== q.swe);
+        options = [
+            { text: q.arb, correct: true, wordId: q.wordId },
+            { text: otherWords[0]?.arb || 'N/A', correct: false },
+            { text: otherWords[1]?.arb || 'N/A', correct: false }
+        ].sort(() => 0.5 - Math.random());
+    } else {
+        questionHtml = `<p class="question-text" dir="rtl" style="font-family: 'IBM Plex Sans Arabic'">${q.arb}</p>`;
+        correctAnswer = q.swe;
+        const otherWords = currentQuiz.questions.filter(w => w.swe !== q.swe);
+        options = [
+            { text: q.swe, correct: true, wordId: q.wordId },
+            { text: otherWords[0]?.swe || 'N/A', correct: false },
+            { text: otherWords[1]?.swe || 'N/A', correct: false }
+        ].sort(() => 0.5 - Math.random());
+    }
+
+    currentQuiz.currentWordId = q.wordId;
+
+    let html = `
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h3>🔄 Repetition ${currentQuiz.index + 1} / ${total}</h3>
+                <div class="progress-bar"><div style="width: ${(currentQuiz.index / total) * 100}%"></div></div>
+            </div>
+            
+            <div class="question-card">
+                ${questionHtml}
+                <div class="options-grid" id="quizOptions">
+                    ${options.map(opt => `
+                        <button class="option-btn" data-correct="${opt.correct}" onclick="checkSpacedAnswer(${opt.correct}, this, '${escapeSquote(correctAnswer)}')">
+                            ${opt.text}
+                        </button>
+                    `).join('')}
+                </div>
+                <div id="answerFeedback" class="answer-feedback" style="display: none;"></div>
+            </div>
+        </div>
+    `;
+
+    contentDiv.innerHTML = html;
+}
+
+window.checkSpacedAnswer = function (isCorrect, clickedBtn, correctAnswer) {
+    const allBtns = document.querySelectorAll('.option-btn');
+    allBtns.forEach(btn => btn.disabled = true);
+
+    allBtns.forEach(btn => {
+        if (btn.getAttribute('data-correct') === 'true') {
+            btn.classList.add('correct-answer');
+        } else if (btn === clickedBtn && !isCorrect) {
+            btn.classList.add('wrong-answer');
+        }
+    });
+
+    // Update spaced repetition data
+    SpacedRepetition.updateWord(currentQuiz.currentWordId, isCorrect);
+
+    if (isCorrect) currentQuiz.score++;
+
+    setTimeout(() => {
+        currentQuiz.index++;
+        if (currentQuiz.index < currentQuiz.questions.length) {
+            renderSpacedReviewQuestion();
+        } else {
+            showSpacedResults();
+        }
+    }, 1500);
+};
+
+function showSpacedResults() {
+    const contentDiv = document.getElementById('lessonContent');
+    const percentage = Math.round((currentQuiz.score / currentQuiz.questions.length) * 100);
+
+    contentDiv.innerHTML = `
+        <div class="result-container" style="text-align: center; padding: 2rem;">
+            <div class="result-icon">🔄</div>
+            <h3>Repetition Klar! / انتهت المراجعة!</h3>
+            <p>Du fick ${currentQuiz.score} av ${currentQuiz.questions.length} rätt (${percentage}%)</p>
+            <button class="quiz-primary-btn" onclick="closeLessonModal()">Stäng / إغلاق</button>
+        </div>
+    `;
+}
 window.openMistakesReview = function () {
     let mistakes = JSON.parse(localStorage.getItem('mistakesLog')) || [];
     const modal = document.getElementById('lessonModal');
@@ -700,14 +1158,28 @@ function showQuizResults() {
         localStorage.setItem(`lesson_score_${currentQuiz.lessonId}`, percentage);
     }
 
+    // Track attempts for progress states
+    const currentAttempts = parseInt(localStorage.getItem(`lesson_attempts_${currentQuiz.lessonId}`) || '0');
+    localStorage.setItem(`lesson_attempts_${currentQuiz.lessonId}`, currentAttempts + 1);
+
     // Check Daily Challenge: Complete 1 Quiz
     if (passed && window.handleDailyChallenge) {
         window.handleDailyChallenge('quiz');
     }
 
+    // Calculate stars for display
+    let starDisplay = '';
+    if (passed) {
+        let stars = 1;
+        if (percentage >= 80) stars = 3;
+        else if (percentage >= 50) stars = 2;
+        starDisplay = '<div class="result-stars">' + '⭐'.repeat(stars) + '☆'.repeat(3 - stars) + '</div>';
+    }
+
     let html = `
         <div class="result-container" style="text-align: center; padding: 2rem;">
             <div class="result-icon">${passed ? '🎉' : '😕'}</div>
+            ${starDisplay}
             <h3>${passed ? 'Grattis! / مبروك!' : 'Försök igen / حاول مرة أخرى'}</h3>
             <p>Du fick ${currentQuiz.score} av ${currentQuiz.questions.length} rätt (${percentage}%)</p>
             
@@ -726,10 +1198,6 @@ function showQuizResults() {
     // Integare ProgressManager
     if (typeof ProgressManager !== 'undefined') {
         ProgressManager.trackGame('lesson_quiz', currentQuiz.score);
-        if (passed) {
-            // Bonus XP for passing?
-            // ProgressManager doesn't have explicit XP, but trackGame updates stats.
-        }
     }
 }
 

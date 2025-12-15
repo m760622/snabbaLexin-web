@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liknande Ord | متشابهات - SnabbaLexin</title>
+    <meta name="description"
+        content="Ord som låter lika på svenska och arabiska. كلمات تتشابه في اللفظ والمعنى بين السويدية والعربية.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+
+        html.iphone-mode {
+            background: var(--bg-color);
+        }
+
+        body.iphone-view {
+            max-width: 430px;
+            margin: 0 auto;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(30, 41, 59, 0.9);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        header h1 {
+            flex: 1;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .quiz-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        main {
+            padding: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-muted);
+        }
+
+        .intro-text p {
+            margin: 0.25rem 0;
+        }
+
+        .intro-text .arb {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .search-container {
+            margin: 0.75rem 0;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-color);
+            font-size: 1rem;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        #searchInput:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .chip {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .chip:hover {
+            border-color: var(--primary);
+        }
+
+        .category-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-title {
+            font-size: 1rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cognates-grid {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .cognate-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .cognate-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        .word-swe {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--primary);
+        }
+
+        .word-arb {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .speaker-icon {
+            font-size: 0.8rem;
+            margin-left: 0.4rem;
+            opacity: 0.7;
+        }
+
+        .word-type {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-left: 0.5rem;
+        }
+
+        /* Quiz Modal */
+        .quiz-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-color);
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .quiz-modal.active {
+            display: block;
+        }
+
+        .quiz-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .quiz-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-header h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #334155;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.75rem;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .question-hint {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .option-btn {
+            background: var(--bg-color);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-color);
+            direction: rtl;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .option-btn.correct {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .option-btn.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .feedback.correct {
+            background: rgba(34, 197, 94, 0.15);
+            color: var(--success);
+        }
+
+        .feedback.wrong {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-container {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-score {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+        }
+
+        .close-quiz {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--card-bg);
+            border: none;
+            color: var(--text-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <button class="back-btn" title="Tillbaka" onclick="window.location.href='learn.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <h1>Liknande Ord / المتشابهات</h1>
+        <button class="quiz-btn" onclick="startQuiz()">📝 Quiz</button>
+    </header>
+
+    <main>
+        <div class="intro-text">
+            <p>600+ ord som låter lika på svenska och arabiska.</p>
+            <p class="arb">كلمات تتشابه في اللفظ والمعنى</p>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Sök ord / ابحث...">
+        </div>
+
+        <div class="filter-chips" id="filterChips">
+            <!-- Dynamic -->
+        </div>
+
+        <div id="content">
+            <!-- Dynamic Content -->
+        </div>
+    </main>
+
+    <!-- Quiz Modal -->
+    <div id="quizModal" class="quiz-modal">
+        <button class="close-quiz" onclick="closeQuiz()">×</button>
+        <div class="quiz-container" id="quizContent">
+            <!-- Dynamic -->
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/cognatesData.js"></script>
+    <script>
+        let currentFilter = 'all';
+        const categoryIcons = {
+            'Substantiv': '📦',
+            'Adjektiv': '🎨',
+            'Verb': '🏃',
+            'Geografi': '🌍',
+            'Medicin & Vetenskap': '🔬',
+            'Musik & Konst': '🎵',
+            'Mat & Dryck': '🍽️',
+            'Teknik': '💻',
+            'Övrigt': '📌'
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            if (localStorage.getItem('mobileView') === 'true') {
+                document.documentElement.classList.add('iphone-mode');
+                document.body.classList.add('iphone-view');
+            }
+
+            renderFilterChips();
+            renderContent(cognatesData);
+
+            // Search
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                let filtered = cognatesData.filter(item =>
+                    item.swe.toLowerCase().includes(term) ||
+                    item.arb.includes(term)
+                );
+                if (currentFilter !== 'all') {
+                    filtered = filtered.filter(item => item.category === currentFilter);
+                }
+                renderContent(filtered, term);
+            });
+        });
+
+        function renderFilterChips() {
+            const container = document.getElementById('filterChips');
+            const categories = ['all', ...new Set(cognatesData.map(c => c.category))];
+
+            container.innerHTML = categories.map(cat => `
+                <button class="chip ${cat === 'all' ? 'active' : ''}" onclick="filterByCategory('${cat}')">
+                    ${cat === 'all' ? '🌐 Alla' : (categoryIcons[cat] || '📌') + ' ' + cat}
+                </button>
+            `).join('');
+        }
+
+        function filterByCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            let filtered = cognatesData;
+            if (cat !== 'all') {
+                filtered = cognatesData.filter(item => item.category === cat);
+            }
+            if (term) {
+                filtered = filtered.filter(item =>
+                    item.swe.toLowerCase().includes(term) ||
+                    item.arb.includes(term)
+                );
+            }
+            renderContent(filtered, term);
+        }
+
+        function renderContent(data, searchTerm = '') {
+            const container = document.getElementById('content');
+
+            if (data.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Inga ord hittades / لا توجد نتائج</div>';
+                return;
+            }
+
+            // Group by category
+            const grouped = {};
+            data.forEach(item => {
+                const cat = item.category || 'Övrigt';
+                if (!grouped[cat]) grouped[cat] = [];
+                grouped[cat].push(item);
+            });
+
+            let html = '';
+            for (const [category, items] of Object.entries(grouped)) {
+                html += `
+                    <div class="category-section">
+                        <div class="category-title">
+                            <span>${categoryIcons[category] || '📌'}</span>
+                            <span>${category} (${items.length})</span>
+                        </div>
+                        <div class="cognates-grid">
+                            ${items.map(item => `
+                                <div class="cognate-card" onclick="playTTS('${item.swe.replace(/'/g, "\\'")}')">
+                                    <div>
+                                        <span class="word-swe">${item.swe}</span>
+                                        <span class="speaker-icon">🔊</span>
+                                        ${item.type ? `<span class="word-type">${item.type}</span>` : ''}
+                                    </div>
+                                    <div class="word-arb">${item.arb}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function playTTS(text) {
+            if (typeof TTSManager !== 'undefined') {
+                TTSManager.speak(text, 'sv');
+            } else {
+                const u = new SpeechSynthesisUtterance(text);
+                u.lang = 'sv-SE';
+                window.speechSynthesis.speak(u);
+            }
+        }
+
+        // ===== QUIZ LOGIC =====
+        let quizState = null;
+
+        function startQuiz() {
+            // Take 10 random words from current filter
+            let pool = currentFilter === 'all' ? cognatesData : cognatesData.filter(c => c.category === currentFilter);
+            if (pool.length < 4) {
+                alert('Inte tillräckligt med ord för quiz! / لا توجد كلمات كافية!');
+                return;
+            }
+
+            const shuffled = [...pool].sort(() => 0.5 - Math.random());
+            const questions = shuffled.slice(0, 10);
+
+            quizState = {
+                questions: questions,
+                index: 0,
+                score: 0,
+                pool: pool
+            };
+
+            document.getElementById('quizModal').classList.add('active');
+            renderQuizQuestion();
+        }
+
+        function closeQuiz() {
+            document.getElementById('quizModal').classList.remove('active');
+            quizState = null;
+        }
+
+        function renderQuizQuestion() {
+            const q = quizState.questions[quizState.index];
+            const total = quizState.questions.length;
+
+            // Generate wrong options from pool
+            const wrongPool = quizState.pool.filter(c => c.swe !== q.swe);
+            const wrongOptions = wrongPool.sort(() => 0.5 - Math.random()).slice(0, 3).map(c => c.arb);
+            const options = [q.arb, ...wrongOptions].sort(() => 0.5 - Math.random());
+
+            const html = `
+                <div class="quiz-header">
+                    <h2>Fråga ${quizState.index + 1} / ${total}</h2>
+                    <div class="progress-bar">
+                        <div class="fill" style="width: ${(quizState.index / total) * 100}%"></div>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="question-text">${q.swe}</div>
+                    <div class="question-hint">Välj rätt arabisk översättning / اختر الترجمة الصحيحة</div>
+                    
+                    <div class="options-grid" id="optionsGrid">
+                        ${options.map((opt, i) => `
+                            <button class="option-btn" data-correct="${opt === q.arb}" onclick="checkQuizAnswer(this, '${opt === q.arb}')">${opt}</button>
+                        `).join('')}
+                    </div>
+
+                    <div class="feedback" id="feedback"></div>
+                </div>
+            `;
+
+            document.getElementById('quizContent').innerHTML = html;
+
+            // Auto-play TTS
+            setTimeout(() => playTTS(q.swe), 300);
+        }
+
+        function checkQuizAnswer(btn, isCorrectStr) {
+            const isCorrect = isCorrectStr === 'true';
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => {
+                b.disabled = true;
+                if (b.getAttribute('data-correct') === 'true') {
+                    b.classList.add('correct');
+                } else if (b === btn && !isCorrect) {
+                    b.classList.add('wrong');
+                }
+            });
+
+            const feedback = document.getElementById('feedback');
+            feedback.classList.add('show');
+            if (isCorrect) {
+                quizState.score++;
+                feedback.className = 'feedback show correct';
+                feedback.innerHTML = '✅ Rätt! / صحيح!';
+            } else {
+                feedback.className = 'feedback show wrong';
+                feedback.innerHTML = `❌ Fel! Rätt svar: ${quizState.questions[quizState.index].arb}`;
+            }
+
+            setTimeout(() => {
+                quizState.index++;
+                if (quizState.index < quizState.questions.length) {
+                    renderQuizQuestion();
+                } else {
+                    showQuizResults();
+                }
+            }, 1500);
+        }
+
+        function showQuizResults() {
+            const score = quizState.score;
+            const total = quizState.questions.length;
+            const percent = Math.round((score / total) * 100);
+            const passed = percent >= 60;
+
+            const html = `
+                <div class="result-container">
+                    <div class="result-icon">${passed ? '🎉' : '😕'}</div>
+                    <div class="result-title">${passed ? 'Grattis! / مبروك!' : 'Försök igen / حاول مرة أخرى'}</div>
+                    <div class="result-score">${score} / ${total} rätt (${percent}%)</div>
+                    
+                    <div class="result-actions">
+                        <button class="action-btn primary" onclick="startQuiz()">🔄 Gör om / أعد الاختبار</button>
+                        <button class="action-btn secondary" onclick="closeQuiz()">← Tillbaka / عودة</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('quizContent').innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

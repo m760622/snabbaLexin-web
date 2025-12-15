@@ -159,8 +159,22 @@ function renderLessonCards(filter = 'all') {
         `;
     });
 
-    // 3. Add "Review Mistakes" Card if filter is 'all' or maybe 'intermediate'? 
-    // Let's show it only on 'all' to avoid clutter specific levels.
+    // 3. Add "Cognates / Similar Words" Card (Always visible)
+    html += `
+        <div class="lesson-card" onclick="window.location.href='cognates.html'" style="border-color: var(--warning); background: rgba(245, 158, 11, 0.1);">
+            <div class="lesson-header">
+                <span class="lesson-icon">🤝</span>
+                <div class="lesson-title">
+                    <h3>Liknande Ord</h3>
+                    <h4>المتشابهات (كلمات مشتركة)</h4>
+                </div>
+                <span class="lesson-badge" style="background: var(--warning); color: #000;">Nyhet</span>
+            </div>
+            <p class="lesson-desc">600+ ord som låter lika på svenska och arabiska.</p>
+        </div>
+    `;
+
+    // 4. Add "Review Mistakes" Card if filter is 'all'
     if (filter === 'all') {
         html += `
             <div class="lesson-card" onclick="openMistakesReview()">

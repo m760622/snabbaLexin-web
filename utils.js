@@ -1992,11 +1992,11 @@ const TTSManager = {
         // Check if online for external providers
         const isOnline = navigator.onLine;
 
-        // Provider chain - Local first (most reliable)
+        // Provider chain - Google TTS first (Best Quality)
         const providers = [
+            { name: 'Google TTS', fn: () => this._playGoogleTTS(text, lang, options), requiresOnline: true },
             { name: 'Local TTS', fn: () => this._playLocalTTS(text, lang, options) },
-            { name: 'VoiceRSS', fn: () => this._playVoiceRSS(text, lang, options), requiresOnline: true },
-            { name: 'Google TTS', fn: () => this._playGoogleTTS(text, lang, options), requiresOnline: true }
+            { name: 'VoiceRSS', fn: () => this._playVoiceRSS(text, lang, options), requiresOnline: true }
         ];
 
         for (let i = 0; i < providers.length; i++) {

@@ -18,6 +18,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const quizModeLabel = document.getElementById('quizModeLabel');
     const userXPEl = document.getElementById('userXP');
     const themeSelector = document.getElementById('themeSelector');
+    const mobileToggleBtn = document.getElementById('mobileToggleBtn');
+
+    // --- Mobile Toggle ---
+    if (mobileToggleBtn) {
+        mobileToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('mobile-view');
+            // Optional: Save preference?
+        });
+    }
 
     // --- State & SRS Data ---
     let currentMode = 'list';

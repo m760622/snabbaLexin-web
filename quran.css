@@ -47,16 +47,16 @@
     --bg-gradient: radial-gradient(circle at top right, #6b21a8, #3b0764, #000000);
 }
 
-/* Oasis Theme (Vivid Green / Aurora) */
+/* Oasis Theme (Aurora Style) */
 [data-quran-theme="oasis"] {
-    --quran-gold: #facc15;
-    /* Yellow 400 */
-    --quran-gold-glow: rgba(250, 204, 21, 0.4);
-    --quran-green: #16a34a;
-    /* Green 600 */
+    --quran-gold: #fde047;
+    /* Bright Yellow */
+    --quran-gold-glow: rgba(253, 224, 71, 0.4);
+    --quran-green: #22c55e;
+    /* Forest Primary */
     --quran-green-light: #4ade80;
-    /* Green 400 (Neon) */
-    --bg-gradient: radial-gradient(circle at top right, #15803d, #052e16, #020617);
+    /* Aurora Neon Green */
+    --bg-gradient: radial-gradient(circle at top right, #15803d, #0f172a, #020617);
 }
 
 body {
@@ -693,4 +693,59 @@ input:checked+.slider:before {
     font-weight: bold;
     font-size: 0.8rem;
     margin-left: 10px;
+}
+/* =========================================
+   Header Controls
+   ========================================= */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.glass-select.mini {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.mobile-toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    backdrop-filter: blur(5px);
+    transition: all 0.2s;
+}
+
+.mobile-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+/* Mobile View Mode Styles */
+body.mobile-view .quran-list,
+body.mobile-view .search-container,
+body.mobile-view .mode-tabs {
+    max-width: 480px; /* Constrain width to mobile size center */
+}
+
+body.mobile-view .quran-card {
+    padding: 1rem;
+}
+
+body.mobile-view .target-word {
+    font-size: 2.5rem;
+}
+
+body.mobile-view .quran-header {
+    justify-content: space-between; /* Ensure spread */
 }

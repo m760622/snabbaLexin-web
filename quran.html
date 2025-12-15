@@ -25,6 +25,22 @@
             <span class="quran-icon">📖</span>
             <h1 class="quran-title">Koranord</h1>
         </div>
+
+        <div class="header-controls">
+            <!-- Theme Selector (Relocated) -->
+            <select id="themeSelector" class="glass-select mini">
+                <option value="emerald">🌲 Emerald</option>
+                <option value="oasis">🌴 Oasis</option>
+                <option value="midnight">🌌 Midnight</option>
+                <option value="sunset">🌅 Sunset</option>
+                <option value="amethyst">🔮 Amethyst</option>
+            </select>
+
+            <!-- Mobile Toggle -->
+            <button id="mobileToggleBtn" class="mobile-toggle-btn" aria-label="Mobile View">
+                📱
+            </button>
+        </div>
     </header>
 
     <div class="search-container">
@@ -43,18 +59,6 @@
         <select id="surahFilter" class="glass-select">
             <option value="all">Alla Suror / كل السور</option>
             <!-- Populated via JS -->
-        </select>
-        <select id="typeFilter" class="glass-select" disabled title="Kommer snart">
-            <option value="all">Alla Typer / كل الأنواع</option>
-        </select>
-
-        <!-- Theme Selector -->
-        <select id="themeSelector" class="glass-select">
-            <option value="emerald">🌲 Emerald (Default)</option>
-            <option value="oasis">🌴 Oasis (Vivid)</option>
-            <option value="midnight">🌌 Midnight</option>
-            <option value="sunset">🌅 Sunset</option>
-            <option value="amethyst">🔮 Amethyst</option>
         </select>
     </div>
 

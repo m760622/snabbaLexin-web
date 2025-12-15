@@ -142,10 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         filteredData = quranData.filter(item => {
             const matchesSearch =
-                item.word.includes(query) ||
-                item.word_sv.toLowerCase().includes(query) ||
-                item.meaning_ar.includes(query) ||
-                item.ayah_full.includes(query);
+                (item.word && item.word.includes(query)) ||
+                (item.word_sv && item.word_sv.toLowerCase().includes(query)) ||
+                (item.meaning_ar && item.meaning_ar.includes(query)) ||
+                (item.ayah_full && item.ayah_full.includes(query)) ||
+                (item.ayah_sv && item.ayah_sv.toLowerCase().includes(query));
 
             const matchesSurah = surah === 'all'
                 ? true

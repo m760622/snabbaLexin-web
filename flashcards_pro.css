@@ -11,7 +11,7 @@
     width: 100%;
     margin: 20px 0;
     margin-top: 60px;
-    min-height: 480px;
+    min-height: 360px;
     /* Increased to accommodate buttons */
     position: relative;
 }
@@ -36,7 +36,7 @@
 .fc-card-pro {
     position: relative;
     width: 320px;
-    height: 460px;
+    height: 320px;
     /* Transparent base for the card container itself */
     background: transparent;
     border-radius: 24px;
@@ -168,14 +168,22 @@
 }
 
 .fc-sentence-back {
-    font-size: clamp(0.9rem, 3vw, 1.1rem);
+    font-size: clamp(1.1rem, 4vw, 1.4rem);
     color: var(--text-secondary, #ccc);
     font-style: italic;
     text-align: center;
-    margin: 0;
-    opacity: 0.8;
-    line-height: 1.4;
-    max-width: 90%;
+    margin: 5px 0 0 0;
+    opacity: 0.9;
+    /* Increased opacity for clarity */
+    line-height: 1.5;
+    line-height: 1.5;
+    max-width: 95%;
+}
+
+/* Specific styling for Arabic example to ensure legibility */
+#flashcardExampleArb {
+    font-family: var(--font-arabic, sans-serif);
+    line-height: 1.6;
 }
 
 /* Content & Typography */
@@ -368,29 +376,63 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px;
-    border: none;
-    border-radius: 16px;
+    padding: 10px;
+    border-radius: 20px;
     cursor: pointer;
-    transition: transform 0.2s, filter 0.2s;
-    height: 80px;
+
+    /* White Glass Layer */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+
+    /* Dazzling Edges */
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    box-shadow:
+        0 0 15px rgba(255, 255, 255, 0.5),
+        /* Outer White Glow */
+        inset 0 0 20px rgba(255, 255, 255, 0.2);
+    /* Inner Light */
+
+    transition: transform 0.2s, filter 0.2s, box-shadow 0.3s;
+    height: 70px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shine Animation */
+.fc-simple-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.fc-simple-btn:hover::before {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .fc-dont-know {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #ef4444;
+    /* Keep distinct text color */
+    color: #ff6b6b;
+    text-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
 }
 
 .fc-know {
-    background: rgba(34, 197, 94, 0.15);
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    color: #22c55e;
+    /* Keep distinct text color */
+    color: #4ade80;
+    text-shadow: 0 0 5px rgba(74, 222, 128, 0.3);
 }
 
 .fc-simple-btn:active {
     transform: scale(0.95);
-    filter: brightness(1.2);
+    filter: brightness(1.3);
 }
 
 .fc-btn-icon {

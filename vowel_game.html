@@ -10,6 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;600;700;800&display=swap"
         rel="stylesheet">
+    <script src="utils.js"></script>
     <style>
         :root {
             --primary: #6366f1;
@@ -1565,7 +1566,6 @@
         }
 
         function initGame() {
-            window.speechSynthesis.getVoices();
             // Load Saved Stage
             let saved = localStorage.getItem('vowelGameStage');
             currentStage = saved ? parseInt(saved) : 1;
@@ -2415,7 +2415,7 @@
 
         // Do NOT auto init; wait for Start Button
     </script>
-<script src="pwa.js" defer></script>
+    <script src="pwa.js" defer></script>
 </body>
 
 </html>

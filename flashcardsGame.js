@@ -453,6 +453,26 @@ function showNextFlashcard() {
         }
     }, 500); // Slight delay for transition
 
+    // Adjust card height dynamically based on content
+    setTimeout(adjustCardHeight, 50);
+}
+
+function adjustCardHeight() {
+    const front = document.querySelector('.fc-front-pro');
+    const back = document.querySelector('.fc-back-pro');
+    const card = document.getElementById('flashcard');
+
+    if (!front || !back || !card) return;
+
+    // Reset height to auto to measure natural height
+    // But faces are absolute, so we need to measure scrollHeight of faces
+    const frontH = front.scrollHeight;
+    const backH = back.scrollHeight;
+
+    // Add some padding/buffer
+    const maxH = Math.max(frontH, backH, 320); // 320 is min height
+
+    card.style.height = `${maxH}px`;
 }
 
 // ========================================

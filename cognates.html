@@ -1009,9 +1009,7 @@
             if (typeof TTSManager !== 'undefined') {
                 TTSManager.speak(text, 'sv');
             } else {
-                const u = new SpeechSynthesisUtterance(text);
-                u.lang = 'sv-SE';
-                window.speechSynthesis.speak(u);
+                console.error('TTSManager not loaded');
             }
         }
 
@@ -1100,26 +1098,22 @@
             saveState();
             const percent = Math.round((fcKnown / fcCards.length) * 100);
             document.getElementById('flashcardView').innerHTML = `
-                <div class="result-container">
-                    <div class="result-icon">${percent >= 70 ? '🎉' : '📚'}</div>
-                    <div class="result-title">${percent >= 70 ? 'Bra jobbat!' : 'Fortsätt öva!'}</div>
-                    <div class="result-score">${fcKnown} / ${fcCards.length} ord (${percent}%)</div>
-                    <div class="result-actions">
-                        <button class="result-btn primary" onclick="location.reload()">🔄 Igen</button>
-                        <button class="result-btn secondary" onclick="switchMode('browse')">← Tillbaka</button>
-                    </div>
-                </div>`;
+    <div class="result-container">
+        <div class="result-icon">${percent >= 70 ? '🎉' : '📚'}</div>
+        <div class="result-title">${percent >= 70 ? 'Bra jobbat!' : 'Fortsätt öva!'}</div>
+        <div class="result-score">${fcKnown} / ${fcCards.length} ord (${percent}%)</div>
+        <div class="result-actions">
+            <button class="result-btn primary" onclick="location.reload()">🔄 Igen</button>
+            <button class="result-btn secondary" onclick="switchMode('browse')">← Tillbaka</button>
+        </div>
+    </div>`;
         }
 
         // ========== QUIZ ==========
         function startQuiz() {
             let pool = currentFilter === 'all' ? cognatesData : cognatesData.filter(c => c.category === currentFilter);
-            if (pool.length < 4) {
-                alert('Inte tillräckligt med ord!');
-                return;
-            }
-
-            const shuffled = [...pool].sort(() => 0.5 - Math.random());
+            if (pool.length < 4) { alert('Inte tillräckligt med ord!'); return; } const shuffled = [...pool].sort(() => 0.5 -
+                Math.random());
             quizState = {
                 questions: shuffled.slice(0, 10),
                 index: 0,
@@ -1138,23 +1132,23 @@
 
         function renderQuizTypeSelector() {
             document.getElementById('quizContent').innerHTML = `
-                <div class="quiz-header">
-                    <h2>Välj Quiz-typ / اختر نوع الاختبار</h2>
-                </div>
-                <div class="quiz-type-selector" style="flex-direction: column; gap: 1rem;">
-                    <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('normal')">
-                        🇸🇪→🇸🇦 Svenska → Arabiska
-                    </button>
-                    <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('reverse')">
-                        🇸🇦→🇸🇪 Arabiska → Svenska
-                    </button>
-                    <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('audio')">
-                        🔊 Lyssna → Välj
-                    </button>
-                    <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('write')">
-                        ✍️ Skriv svaret
-                    </button>
-                </div>`;
+        <div class="quiz-header">
+            <h2>Välj Quiz-typ / اختر نوع الاختبار</h2>
+        </div>
+        <div class="quiz-type-selector" style="flex-direction: column; gap: 1rem;">
+            <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('normal')">
+                🇸🇪→🇸🇦 Svenska → Arabiska
+            </button>
+            <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('reverse')">
+                🇸🇦→🇸🇪 Arabiska → Svenska
+            </button>
+            <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('audio')">
+                🔊 Lyssna → Välj
+            </button>
+            <button class="quiz-type-btn" style="padding: 1rem; font-size: 1rem;" onclick="setQuizType('write')">
+                ✍️ Skriv svaret
+            </button>
+        </div>`;
         }
 
         function setQuizType(type) {
@@ -1170,46 +1164,52 @@
             const wrongOptions = wrongPool.sort(() => 0.5 - Math.random()).slice(0, 3);
 
             let html = `
-                <div class="quiz-header">
-                    <h2>Fråga ${quizState.index + 1} / ${total}</h2>
-                    <div class="progress-bar"><div class="fill" style="width: ${(quizState.index / total) * 100}%"></div></div>
-                </div>
-                <div class="question-card">`;
+        <div class="quiz-header">
+            <h2>Fråga ${quizState.index + 1} / ${total}</h2>
+            <div class="progress-bar">
+                <div class="fill" style="width: ${(quizState.index / total) * 100}%"></div>
+            </div>
+        </div>
+        <div class="question-card">`;
 
             if (quizType === 'normal') {
                 const options = [q.arb, ...wrongOptions.map(c => c.arb)].sort(() => 0.5 - Math.random());
                 html += `
-                    <div class="question-text">${q.swe}</div>
-                    <div class="question-hint">Välj rätt arabisk översättning / اختر الترجمة</div>
-                    <div class="options-grid" id="optionsGrid">
-                        ${options.map(opt => `<button class="option-btn arb" data-correct="${opt === q.arb}" onclick="checkAnswer(this, ${opt === q.arb})">${opt}</button>`).join('')}
-                    </div>`;
+            <div class="question-text">${q.swe}</div>
+            <div class="question-hint">Välj rätt arabisk översättning / اختر الترجمة</div>
+            <div class="options-grid" id="optionsGrid">
+                ${options.map(opt => `<button class="option-btn arb" data-correct="${opt === q.arb}"
+                    onclick="checkAnswer(this, ${opt === q.arb})">${opt}</button>`).join('')}
+            </div>`;
             } else if (quizType === 'reverse') {
                 const options = [q.swe, ...wrongOptions.map(c => c.swe)].sort(() => 0.5 - Math.random());
                 html += `
-                    <div class="question-text" style="font-family: 'IBM Plex Sans Arabic', sans-serif;">${q.arb}</div>
-                    <div class="question-hint">Välj rätt svenskt ord / اختر الكلمة السويدية</div>
-                    <div class="options-grid" id="optionsGrid">
-                        ${options.map(opt => `<button class="option-btn" data-correct="${opt === q.swe}" onclick="checkAnswer(this, ${opt === q.swe})">${opt}</button>`).join('')}
-                    </div>`;
+            <div class="question-text" style="font-family: 'IBM Plex Sans Arabic', sans-serif;">${q.arb}</div>
+            <div class="question-hint">Välj rätt svenskt ord / اختر الكلمة السويدية</div>
+            <div class="options-grid" id="optionsGrid">
+                ${options.map(opt => `<button class="option-btn" data-correct="${opt === q.swe}"
+                    onclick="checkAnswer(this, ${opt === q.swe})">${opt}</button>`).join('')}
+            </div>`;
             } else if (quizType === 'audio') {
                 const options = [q.arb, ...wrongOptions.map(c => c.arb)].sort(() => 0.5 - Math.random());
                 html += `
-                    <div class="question-text"><button class="action-btn" onclick="playTTS('${q.swe}')">🔊 Lyssna</button></div>
-                    <div class="question-hint">Vad hörde du? / ماذا سمعت؟</div>
-                    <div class="options-grid" id="optionsGrid">
-                        ${options.map(opt => `<button class="option-btn arb" data-correct="${opt === q.arb}" onclick="checkAnswer(this, ${opt === q.arb})">${opt}</button>`).join('')}
-                    </div>`;
+            <div class="question-text"><button class="action-btn" onclick="playTTS('${q.swe}')">🔊 Lyssna</button></div>
+            <div class="question-hint">Vad hörde du? / ماذا سمعت؟</div>
+            <div class="options-grid" id="optionsGrid">
+                ${options.map(opt => `<button class="option-btn arb" data-correct="${opt === q.arb}"
+                    onclick="checkAnswer(this, ${opt === q.arb})">${opt}</button>`).join('')}
+            </div>`;
                 setTimeout(() => playTTS(q.swe), 500);
             } else if (quizType === 'write') {
                 html += `
-                    <div class="question-text">${q.swe}</div>
-                    <div class="question-hint">Skriv den arabiska översättningen / اكتب الترجمة</div>
-                    <input type="text" class="writing-input" id="writeAnswer" placeholder="اكتب هنا..." dir="rtl">
-                    <button class="submit-btn" onclick="checkWrittenAnswer('${q.arb}')">Kontrollera / تحقق</button>`;
+            <div class="question-text">${q.swe}</div>
+            <div class="question-hint">Skriv den arabiska översättningen / اكتب الترجمة</div>
+            <input type="text" class="writing-input" id="writeAnswer" placeholder="اكتب هنا..." dir="rtl">
+            <button class="submit-btn" onclick="checkWrittenAnswer('${q.arb}')">Kontrollera / تحقق</button>`;
             }
 
-            html += `<div class="feedback" id="feedback"></div></div>`;
+            html += `<div class="feedback" id="feedback"></div>
+        </div>`;
             document.getElementById('quizContent').innerHTML = html;
         }
 
@@ -1246,33 +1246,30 @@
 
             setTimeout(() => {
                 quizState.index++;
-                if (quizState.index < quizState.questions.length) renderQuizQuestion();
-                else showQuizResults();
+                if (quizState.index < quizState.questions.length) renderQuizQuestion(); else showQuizResults();
             }, 1500);
         }
-
         function showQuizResults() {
-            const score = quizState.score;
-            const total = quizState.questions.length;
-            const percent = Math.round((score / total) * 100);
-            const passed = percent >= 60;
+            const score = quizState.score; const total = quizState.questions.length; const
+                percent = Math.round((score / total) * 100); const passed = percent >= 60;
 
             if (passed) cognatesStreak++;
             saveState();
 
             document.getElementById('quizContent').innerHTML = `
-                <div class="result-container">
-                    <div class="result-icon">${passed ? '🎉' : '😕'}</div>
-                    <div class="result-title">${passed ? 'Grattis! / مبروك!' : 'Försök igen'}</div>
-                    <div class="result-score">${score} / ${total} rätt (${percent}%)</div>
-                    <div class="result-actions">
-                        <button class="result-btn primary" onclick="startQuiz()">🔄 Gör om</button>
-                        <button class="result-btn secondary" onclick="closeQuiz()">← Tillbaka</button>
-                    </div>
-                </div>`;
+            <div class="result-container">
+                <div class="result-icon">${passed ? '🎉' : '😕'}</div>
+                <div class="result-title">${passed ? 'Grattis! / مبروك!' : 'Försök igen'}</div>
+                <div class="result-score">${score} / ${total} rätt (${percent}%)</div>
+                <div class="result-actions">
+                    <button class="result-btn primary" onclick="startQuiz()">🔄 Gör om</button>
+                    <button class="result-btn secondary" onclick="closeQuiz()">← Tillbaka</button>
+                </div>
+            </div>`;
         }
     </script>
-<script src="pwa.js" defer></script>
+    <script src="utils.js"></script>
+    <script src="pwa.js" defer></script>
 </body>
 
 </html>

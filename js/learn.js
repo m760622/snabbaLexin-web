@@ -4,6 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemeAndMobile();
 });
 
+// Global TTS Helper
+window.playTTS = function (text) {
+    if (typeof TTSManager !== 'undefined') {
+        TTSManager.speak(text, 'sv');
+    } else {
+        console.warn('TTSManager not loaded, using fallback');
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'sv-SE';
+        window.speechSynthesis.speak(u);
+    }
+};
+
 function initThemeAndMobile() {
     // Theme
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -1122,17 +1134,6 @@ window.openMistakesReview = function () {
 window.removeMistake = function (index) {
     let mistakes = JSON.parse(localStorage.getItem('mistakesLog')) || [];
     // Helpers
-    window.playTTS = function (text) {
-        if (typeof TTSManager !== 'undefined') {
-            TTSManager.speak(text, 'sv');
-        } else {
-            // Fallback
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = 'sv-SE';
-            window.speechSynthesis.speak(u);
-        }
-    };
-
     window.escapeSquote = function (str) {
         return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     };

@@ -432,12 +432,25 @@
         <!-- ALWAYS VISIBLE as per request -->
         <div class="fc-rating-container" id="flashcardRatingBtns">
             <button class="fc-simple-btn fc-dont-know" onclick="handleFlashcardRating(0)">
-                <span class="fc-btn-icon">❌</span>
-                <span class="fc-btn-text">Inte än<br>لا أعرفها</span>
+                <span class="fc-btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                        style="color: white;">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </span>
+                <span class="fc-btn-text">Inte än / لا أعرفها</span>
             </button>
             <button class="fc-simple-btn fc-know" onclick="handleFlashcardRating(4)">
-                <span class="fc-btn-icon">✅</span>
-                <span class="fc-btn-text">Kan det<br>أعرفها</span>
+                <span class="fc-btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                        style="color: white;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </span>
+                <span class="fc-btn-text">Kan det / أعرفها</span>
             </button>
         </div>
 
@@ -1091,6 +1104,7 @@
             loadDailyChallenge();
         });
     </script>
+    <script src="utils.js"></script>
     <script src="pwa.js" defer></script>
 </body>
 

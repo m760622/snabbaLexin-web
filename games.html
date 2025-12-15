@@ -387,6 +387,8 @@
                 <option value="preposition">📍 Preposition / حرف جر</option>
             </select>
             <div class="fc-mastery-badge" id="flashcardMastery">❄️ Box 1</div>
+            <button id="fcAutoPlayToggle" class="fc-autoplay-btn" onclick="toggleAutoPlay()"
+                title="Toggle Auto-play">🔊</button>
         </div>
 
         <!-- Swipe Hint -->
@@ -397,6 +399,9 @@
         </div>
 
         <div class="flashcard-container fc-container-pro">
+            <!-- Segmented Progress Bar -->
+            <div class="fc-progress-segmented" id="fcSegmentedProgress"></div>
+
             <div class="flashcard fc-card-pro" id="flashcard">
                 <div class="fc-front-pro">
                     <span class="fc-type-badge" id="flashcardType"></span>

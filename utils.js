@@ -2849,6 +2849,92 @@ const LongPressTTS = {
     }
 };
 
+// ========================================
+// Sound Manager
+// ========================================
+const SoundManager = {
+    sounds: {
+        flip: new Audio('assets/sounds/flip.mp3'), // Placeholder paths, will need files or base64
+        success: new Audio('assets/sounds/success.mp3'),
+        error: new Audio('assets/sounds/error.mp3'),
+        click: new Audio('assets/sounds/click.mp3')
+    },
+
+    // Base64 fallbacks for essential sounds (short "pop" and "ding")
+    // Using very short data URIs to ensure functionality without external files
+    base64Sounds: {
+        flip: 'data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...', // Placeholder
+        // Actually, let's use the Web Audio API for synthesized sounds to avoid file dependency
+    },
+
+    ctx: null,
+
+    init() {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                this.ctx = new AudioContext();
+            }
+        } catch (e) {
+            console.warn('Web Audio API not supported');
+        }
+    },
+
+    play(type) {
+        if (!this.ctx) this.init();
+        if (!this.ctx) return;
+
+        // Resume context if suspended (browser autoplay policy)
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        const now = this.ctx.currentTime;
+
+        if (type === 'flip') {
+            // Whoosh sound (filtered noise or sliding tone)
+            // Simulating with simple sine slide
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+            osc.start(now);
+            osc.stop(now + 0.1);
+        } else if (type === 'success') {
+            // Ding!
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, now);
+            osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+            osc.start(now);
+            osc.stop(now + 0.5);
+        } else if (type === 'error') {
+            // Bonnet/Buzzer
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        } else if (type === 'click') {
+            // Click
+            osc.frequency.setValueAtTime(400, now);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.start(now);
+            osc.stop(now + 0.05);
+        }
+    }
+};
+
 // Auto-initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
     ThemeManager.init();

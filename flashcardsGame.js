@@ -91,20 +91,7 @@ const LeitnerSystem = {
 // ========================================
 // Haptic Feedback
 // ========================================
-const HapticFeedback = {
-    trigger(type = 'light') {
-        if ('vibrate' in navigator) {
-            const patterns = {
-                light: [10],
-                medium: [20],
-                heavy: [30],
-                success: [10, 50, 20],
-                error: [50, 30, 50]
-            };
-            navigator.vibrate(patterns[type] || patterns.light);
-        }
-    }
-};
+// HapticFeedback replaced by global HapticManager in utils.js
 
 // ========================================
 // Confetti Effect
@@ -196,6 +183,7 @@ function initFlashcards() {
 
     // Update progress display
     updateProgressRing(0);
+    initSegmentedProgress(); // Initialize segments
     document.getElementById('flashcardProgress').textContent = `0/${flashcardTotal}`;
 
     // Reset flashcard state
@@ -213,7 +201,42 @@ function initFlashcards() {
 }
 
 // ========================================
-// Progress Ring Update
+// Segmented Progress Bar
+// ========================================
+function initSegmentedProgress() {
+    const container = document.getElementById('fcSegmentedProgress');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    // Create segments
+    for (let i = 0; i < flashcardTotal; i++) {
+        const segment = document.createElement('div');
+        segment.className = 'fc-progress-segment';
+        segment.id = `fc-seg-${i}`;
+        container.appendChild(segment);
+    }
+}
+
+function updateSegmentedProgress(index, status) {
+    const segment = document.getElementById(`fc-seg-${index}`);
+    if (!segment) return;
+
+    // Clear active state from all
+    document.querySelectorAll('.fc-progress-segment').forEach(s => s.classList.remove('active'));
+
+    if (status) {
+        // Result: correct or wrong
+        segment.classList.add('completed');
+        segment.classList.add(status); // 'correct' or 'wrong'
+    } else {
+        // New active
+        segment.classList.add('active');
+    }
+}
+
+// ========================================
+// Progress Ring Update (Legacy/Header)
 // ========================================
 function updateProgressRing(progress) {
     const ring = document.querySelector('.fc-progress-ring-circle');
@@ -259,7 +282,8 @@ function setupSwipeGestures() {
 
         if (Math.abs(diff) > 100) {
             // Swipe detected
-            HapticFeedback.trigger('medium');
+            // Swipe detected
+            if (typeof HapticManager !== 'undefined') HapticManager.trigger('medium');
             if (diff > 0) {
                 handleFlashcardRating(4); // Swipe right = Know
             } else {
@@ -293,7 +317,10 @@ function flipFlashcard() {
     if (!flashcard) return;
 
     flashcard.classList.toggle('flipped');
-    HapticFeedback.trigger('light');
+
+    // Pro Feel: Haptic + Sound
+    if (typeof HapticManager !== 'undefined') HapticManager.trigger('selection');
+    if (typeof SoundManager !== 'undefined') SoundManager.play('flip');
 
     // Buttons are now always visible, no need to toggle display
 }
@@ -318,6 +345,9 @@ function showNextFlashcard() {
 
     // Start timing
     cardStartTime = Date.now();
+
+    // Update Segmented Progress (Active)
+    updateSegmentedProgress(flashcardIndex, null);
 
     // Populate Data
     const wordEl = document.getElementById('flashcardWord');
@@ -351,6 +381,16 @@ function showNextFlashcard() {
     const typeEl = document.getElementById('flashcardType');
     if (typeEl) {
         typeEl.textContent = wordType;
+    }
+
+    // Shimmer effect for Mastered words (Box 5)
+    const flashcardEl = document.getElementById('flashcard');
+    if (flashcardEl) {
+        if (box >= 5) {
+            flashcardEl.classList.add('shimmering');
+        } else {
+            flashcardEl.classList.remove('shimmering');
+        }
     }
 
     // --- POPULATE BACK OF CARD ---
@@ -408,11 +448,56 @@ function showNextFlashcard() {
 
     // Auto TTS - speak Swedish word
     setTimeout(() => {
-        if (typeof TTSManager !== 'undefined') {
+        if (typeof TTSManager !== 'undefined' && isAutoPlayEnabled) {
             TTSManager.speak(swedishWord, 'sv');
         }
-    }, 300);
+    }, 500); // Slight delay for transition
 
+}
+
+// ========================================
+// Auto-Play Settings
+// ========================================
+let isAutoPlayEnabled = localStorage.getItem('fc_autoplay') !== 'false'; // Default true
+
+function toggleAutoPlay() {
+    isAutoPlayEnabled = !isAutoPlayEnabled;
+    localStorage.setItem('fc_autoplay', isAutoPlayEnabled);
+    updateAutoPlayButton();
+
+    // Feedback
+    if (typeof showToast === 'function') {
+        showToast(isAutoPlayEnabled ? 'Auto-play: PÅ 🔊' : 'Auto-play: AV 🔇');
+    }
+}
+
+function updateAutoPlayButton() {
+    const btn = document.getElementById('fcAutoPlayToggle');
+    if (btn) {
+        btn.textContent = isAutoPlayEnabled ? '🔊' : '🔇';
+        btn.classList.toggle('muted', !isAutoPlayEnabled);
+    }
+}
+
+// Initialize button state on load
+// (Call this in initFlashcards or global scope)
+document.addEventListener('DOMContentLoaded', updateAutoPlayButton);
+
+// ========================================
+// Next Review Toast
+// ========================================
+function showNextReviewToast(box, isCorrect) {
+    if (typeof showToast !== 'function') return;
+
+    // Boxes: 1 (Daily), 2 (3d), 3 (7d), 4 (14d), 5 (30d)
+    const intervals = [1, 3, 7, 14, 30];
+    const days = intervals[box - 1] || 1;
+
+    const msg = isCorrect
+        ? `Bra! Nästa repetition om ${days} dagar (Box ${box})`
+        : `Repetition imorgon (Box 1)`;
+
+    showToast(msg, 2000);
 }
 
 // ========================================
@@ -449,13 +534,20 @@ function handleFlashcardRatingInternal(rating) {
         LeitnerSystem.promoteWord(wordId);
         flashcardScore++;
         sessionStats.correct++;
-        HapticFeedback.trigger('success');
+        if (typeof HapticManager !== 'undefined') HapticManager.trigger('success');
+        if (typeof SoundManager !== 'undefined') SoundManager.play('success');
+        updateSegmentedProgress(flashcardIndex, 'correct');
+        const newBox = LeitnerSystem.getWordBox(wordId); // already promoted
+        showNextReviewToast(newBox, true);
     } else {
         // Hard or Again - demote
         console.log(`Rating ${rating} (Hard/Again), demoting word ${wordId}`);
         LeitnerSystem.demoteWord(wordId);
         sessionStats.wrong++;
-        HapticFeedback.trigger('error');
+        if (typeof HapticManager !== 'undefined') HapticManager.trigger('error');
+        if (typeof SoundManager !== 'undefined') SoundManager.play('error');
+        updateSegmentedProgress(flashcardIndex, 'wrong');
+        showNextReviewToast(1, false);
     }
 
     // Add to favorites if struggling (rating 0)
@@ -508,7 +600,8 @@ function finishFlashcards() {
     // Trigger confetti for good performance
     if (percentage >= 70) {
         triggerConfetti();
-        HapticFeedback.trigger('success');
+        if (typeof HapticManager !== 'undefined') HapticManager.trigger('success');
+        if (typeof SoundManager !== 'undefined') SoundManager.play('success');
     }
 
     // Show results

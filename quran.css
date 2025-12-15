@@ -104,6 +104,7 @@
 }
 
 /* Grey (Slate) */
+/* Grey (Slate) */
 [data-quran-theme="slate"] {
     --quran-gold: #f1f5f9;
     /* Slate 100 */
@@ -120,6 +121,14 @@ body {
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
     transition: background 0.5s ease;
+}
+
+body.iphone-view {
+    max-width: 430px;
+    margin: 0 auto;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
 }
 
 /* Header */

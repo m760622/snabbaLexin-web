@@ -21,232 +21,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileToggleBtn = document.getElementById('mobileToggleBtn');
 
     // --- Mobile Toggle ---
+    window.toggleMobileView = function () {
+        document.body.classList.toggle('iphone-view');
+        const isActive = document.body.classList.contains('iphone-view');
+        localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+
+        const btn = document.getElementById('mobileToggleBtn');
+        if (btn) btn.classList.toggle('active', isActive);
+
+        // Force resize trigger for charts/layout
+        window.dispatchEvent(new Event('resize'));
+    };
+
+    // Apply saved mobile preference
+    if (localStorage.getItem('mobileView') === 'true') {
+        document.body.classList.add('iphone-view');
+        if (mobileToggleBtn) mobileToggleBtn.classList.add('active');
+    }
+
     if (mobileToggleBtn) {
-        mobileToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('mobile-view');
-            // Optional: Save preference?
-        });
+        mobileToggleBtn.addEventListener('click', toggleMobileView);
     }
 
     // --- State & SRS Data ---
     let currentMode = 'list';
+    /* ... existing code ... */
 
-    // Default User Data
-    let userData = {
-        xp: 0,
-        streak: 0,
-        srs: {}, // { wordId: { level: 0, nextReview: timestamp } }
-        favorites: [], // [wordId, wordId...]
-        theme: 'emerald'
-    };
-
-    // Load from LocalStorage
-    const savedData = localStorage.getItem('quranUserProgress');
-    if (savedData) {
-        userData = { ...userData, ...JSON.parse(savedData) };
-        // Ensure favorites array exists if loading old data
-        if (!userData.favorites) userData.favorites = [];
-    }
-
-    // Apply Saved Theme
-    applyTheme(userData.theme);
-    if (themeSelector) themeSelector.value = userData.theme;
-
-    // Flashcard State
-    let fcIndex = 0;
-    let fcFlipped = false;
-    let filteredData = [...quranData]; // Working dataset
-
-    // Quiz State
-    let quizScore = 0;
-    let quizStreak = 0; // Session streak
-    let currentQuizItem = null;
-    let quizDirection = 'ar-sv'; // 'ar-sv' or 'sv-ar'
-
-    // --- Initialization ---
-    initFilters();
-    initTheme();
-    updateXPDisplay();
-    renderCards(quranData);
-    initTabs();
-    initFlashcards();
-    initQuiz();
-
-    // Helper: Save Data
-    function saveProgress() {
-        localStorage.setItem('quranUserProgress', JSON.stringify(userData));
-        updateXPDisplay();
-    }
-
-    function updateXPDisplay() {
-        if (userXPEl) userXPEl.textContent = userData.xp;
-    }
-
-    // --- Theme Logic ---
-    function initTheme() {
-        themeSelector.addEventListener('change', (e) => {
-            const newTheme = e.target.value;
-            applyTheme(newTheme);
-            userData.theme = newTheme;
-            saveProgress();
-        });
-    }
-
-    function applyTheme(theme) {
-        if (theme === 'emerald') {
-            document.body.removeAttribute('data-quran-theme');
-        } else {
-            document.body.setAttribute('data-quran-theme', theme);
-        }
-    }
-
-    // --- Filter Logic ---
-    function initFilters() {
-        // Populate Surah Filter
-        const uniqueSurahs = [...new Set(quranData.map(item => item.surah))];
-        uniqueSurahs.forEach(surah => {
-            const opt = document.createElement('option');
-            opt.value = surah;
-            opt.textContent = surah;
-            surahFilter.appendChild(opt);
-        });
-
-        // Event Listeners
-        surahFilter.addEventListener('change', filterData);
-        document.getElementById('typeFilter').addEventListener('change', filterData); // Add Type Listener
-    }
-
-    function filterData() {
-        const query = searchInput.value.toLowerCase();
-        const surah = surahFilter.value;
-        const type = document.getElementById('typeFilter').value; // Get Type Value
-
-        filteredData = quranData.filter(item => {
-            const matchesSearch =
-                item.word.includes(query) ||
-                item.word_sv.toLowerCase().includes(query) ||
-                item.meaning_ar.includes(query) ||
-                item.ayah_full.includes(query);
-
-            const matchesSurah = surah === 'all'
-                ? true
-                : surah === 'favorites'
-                    ? userData.favorites.includes(item.id)
-                    : item.surah === surah;
-
-            // Type Check (Handle 'word' as implicit 'other' if needed, or strict match)
-            // Our script defaults to 'word' if unknown.
-            const matchesType = type === 'all' || item.type === type;
-
-            return matchesSearch && matchesSurah && matchesType;
-        });
-
-        // Re-render based on current mode
-        if (currentMode === 'list') renderCards(filteredData);
-        if (currentMode === 'flashcards') {
-            fcIndex = 0;
-            loadFlashcard(fcIndex);
-        }
-    }
-
-    // --- Tab Logic ---
-    function initTabs() {
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tabBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                switchMode(btn.dataset.mode);
-            });
-        });
-    }
-
-    function switchMode(mode) {
-        currentMode = mode;
-        Object.values(modeContainers).forEach(el => el.classList.add('hidden'));
-        modeContainers[mode].classList.remove('hidden');
-
-        // Toggle Filter Bar Visibility (Show in List/Cards, Hide in Quiz)
-        if (mode === 'quiz') {
-            filterBar.classList.add('hidden');
-            // Check if we need to start quiz
-            if (!currentQuizItem) nextQuestion();
-        } else {
-            filterBar.classList.remove('hidden');
-            if (mode === 'flashcards') {
-                // Determine sort order? For now just use filtered list
-                // SRS Feature: Could sort by 'Level' here
-                loadFlashcard(fcIndex);
-            }
-        }
-    }
-
-    // --- List & Search ---
-    searchInput.addEventListener('input', filterData);
-
-    function renderCards(items) {
-        listContainer.innerHTML = '';
-
-        if (items.length === 0) {
-            listContainer.innerHTML = '<div style="text-align:center; color:#ccc; padding:2rem;">Inga resultat hittades</div>';
-            return;
-        }
-
-        // Optimize rendering with fragment
-        const fragment = document.createDocumentFragment();
-
-        items.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'quran-card';
-
-            // Highlight
-            let displayAyah = item.ayah_full;
-            if (item.word && displayAyah.includes(item.word)) {
-                displayAyah = displayAyah.replace(item.word, `<span class="highlight-word">${item.word}</span>`);
-            }
-
-            // Audio Buttons HTML
-            const svAudioBtn = `<button class="audio-btn" onclick="playTTS('${item.word_sv}', 'sv-SE', this)">🔊</button>`;
-
-            // Arabic Audio (Placeholder logic - uses TTS for now, ideally external MP3)
-            const arAudioBtn = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this)">🕌</button>`;
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <span class="surah-badge">${item.surah}</span>
-                    <span class="card-number">#${item.id}</span>
-                </div>
-                
-                <div class="main-word-section">
-                    <span class="target-word">${item.word}</span>
-                    <span class="meaning-ar">${item.meaning_ar}</span>
-                    <span class="word-sv">${item.word_sv} ${svAudioBtn}</span>
-                </div>
-
-                <div class="ayah-section">
-                    <div class="ayah-full">${displayAyah} ${arAudioBtn}</div>
-                    <div class="ayah-sv">${item.ayah_sv}</div>
-                </div>
-            `;
-            fragment.appendChild(card);
-        });
-
-        listContainer.appendChild(fragment);
-    }
+    /* ... (Lines 35-236 skipped in replacement context, keeping structure) ... */
 
     // --- Audio Logic ---
     window.playTTS = function (text, lang, btn) {
-        if (btn) btn.classList.add('playing');
+        if (btn) {
+            btn.classList.add('playing');
+            // Remove playing class after animation
+            setTimeout(() => btn.classList.remove('playing'), 2000);
+        }
 
-        // Use global TTSManager if available, else fallback
-        if (window.TTSManager) {
-            window.TTSManager.speak(text, lang);
-            // Simple timeout to remove animation
-            setTimeout(() => btn?.classList.remove('playing'), 2000);
+        // Use unified TTSManager from utils.js
+        if (typeof TTSManager !== 'undefined') {
+            TTSManager.speak(text, lang);
         } else {
-            // Fallback
+            console.warn('TTSManager not found, using fallback.');
             const u = new SpeechSynthesisUtterance(text);
             u.lang = lang;
-            u.onend = () => btn?.classList.remove('playing');
             window.speechSynthesis.speak(u);
         }
     };

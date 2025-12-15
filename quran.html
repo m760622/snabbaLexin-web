@@ -22,30 +22,15 @@
                     <path d="M19 12H5M12 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </button>
+            <!-- Mobile Toggle (Relocated) -->
+            <button id="mobileToggleBtn" class="mobile-toggle-btn" aria-label="Mobile View"
+                style="margin-left: 0.5rem; margin-right: 0.5rem;">
+                📱
+            </button>
             <span class="quran-icon">📖</span>
             <h1 class="quran-title">Koranord</h1>
         </div>
 
-        <div class="header-controls">
-            <!-- Theme Selector (Relocated) -->
-            <select id="themeSelector" class="glass-select mini">
-                <option value="emerald">🌲 Emerald</option>
-                <option value="oasis">🌴 Oasis</option>
-                <option value="sky">☁️ Himmel</option>
-                <option value="ocean">🌊 Hav</option>
-                <option value="navy">🌌 Nattblå</option>
-                <option value="obsidian">⚫ Svart</option>
-                <option value="slate">🗿 Grå</option>
-                <option value="midnight">🌠 Midnight</option>
-                <option value="sunset">🌅 Sunset</option>
-                <option value="amethyst">🔮 Amethyst</option>
-            </select>
-
-            <!-- Mobile Toggle -->
-            <button id="mobileToggleBtn" class="mobile-toggle-btn" aria-label="Mobile View">
-                📱
-            </button>
-        </div>
     </header>
 
     <div class="search-container">
@@ -54,6 +39,19 @@
 
     <!-- Mode Tabs -->
     <div class="mode-tabs">
+        <!-- Theme Selector (Relocated) -->
+        <select id="themeSelector" class="glass-select mini">
+            <option value="emerald">🌲 Emerald</option>
+            <option value="oasis">🌴 Oasis</option>
+            <option value="sky">☁️ Himmel</option>
+            <option value="ocean">🌊 Hav</option>
+            <option value="navy">🌌 Nattblå</option>
+            <option value="obsidian">⚫ Svart</option>
+            <option value="slate">🗿 Grå</option>
+            <option value="midnight">🌠 Midnight</option>
+            <option value="sunset">🌅 Sunset</option>
+            <option value="amethyst">🔮 Amethyst</option>
+        </select>
         <button class="tab-btn active" data-mode="list">📜 Lista</button>
         <button class="tab-btn" data-mode="flashcards">🗂️ Kort</button>
         <button class="tab-btn" data-mode="quiz">❓ Quiz</button>
@@ -62,17 +60,18 @@
     <!-- Filter Bar (Visible in List & Flashcards) -->
     <div class="filter-bar" id="filterBar">
         <select id="surahFilter" class="glass-select">
-            <option value="all">Alla Suror / كل السور</option>
+            <option value="all">Alla Suror</option>
             <option value="favorites">⭐ Favoriter / المفضلة</option>
             <!-- Populated via JS -->
         </select>
         <select id="typeFilter" class="glass-select">
-            <option value="all">Alla Typer / كل الأنواع</option>
-            <option value="noun">Substantiv / اسم</option>
-            <option value="verb">Verb / فعل</option>
-            <option value="adjective">Adjektiv/Adverb / صفة/حال</option>
-            <option value="phrase">Fras / عبارة</option>
-            <option value="word">Ord / كلمة</option>
+            <option value="all">Alla Typer</option>
+            <option value="word">Ord (Glossor)</option>
+            <option value="verb">Verb (Verber)</option>
+            <option value="noun">Substantiv (Namn)</option>
+            <option value="adjective">Adjektiv (Beskrivning)</option>
+            <option value="adverb">Adverb</option>
+            <option value="phrase">Fraser (Meningar)</option>
         </select>
     </div>
 

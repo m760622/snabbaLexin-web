@@ -6,7 +6,8 @@ const quranData = [
         "meaning_ar": "يسأل بعضهم بعضاً",
         "word_sv": "Frågar varandra",
         "ayah_full": "عَمَّ يَتَسَاءَلُونَ",
-        "ayah_sv": "Vad är det de frågar varandra om"
+        "ayah_sv": "Vad är det de frågar varandra om",
+        "type": "phrase"
     },
     {
         "id": "2",
@@ -15,7 +16,8 @@ const quranData = [
         "meaning_ar": "الخبر العظيم",
         "word_sv": "Den stora nyheten",
         "ayah_full": "عَنِ النَّبَأِ الْعَظِيمِ",
-        "ayah_sv": "[De frågar] om den stora nyheten"
+        "ayah_sv": "[De frågar] om den stora nyheten",
+        "type": "noun"
     },
     {
         "id": "3",
@@ -24,7 +26,8 @@ const quranData = [
         "meaning_ar": "ممهدة كالفراش",
         "word_sv": "Bädd / Viloplats",
         "ayah_full": "أَلَمْ نَجْعَلِ الْأَرْضَ مِهَادًا",
-        "ayah_sv": "Har Vi inte gjort jorden till en bädd"
+        "ayah_sv": "Har Vi inte gjort jorden till en bädd",
+        "type": "phrase"
     },
     {
         "id": "4",
@@ -33,7 +36,8 @@ const quranData = [
         "meaning_ar": "رواسي تثبت الأرض",
         "word_sv": "Pålar",
         "ayah_full": "وَالْجِبَالَ أَوْتَادًا",
-        "ayah_sv": "och bergen till pålar"
+        "ayah_sv": "och bergen till pålar",
+        "type": "noun"
     },
     {
         "id": "5",
@@ -42,7 +46,8 @@ const quranData = [
         "meaning_ar": "أصنافاً (ذكراً وأنثى)",
         "word_sv": "I par",
         "ayah_full": "وَخَلَقْنَاكُمْ أَزْوَاجًا",
-        "ayah_sv": "och Vi har skapat er i par"
+        "ayah_sv": "och Vi har skapat er i par",
+        "type": "phrase"
     },
     {
         "id": "6",
@@ -51,7 +56,8 @@ const quranData = [
         "meaning_ar": "راحة للأبدان",
         "word_sv": "Vila",
         "ayah_full": "وَجَعَلْنَا نَوْمَكُمْ سُبَاتًا",
-        "ayah_sv": "och gjort sömnen till vila för er"
+        "ayah_sv": "och gjort sömnen till vila för er",
+        "type": "word"
     },
     {
         "id": "7",
@@ -60,7 +66,8 @@ const quranData = [
         "meaning_ar": "ساتراً بظلامه",
         "word_sv": "Klädnad",
         "ayah_full": "وَجَعَلْنَا اللَّيْلَ لِبَاسًا",
-        "ayah_sv": "och gjort natten till en klädnad"
+        "ayah_sv": "och gjort natten till en klädnad",
+        "type": "noun"
     },
     {
         "id": "8",
@@ -69,7 +76,8 @@ const quranData = [
         "meaning_ar": "وقتاً للسعي والرزق",
         "word_sv": "Tid för utkomst",
         "ayah_full": "وَجَعَلْنَا النَّهَارَ مَعَاشًا",
-        "ayah_sv": "och gjort dagen till en tid för utkomst"
+        "ayah_sv": "och gjort dagen till en tid för utkomst",
+        "type": "phrase"
     },
     {
         "id": "9",
@@ -78,7 +86,8 @@ const quranData = [
         "meaning_ar": "قوية محكمة",
         "word_sv": "Fasta (himlar)",
         "ayah_full": "وَبَنَيْنَا فَوْقَكُمْ سَبْعًا شِدَادًا",
-        "ayah_sv": "Och ovanför er har Vi byggt sju fasta [himlar]"
+        "ayah_sv": "Och ovanför er har Vi byggt sju fasta [himlar]",
+        "type": "phrase"
     },
     {
         "id": "10",
@@ -87,7 +96,8 @@ const quranData = [
         "meaning_ar": "مصباحاً (الشمس)",
         "word_sv": "Lampa (Solen)",
         "ayah_full": "وَجَعَلْنَا سِرَاجًا وَهَّاجًا",
-        "ayah_sv": "och hängt upp en flammande lampa"
+        "ayah_sv": "och hängt upp en flammande lampa",
+        "type": "phrase"
     },
     {
         "id": "11",
@@ -96,7 +106,8 @@ const quranData = [
         "meaning_ar": "مضيئاً متوقداً",
         "word_sv": "Flammande",
         "ayah_full": "وَجَعَلْنَا سِرَاجًا وَهَّاجًا",
-        "ayah_sv": "och hängt upp en flammande lampa"
+        "ayah_sv": "och hängt upp en flammande lampa",
+        "type": "adjective"
     },
     {
         "id": "12",
@@ -105,7 +116,8 @@ const quranData = [
         "meaning_ar": "السحب الممطرة",
         "word_sv": "Regnmoln",
         "ayah_full": "وَأَنزَلْنَا مِنَ الْمُعْصِرَاتِ مَاءً ثَجَّاجًا",
-        "ayah_sv": "och [att Vi] låter regn flöda ur de tunga molnen"
+        "ayah_sv": "och [att Vi] låter regn flöda ur de tunga molnen",
+        "type": "noun"
     },
     {
         "id": "13",
@@ -114,7 +126,8 @@ const quranData = [
         "meaning_ar": "منصبّاً بكثرة",
         "word_sv": "Flödande",
         "ayah_full": "وَأَنزَلْنَا مِنَ الْمُعْصِرَاتِ مَاءً ثَجَّاجًا",
-        "ayah_sv": "och [att Vi] låter regn flöda ur de tunga molnen"
+        "ayah_sv": "och [att Vi] låter regn flöda ur de tunga molnen",
+        "type": "adjective"
     },
     {
         "id": "14",
@@ -123,7 +136,8 @@ const quranData = [
         "meaning_ar": "ملتفة الأشجار",
         "word_sv": "Täta (snår)",
         "ayah_full": "وَجَنَّاتٍ أَلْفَافًا",
-        "ayah_sv": "och lummiga trädgårdar"
+        "ayah_sv": "och lummiga trädgårdar",
+        "type": "phrase"
     },
     {
         "id": "15",
@@ -132,7 +146,8 @@ const quranData = [
         "meaning_ar": "وقتاً محدداً",
         "word_sv": "En fastställd tid",
         "ayah_full": "إِنَّ يَوْمَ الْفَصْلِ كَانَ مِيقَاتًا",
-        "ayah_sv": "Åtskillnadens dag är sannerligen en fastställd tid"
+        "ayah_sv": "Åtskillnadens dag är sannerligen en fastställd tid",
+        "type": "noun"
     },
     {
         "id": "16",
@@ -141,7 +156,8 @@ const quranData = [
         "meaning_ar": "شقت لنزول الملائكة",
         "word_sv": "Öppnas",
         "ayah_full": "وَفُتِحَتِ السَّمَاءُ فَكَانَتْ أَبْوَابًا",
-        "ayah_sv": "Och himlen öppnas med portar på glänt"
+        "ayah_sv": "Och himlen öppnas med portar på glänt",
+        "type": "noun"
     },
     {
         "id": "17",
@@ -150,7 +166,8 @@ const quranData = [
         "meaning_ar": "نسفت من أماكنها",
         "word_sv": "Sätts i rörelse",
         "ayah_full": "وَسُيِّرَتِ الْجِبَالُ فَكَانَتْ سَرَابًا",
-        "ayah_sv": "och bergen sätts i rörelse och blir en hägring"
+        "ayah_sv": "och bergen sätts i rörelse och blir en hägring",
+        "type": "phrase"
     },
     {
         "id": "18",
@@ -159,7 +176,8 @@ const quranData = [
         "meaning_ar": "مكاناً للترصد",
         "word_sv": "Bakhåll",
         "ayah_full": "إِنَّ جَهَنَّمَ كَانَتْ مِرْصَادًا",
-        "ayah_sv": "Helvetet ligger i bakhåll"
+        "ayah_sv": "Helvetet ligger i bakhåll",
+        "type": "noun"
     },
     {
         "id": "19",
@@ -168,7 +186,8 @@ const quranData = [
         "meaning_ar": "مرجعاً ومأوى",
         "word_sv": "Hemvist",
         "ayah_full": "لِّلطَّاغِينَ مَآبًا",
-        "ayah_sv": "en hemvist för de trotsiga syndarna"
+        "ayah_sv": "en hemvist för de trotsiga syndarna",
+        "type": "noun"
     },
     {
         "id": "20",
@@ -177,7 +196,8 @@ const quranData = [
         "meaning_ar": "دهوراً لا تنقطع",
         "word_sv": "Tidevarv",
         "ayah_full": "لَّابِثِينَ فِيهَا أَحْقَابًا",
-        "ayah_sv": "där de skall förbli under långa tidevarv"
+        "ayah_sv": "där de skall förbli under långa tidevarv",
+        "type": "noun"
     },
     {
         "id": "21",
@@ -186,7 +206,8 @@ const quranData = [
         "meaning_ar": "نومًا أو راحة",
         "word_sv": "Svalka",
         "ayah_full": "لَّا يَذُوقُونَ فِيهَا بَرْدًا وَلَا شَرَابًا",
-        "ayah_sv": "där de varken skall finna svalka eller dryck"
+        "ayah_sv": "där de varken skall finna svalka eller dryck",
+        "type": "word"
     },
     {
         "id": "22",
@@ -195,7 +216,8 @@ const quranData = [
         "meaning_ar": "صديد أهل النار",
         "word_sv": "Var / Vätska",
         "ayah_full": "إِلَّا حَمِيمًا وَغَسَّاقًا",
-        "ayah_sv": "utom skållhett vatten och en vätska av var"
+        "ayah_sv": "utom skållhett vatten och en vätska av var",
+        "type": "phrase"
     },
     {
         "id": "23",
@@ -204,7 +226,8 @@ const quranData = [
         "meaning_ar": "موافقاً للعمل",
         "word_sv": "Rättvis",
         "ayah_full": "جَزَاءً وِفَاقًا",
-        "ayah_sv": "en rättvis lön [för vad de gjorde]"
+        "ayah_sv": "en rättvis lön [för vad de gjorde]",
+        "type": "noun"
     },
     {
         "id": "24",
@@ -213,7 +236,8 @@ const quranData = [
         "meaning_ar": "تكذيباً شديداً",
         "word_sv": "Förnekande",
         "ayah_full": "وَكَذَّبُوا بِآيَاتِنَا كِذَّابًا",
-        "ayah_sv": "och de förnekade envist Våra budskap"
+        "ayah_sv": "och de förnekade envist Våra budskap",
+        "type": "adjective"
     },
     {
         "id": "25",
@@ -222,7 +246,8 @@ const quranData = [
         "meaning_ar": "بارزة الثدي",
         "word_sv": "Ungmöar",
         "ayah_full": "وَكَوَاعِبَ أَتْرَابًا",
-        "ayah_sv": "och ungmöar av samma ålder"
+        "ayah_sv": "och ungmöar av samma ålder",
+        "type": "noun"
     },
     {
         "id": "26",
@@ -231,7 +256,8 @@ const quranData = [
         "meaning_ar": "ممتلئة صافية",
         "word_sv": "Bräddfulla",
         "ayah_full": "وَكَأْسًا دِهَاقًا",
-        "ayah_sv": "och bägare bräddfulla [med dryck]"
+        "ayah_sv": "och bägare bräddfulla [med dryck]",
+        "type": "word"
     },
     {
         "id": "27",
@@ -240,7 +266,8 @@ const quranData = [
         "meaning_ar": "كلاماً باطلاً",
         "word_sv": "Tomt tal",
         "ayah_full": "لَّا يَسْمَعُونَ فِيهَا لَغْوًا وَلَا كِذَّابًا",
-        "ayah_sv": "Där skall de inte höra tomt tal eller lögner"
+        "ayah_sv": "Där skall de inte höra tomt tal eller lögner",
+        "type": "phrase"
     },
     {
         "id": "28",
@@ -249,7 +276,8 @@ const quranData = [
         "meaning_ar": "مصطفين",
         "word_sv": "På rad",
         "ayah_full": "يَوْمَ يَقُومُ الرُّوحُ وَالْمَلَائِكَةُ صَفًّا",
-        "ayah_sv": "Den Dag då Ängeln och änglarna står uppställda på rad"
+        "ayah_sv": "Den Dag då Ängeln och änglarna står uppställda på rad",
+        "type": "phrase"
     },
     {
         "id": "29",
@@ -258,7 +286,8 @@ const quranData = [
         "meaning_ar": "انتزاع الروح بشدة",
         "word_sv": "Sliter (våldsamt)",
         "ayah_full": "وَالنَّازِعَاتِ غَرْقًا",
-        "ayah_sv": "VID DEM som sliter [själarna ur de förhärdade syndarnas kroppar]"
+        "ayah_sv": "VID DEM som sliter [själarna ur de förhärdade syndarnas kroppar]",
+        "type": "phrase"
     },
     {
         "id": "30",
@@ -267,7 +296,8 @@ const quranData = [
         "meaning_ar": "اخراج الروح برفق",
         "word_sv": "Löser (varsamt)",
         "ayah_full": "وَالنَّاشِطَاتِ نَشْطًا",
-        "ayah_sv": "vid dem som varsamt löser [de goda själarna]"
+        "ayah_sv": "vid dem som varsamt löser [de goda själarna]",
+        "type": "phrase"
     },
     {
         "id": "31",
@@ -276,7 +306,8 @@ const quranData = [
         "meaning_ar": "السير السريع",
         "word_sv": "Svävar",
         "ayah_full": "وَالسَّابِحَاتِ سَبْحًا",
-        "ayah_sv": "vid dem som svävar fritt"
+        "ayah_sv": "vid dem som svävar fritt",
+        "type": "noun"
     },
     {
         "id": "32",
@@ -285,7 +316,8 @@ const quranData = [
         "meaning_ar": "المسارعة للأمر",
         "word_sv": "Ilart",
         "ayah_full": "فَالسَّابِقَاتِ سَبْقًا",
-        "ayah_sv": "och som ilar fram"
+        "ayah_sv": "och som ilar fram",
+        "type": "noun"
     },
     {
         "id": "33",
@@ -294,7 +326,8 @@ const quranData = [
         "meaning_ar": "النفخة الأولى",
         "word_sv": "Den första stöten",
         "ayah_full": "يَوْمَ تَرْجُفُ الرَّاجِفَةُ",
-        "ayah_sv": "En Dag skall [jorden] skakas av den första stöten"
+        "ayah_sv": "En Dag skall [jorden] skakas av den första stöten",
+        "type": "noun"
     },
     {
         "id": "34",
@@ -303,7 +336,8 @@ const quranData = [
         "meaning_ar": "النفخة الثانية",
         "word_sv": "Den andra stöten",
         "ayah_full": "تَتْبَعُهَا الرَّادِفَةُ",
-        "ayah_sv": "följd av den andra"
+        "ayah_sv": "följd av den andra",
+        "type": "noun"
     },
     {
         "id": "35",
@@ -312,7 +346,8 @@ const quranData = [
         "meaning_ar": "خائفة مضطربة",
         "word_sv": "Bävande",
         "ayah_full": "قُلُوبٌ يَوْمَئِذٍ وَاجِفَةٌ",
-        "ayah_sv": "Den Dagen skall människohjärtan bultande av ångest"
+        "ayah_sv": "Den Dagen skall människohjärtan bultande av ångest",
+        "type": "adjective"
     },
     {
         "id": "36",
@@ -321,7 +356,8 @@ const quranData = [
         "meaning_ar": "الحالة الأولى (الحياة)",
         "word_sv": "Tidigare tillstånd",
         "ayah_full": "أَإِنَّا لَمَرْدُودُونَ فِي الْحَافِرَةِ",
-        "ayah_sv": "Skall vi föras tillbaka till vårt tidigare tillstånd"
+        "ayah_sv": "Skall vi föras tillbaka till vårt tidigare tillstånd",
+        "type": "phrase"
     },
     {
         "id": "37",
@@ -330,7 +366,8 @@ const quranData = [
         "meaning_ar": "بالية متفتتة",
         "word_sv": "Murkna",
         "ayah_full": "عِظَامًا نَّخِرَةً",
-        "ayah_sv": "multna ben"
+        "ayah_sv": "multna ben",
+        "type": "noun"
     },
     {
         "id": "38",
@@ -339,7 +376,8 @@ const quranData = [
         "meaning_ar": "صيحة شديدة",
         "word_sv": "Ett enda rop",
         "ayah_full": "فَإِنَّمَا هِيَ زَجْرَةٌ وَاحِدَةٌ",
-        "ayah_sv": "Det skall bli ett enda rop"
+        "ayah_sv": "Det skall bli ett enda rop",
+        "type": "noun"
     },
     {
         "id": "39",
@@ -348,7 +386,8 @@ const quranData = [
         "meaning_ar": "وجه الأرض",
         "word_sv": "Den öppna vidden",
         "ayah_full": "فَإِذَا هُم بِالسَّاهِرَةِ",
-        "ayah_sv": "och se, de är alla samlade på den [öppna] vidden"
+        "ayah_sv": "och se, de är alla samlade på den [öppna] vidden",
+        "type": "noun"
     },
     {
         "id": "40",
@@ -357,7 +396,8 @@ const quranData = [
         "meaning_ar": "اسم الوادي",
         "word_sv": "Tuwa",
         "ayah_full": "بِالْوَادِ الْمُقَدَّسِ طُوًى",
-        "ayah_sv": "i den heliga dalen Tuwa"
+        "ayah_sv": "i den heliga dalen Tuwa",
+        "type": "word"
     },
     {
         "id": "41",
@@ -366,7 +406,8 @@ const quranData = [
         "meaning_ar": "تجاوز الحد",
         "word_sv": "Överträtt gränsen",
         "ayah_full": "اذْهَبْ إِلَىٰ فِرْعَوْنَ إِنَّهُ طَغَىٰ",
-        "ayah_sv": "Gå till Farao! Han har överträtt alla gränser"
+        "ayah_sv": "Gå till Farao! Han har överträtt alla gränser",
+        "type": "phrase"
     },
     {
         "id": "42",
@@ -375,7 +416,8 @@ const quranData = [
         "meaning_ar": "تتطهر",
         "word_sv": "Rena dig",
         "ayah_full": "فَقُلْ هَل لَّكَ إِلَىٰ أَن تَزَكَّىٰ",
-        "ayah_sv": "och säg: Är du villig att rena dig"
+        "ayah_sv": "och säg: Är du villig att rena dig",
+        "type": "phrase"
     },
     {
         "id": "43",
@@ -384,7 +426,8 @@ const quranData = [
         "meaning_ar": "ولّى معرضاً",
         "word_sv": "Vände ryggen till",
         "ayah_full": "ثُمَّ أَدْبَرَ يَسْعَىٰ",
-        "ayah_sv": "Vände han ryggen till och skyndade bort"
+        "ayah_sv": "Vände han ryggen till och skyndade bort",
+        "type": "phrase"
     },
     {
         "id": "44",
@@ -393,7 +436,8 @@ const quranData = [
         "meaning_ar": "سقفها/ارتفاعها",
         "word_sv": "Dess valv",
         "ayah_full": "رَفَعَ سَمْكَهَا فَسَوَّاهَا",
-        "ayah_sv": "Han har rest dess valv och format den"
+        "ayah_sv": "Han har rest dess valv och format den",
+        "type": "phrase"
     },
     {
         "id": "45",
@@ -402,7 +446,8 @@ const quranData = [
         "meaning_ar": "أظلم",
         "word_sv": "Förmörkat",
         "ayah_full": "وَأَغْطَشَ لَيْلَهَا وَأَخْرَجَ ضُحَاهَا",
-        "ayah_sv": "Han har låtit mörker täcka dess natt"
+        "ayah_sv": "Han har låtit mörker täcka dess natt",
+        "type": "noun"
     },
     {
         "id": "46",
@@ -411,7 +456,8 @@ const quranData = [
         "meaning_ar": "بسطها",
         "word_sv": "Brett ut den",
         "ayah_full": "وَالْأَرْضَ بَعْدَ ذَٰلِكَ دَحَاهَا",
-        "ayah_sv": "Och därefter har Han brett ut jorden"
+        "ayah_sv": "Och därefter har Han brett ut jorden",
+        "type": "phrase"
     },
     {
         "id": "47",
@@ -420,7 +466,8 @@ const quranData = [
         "meaning_ar": "ثبتها (الجبال)",
         "word_sv": "Stadgat den",
         "ayah_full": "وَالْجِبَالَ أَرْسَاهَا",
-        "ayah_sv": "och Han har stadgat bergen"
+        "ayah_sv": "och Han har stadgat bergen",
+        "type": "phrase"
     },
     {
         "id": "48",
@@ -429,7 +476,8 @@ const quranData = [
         "meaning_ar": "المصيبة العظمى",
         "word_sv": "Den stora prövningen",
         "ayah_full": "فَإِذَا جَاءَتِ الطَّامَّةُ الْكُبْرَىٰ",
-        "ayah_sv": "Men när den stora, avgörande prövningen kommer"
+        "ayah_sv": "Men när den stora, avgörande prövningen kommer",
+        "type": "noun"
     },
     {
         "id": "49",
@@ -438,7 +486,8 @@ const quranData = [
         "meaning_ar": "المسكن/المصير",
         "word_sv": "Härbärget",
         "ayah_full": "فَإِنَّ الْجَحِيمَ هِيَ الْمَأْوَىٰ",
-        "ayah_sv": "skall helvetet bli hans härbärge"
+        "ayah_sv": "skall helvetet bli hans härbärge",
+        "type": "noun"
     },
     {
         "id": "50",
@@ -447,7 +496,8 @@ const quranData = [
         "meaning_ar": "وقت وقوعها",
         "word_sv": "Inyträffa",
         "ayah_full": "أَيَّانَ مُرْسَاهَا",
-        "ayah_sv": "När skall den inträffa"
+        "ayah_sv": "När skall den inträffa",
+        "type": "word"
     },
     {
         "id": "51",
@@ -456,7 +506,8 @@ const quranData = [
         "meaning_ar": "وقت العصر/الغروب",
         "word_sv": "En afton",
         "ayah_full": "لَمْ يَلْبَثُوا إِلَّا عَشِيَّةً أَوْ ضُحَاهَا",
-        "ayah_sv": "som om de inte hade dröjt kvar mer än en afton"
+        "ayah_sv": "som om de inte hade dröjt kvar mer än en afton",
+        "type": "noun"
     },
     {
         "id": "52",
@@ -465,7 +516,8 @@ const quranData = [
         "meaning_ar": "قطب وجهه",
         "word_sv": "Rynkade pannan",
         "ayah_full": "عَبَسَ وَتَوَلَّىٰ",
-        "ayah_sv": "HAN RYNKADE pannan och vände sig bort"
+        "ayah_sv": "HAN RYNKADE pannan och vände sig bort",
+        "type": "phrase"
     },
     {
         "id": "53",
@@ -474,7 +526,8 @@ const quranData = [
         "meaning_ar": "أعرض",
         "word_sv": "Vände sig bort",
         "ayah_full": "عَبَسَ وَتَوَلَّىٰ",
-        "ayah_sv": "HAN RYNKADE pannan och vände sig bort"
+        "ayah_sv": "HAN RYNKADE pannan och vände sig bort",
+        "type": "phrase"
     },
     {
         "id": "54",
@@ -483,7 +536,8 @@ const quranData = [
         "meaning_ar": "الضرير",
         "word_sv": "Den blinde",
         "ayah_full": "أَن جَاءَهُ الْأَعْمَىٰ",
-        "ayah_sv": "därför att den blinde mannen kom till honom"
+        "ayah_sv": "därför att den blinde mannen kom till honom",
+        "type": "noun"
     },
     {
         "id": "55",
@@ -492,7 +546,8 @@ const quranData = [
         "meaning_ar": "يتطهر من الذنب",
         "word_sv": "Renad",
         "ayah_full": "وَمَا يُدْرِيكَ لَعَلَّهُ يَزَّكَّىٰ",
-        "ayah_sv": "Men vad kunde du veta? Han kanske ville bli renad"
+        "ayah_sv": "Men vad kunde du veta? Han kanske ville bli renad",
+        "type": "verb"
     },
     {
         "id": "56",
@@ -501,7 +556,8 @@ const quranData = [
         "meaning_ar": "تتعرض له وتقبل",
         "word_sv": "Ägnar uppmärksamhet",
         "ayah_full": "فَأَنتَ لَهُ تَصَدَّىٰ",
-        "ayah_sv": "ägnar du all uppmärksamhet"
+        "ayah_sv": "ägnar du all uppmärksamhet",
+        "type": "phrase"
     },
     {
         "id": "57",
@@ -510,7 +566,8 @@ const quranData = [
         "meaning_ar": "تنشغل عنه",
         "word_sv": "Låter dig distraheras",
         "ayah_full": "فَأَنتَ عَنْهُ تَلَهَّىٰ",
-        "ayah_sv": "låter du dig distraheras [av annat]"
+        "ayah_sv": "låter du dig distraheras [av annat]",
+        "type": "phrase"
     },
     {
         "id": "58",
@@ -519,7 +576,8 @@ const quranData = [
         "meaning_ar": "الكتبة (الملائكة)",
         "word_sv": "Händer (Änglar)",
         "ayah_full": "بِأَيْدِي سَفَرَةٍ",
-        "ayah_sv": "nedtecknade av [Änglarnas] händer"
+        "ayah_sv": "nedtecknade av [Änglarnas] händer",
+        "type": "phrase"
     },
     {
         "id": "59",
@@ -528,7 +586,8 @@ const quranData = [
         "meaning_ar": "أتقياء/صادقين",
         "word_sv": "Fromma",
         "ayah_full": "كِرَامٍ بَرَرَةٍ",
-        "ayah_sv": "ädla, fromma"
+        "ayah_sv": "ädla, fromma",
+        "type": "word"
     },
     {
         "id": "60",
@@ -537,7 +596,8 @@ const quranData = [
         "meaning_ar": "جعل له قبراً",
         "word_sv": "Lagt i graven",
         "ayah_full": "ثُمَّ أَمَاتَهُ فَأَقْبَرَهُ",
-        "ayah_sv": "Låter Han honom dö och läggas i graven"
+        "ayah_sv": "Låter Han honom dö och läggas i graven",
+        "type": "phrase"
     },
     {
         "id": "61",
@@ -546,7 +606,8 @@ const quranData = [
         "meaning_ar": "أحياه وبعثه",
         "word_sv": "Väcka till liv",
         "ayah_full": "ثُمَّ إِذَا شَاءَ أَنشَرَهُ",
-        "ayah_sv": "och Han skall väcka honom till liv när Han vill"
+        "ayah_sv": "och Han skall väcka honom till liv när Han vill",
+        "type": "phrase"
     },
     {
         "id": "62",
@@ -555,7 +616,8 @@ const quranData = [
         "meaning_ar": "صدعنا",
         "word_sv": "Klyver",
         "ayah_full": "ثُمَّ شَقَقْنَا الْأَرْضَ شَقًّا",
-        "ayah_sv": "Därefter klyver Vi jorden"
+        "ayah_sv": "Därefter klyver Vi jorden",
+        "type": "noun"
     },
     {
         "id": "63",
@@ -564,7 +626,8 @@ const quranData = [
         "meaning_ar": "علفاً",
         "word_sv": "Grönska / Foder",
         "ayah_full": "وَعِنَبًا وَقَضْبًا",
-        "ayah_sv": "och vinrankor och grönska"
+        "ayah_sv": "och vinrankor och grönska",
+        "type": "phrase"
     },
     {
         "id": "64",
@@ -573,7 +636,8 @@ const quranData = [
         "meaning_ar": "عظيمة الأشجار",
         "word_sv": "Lummiga",
         "ayah_full": "وَحَدَائِقَ غُلْبًا",
-        "ayah_sv": "och lummiga trädgårdar"
+        "ayah_sv": "och lummiga trädgårdar",
+        "type": "word"
     },
     {
         "id": "65",
@@ -582,7 +646,8 @@ const quranData = [
         "meaning_ar": "المرعى",
         "word_sv": "Bete",
         "ayah_full": "وَفَاكِهَةً وَأَبًّا",
-        "ayah_sv": "frukt och bete"
+        "ayah_sv": "frukt och bete",
+        "type": "noun"
     },
     {
         "id": "66",
@@ -591,7 +656,8 @@ const quranData = [
         "meaning_ar": "الصيحة العظيمة",
         "word_sv": "Det bedövande dånet",
         "ayah_full": "فَإِذَا جَاءَتِ الصَّاخَّةُ",
-        "ayah_sv": "Men när det bedövande dånet ljuder"
+        "ayah_sv": "Men när det bedövande dånet ljuder",
+        "type": "noun"
     },
     {
         "id": "67",
@@ -600,7 +666,8 @@ const quranData = [
         "meaning_ar": "مضيئة",
         "word_sv": "Strålande",
         "ayah_full": "وُجُوهٌ يَوْمَئِذٍ مُّسْفِرَةٌ",
-        "ayah_sv": "Den Dagen skall ansikten stråla av ljus"
+        "ayah_sv": "Den Dagen skall ansikten stråla av ljus",
+        "type": "adjective"
     },
     {
         "id": "68",
@@ -609,7 +676,8 @@ const quranData = [
         "meaning_ar": "غبار",
         "word_sv": "Damm",
         "ayah_full": "وَوُجُوهٌ يَوْمَئِذٍ عَلَيْهَا غَبَرَةٌ",
-        "ayah_sv": "och ansikten skall vara täckta av damm"
+        "ayah_sv": "och ansikten skall vara täckta av damm",
+        "type": "noun"
     },
     {
         "id": "69",
@@ -618,7 +686,8 @@ const quranData = [
         "meaning_ar": "سواد",
         "word_sv": "Mörker",
         "ayah_full": "تَرْهَقُهَا قَتَرَةٌ",
-        "ayah_sv": "höljda i mörker"
+        "ayah_sv": "höljda i mörker",
+        "type": "noun"
     },
     {
         "id": "70",
@@ -627,7 +696,8 @@ const quranData = [
         "meaning_ar": "الجاحدون",
         "word_sv": "Förnekarna",
         "ayah_full": "أُولَٰئِكَ هُمُ الْكَفَرَةُ الْفَجَرَةُ",
-        "ayah_sv": "det är förnekarna, de som har sjunkit djupt i synd"
+        "ayah_sv": "det är förnekarna, de som har sjunkit djupt i synd",
+        "type": "noun"
     },
     {
         "id": "71",
@@ -636,7 +706,8 @@ const quranData = [
         "meaning_ar": "لُفت/ذهب نورها",
         "word_sv": "Lindas ihop",
         "ayah_full": "إِذَا الشَّمْسُ كُوِّرَتْ",
-        "ayah_sv": "När solen lindas ihop"
+        "ayah_sv": "När solen lindas ihop",
+        "type": "phrase"
     },
     {
         "id": "72",
@@ -645,7 +716,8 @@ const quranData = [
         "meaning_ar": "تناثرت",
         "word_sv": "Faller / Slocknar",
         "ayah_full": "وَإِذَا النُّجُومُ انكَدَرَتْ",
-        "ayah_sv": "och stjärnorna faller och slocknar"
+        "ayah_sv": "och stjärnorna faller och slocknar",
+        "type": "phrase"
     },
     {
         "id": "73",
@@ -654,7 +726,8 @@ const quranData = [
         "meaning_ar": "حركت",
         "word_sv": "Sätts i rörelse",
         "ayah_full": "وَإِذَا الْجِبَالُ سُيِّرَتْ",
-        "ayah_sv": "och bergen sätts i rörelse"
+        "ayah_sv": "och bergen sätts i rörelse",
+        "type": "phrase"
     },
     {
         "id": "74",
@@ -663,7 +736,8 @@ const quranData = [
         "meaning_ar": "النوق الحوامل",
         "word_sv": "De dräktiga stona",
         "ayah_full": "وَإِذَا الْعِشَارُ عُطِّلَتْ",
-        "ayah_sv": "och de dräktiga stona lämnas utan tillsyn"
+        "ayah_sv": "och de dräktiga stona lämnas utan tillsyn",
+        "type": "phrase"
     },
     {
         "id": "75",
@@ -672,7 +746,8 @@ const quranData = [
         "meaning_ar": "أهملت بلا راع",
         "word_sv": "Lämnas utan tillsyn",
         "ayah_full": "وَإِذَا الْعِشَارُ عُطِّلَتْ",
-        "ayah_sv": "och de dräktiga stona lämnas utan tillsyn"
+        "ayah_sv": "och de dräktiga stona lämnas utan tillsyn",
+        "type": "phrase"
     },
     {
         "id": "76",
@@ -681,7 +756,8 @@ const quranData = [
         "meaning_ar": "أوقدت",
         "word_sv": "Sätts i brand",
         "ayah_full": "وَإِذَا الْبِحَارُ سُجِّرَتْ",
-        "ayah_sv": "och haven sätts i brand"
+        "ayah_sv": "och haven sätts i brand",
+        "type": "phrase"
     },
     {
         "id": "77",
@@ -690,7 +766,8 @@ const quranData = [
         "meaning_ar": "الأرواح",
         "word_sv": "Själarna",
         "ayah_full": "وَإِذَا النُّفُوسُ زُوِّجَتْ",
-        "ayah_sv": "och människosjälarna [sorteras och] paras ihop"
+        "ayah_sv": "och människosjälarna [sorteras och] paras ihop",
+        "type": "noun"
     },
     {
         "id": "78",
@@ -699,7 +776,8 @@ const quranData = [
         "meaning_ar": "المدفونة حية",
         "word_sv": "Flickan som begravdes levande",
         "ayah_full": "وَإِذَا الْمَوْءُودَةُ سُئِلَتْ",
-        "ayah_sv": "och den lilla flickan som begravdes levande tillfrågas"
+        "ayah_sv": "och den lilla flickan som begravdes levande tillfrågas",
+        "type": "phrase"
     },
     {
         "id": "79",
@@ -708,7 +786,8 @@ const quranData = [
         "meaning_ar": "نزعت",
         "word_sv": "Dragas undan",
         "ayah_full": "وَإِذَا السَّمَاءُ كُشِطَتْ",
-        "ayah_sv": "och himlen skall dragas undan"
+        "ayah_sv": "och himlen skall dragas undan",
+        "type": "phrase"
     },
     {
         "id": "80",
@@ -717,7 +796,8 @@ const quranData = [
         "meaning_ar": "أضرمت",
         "word_sv": "Tänds på",
         "ayah_full": "وَإِذَا الْجَحِيمُ سُعِّرَتْ",
-        "ayah_sv": "och helvetets ugn tänds på"
+        "ayah_sv": "och helvetets ugn tänds på",
+        "type": "phrase"
     },
     {
         "id": "81",
@@ -726,7 +806,8 @@ const quranData = [
         "meaning_ar": "قربت",
         "word_sv": "Förs fram",
         "ayah_full": "وَإِذَا الْجَنَّةُ أُزْلِفَتْ",
-        "ayah_sv": "och paradiset förs fram"
+        "ayah_sv": "och paradiset förs fram",
+        "type": "phrase"
     },
     {
         "id": "82",
@@ -735,7 +816,8 @@ const quranData = [
         "meaning_ar": "الكواكب المختفية",
         "word_sv": "De som drar sig tillbaka",
         "ayah_full": "فَلَا أُقْسِمُ بِالْخُنَّسِ",
-        "ayah_sv": "Jag kallar att vittna de [stjärnor] som drar sig tillbaka"
+        "ayah_sv": "Jag kallar att vittna de [stjärnor] som drar sig tillbaka",
+        "type": "phrase"
     },
     {
         "id": "83",
@@ -744,7 +826,8 @@ const quranData = [
         "meaning_ar": "الكواكب السائرة",
         "word_sv": "De som löper",
         "ayah_full": "الْجَوَارِ الْكُنَّسِ",
-        "ayah_sv": "som löper [sitt lopp] och döljer sig"
+        "ayah_sv": "som löper [sitt lopp] och döljer sig",
+        "type": "phrase"
     },
     {
         "id": "84",
@@ -753,7 +836,8 @@ const quranData = [
         "meaning_ar": "التي تستتر",
         "word_sv": "De som döljer sig",
         "ayah_full": "الْجَوَارِ الْكُنَّسِ",
-        "ayah_sv": "som löper [sitt lopp] och döljer sig"
+        "ayah_sv": "som löper [sitt lopp] och döljer sig",
+        "type": "phrase"
     },
     {
         "id": "85",
@@ -762,7 +846,8 @@ const quranData = [
         "meaning_ar": "أقبل بظلامه",
         "word_sv": "Drar bort / Mörknar",
         "ayah_full": "وَاللَّيْلِ إِذَا عَسْعَسَ",
-        "ayah_sv": "och natten, när den drar bort"
+        "ayah_sv": "och natten, när den drar bort",
+        "type": "phrase"
     },
     {
         "id": "86",
@@ -771,7 +856,8 @@ const quranData = [
         "meaning_ar": "أضاء وظهر",
         "word_sv": "Andas (Gryr)",
         "ayah_full": "وَالصُّبْحِ إِذَا تَنَفَّسَ",
-        "ayah_sv": "och morgonen, när den andas [och gryr]"
+        "ayah_sv": "och morgonen, när den andas [och gryr]",
+        "type": "phrase"
     },
     {
         "id": "87",
@@ -780,7 +866,8 @@ const quranData = [
         "meaning_ar": "ذو مكانة",
         "word_sv": "Makt (Ställning)",
         "ayah_full": "ذِي قُوَّةٍ عِندَ ذِي الْعَرْشِ مَكِينٍ",
-        "ayah_sv": "med makt och rang hos Honom som tronar i Majestät"
+        "ayah_sv": "med makt och rang hos Honom som tronar i Majestät",
+        "type": "phrase"
     },
     {
         "id": "88",
@@ -789,7 +876,8 @@ const quranData = [
         "meaning_ar": "يطيعه الملائكة",
         "word_sv": "Åtlydd",
         "ayah_full": "مُّطَاعٍ ثَمَّ أَمِينٍ",
-        "ayah_sv": "åtlydd [i den höga Världen] och trodd"
+        "ayah_sv": "åtlydd [i den höga Världen] och trodd",
+        "type": "noun"
     },
     {
         "id": "89",
@@ -798,7 +886,8 @@ const quranData = [
         "meaning_ar": "بخيل",
         "word_sv": "Snål",
         "ayah_full": "وَمَا هُوَ عَلَى الْغَيْبِ بِضَنِينٍ",
-        "ayah_sv": "och han undanhåller ingenting av det som är dolt"
+        "ayah_sv": "och han undanhåller ingenting av det som är dolt",
+        "type": "noun"
     },
     {
         "id": "90",
@@ -807,7 +896,8 @@ const quranData = [
         "meaning_ar": "انشقت",
         "word_sv": "Rämnar",
         "ayah_full": "إِذَا السَّمَاءُ انفَطَرَتْ",
-        "ayah_sv": "När himlen rämnar"
+        "ayah_sv": "När himlen rämnar",
+        "type": "noun"
     },
     {
         "id": "91",
@@ -816,7 +906,8 @@ const quranData = [
         "meaning_ar": "تساقطت",
         "word_sv": "Faller",
         "ayah_full": "وَإِذَا الْكَوَاكِبُ انتَثَرَتْ",
-        "ayah_sv": "och stjärnorna faller"
+        "ayah_sv": "och stjärnorna faller",
+        "type": "noun"
     },
     {
         "id": "92",
@@ -825,7 +916,8 @@ const quranData = [
         "meaning_ar": "فتحت",
         "word_sv": "Öppnar sig",
         "ayah_full": "وَإِذَا الْبِحَارُ فُجِّرَتْ",
-        "ayah_sv": "och haven öppnar sig"
+        "ayah_sv": "och haven öppnar sig",
+        "type": "phrase"
     },
     {
         "id": "93",
@@ -834,7 +926,8 @@ const quranData = [
         "meaning_ar": "قلب ترابها",
         "word_sv": "Vänds upp och ned",
         "ayah_full": "وَإِذَا الْقُبُورُ بُعْثِرَتْ",
-        "ayah_sv": "och gravarna vänds upp och ned"
+        "ayah_sv": "och gravarna vänds upp och ned",
+        "type": "phrase"
     },
     {
         "id": "94",
@@ -843,7 +936,8 @@ const quranData = [
         "meaning_ar": "خدعك",
         "word_sv": "Förtlett dig",
         "ayah_full": "مَا غَرَّكَ بِرَبِّكَ الْكَرِيمِ",
-        "ayah_sv": "vad har förtlett dig att trotsa din Herre"
+        "ayah_sv": "vad har förtlett dig att trotsa din Herre",
+        "type": "phrase"
     },
     {
         "id": "95",
@@ -852,7 +946,8 @@ const quranData = [
         "meaning_ar": "سوى خلقك",
         "word_sv": "Skapat dig fullkomlig",
         "ayah_full": "خَلَقَكَ فَسَوَّاكَ فَعَدَلَكَ",
-        "ayah_sv": "Han som har skapat dig och format dig och gjort dig till en fullkomlig skapelse"
+        "ayah_sv": "Han som har skapat dig och format dig och gjort dig till en fullkomlig skapelse",
+        "type": "phrase"
     },
     {
         "id": "96",
@@ -861,7 +956,8 @@ const quranData = [
         "meaning_ar": "صورك",
         "word_sv": "Satte samman dig",
         "ayah_full": "فِي أَيِّ صُورَةٍ مَّا شَاءَ رَكَّبَكَ",
-        "ayah_sv": "och som gav dig den gestalt Han ville"
+        "ayah_sv": "och som gav dig den gestalt Han ville",
+        "type": "phrase"
     },
     {
         "id": "97",
@@ -870,7 +966,8 @@ const quranData = [
         "meaning_ar": "ملائكة مراقبين",
         "word_sv": "Väktare",
         "ayah_full": "وَإِنَّ عَلَيْكُمْ لَحَافِظِينَ",
-        "ayah_sv": "Men [himmelska] väktare vakar över er"
+        "ayah_sv": "Men [himmelska] väktare vakar över er",
+        "type": "noun"
     },
     {
         "id": "98",
@@ -879,7 +976,8 @@ const quranData = [
         "meaning_ar": "يدخلونها",
         "word_sv": "Brinna i den",
         "ayah_full": "يَصْلَوْنَهَا يَوْمَ الدِّينِ",
-        "ayah_sv": "där de skall brinna på Domens dag"
+        "ayah_sv": "där de skall brinna på Domens dag",
+        "type": "phrase"
     },
     {
         "id": "99",
@@ -888,7 +986,8 @@ const quranData = [
         "meaning_ar": "المنقصين للمكيال",
         "word_sv": "De som snålar",
         "ayah_full": "وَيْلٌ لِّلْمُطَفِّفِينَ",
-        "ayah_sv": "VE DEM som snålar med mått och vikt"
+        "ayah_sv": "VE DEM som snålar med mått och vikt",
+        "type": "phrase"
     },
     {
         "id": "100",
@@ -897,7 +996,8 @@ const quranData = [
         "meaning_ar": "اشتروا بالكيل",
         "word_sv": "Mäter upp",
         "ayah_full": "الَّذِينَ إِذَا اكْتَالُوا عَلَى النَّاسِ يَسْتَوْفُونَ",
-        "ayah_sv": "de som, när de mäter upp åt sig själva, kräver fullt mått"
+        "ayah_sv": "de som, när de mäter upp åt sig själva, kräver fullt mått",
+        "type": "phrase"
     },
     {
         "id": "101",
@@ -906,7 +1006,8 @@ const quranData = [
         "meaning_ar": "يأخذون كاملاً",
         "word_sv": "Kräver fullt",
         "ayah_full": "يَسْتَوْفُونَ",
-        "ayah_sv": "kräver fullt mått"
+        "ayah_sv": "kräver fullt mått",
+        "type": "phrase"
     },
     {
         "id": "102",
@@ -915,7 +1016,8 @@ const quranData = [
         "meaning_ar": "باعوا لغيرهم",
         "word_sv": "Mäter åt andra",
         "ayah_full": "وَإِذَا كَالُوهُمْ",
-        "ayah_sv": "men som, när de mäter [åt andra]"
+        "ayah_sv": "men som, när de mäter [åt andra]",
+        "type": "phrase"
     },
     {
         "id": "103",
@@ -924,7 +1026,8 @@ const quranData = [
         "meaning_ar": "ينقصون",
         "word_sv": "Ger knappt",
         "ayah_full": "يُخْسِرُونَ",
-        "ayah_sv": "ger knappt mått"
+        "ayah_sv": "ger knappt mått",
+        "type": "phrase"
     },
     {
         "id": "104",
@@ -933,7 +1036,8 @@ const quranData = [
         "meaning_ar": "كتاب الفجار/سجن",
         "word_sv": "Sijjin",
         "ayah_full": "إِنَّ كِتَابَ الْفُجَّارِ لَفِي سِجِّينٍ",
-        "ayah_sv": "Nej! De ondas bok finns i Sijjin"
+        "ayah_sv": "Nej! De ondas bok finns i Sijjin",
+        "type": "noun"
     },
     {
         "id": "105",
@@ -942,7 +1046,8 @@ const quranData = [
         "meaning_ar": "مكتوب",
         "word_sv": "Tydlig skrift",
         "ayah_full": "كِتَابٌ مَّرْقُومٌ",
-        "ayah_sv": "Det är en tydlig skrift"
+        "ayah_sv": "Det är en tydlig skrift",
+        "type": "phrase"
     },
     {
         "id": "106",
@@ -951,7 +1056,8 @@ const quranData = [
         "meaning_ar": "غطى (الصدأ)",
         "word_sv": "Rost",
         "ayah_full": "بَلْ ۜ رَانَ عَلَىٰ قُلُوبِهِم",
-        "ayah_sv": "har lagt sig som rost på deras hjärtan"
+        "ayah_sv": "har lagt sig som rost på deras hjärtan",
+        "type": "noun"
     },
     {
         "id": "107",
@@ -960,7 +1066,8 @@ const quranData = [
         "meaning_ar": "أسرة مزينة",
         "word_sv": "Soffor",
         "ayah_full": "عَلَى الْأَرَائِكِ يَنظُرُونَ",
-        "ayah_sv": "[som vilar] på höga soffor och ser sig omkring"
+        "ayah_sv": "[som vilar] på höga soffor och ser sig omkring",
+        "type": "noun"
     },
     {
         "id": "108",
@@ -969,7 +1076,8 @@ const quranData = [
         "meaning_ar": "بهجة",
         "word_sv": "Glans",
         "ayah_full": "نَضْرَةَ النَّعِيمِ",
-        "ayah_sv": "lycksalighetens glans"
+        "ayah_sv": "lycksalighetens glans",
+        "type": "noun"
     },
     {
         "id": "109",
@@ -978,7 +1086,8 @@ const quranData = [
         "meaning_ar": "خمر صافية",
         "word_sv": "Nektar",
         "ayah_full": "يُسْقَوْنَ مِن رَّحِيقٍ مَّخْتُومٍ",
-        "ayah_sv": "De bjuds att dricka en förseglad, ädel nektar"
+        "ayah_sv": "De bjuds att dricka en förseglad, ädel nektar",
+        "type": "noun"
     },
     {
         "id": "110",
@@ -987,7 +1096,8 @@ const quranData = [
         "meaning_ar": "مغلق",
         "word_sv": "Förseglad",
         "ayah_full": "رَّحِيقٍ مَّخْتُومٍ",
-        "ayah_sv": "förseglad nektar"
+        "ayah_sv": "förseglad nektar",
+        "type": "noun"
     },
     {
         "id": "111",
@@ -996,7 +1106,8 @@ const quranData = [
         "meaning_ar": "عين عالية",
         "word_sv": "Tasnim",
         "ayah_full": "وَمِزَاجُهُ مِن تَسْنِيمٍ",
-        "ayah_sv": "blandat med [vatten från källan] Tasnim"
+        "ayah_sv": "blandat med [vatten från källan] Tasnim",
+        "type": "noun"
     },
     {
         "id": "112",
@@ -1005,7 +1116,8 @@ const quranData = [
         "meaning_ar": "مسرورين/ساخرين",
         "word_sv": "Skämtande",
         "ayah_full": "انقَلَبُوا فَكِهِينَ",
-        "ayah_sv": "återvände de skämtande [om de troende]"
+        "ayah_sv": "återvände de skämtande [om de troende]",
+        "type": "adjective"
     },
     {
         "id": "113",
@@ -1014,7 +1126,8 @@ const quranData = [
         "meaning_ar": "تصدعت",
         "word_sv": "Brister i stycken",
         "ayah_full": "إِذَا السَّمَاءُ انشَقَّتْ",
-        "ayah_sv": "När himlen brister i stycken"
+        "ayah_sv": "När himlen brister i stycken",
+        "type": "phrase"
     },
     {
         "id": "114",
@@ -1023,7 +1136,8 @@ const quranData = [
         "meaning_ar": "استمعت وانقادت",
         "word_sv": "Lystrar",
         "ayah_full": "وَأَذِنَتْ لِرَبِّهَا وَحُقَّتْ",
-        "ayah_sv": "och lystrar till sin Herre"
+        "ayah_sv": "och lystrar till sin Herre",
+        "type": "noun"
     },
     {
         "id": "115",
@@ -1032,7 +1146,8 @@ const quranData = [
         "meaning_ar": "بسطت",
         "word_sv": "Planats ut",
         "ayah_full": "وَإِذَا الْأَرْضُ مُدَّتْ",
-        "ayah_sv": "och när jorden har planats ut"
+        "ayah_sv": "och när jorden har planats ut",
+        "type": "phrase"
     },
     {
         "id": "116",
@@ -1041,7 +1156,8 @@ const quranData = [
         "meaning_ar": "فرغت ما فيها",
         "word_sv": "Tömmer sig",
         "ayah_full": "وَأَلْقَتْ مَا فِيهَا وَتَخَلَّتْ",
-        "ayah_sv": "och kastar upp vad den gömmer och tömmer sig"
+        "ayah_sv": "och kastar upp vad den gömmer och tömmer sig",
+        "type": "phrase"
     },
     {
         "id": "117",
@@ -1050,7 +1166,8 @@ const quranData = [
         "meaning_ar": "ساعٍ بجهد",
         "word_sv": "Strävar",
         "ayah_full": "إِنَّكَ كَادِحٌ إِلَىٰ رَبِّكَ كَدْحًا",
-        "ayah_sv": "du strävar och strävar mot din Herre"
+        "ayah_sv": "du strävar och strävar mot din Herre",
+        "type": "noun"
     },
     {
         "id": "118",
@@ -1059,7 +1176,8 @@ const quranData = [
         "meaning_ar": "هلاكاً",
         "word_sv": "Förintelse",
         "ayah_full": "وَيَدْعُو ثُبُورًا",
-        "ayah_sv": "skall han ropa på förintelse"
+        "ayah_sv": "skall han ropa på förintelse",
+        "type": "noun"
     },
     {
         "id": "119",
@@ -1068,7 +1186,8 @@ const quranData = [
         "meaning_ar": "يرجع",
         "word_sv": "Vända åter",
         "ayah_full": "إِنَّهُ ظَنَّ أَن لَّن يَحُورَ",
-        "ayah_sv": "Han trodde att han aldrig skulle behöva vända åter [till Gud]"
+        "ayah_sv": "Han trodde att han aldrig skulle behöva vända åter [till Gud]",
+        "type": "phrase"
     },
     {
         "id": "120",
@@ -1077,7 +1196,8 @@ const quranData = [
         "meaning_ar": "حمرة الأفق",
         "word_sv": "Aftonrodnaden",
         "ayah_full": "فَلَا أُقْسِمُ بِالشَّفَقِ",
-        "ayah_sv": "Jag kallar aftonrodnaden att vittna"
+        "ayah_sv": "Jag kallar aftonrodnaden att vittna",
+        "type": "noun"
     },
     {
         "id": "121",
@@ -1086,7 +1206,8 @@ const quranData = [
         "meaning_ar": "جمع وضم",
         "word_sv": "Samlar in",
         "ayah_full": "وَاللَّيْلِ وَمَا وَسَقَ",
-        "ayah_sv": "Jag kallar natten och vad den döljer"
+        "ayah_sv": "Jag kallar natten och vad den döljer",
+        "type": "phrase"
     },
     {
         "id": "122",
@@ -1095,7 +1216,8 @@ const quranData = [
         "meaning_ar": "اكتمل واستوى",
         "word_sv": "Blir full",
         "ayah_full": "وَالْقَمَرِ إِذَا اتَّسَقَ",
-        "ayah_sv": "och månen, när den blir full"
+        "ayah_sv": "och månen, när den blir full",
+        "type": "phrase"
     },
     {
         "id": "123",
@@ -1104,7 +1226,8 @@ const quranData = [
         "meaning_ar": "حالاً بعد حال",
         "word_sv": "Stadium",
         "ayah_full": "لَتَرْكَبُنَّ طَبَقًا عَن طَبَقٍ",
-        "ayah_sv": "att ni helt säkert skall gå igenom det ena stadiet efter det andra"
+        "ayah_sv": "att ni helt säkert skall gå igenom det ena stadiet efter det andra",
+        "type": "noun"
     },
     {
         "id": "124",
@@ -1113,7 +1236,8 @@ const quranData = [
         "meaning_ar": "منازل النجوم",
         "word_sv": "Stjärnbilderna",
         "ayah_full": "وَالسَّمَاءِ ذَاتِ الْبُرُوجِ",
-        "ayah_sv": "VID HIMLEN med dess stjärnbilder"
+        "ayah_sv": "VID HIMLEN med dess stjärnbilder",
+        "type": "noun"
     },
     {
         "id": "125",
@@ -1122,7 +1246,8 @@ const quranData = [
         "meaning_ar": "مشاهَد (الجمعة/عرفة)",
         "word_sv": "Det bevittnade",
         "ayah_full": "وَشَاهِدٍ وَمَشْهُودٍ",
-        "ayah_sv": "vid vittnet och det bevittnade"
+        "ayah_sv": "vid vittnet och det bevittnade",
+        "type": "noun"
     },
     {
         "id": "126",
@@ -1131,7 +1256,8 @@ const quranData = [
         "meaning_ar": "الشق العظيم",
         "word_sv": "Gropen",
         "ayah_full": "قُتِلَ أَصْحَابُ الْأُخْدُودِ",
-        "ayah_sv": "Fördömda vare männen som grävde gropen"
+        "ayah_sv": "Fördömda vare männen som grävde gropen",
+        "type": "noun"
     },
     {
         "id": "127",
@@ -1140,7 +1266,8 @@ const quranData = [
         "meaning_ar": "المحب لأوليائه",
         "word_sv": "Den Kärleksfulle",
         "ayah_full": "وَهُوَ الْغَفُورُ الْوَدُودُ",
-        "ayah_sv": "Han är Den som ständigt förlåter, den Kärleksfulle"
+        "ayah_sv": "Han är Den som ständigt förlåter, den Kärleksfulle",
+        "type": "noun"
     },
     {
         "id": "128",
@@ -1149,7 +1276,8 @@ const quranData = [
         "meaning_ar": "العظيم",
         "word_sv": "Den Ärorike",
         "ayah_full": "ذُو الْعَرْشِ الْمَجِيدُ",
-        "ayah_sv": "Herren till Tronen, den Ärorike"
+        "ayah_sv": "Herren till Tronen, den Ärorike",
+        "type": "noun"
     },
     {
         "id": "129",
@@ -1158,7 +1286,8 @@ const quranData = [
         "meaning_ar": "أخذ وعقاب",
         "word_sv": "Grepp",
         "ayah_full": "إِنَّ بَطْشَ رَبِّكَ لَشَدِيدٌ",
-        "ayah_sv": "Din Herres grepp är sannerligen hårt"
+        "ayah_sv": "Din Herres grepp är sannerligen hårt",
+        "type": "noun"
     },
     {
         "id": "130",
@@ -1167,7 +1296,8 @@ const quranData = [
         "meaning_ar": "مصان",
         "word_sv": "Väl bevarad",
         "ayah_full": "فِي لَوْحٍ مَّحْفُوظٍ",
-        "ayah_sv": "[som finns] på en tavla, väl bevarad"
+        "ayah_sv": "[som finns] på en tavla, väl bevarad",
+        "type": "phrase"
     },
     {
         "id": "131",
@@ -1176,7 +1306,8 @@ const quranData = [
         "meaning_ar": "النجم الليلي",
         "word_sv": "Den nattlige besökaren",
         "ayah_full": "وَالسَّمَاءِ وَالطَّارِقِ",
-        "ayah_sv": "VID HIMLEN och den nattlige besökaren"
+        "ayah_sv": "VID HIMLEN och den nattlige besökaren",
+        "type": "noun"
     },
     {
         "id": "132",
@@ -1185,7 +1316,8 @@ const quranData = [
         "meaning_ar": "المضيء",
         "word_sv": "Den klart lysande",
         "ayah_full": "النَّجْمُ الثَّاقِبُ",
-        "ayah_sv": "[det är] stjärnan som lyser med klart sken"
+        "ayah_sv": "[det är] stjärnan som lyser med klart sken",
+        "type": "noun"
     },
     {
         "id": "133",
@@ -1194,7 +1326,8 @@ const quranData = [
         "meaning_ar": "ملك رقيب",
         "word_sv": "Väktare",
         "ayah_full": "إِن كُلُّ نَفْسٍ لَّمَّا عَلَيْهَا حَافِظٌ",
-        "ayah_sv": "Varenda människa har en väktare över sig"
+        "ayah_sv": "Varenda människa har en väktare över sig",
+        "type": "noun"
     },
     {
         "id": "134",
@@ -1203,7 +1336,8 @@ const quranData = [
         "meaning_ar": "مصبوب بسرعة",
         "word_sv": "Framvällande",
         "ayah_full": "خُلِقَ مِن مَّاءٍ دَافِقٍ",
-        "ayah_sv": "skapad av en droppe framvällande vätska"
+        "ayah_sv": "skapad av en droppe framvällande vätska",
+        "type": "adjective"
     },
     {
         "id": "135",
@@ -1212,7 +1346,8 @@ const quranData = [
         "meaning_ar": "الظهر",
         "word_sv": "Ländryggen",
         "ayah_full": "يَخْرُجُ مِن بَيْنِ الصُّلْبِ وَالتَّرَائِبِ",
-        "ayah_sv": "som väller fram mellan ländryggen och bäckenet"
+        "ayah_sv": "som väller fram mellan ländryggen och bäckenet",
+        "type": "noun"
     },
     {
         "id": "136",
@@ -1221,7 +1356,8 @@ const quranData = [
         "meaning_ar": "عظام الصدر",
         "word_sv": "Bäckenet (Bröstkorgen)",
         "ayah_full": "الصُّلْبِ وَالتَّرَائِبِ",
-        "ayah_sv": "mellan ländryggen och bäckenet"
+        "ayah_sv": "mellan ländryggen och bäckenet",
+        "type": "phrase"
     },
     {
         "id": "137",
@@ -1230,7 +1366,8 @@ const quranData = [
         "meaning_ar": "الخفايا",
         "word_sv": "Hemligheterna",
         "ayah_full": "يَوْمَ تُبْلَى السَّرَائِرُ",
-        "ayah_sv": "den Dag då [alla] hemligheter skall dras fram i ljuset"
+        "ayah_sv": "den Dag då [alla] hemligheter skall dras fram i ljuset",
+        "type": "noun"
     },
     {
         "id": "138",
@@ -1239,7 +1376,8 @@ const quranData = [
         "meaning_ar": "المطر",
         "word_sv": "Regnet",
         "ayah_full": "وَالسَّمَاءِ ذَاتِ الرَّجْعِ",
-        "ayah_sv": "Vid himlen, som sänder regnet åter och åter"
+        "ayah_sv": "Vid himlen, som sänder regnet åter och åter",
+        "type": "noun"
     },
     {
         "id": "139",
@@ -1248,7 +1386,8 @@ const quranData = [
         "meaning_ar": "النبات (الشق)",
         "word_sv": "Som spricker",
         "ayah_full": "وَالْأَرْضِ ذَاتِ الصَّدْعِ",
-        "ayah_sv": "och jorden, som spricker när växterna spirar"
+        "ayah_sv": "och jorden, som spricker när växterna spirar",
+        "type": "phrase"
     },
     {
         "id": "140",
@@ -1257,7 +1396,8 @@ const quranData = [
         "meaning_ar": "قول قاطع",
         "word_sv": "Sanningens ord",
         "ayah_full": "إِنَّهُ لَقَوْلٌ فَصْلٌ",
-        "ayah_sv": "Detta är i sanning Sanningens ord"
+        "ayah_sv": "Detta är i sanning Sanningens ord",
+        "type": "phrase"
     },
     {
         "id": "141",
@@ -1266,7 +1406,8 @@ const quranData = [
         "meaning_ar": "اللعب",
         "word_sv": "Skämt",
         "ayah_full": "وَمَا هُوَ بِالْهَزْلِ",
-        "ayah_sv": "det är inget skämt"
+        "ayah_sv": "det är inget skämt",
+        "type": "noun"
     },
     {
         "id": "142",
@@ -1275,7 +1416,8 @@ const quranData = [
         "meaning_ar": "قليلاً",
         "word_sv": "En kort stund",
         "ayah_full": "فَمَهِّلِ الْكَافِرِينَ أَمْهِلْهُمْ رُوَيْدًا",
-        "ayah_sv": "Låt de otrogna hållas, ge dem anstånd en kort stund"
+        "ayah_sv": "Låt de otrogna hållas, ge dem anstånd en kort stund",
+        "type": "noun"
     },
     {
         "id": "143",
@@ -1284,7 +1426,8 @@ const quranData = [
         "meaning_ar": "العشب",
         "word_sv": "Grönskan",
         "ayah_full": "وَالَّذِي أَخْرَجَ الْمَرْعَىٰ",
-        "ayah_sv": "Han som låter grönskan spira"
+        "ayah_sv": "Han som låter grönskan spira",
+        "type": "noun"
     },
     {
         "id": "144",
@@ -1293,7 +1436,8 @@ const quranData = [
         "meaning_ar": "يابساً",
         "word_sv": "Vissnat",
         "ayah_full": "فَجَعَلَهُ غُثَاءً أَحْوَىٰ",
-        "ayah_sv": "och så låter det vissna"
+        "ayah_sv": "och så låter det vissna",
+        "type": "adjective"
     },
     {
         "id": "145",
@@ -1302,7 +1446,8 @@ const quranData = [
         "meaning_ar": "مائلاً للسواد",
         "word_sv": "Mörkna",
         "ayah_full": "فَجَعَلَهُ غُثَاءً أَحْوَىٰ",
-        "ayah_sv": "och så låter det vissna och mörkna"
+        "ayah_sv": "och så låter det vissna och mörkna",
+        "type": "word"
     },
     {
         "id": "146",
@@ -1311,7 +1456,8 @@ const quranData = [
         "meaning_ar": "نعلمك القراءة",
         "word_sv": "Lära dig läsa",
         "ayah_full": "سَنُقْرِئُكَ فَلَا تَنسَىٰ",
-        "ayah_sv": "Vi skall lära dig att läsa och du skall inte glömma"
+        "ayah_sv": "Vi skall lära dig att läsa och du skall inte glömma",
+        "type": "phrase"
     },
     {
         "id": "147",
@@ -1320,7 +1466,8 @@ const quranData = [
         "meaning_ar": "يبتعد عنها",
         "word_sv": "Drar sig undan",
         "ayah_full": "وَيَتَجَنَّبُهَا الْأَشْقَى",
-        "ayah_sv": "men den förhärdade syndaren drar sig undan"
+        "ayah_sv": "men den förhärdade syndaren drar sig undan",
+        "type": "phrase"
     },
     {
         "id": "148",
@@ -1329,7 +1476,8 @@ const quranData = [
         "meaning_ar": "يفضلون",
         "word_sv": "Föredrar",
         "ayah_full": "بَلْ تُؤْثِرُونَ الْحَيَاةَ الدُّنْيَا",
-        "ayah_sv": "Men ni föredrar det jordiska livet"
+        "ayah_sv": "Men ni föredrar det jordiska livet",
+        "type": "verb"
     },
     {
         "id": "149",
@@ -1338,7 +1486,8 @@ const quranData = [
         "meaning_ar": "القيامة",
         "word_sv": "Den som höljer allt",
         "ayah_full": "هَلْ أَتَاكَ حَدِيثُ الْغَاشِيَةِ",
-        "ayah_sv": "HAR DU hört berättelsen om Den som höljer allt"
+        "ayah_sv": "HAR DU hört berättelsen om Den som höljer allt",
+        "type": "noun"
     },
     {
         "id": "150",
@@ -1347,7 +1496,8 @@ const quranData = [
         "meaning_ar": "ذليلة",
         "word_sv": "Nedslagna",
         "ayah_full": "وُجُوهٌ يَوْمَئِذٍ خَاشِعَةٌ",
-        "ayah_sv": "Den Dagen skall människors ansikten vara nedslagna"
+        "ayah_sv": "Den Dagen skall människors ansikten vara nedslagna",
+        "type": "word"
     },
     {
         "id": "151",
@@ -1356,7 +1506,8 @@ const quranData = [
         "meaning_ar": "تعبة",
         "word_sv": "Utarbetade",
         "ayah_full": "عَامِلَةٌ نَّاصِبَةٌ",
-        "ayah_sv": "tärda, utarbetade"
+        "ayah_sv": "tärda, utarbetade",
+        "type": "noun"
     },
     {
         "id": "152",
@@ -1365,7 +1516,8 @@ const quranData = [
         "meaning_ar": "شديدة الحرارة",
         "word_sv": "Het",
         "ayah_full": "تَصْلَىٰ نَارًا حَامِيَةً",
-        "ayah_sv": "De skall stiga in i en het Eld"
+        "ayah_sv": "De skall stiga in i en het Eld",
+        "type": "adjective"
     },
     {
         "id": "153",
@@ -1374,7 +1526,8 @@ const quranData = [
         "meaning_ar": "متناهية الحرارة",
         "word_sv": "Kokande",
         "ayah_full": "تُسْقَىٰ مِنْ عَيْنٍ آنِيَةٍ",
-        "ayah_sv": "och dricka ur en kokande källa"
+        "ayah_sv": "och dricka ur en kokande källa",
+        "type": "adjective"
     },
     {
         "id": "154",
@@ -1383,7 +1536,8 @@ const quranData = [
         "meaning_ar": "شوك يابس",
         "word_sv": "Törne",
         "ayah_full": "لَّيْسَ لَهُمْ طَعَامٌ إِلَّا مِن ضَرِيعٍ",
-        "ayah_sv": "som inte får annan föda än bittert taggrens"
+        "ayah_sv": "som inte får annan föda än bittert taggrens",
+        "type": "noun"
     },
     {
         "id": "155",
@@ -1392,7 +1546,8 @@ const quranData = [
         "meaning_ar": "كلام باطل",
         "word_sv": "Tomt tal",
         "ayah_full": "لَّا تَسْمَعُ فِيهَا لَاغِيَةً",
-        "ayah_sv": "Där skall de inte höra tomt tal"
+        "ayah_sv": "Där skall de inte höra tomt tal",
+        "type": "phrase"
     },
     {
         "id": "156",
@@ -1401,7 +1556,8 @@ const quranData = [
         "meaning_ar": "وسائد",
         "word_sv": "Kuddar",
         "ayah_full": "وَنَمَارِقُ مَصْفُوفَةٌ",
-        "ayah_sv": "och kuddar i rader"
+        "ayah_sv": "och kuddar i rader",
+        "type": "noun"
     },
     {
         "id": "157",
@@ -1410,7 +1566,8 @@ const quranData = [
         "meaning_ar": "بسط",
         "word_sv": "Mattor",
         "ayah_full": "وَزَرَابِيُّ مَبْثُوثَةٌ",
-        "ayah_sv": "och [fina] mattor utbredda"
+        "ayah_sv": "och [fina] mattor utbredda",
+        "type": "noun"
     },
     {
         "id": "158",
@@ -1419,7 +1576,8 @@ const quranData = [
         "meaning_ar": "منشورة",
         "word_sv": "Utbredda",
         "ayah_full": "وَزَرَابِيُّ مَبْثُوثَةٌ",
-        "ayah_sv": "och [fina] mattor utbredda"
+        "ayah_sv": "och [fina] mattor utbredda",
+        "type": "word"
     },
     {
         "id": "159",
@@ -1428,7 +1586,8 @@ const quranData = [
         "meaning_ar": "بسطت",
         "word_sv": "Breitts ut",
         "ayah_full": "وَإِلَى الْأَرْضِ كَيْفَ سُطِحَتْ",
-        "ayah_sv": "och jorden, hur den har breitts ut"
+        "ayah_sv": "och jorden, hur den har breitts ut",
+        "type": "phrase"
     },
     {
         "id": "160",
@@ -1437,7 +1596,8 @@ const quranData = [
         "meaning_ar": "مسلط",
         "word_sv": "Övervakare",
         "ayah_full": "لَّسْتَ عَلَيْهِم بِمُصَيْطِرٍ",
-        "ayah_sv": "du är inte satt att vaka över dem"
+        "ayah_sv": "du är inte satt att vaka över dem",
+        "type": "noun"
     },
     {
         "id": "161",
@@ -1446,7 +1606,8 @@ const quranData = [
         "meaning_ar": "رجوعهم",
         "word_sv": "Återkomst",
         "ayah_full": "إِنَّ إِلَيْنَا إِيَابَهُمْ",
-        "ayah_sv": "Till Oss skall de se, återvända"
+        "ayah_sv": "Till Oss skall de se, återvända",
+        "type": "noun"
     },
     {
         "id": "162",
@@ -1455,7 +1616,8 @@ const quranData = [
         "meaning_ar": "عقل",
         "word_sv": "Förstånd",
         "ayah_full": "هَلْ فِي ذَٰلِكَ قَسَمٌ لِّذِي حِجْرٍ",
-        "ayah_sv": "Är inte detta en ed [av vikt] för den som har förstånd?"
+        "ayah_sv": "Är inte detta en ed [av vikt] för den som har förstånd?",
+        "type": "noun"
     },
     {
         "id": "163",
@@ -1464,7 +1626,8 @@ const quranData = [
         "meaning_ar": "مدينة عاد",
         "word_sv": "Iram",
         "ayah_full": "إِرَمَ ذَاتِ الْعِمَادِ",
-        "ayah_sv": "[stammen] Ad i Iram"
+        "ayah_sv": "[stammen] Ad i Iram",
+        "type": "noun"
     },
     {
         "id": "164",
@@ -1473,7 +1636,8 @@ const quranData = [
         "meaning_ar": "الأعمدة",
         "word_sv": "Pelarna",
         "ayah_full": "إِرَمَ ذَاتِ الْعِمَادِ",
-        "ayah_sv": "staden med de många pelarna"
+        "ayah_sv": "staden med de många pelarna",
+        "type": "noun"
     },
     {
         "id": "165",
@@ -1482,7 +1646,8 @@ const quranData = [
         "meaning_ar": "قطعوا",
         "word_sv": "Högg ut",
         "ayah_full": "وَثَمُودَ الَّذِينَ جَابُوا الصَّخْرَ",
-        "ayah_sv": "och [mot] stammen Thamud, som högg ut sina bostäder i dalens klippväggar"
+        "ayah_sv": "och [mot] stammen Thamud, som högg ut sina bostäder i dalens klippväggar",
+        "type": "phrase"
     },
     {
         "id": "166",
@@ -1491,7 +1656,8 @@ const quranData = [
         "meaning_ar": "نصيب",
         "word_sv": "Piska",
         "ayah_full": "فَصَبَّ عَلَيْهِمْ رَبُّكَ سَوْطَ عَذَابٍ",
-        "ayah_sv": "därför lät din Herre straffets piska vina över dem"
+        "ayah_sv": "därför lät din Herre straffets piska vina över dem",
+        "type": "word"
     },
     {
         "id": "167",
@@ -1500,7 +1666,8 @@ const quranData = [
         "meaning_ar": "تحثون",
         "word_sv": "Uppmanar",
         "ayah_full": "وَلَا تَحُضُّونَ عَلَىٰ طَعَامِ الْمِسْكِينِ",
-        "ayah_sv": "och inte uppmanar varandra att ge den fattige mat"
+        "ayah_sv": "och inte uppmanar varandra att ge den fattige mat",
+        "type": "noun"
     },
     {
         "id": "168",
@@ -1509,7 +1676,8 @@ const quranData = [
         "meaning_ar": "الميراث",
         "word_sv": "Arvet",
         "ayah_full": "وَتَأْكُلُونَ التُّرَاثَ",
-        "ayah_sv": "Och ni slukar arvet"
+        "ayah_sv": "Och ni slukar arvet",
+        "type": "noun"
     },
     {
         "id": "169",
@@ -1518,7 +1686,8 @@ const quranData = [
         "meaning_ar": "جامعاً",
         "word_sv": "Med hull och hår",
         "ayah_full": "أَكْلًا لَّمًّا",
-        "ayah_sv": "med hull och hår (girigt)"
+        "ayah_sv": "med hull och hår (girigt)",
+        "type": "phrase"
     },
     {
         "id": "170",
@@ -1527,7 +1696,8 @@ const quranData = [
         "meaning_ar": "كثيراً",
         "word_sv": "Gränslös",
         "ayah_full": "وَتُحِبُّونَ الْمَالَ حُبًّا جَمًّا",
-        "ayah_sv": "och er kärlek till pengar är gränslös"
+        "ayah_sv": "och er kärlek till pengar är gränslös",
+        "type": "noun"
     },
     {
         "id": "171",
@@ -1536,7 +1706,8 @@ const quranData = [
         "meaning_ar": "زلزلت",
         "word_sv": "Skakas",
         "ayah_full": "كَلَّا إِذَا دُكَّتِ الْأَرْضُ دَكًّا دَكًّا",
-        "ayah_sv": "Men nej! När jorden skakas i grundvalarna, stöt på stöt"
+        "ayah_sv": "Men nej! När jorden skakas i grundvalarna, stöt på stöt",
+        "type": "noun"
     },
     {
         "id": "172",
@@ -1545,7 +1716,8 @@ const quranData = [
         "meaning_ar": "ذلك اليوم",
         "word_sv": "Den Dagen",
         "ayah_full": "وَجِيءَ يَوْمَئِذٍ بِجَهَنَّمَ",
-        "ayah_sv": "när helvetet den Dagen görs synligt"
+        "ayah_sv": "när helvetet den Dagen görs synligt",
+        "type": "verb"
     },
     {
         "id": "173",
@@ -1554,7 +1726,8 @@ const quranData = [
         "meaning_ar": "مقيم",
         "word_sv": "Bor",
         "ayah_full": "وَأَنتَ حِلٌّ بِهَٰذَا الْبَلَدِ",
-        "ayah_sv": "du som bor i denna Stad"
+        "ayah_sv": "du som bor i denna Stad",
+        "type": "noun"
     },
     {
         "id": "174",
@@ -1563,7 +1736,8 @@ const quranData = [
         "meaning_ar": "مشقة",
         "word_sv": "Möda",
         "ayah_full": "لَقَدْ خَلَقْنَا الْإِنسَانَ فِي كَبَدٍ",
-        "ayah_sv": "Vi har sannerligen skapat människan till möda och besvär"
+        "ayah_sv": "Vi har sannerligen skapat människan till möda och besvär",
+        "type": "word"
     },
     {
         "id": "175",
@@ -1572,7 +1746,8 @@ const quranData = [
         "meaning_ar": "كثيراً",
         "word_sv": "I mängd",
         "ayah_full": "أَهْلَكْتُ مَالًا لُّبَدًا",
-        "ayah_sv": "Jag har satt sprätt på pengar i mängd"
+        "ayah_sv": "Jag har satt sprätt på pengar i mängd",
+        "type": "phrase"
     },
     {
         "id": "176",
@@ -1581,7 +1756,8 @@ const quranData = [
         "meaning_ar": "الطريقين",
         "word_sv": "De två vägarna",
         "ayah_full": "وَهَدَيْنَاهُ النَّجْدَيْنِ",
-        "ayah_sv": "och visat henne de två vägarna"
+        "ayah_sv": "och visat henne de två vägarna",
+        "type": "phrase"
     },
     {
         "id": "177",
@@ -1590,7 +1766,8 @@ const quranData = [
         "meaning_ar": "تجاوز",
         "word_sv": "Slå in på",
         "ayah_full": "فَلَا اقْتَحَمَ الْعَقَبَةَ",
-        "ayah_sv": "Men han ville inte slå in på den branta vägen"
+        "ayah_sv": "Men han ville inte slå in på den branta vägen",
+        "type": "phrase"
     },
     {
         "id": "178",
@@ -1599,7 +1776,8 @@ const quranData = [
         "meaning_ar": "الطريق الشاق",
         "word_sv": "Den branta vägen",
         "ayah_full": "فَلَا اقْتَحَمَ الْعَقَبَةَ",
-        "ayah_sv": "Men han ville inte slå in på den branta vägen"
+        "ayah_sv": "Men han ville inte slå in på den branta vägen",
+        "type": "noun"
     },
     {
         "id": "179",
@@ -1608,7 +1786,8 @@ const quranData = [
         "meaning_ar": "تحرير",
         "word_sv": "Lossa",
         "ayah_full": "فَكُّ رَقَبَةٍ",
-        "ayah_sv": "Att lossa [en slavs] bojor"
+        "ayah_sv": "Att lossa [en slavs] bojor",
+        "type": "word"
     },
     {
         "id": "180",
@@ -1617,7 +1796,8 @@ const quranData = [
         "meaning_ar": "مجاعة",
         "word_sv": "Svält",
         "ayah_full": "فِي يَوْمٍ ذِي مَسْغَبَةٍ",
-        "ayah_sv": "en dag då svälten härjar"
+        "ayah_sv": "en dag då svälten härjar",
+        "type": "noun"
     },
     {
         "id": "181",
@@ -1626,7 +1806,8 @@ const quranData = [
         "meaning_ar": "قرابة",
         "word_sv": "Anförvant",
         "ayah_full": "يَتِيمًا ذَا مَقْرَبَةٍ",
-        "ayah_sv": "en faderlös anförvant"
+        "ayah_sv": "en faderlös anförvant",
+        "type": "noun"
     },
     {
         "id": "182",
@@ -1635,7 +1816,8 @@ const quranData = [
         "meaning_ar": "فقر",
         "word_sv": "Nöd",
         "ayah_full": "مِسْكِينًا ذَا مَتْرَبَةٍ",
-        "ayah_sv": "en nödställd stackare"
+        "ayah_sv": "en nödställd stackare",
+        "type": "noun"
     },
     {
         "id": "183",
@@ -1644,7 +1826,8 @@ const quranData = [
         "meaning_ar": "مغلقة",
         "word_sv": "Sluter sig",
         "ayah_full": "عَلَيْهِمْ نَارٌ مُّؤْصَدَةٌ",
-        "ayah_sv": "Över dem skall Elden sluta sig"
+        "ayah_sv": "Över dem skall Elden sluta sig",
+        "type": "phrase"
     },
     {
         "id": "184",
@@ -1653,7 +1836,8 @@ const quranData = [
         "meaning_ar": "تبعها",
         "word_sv": "Följer",
         "ayah_full": "وَالْقَمَرِ إِذَا تَلَاهَا",
-        "ayah_sv": "vid månen, som följer henne"
+        "ayah_sv": "vid månen, som följer henne",
+        "type": "noun"
     },
     {
         "id": "185",
@@ -1662,7 +1846,8 @@ const quranData = [
         "meaning_ar": "أظهرها",
         "word_sv": "Låter framträda",
         "ayah_full": "وَالنَّهَارِ إِذَا جَلَّاهَا",
-        "ayah_sv": "vid dagen, som låter den framträda"
+        "ayah_sv": "vid dagen, som låter den framträda",
+        "type": "phrase"
     },
     {
         "id": "186",
@@ -1671,7 +1856,8 @@ const quranData = [
         "meaning_ar": "يغطيها",
         "word_sv": "Täcker",
         "ayah_full": "وَاللَّيْلِ إِذَا يَغْشَاهَا",
-        "ayah_sv": "vid natten, som täcker den"
+        "ayah_sv": "vid natten, som täcker den",
+        "type": "verb"
     },
     {
         "id": "187",
@@ -1680,7 +1866,8 @@ const quranData = [
         "meaning_ar": "بسطها",
         "word_sv": "Brett ut",
         "ayah_full": "وَالْأَرْضِ وَمَا طَحَاهَا",
-        "ayah_sv": "vid jorden och Den som har brett ut den"
+        "ayah_sv": "vid jorden och Den som har brett ut den",
+        "type": "phrase"
     },
     {
         "id": "188",
@@ -1689,7 +1876,8 @@ const quranData = [
         "meaning_ar": "عرفها",
         "word_sv": "Ingav",
         "ayah_full": "فَأَلْهَمَهَا فُجُورَهَا وَتَقْوَاهَا",
-        "ayah_sv": "och ingav den dess ogudaktighet och dess gudsfruktan"
+        "ayah_sv": "och ingav den dess ogudaktighet och dess gudsfruktan",
+        "type": "noun"
     },
     {
         "id": "189",
@@ -1698,7 +1886,8 @@ const quranData = [
         "meaning_ar": "طهرها",
         "word_sv": "Håller ren",
         "ayah_full": "قَدْ أَفْلَحَ مَن زَكَّاهَا",
-        "ayah_sv": "helt visst skall det gå den väl i händer som håller den [själen] ren"
+        "ayah_sv": "helt visst skall det gå den väl i händer som håller den [själen] ren",
+        "type": "phrase"
     },
     {
         "id": "190",
@@ -1707,7 +1896,8 @@ const quranData = [
         "meaning_ar": "أفسدها",
         "word_sv": "Begraver",
         "ayah_full": "وَقَدْ خَابَ مَن دَسَّاهَا",
-        "ayah_sv": "men den som begraver den [i synd] är förlorad"
+        "ayah_sv": "men den som begraver den [i synd] är förlorad",
+        "type": "noun"
     },
     {
         "id": "191",
@@ -1716,7 +1906,8 @@ const quranData = [
         "meaning_ar": "بطغيانها",
         "word_sv": "I sitt övermod",
         "ayah_full": "كَذَّبَتْ ثَمُودُ بِطْغُوَاهَا",
-        "ayah_sv": "I sitt övermod förnekade [stammen] Thamud sanningen"
+        "ayah_sv": "I sitt övermod förnekade [stammen] Thamud sanningen",
+        "type": "phrase"
     },
     {
         "id": "192",
@@ -1725,7 +1916,8 @@ const quranData = [
         "meaning_ar": "نهض مسرعاً",
         "word_sv": "Rusade fram",
         "ayah_full": "إِذِ انبَعَثَ أَشْقَاهَا",
-        "ayah_sv": "då den uslaste bland dem rusade fram"
+        "ayah_sv": "då den uslaste bland dem rusade fram",
+        "type": "phrase"
     },
     {
         "id": "193",
@@ -1734,7 +1926,8 @@ const quranData = [
         "meaning_ar": "قتلوها",
         "word_sv": "Skar av hälsenorna",
         "ayah_full": "فَكَذَّبُوهُ فَعَقَرُوهَا",
-        "ayah_sv": "Men de trodde honom inte utan skar av hälsenorna på stoet"
+        "ayah_sv": "Men de trodde honom inte utan skar av hälsenorna på stoet",
+        "type": "phrase"
     },
     {
         "id": "194",
@@ -1743,7 +1936,8 @@ const quranData = [
         "meaning_ar": "أطبق العذاب",
         "word_sv": "Lät straffet drabba",
         "ayah_full": "فَدَمْدَمَ عَلَيْهِمْ رَبُّهُم",
-        "ayah_sv": "då lät deras Herre straffet drabba dem alla"
+        "ayah_sv": "då lät deras Herre straffet drabba dem alla",
+        "type": "phrase"
     },
     {
         "id": "195",
@@ -1752,7 +1946,8 @@ const quranData = [
         "meaning_ar": "ظهر",
         "word_sv": "Lyser klart",
         "ayah_full": "وَالنَّهَارِ إِذَا تَجَلَّىٰ",
-        "ayah_sv": "vid dagen, när den lyser klart"
+        "ayah_sv": "vid dagen, när den lyser klart",
+        "type": "phrase"
     },
     {
         "id": "196",
@@ -1761,7 +1956,8 @@ const quranData = [
         "meaning_ar": "مختلف",
         "word_sv": "Av skilda slag",
         "ayah_full": "إِنَّ سَعْيَكُمْ لَشَتَّىٰ",
-        "ayah_sv": "är er strävan sannerligen av skilda slag"
+        "ayah_sv": "är er strävan sannerligen av skilda slag",
+        "type": "phrase"
     },
     {
         "id": "197",
@@ -1770,7 +1966,8 @@ const quranData = [
         "meaning_ar": "خاف الله",
         "word_sv": "Fruktar Gud",
         "ayah_full": "فَأَمَّا مَنْ أَعْطَىٰ وَاتَّقَىٰ",
-        "ayah_sv": "Den som ger [av sitt] och fruktar Gud"
+        "ayah_sv": "Den som ger [av sitt] och fruktar Gud",
+        "type": "phrase"
     },
     {
         "id": "198",
@@ -1779,7 +1976,8 @@ const quranData = [
         "meaning_ar": "الجنة/الخير",
         "word_sv": "Det lätta",
         "ayah_full": "فَسَنُيَسِّرُهُ لِلْيُسْرَىٰ",
-        "ayah_sv": "honom skall Vi göra det lätt att följa den lätta vägen"
+        "ayah_sv": "honom skall Vi göra det lätt att följa den lätta vägen",
+        "type": "noun"
     },
     {
         "id": "199",
@@ -1788,7 +1986,8 @@ const quranData = [
         "meaning_ar": "بخل واستكبر",
         "word_sv": "Ser sig själv som tillräcklig",
         "ayah_full": "وَمَن بَخِلَ وَاسْتَغْنَىٰ",
-        "ayah_sv": "men den som snålar och ser sig själv som tillräcklig"
+        "ayah_sv": "men den som snålar och ser sig själv som tillräcklig",
+        "type": "phrase"
     },
     {
         "id": "200",
@@ -1797,7 +1996,8 @@ const quranData = [
         "meaning_ar": "الشدة/النار",
         "word_sv": "Det svåra",
         "ayah_full": "فَسَنُيَسِّرُهُ لِلْعُسْرَىٰ",
-        "ayah_sv": "skall Vi göra det lätt för honom att gå det svåra till mötes"
+        "ayah_sv": "skall Vi göra det lätt för honom att gå det svåra till mötes",
+        "type": "noun"
     },
     {
         "id": "201",
@@ -1806,7 +2006,8 @@ const quranData = [
         "meaning_ar": "هلك",
         "word_sv": "Faller",
         "ayah_full": "وَمَا يُغْنِي عَنْهُ مَالُهُ إِذَا تَرَدَّىٰ",
-        "ayah_sv": "vad har han för glädje av sin rikedom när han faller [i graven]"
+        "ayah_sv": "vad har han för glädje av sin rikedom när han faller [i graven]",
+        "type": "noun"
     },
     {
         "id": "202",
@@ -1815,7 +2016,8 @@ const quranData = [
         "meaning_ar": "تتوقد",
         "word_sv": "Flammande",
         "ayah_full": "فَأَنذَرْتُكُمْ نَارًا تَلَظَّىٰ",
-        "ayah_sv": "Därför varnar Jag er för en flammande Eld"
+        "ayah_sv": "Därför varnar Jag er för en flammande Eld",
+        "type": "adjective"
     },
     {
         "id": "203",
@@ -1824,7 +2026,8 @@ const quranData = [
         "meaning_ar": "سكن",
         "word_sv": "Är stilla",
         "ayah_full": "وَاللَّيْلِ إِذَا سَجَىٰ",
-        "ayah_sv": "vid natten, när den är stilla"
+        "ayah_sv": "vid natten, när den är stilla",
+        "type": "phrase"
     },
     {
         "id": "204",
@@ -1833,7 +2036,8 @@ const quranData = [
         "meaning_ar": "تركك",
         "word_sv": "Övergett",
         "ayah_full": "مَا وَدَّعَكَ رَبُّكَ",
-        "ayah_sv": "Din Herre har inte övergett dig"
+        "ayah_sv": "Din Herre har inte övergett dig",
+        "type": "noun"
     },
     {
         "id": "205",
@@ -1842,7 +2046,8 @@ const quranData = [
         "meaning_ar": "أبغض",
         "word_sv": "Hyser ovilja",
         "ayah_full": "وَمَا قَلَىٰ",
-        "ayah_sv": "och Han hyser inte ovilja [mot dig]"
+        "ayah_sv": "och Han hyser inte ovilja [mot dig]",
+        "type": "phrase"
     },
     {
         "id": "206",
@@ -1851,7 +2056,8 @@ const quranData = [
         "meaning_ar": "ضم ورعى",
         "word_sv": "Tog hand om",
         "ayah_full": "أَلَمْ يَجِدْكَ يَتِيمًا فَآوَىٰ",
-        "ayah_sv": "Fann Han dig inte faderlös och tog hand om dig"
+        "ayah_sv": "Fann Han dig inte faderlös och tog hand om dig",
+        "type": "phrase"
     },
     {
         "id": "207",
@@ -1860,7 +2066,8 @@ const quranData = [
         "meaning_ar": "فقيراً",
         "word_sv": "Fattig",
         "ayah_full": "وَوَجَدَكَ عَائِلًا فَأَغْنَىٰ",
-        "ayah_sv": "Och fann Han dig inte fattig och gav dig vad du behövde"
+        "ayah_sv": "Och fann Han dig inte fattig och gav dig vad du behövde",
+        "type": "adjective"
     },
     {
         "id": "208",
@@ -1869,7 +2076,8 @@ const quranData = [
         "meaning_ar": "تذل",
         "word_sv": "Tryck ned",
         "ayah_full": "فَأَمَّا الْيَتِيمَ فَلَا تَقْهَرْ",
-        "ayah_sv": "Var därför inte hård mot den faderlöse (Tryck inte ned)"
+        "ayah_sv": "Var därför inte hård mot den faderlöse (Tryck inte ned)",
+        "type": "phrase"
     },
     {
         "id": "209",
@@ -1878,7 +2086,8 @@ const quranData = [
         "meaning_ar": "تزجر",
         "word_sv": "Kör iväg",
         "ayah_full": "وَأَمَّا السَّائِلَ فَلَا تَنْهَرْ",
-        "ayah_sv": "och kör inte iväg tiggaren"
+        "ayah_sv": "och kör inte iväg tiggaren",
+        "type": "phrase"
     },
     {
         "id": "210",
@@ -1887,7 +2096,8 @@ const quranData = [
         "meaning_ar": "نوسع",
         "word_sv": "Öppnat",
         "ayah_full": "أَلَمْ نَشْرَحْ لَكَ صَدْرَكَ",
-        "ayah_sv": "HAR VI inte öppnat ditt bröst"
+        "ayah_sv": "HAR VI inte öppnat ditt bröst",
+        "type": "noun"
     },
     {
         "id": "211",
@@ -1896,7 +2106,8 @@ const quranData = [
         "meaning_ar": "حملك",
         "word_sv": "Börda",
         "ayah_full": "وَوَضَعْنَا عَنكَ وِزْرَكَ",
-        "ayah_sv": "och lättat din börda"
+        "ayah_sv": "och lättat din börda",
+        "type": "word"
     },
     {
         "id": "212",
@@ -1905,7 +2116,8 @@ const quranData = [
         "meaning_ar": "أثقل",
         "word_sv": "Tyngde",
         "ayah_full": "الَّذِي أَنقَضَ ظَهْرَكَ",
-        "ayah_sv": "som tyngde din rygg"
+        "ayah_sv": "som tyngde din rygg",
+        "type": "noun"
     },
     {
         "id": "213",
@@ -1914,7 +2126,8 @@ const quranData = [
         "meaning_ar": "اسمك",
         "word_sv": "Rykte",
         "ayah_full": "وَرَفَعْنَا لَكَ ذِكْرَكَ",
-        "ayah_sv": "och gett dig högt rykte"
+        "ayah_sv": "och gett dig högt rykte",
+        "type": "noun"
     },
     {
         "id": "214",
@@ -1923,7 +2136,8 @@ const quranData = [
         "meaning_ar": "اجتهد",
         "word_sv": "Sträva",
         "ayah_full": "فَإِذَا فَرَغْتَ فَانصَبْ",
-        "ayah_sv": "Och när du är ledig, sträva [i bön]"
+        "ayah_sv": "Och när du är ledig, sträva [i bön]",
+        "type": "word"
     },
     {
         "id": "215",
@@ -1932,7 +2146,8 @@ const quranData = [
         "meaning_ar": "سيناء",
         "word_sv": "Sinai",
         "ayah_full": "وَطُورِ سِينِينَ",
-        "ayah_sv": "vid Sinai berg"
+        "ayah_sv": "vid Sinai berg",
+        "type": "noun"
     },
     {
         "id": "216",
@@ -1941,7 +2156,8 @@ const quranData = [
         "meaning_ar": "هيئة",
         "word_sv": "Skapnad",
         "ayah_full": "لَقَدْ خَلَقْنَا الْإِنسَانَ فِي أَحْسَنِ تَقْوِيمٍ",
-        "ayah_sv": "Vi har sannerligen skapat människan i den bästa skapnad"
+        "ayah_sv": "Vi har sannerligen skapat människan i den bästa skapnad",
+        "type": "noun"
     },
     {
         "id": "217",
@@ -1950,7 +2166,8 @@ const quranData = [
         "meaning_ar": "أدنى",
         "word_sv": "Lägsta",
         "ayah_full": "أَسْفَلَ سَافِلِينَ",
-        "ayah_sv": "den lägsta av de låga grader"
+        "ayah_sv": "den lägsta av de låga grader",
+        "type": "word"
     },
     {
         "id": "218",
@@ -1959,7 +2176,8 @@ const quranData = [
         "meaning_ar": "مقطوع",
         "word_sv": "Tar slut",
         "ayah_full": "فَلَهُمْ أَجْرٌ غَيْرُ مَمْنُونٍ",
-        "ayah_sv": "väntar en lön som aldrig tar slut"
+        "ayah_sv": "väntar en lön som aldrig tar slut",
+        "type": "phrase"
     },
     {
         "id": "219",
@@ -1968,7 +2186,8 @@ const quranData = [
         "meaning_ar": "دم متجمد",
         "word_sv": "Grodd",
         "ayah_full": "خَلَقَ الْإِنسَانَ مِنْ عَلَقٍ",
-        "ayah_sv": "som har skapat människan av en grodd"
+        "ayah_sv": "som har skapat människan av en grodd",
+        "type": "noun"
     },
     {
         "id": "220",
@@ -1977,7 +2196,8 @@ const quranData = [
         "meaning_ar": "الكريم جداً",
         "word_sv": "Den Frikostigaste",
         "ayah_full": "اقْرَأْ وَرَبُّكَ الْأَكْرَمُ",
-        "ayah_sv": "Läs! Din Herre är den Frikostigaste"
+        "ayah_sv": "Läs! Din Herre är den Frikostigaste",
+        "type": "noun"
     },
     {
         "id": "221",
@@ -1986,7 +2206,8 @@ const quranData = [
         "meaning_ar": "الرجوع",
         "word_sv": "Återkomsten",
         "ayah_full": "إِنَّ إِلَىٰ رَبِّكَ الرُّجْعَىٰ",
-        "ayah_sv": "Men till din Herre är återkomsten"
+        "ayah_sv": "Men till din Herre är återkomsten",
+        "type": "noun"
     },
     {
         "id": "222",
@@ -1995,7 +2216,8 @@ const quranData = [
         "meaning_ar": "مقدمة الرأس",
         "word_sv": "Luggen",
         "ayah_full": "لَنَسْفَعًا بِالنَّاصِيَةِ",
-        "ayah_sv": "skall Vi sannerligen släpa honom [till straffet] vid luggen"
+        "ayah_sv": "skall Vi sannerligen släpa honom [till straffet] vid luggen",
+        "type": "noun"
     },
     {
         "id": "223",
@@ -2004,7 +2226,8 @@ const quranData = [
         "meaning_ar": "لنجذبن",
         "word_sv": "Släpa",
         "ayah_full": "لَنَسْفَعًا بِالنَّاصِيَةِ",
-        "ayah_sv": "skall Vi sannerligen släpa honom [till straffet] vid luggen"
+        "ayah_sv": "skall Vi sannerligen släpa honom [till straffet] vid luggen",
+        "type": "word"
     },
     {
         "id": "224",
@@ -2013,7 +2236,8 @@ const quranData = [
         "meaning_ar": "عشيرته",
         "word_sv": "Hejdukar",
         "ayah_full": "فَلْيَدْعُ نَادِيَهُ",
-        "ayah_sv": "Låt honom kalla på sina hejdukar"
+        "ayah_sv": "Låt honom kalla på sina hejdukar",
+        "type": "noun"
     },
     {
         "id": "225",
@@ -2022,7 +2246,8 @@ const quranData = [
         "meaning_ar": "ملائكة العذاب",
         "word_sv": "Helvetesvakter",
         "ayah_full": "سَنَدْعُ الزَّبَانِيَةَ",
-        "ayah_sv": "Vi skall kalla på helvetesvakter"
+        "ayah_sv": "Vi skall kalla på helvetesvakter",
+        "type": "noun"
     },
     {
         "id": "226",
@@ -2031,7 +2256,8 @@ const quranData = [
         "meaning_ar": "الشرف/التقدير",
         "word_sv": "Allmakten",
         "ayah_full": "لَيْلَةِ الْقَدْرِ",
-        "ayah_sv": "Allmaktens Natt"
+        "ayah_sv": "Allmaktens Natt",
+        "type": "noun"
     },
     {
         "id": "227",
@@ -2040,7 +2266,8 @@ const quranData = [
         "meaning_ar": "بزوغ",
         "word_sv": "Gryningen",
         "ayah_full": "حَتَّىٰ مَطْلَعِ الْفَجْرِ",
-        "ayah_sv": "till dess gryningen bryter in"
+        "ayah_sv": "till dess gryningen bryter in",
+        "type": "noun"
     },
     {
         "id": "228",
@@ -2049,7 +2276,8 @@ const quranData = [
         "meaning_ar": "تاركين (دينهم)",
         "word_sv": "Lämna",
         "ayah_full": "لَمْ يَكُنِ ... مُنفَكِّينَ",
-        "ayah_sv": "skulle inte lämna [sin tro]"
+        "ayah_sv": "skulle inte lämna [sin tro]",
+        "type": "word"
     },
     {
         "id": "229",
@@ -2058,7 +2286,8 @@ const quranData = [
         "meaning_ar": "منزهة",
         "word_sv": "Rena",
         "ayah_full": "يَتْلُو صُحُفًا مُّطَهَّرَةً",
-        "ayah_sv": "som läser upp [ur] rena blad"
+        "ayah_sv": "som läser upp [ur] rena blad",
+        "type": "adjective"
     },
     {
         "id": "230",
@@ -2067,7 +2296,8 @@ const quranData = [
         "meaning_ar": "مستقيمة",
         "word_sv": "Av evigt värde",
         "ayah_full": "فِيهَا كُتُبٌ قَيِّمَةٌ",
-        "ayah_sv": "med skrifter av evigt värde"
+        "ayah_sv": "med skrifter av evigt värde",
+        "type": "phrase"
     },
     {
         "id": "231",
@@ -2076,7 +2306,8 @@ const quranData = [
         "meaning_ar": "الخلق",
         "word_sv": "Skapade varelser",
         "ayah_full": "أُولَٰئِكَ هُمْ شَرُّ الْبَرِيَّةِ",
-        "ayah_sv": "de är de sämsta av alla skapade varelser"
+        "ayah_sv": "de är de sämsta av alla skapade varelser",
+        "type": "phrase"
     },
     {
         "id": "232",
@@ -2085,7 +2316,8 @@ const quranData = [
         "meaning_ar": "هزتها",
         "word_sv": "Skalv",
         "ayah_full": "إِذَا زُلْزِلَتِ الْأَرْضُ زِلْزَالَهَا",
-        "ayah_sv": "När jorden skälver i sitt sista skalv"
+        "ayah_sv": "När jorden skälver i sitt sista skalv",
+        "type": "noun"
     },
     {
         "id": "233",
@@ -2094,7 +2326,8 @@ const quranData = [
         "meaning_ar": "ما في بطنها",
         "word_sv": "Bördor",
         "ayah_full": "وَأَخْرَجَتِ الْأَرْضُ أَثْقَالَهَا",
-        "ayah_sv": "och jorden kastar upp sina bördor"
+        "ayah_sv": "och jorden kastar upp sina bördor",
+        "type": "noun"
     },
     {
         "id": "234",
@@ -2103,7 +2336,8 @@ const quranData = [
         "meaning_ar": "متفرقين",
         "word_sv": "Spridda hopar",
         "ayah_full": "يَصْدُرُ النَّاسُ أَشْتَاتًا",
-        "ayah_sv": "människorna stiga fram i spridda hopar"
+        "ayah_sv": "människorna stiga fram i spridda hopar",
+        "type": "phrase"
     },
     {
         "id": "235",
@@ -2112,7 +2346,8 @@ const quranData = [
         "meaning_ar": "وزن",
         "word_sv": "Vikt",
         "ayah_full": "فَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ",
-        "ayah_sv": "Den som har gjort så mycket som ett stoftkorns vikt"
+        "ayah_sv": "Den som har gjort så mycket som ett stoftkorns vikt",
+        "type": "noun"
     },
     {
         "id": "236",
@@ -2121,7 +2356,8 @@ const quranData = [
         "meaning_ar": "الخيل المسرعة",
         "word_sv": "Stridshästarna",
         "ayah_full": "وَالْعَادِيَاتِ ضَبْحًا",
-        "ayah_sv": "VID DE flämtande stridshästarna"
+        "ayah_sv": "VID DE flämtande stridshästarna",
+        "type": "noun"
     },
     {
         "id": "237",
@@ -2130,7 +2366,8 @@ const quranData = [
         "meaning_ar": "صوت الأنفاس",
         "word_sv": "Flämtande",
         "ayah_full": "وَالْعَادِيَاتِ ضَبْحًا",
-        "ayah_sv": "VID DE flämtande stridshästarna"
+        "ayah_sv": "VID DE flämtande stridshästarna",
+        "type": "adjective"
     },
     {
         "id": "238",
@@ -2139,7 +2376,8 @@ const quranData = [
         "meaning_ar": "الموقدات للنار",
         "word_sv": "Slår eld",
         "ayah_full": "فَالْمُورِيَاتِ قَدْحًا",
-        "ayah_sv": "som slår eld [ur marken]"
+        "ayah_sv": "som slår eld [ur marken]",
+        "type": "phrase"
     },
     {
         "id": "239",
@@ -2148,7 +2386,8 @@ const quranData = [
         "meaning_ar": "ضرباً بالحافر",
         "word_sv": "Slår eld",
         "ayah_full": "فَالْمُورِيَاتِ قَدْحًا",
-        "ayah_sv": "som slår eld [ur marken]"
+        "ayah_sv": "som slår eld [ur marken]",
+        "type": "phrase"
     },
     {
         "id": "240",
@@ -2157,7 +2396,8 @@ const quranData = [
         "meaning_ar": "المهاجمات",
         "word_sv": "Anfaller",
         "ayah_full": "فَالْمُغِيرَاتِ صُبْحًا",
-        "ayah_sv": "som anfaller på morgonen"
+        "ayah_sv": "som anfaller på morgonen",
+        "type": "noun"
     },
     {
         "id": "241",
@@ -2166,7 +2406,8 @@ const quranData = [
         "meaning_ar": "غباراً",
         "word_sv": "Moln av damm",
         "ayah_full": "فَأَثَرْنَ بِهِ نَقْعًا",
-        "ayah_sv": "och river upp moln av damm"
+        "ayah_sv": "och river upp moln av damm",
+        "type": "phrase"
     },
     {
         "id": "242",
@@ -2175,7 +2416,8 @@ const quranData = [
         "meaning_ar": "جحود",
         "word_sv": "Otacksam",
         "ayah_full": "إِنَّ الْإِنسَانَ لِرَبِّهِ لَكَنُودٌ",
-        "ayah_sv": "att människan är djupt otacksam mot sin Herre"
+        "ayah_sv": "att människan är djupt otacksam mot sin Herre",
+        "type": "adjective"
     },
     {
         "id": "243",
@@ -2184,7 +2426,8 @@ const quranData = [
         "meaning_ar": "أثير وأخرج",
         "word_sv": "Vänds upp och ned",
         "ayah_full": "إِذَا بُعْثِرَ مَا فِي الْقُبُورِ",
-        "ayah_sv": "när gravarna vänds upp och ned"
+        "ayah_sv": "när gravarna vänds upp och ned",
+        "type": "phrase"
     },
     {
         "id": "244",
@@ -2193,7 +2436,8 @@ const quranData = [
         "meaning_ar": "جمع وكشف",
         "word_sv": "Uppenbaras",
         "ayah_full": "وَحُصِّلَ مَا فِي الصُّدُورِ",
-        "ayah_sv": "och vad som göms i människornas bröst uppenbaras"
+        "ayah_sv": "och vad som göms i människornas bröst uppenbaras",
+        "type": "noun"
     },
     {
         "id": "245",
@@ -2202,7 +2446,8 @@ const quranData = [
         "meaning_ar": "القيامة",
         "word_sv": "Det dånande slaget",
         "ayah_full": "الْقَارِعَةُ",
-        "ayah_sv": "Det dånande slaget"
+        "ayah_sv": "Det dånande slaget",
+        "type": "noun"
     },
     {
         "id": "246",
@@ -2211,7 +2456,8 @@ const quranData = [
         "meaning_ar": "المنتشر",
         "word_sv": "Kringströdda",
         "ayah_full": "كَالْفَرَاشِ الْمَبْثُوثِ",
-        "ayah_sv": "som kringströdda mott"
+        "ayah_sv": "som kringströdda mott",
+        "type": "noun"
     },
     {
         "id": "247",
@@ -2220,7 +2466,8 @@ const quranData = [
         "meaning_ar": "الصوف",
         "word_sv": "Ull",
         "ayah_full": "كَالْعِهْنِ الْمَنْفُوشِ",
-        "ayah_sv": "som kardad ull"
+        "ayah_sv": "som kardad ull",
+        "type": "noun"
     },
     {
         "id": "248",
@@ -2229,7 +2476,8 @@ const quranData = [
         "meaning_ar": "المفرق",
         "word_sv": "Kardad",
         "ayah_full": "كَالْعِهْنِ الْمَنْفُوشِ",
-        "ayah_sv": "som kardad ull"
+        "ayah_sv": "som kardad ull",
+        "type": "noun"
     },
     {
         "id": "249",
@@ -2238,7 +2486,8 @@ const quranData = [
         "meaning_ar": "قعر النار",
         "word_sv": "Avgrund",
         "ayah_full": "فَأُمُّهُ هَاوِيَةٌ",
-        "ayah_sv": "har avgrunden till moder"
+        "ayah_sv": "har avgrunden till moder",
+        "type": "noun"
     },
     {
         "id": "250",
@@ -2247,7 +2496,8 @@ const quranData = [
         "meaning_ar": "شغلكم",
         "word_sv": "Distraherar",
         "ayah_full": "أَلْهَاكُمُ التَّكَاثُرُ",
-        "ayah_sv": "BEGÄRET att få mer och mer distraherar er"
+        "ayah_sv": "BEGÄRET att få mer och mer distraherar er",
+        "type": "noun"
     },
     {
         "id": "251",
@@ -2256,7 +2506,8 @@ const quranData = [
         "meaning_ar": "متم ودفنتم",
         "word_sv": "Vilar",
         "ayah_full": "حَتَّىٰ زُرْتُمُ الْمَقَابِرَ",
-        "ayah_sv": "ända till dess ni vilar i era gravar"
+        "ayah_sv": "ända till dess ni vilar i era gravar",
+        "type": "noun"
     },
     {
         "id": "252",
@@ -2265,7 +2516,8 @@ const quranData = [
         "meaning_ar": "النار",
         "word_sv": "Helvetet",
         "ayah_full": "لَتَرَوُنَّ الْجَحِيمَ",
-        "ayah_sv": "Ni skall sannerligen få skåda helvetet"
+        "ayah_sv": "Ni skall sannerligen få skåda helvetet",
+        "type": "noun"
     },
     {
         "id": "253",
@@ -2274,7 +2526,8 @@ const quranData = [
         "meaning_ar": "ملذات الدنيا",
         "word_sv": "Det goda",
         "ayah_full": "عَنِ النَّعِيمِ",
-        "ayah_sv": "om det goda [som livet skänkte er]"
+        "ayah_sv": "om det goda [som livet skänkte er]",
+        "type": "noun"
     },
     {
         "id": "254",
@@ -2283,7 +2536,8 @@ const quranData = [
         "meaning_ar": "الدهر",
         "word_sv": "Tiden",
         "ayah_full": "وَالْعَصْرِ",
-        "ayah_sv": "VID TIDEN"
+        "ayah_sv": "VID TIDEN",
+        "type": "noun"
     },
     {
         "id": "255",
@@ -2292,7 +2546,8 @@ const quranData = [
         "meaning_ar": "هلاك",
         "word_sv": "Förlust",
         "ayah_full": "إِنَّ الْإِنسَانَ لَفِي خُسْرٍ",
-        "ayah_sv": "är människans lott förlust"
+        "ayah_sv": "är människans lott förlust",
+        "type": "noun"
     },
     {
         "id": "256",
@@ -2301,7 +2556,8 @@ const quranData = [
         "meaning_ar": "أوصى بعضهم",
         "word_sv": "Råder varandra",
         "ayah_full": "وَتَوَاصَوْا بِالْحَقِّ",
-        "ayah_sv": "och som råder varandra att hålla fast vid sanningen"
+        "ayah_sv": "och som råder varandra att hålla fast vid sanningen",
+        "type": "phrase"
     },
     {
         "id": "257",
@@ -2310,7 +2566,8 @@ const quranData = [
         "meaning_ar": "مغتاب",
         "word_sv": "Smädare",
         "ayah_full": "وَيْلٌ لِّكُلِّ هُمَزَةٍ",
-        "ayah_sv": "VE OCH FÖRDÄRV över varje smädare"
+        "ayah_sv": "VE OCH FÖRDÄRV över varje smädare",
+        "type": "noun"
     },
     {
         "id": "258",
@@ -2319,7 +2576,8 @@ const quranData = [
         "meaning_ar": "عياب",
         "word_sv": "Baktalare",
         "ayah_full": "لِّكُلِّ هُمَزَةٍ لُّمَزَةٍ",
-        "ayah_sv": "varje smädare, varje baktalare"
+        "ayah_sv": "varje smädare, varje baktalare",
+        "type": "noun"
     },
     {
         "id": "259",
@@ -2328,7 +2586,8 @@ const quranData = [
         "meaning_ar": "أحصاه",
         "word_sv": "Räknar",
         "ayah_full": "جَمَعَ مَالًا وَعَدَّدَهُ",
-        "ayah_sv": "samlar rikedomar och räknar dem"
+        "ayah_sv": "samlar rikedomar och räknar dem",
+        "type": "noun"
     },
     {
         "id": "260",
@@ -2337,7 +2596,8 @@ const quranData = [
         "meaning_ar": "خلد ذكره",
         "word_sv": "Odödlig",
         "ayah_full": "أَنَّ مَالَهُ أَخْلَدَهُ",
-        "ayah_sv": "att hans rikedom skall göra honom odödlig"
+        "ayah_sv": "att hans rikedom skall göra honom odödlig",
+        "type": "adjective"
     },
     {
         "id": "261",
@@ -2346,7 +2606,8 @@ const quranData = [
         "meaning_ar": "النار المحطمة",
         "word_sv": "Krossaren",
         "ayah_full": "لَيُنبَذَنَّ فِي الْحُطَمَةِ",
-        "ayah_sv": "han skall sannerligen kastas i Krossaren"
+        "ayah_sv": "han skall sannerligen kastas i Krossaren",
+        "type": "noun"
     },
     {
         "id": "262",
@@ -2355,7 +2616,8 @@ const quranData = [
         "meaning_ar": "المشتعلة",
         "word_sv": "Tänd",
         "ayah_full": "نَارُ اللَّهِ الْمُوقَدَةُ",
-        "ayah_sv": "Det är Guds eld, tänd [av Honom]"
+        "ayah_sv": "Det är Guds eld, tänd [av Honom]",
+        "type": "noun"
     },
     {
         "id": "263",
@@ -2364,7 +2626,8 @@ const quranData = [
         "meaning_ar": "مغلقة",
         "word_sv": "Sluter sig",
         "ayah_full": "عَلَيْهِم مُّؤْصَدَةٌ",
-        "ayah_sv": "skall sluta sig omkring dem"
+        "ayah_sv": "skall sluta sig omkring dem",
+        "type": "phrase"
     },
     {
         "id": "264",
@@ -2373,7 +2636,8 @@ const quranData = [
         "meaning_ar": "أعمدة",
         "word_sv": "Pelare",
         "ayah_full": "فِي عَمَدٍ مُّمَدَّدَةٍ",
-        "ayah_sv": "fastbundna vid höga pelare"
+        "ayah_sv": "fastbundna vid höga pelare",
+        "type": "noun"
     },
     {
         "id": "265",
@@ -2382,7 +2646,8 @@ const quranData = [
         "meaning_ar": "إبطال وخسارة",
         "word_sv": "Gick om intet",
         "ayah_full": "كَيْدَهُمْ فِي تَضْلِيلٍ",
-        "ayah_sv": "fick Han inte deras listiga planer att gå om intet"
+        "ayah_sv": "fick Han inte deras listiga planer att gå om intet",
+        "type": "phrase"
     },
     {
         "id": "266",
@@ -2391,7 +2656,8 @@ const quranData = [
         "meaning_ar": "جماعات",
         "word_sv": "Svärmar",
         "ayah_full": "طَيْرًا أَبَابِيلَ",
-        "ayah_sv": "svärmar av fåglar"
+        "ayah_sv": "svärmar av fåglar",
+        "type": "noun"
     },
     {
         "id": "267",
@@ -2400,7 +2666,8 @@ const quranData = [
         "meaning_ar": "طين متحجر",
         "word_sv": "Bränd lera",
         "ayah_full": "بِحِجَارَةٍ مِّن سِجِّيلٍ",
-        "ayah_sv": "stenar av bränd lera"
+        "ayah_sv": "stenar av bränd lera",
+        "type": "phrase"
     },
     {
         "id": "268",
@@ -2409,7 +2676,8 @@ const quranData = [
         "meaning_ar": "زرع يابس",
         "word_sv": "Uppätet strå",
         "ayah_full": "كَعَصْفٍ مَّأْكُولٍ",
-        "ayah_sv": "som liknade uppätna strån"
+        "ayah_sv": "som liknade uppätna strån",
+        "type": "phrase"
     },
     {
         "id": "269",
@@ -2418,7 +2686,8 @@ const quranData = [
         "meaning_ar": "اعتياد",
         "word_sv": "Skydd / Vana",
         "ayah_full": "لِإِيلَافِ قُرَيْشٍ",
-        "ayah_sv": "TILL SKYDD för Quraysh"
+        "ayah_sv": "TILL SKYDD för Quraysh",
+        "type": "phrase"
     },
     {
         "id": "270",
@@ -2427,7 +2696,8 @@ const quranData = [
         "meaning_ar": "سفر",
         "word_sv": "Vinter- och sommarfärder",
         "ayah_full": "رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
-        "ayah_sv": "under deras vinter- och sommarfärder"
+        "ayah_sv": "under deras vinter- och sommarfärder",
+        "type": "phrase"
     },
     {
         "id": "271",
@@ -2436,7 +2706,8 @@ const quranData = [
         "meaning_ar": "رزقهم الطعام",
         "word_sv": "Ger dem mat",
         "ayah_full": "الَّذِي أَطْعَمَهُم مِّن جُوعٍ",
-        "ayah_sv": "Han som ger dem mat i hungerns tid"
+        "ayah_sv": "Han som ger dem mat i hungerns tid",
+        "type": "phrase"
     },
     {
         "id": "272",
@@ -2445,7 +2716,8 @@ const quranData = [
         "meaning_ar": "يدفع بقسوة",
         "word_sv": "Stöter bort",
         "ayah_full": "فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ",
-        "ayah_sv": "Det är han som stöter bort den faderlöse"
+        "ayah_sv": "Det är han som stöter bort den faderlöse",
+        "type": "phrase"
     },
     {
         "id": "273",
@@ -2454,7 +2726,8 @@ const quranData = [
         "meaning_ar": "يحث",
         "word_sv": "Uppmanar",
         "ayah_full": "وَلَا يَحُضُّ عَلَىٰ طَعَامِ",
-        "ayah_sv": "och som inte uppmanar att ge den fattige mat"
+        "ayah_sv": "och som inte uppmanar att ge den fattige mat",
+        "type": "verb"
     },
     {
         "id": "274",
@@ -2463,7 +2736,8 @@ const quranData = [
         "meaning_ar": "غافلون",
         "word_sv": "Försumliga",
         "ayah_full": "عَن صَلَاتِهِمْ سَاهُونَ",
-        "ayah_sv": "de som är försumliga med sin bön"
+        "ayah_sv": "de som är försumliga med sin bön",
+        "type": "word"
     },
     {
         "id": "275",
@@ -2472,7 +2746,8 @@ const quranData = [
         "meaning_ar": "الشيء القليل",
         "word_sv": "Det nödvändigaste",
         "ayah_full": "وَيَمْنَعُونَ الْمَاعُونَ",
-        "ayah_sv": "och vägrar även det nödvändigaste"
+        "ayah_sv": "och vägrar även det nödvändigaste",
+        "type": "noun"
     },
     {
         "id": "276",
@@ -2481,7 +2756,8 @@ const quranData = [
         "meaning_ar": "الخير الكثير",
         "word_sv": "Det goda i överflöd",
         "ayah_full": "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
-        "ayah_sv": "VI HAR sannerligen gett dig det goda i överflöd"
+        "ayah_sv": "VI HAR sannerligen gett dig det goda i överflöd",
+        "type": "noun"
     },
     {
         "id": "277",
@@ -2490,7 +2766,8 @@ const quranData = [
         "meaning_ar": "اذبح",
         "word_sv": "Slakta",
         "ayah_full": "فَصَلِّ لِرَبِّكَ وَانْحَرْ",
-        "ayah_sv": "Be därför till din Herre och slakta [ditt offer]"
+        "ayah_sv": "Be därför till din Herre och slakta [ditt offer]",
+        "type": "word"
     },
     {
         "id": "278",
@@ -2499,7 +2776,8 @@ const quranData = [
         "meaning_ar": "مبغضك",
         "word_sv": "Den som hatar dig",
         "ayah_full": "إِنَّ شَانِئَكَ",
-        "ayah_sv": "Den som hatar dig"
+        "ayah_sv": "Den som hatar dig",
+        "type": "noun"
     },
     {
         "id": "279",
@@ -2508,7 +2786,8 @@ const quranData = [
         "meaning_ar": "المقطوع",
         "word_sv": "Bortglömd",
         "ayah_full": "هُوَ الْأَبْتَرُ",
-        "ayah_sv": "är sannerligen den som skall bli bortglömd"
+        "ayah_sv": "är sannerligen den som skall bli bortglömd",
+        "type": "noun"
     },
     {
         "id": "280",
@@ -2517,7 +2796,8 @@ const quranData = [
         "meaning_ar": "الجاحدون",
         "word_sv": "Förnekarna",
         "ayah_full": "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
-        "ayah_sv": "SÄG: Ni som förnekar sanningen"
+        "ayah_sv": "SÄG: Ni som förnekar sanningen",
+        "type": "noun"
     },
     {
         "id": "281",
@@ -2526,7 +2806,8 @@ const quranData = [
         "meaning_ar": "أخضع وأذل",
         "word_sv": "Dyrkar",
         "ayah_full": "لَا أَعْبُدُ مَا تَعْبُدُونَ",
-        "ayah_sv": "Jag dyrkar inte vad ni dyrkar"
+        "ayah_sv": "Jag dyrkar inte vad ni dyrkar",
+        "type": "noun"
     },
     {
         "id": "282",
@@ -2535,7 +2816,8 @@ const quranData = [
         "meaning_ar": "شرككم",
         "word_sv": "Er tro",
         "ayah_full": "لَكُمْ دِينُكُمْ",
-        "ayah_sv": "Ni har er tro"
+        "ayah_sv": "Ni har er tro",
+        "type": "phrase"
     },
     {
         "id": "283",
@@ -2544,7 +2826,8 @@ const quranData = [
         "meaning_ar": "عون",
         "word_sv": "Hjälp",
         "ayah_full": "جَاءَ نَصْرُ اللَّهِ",
-        "ayah_sv": "Guds hjälp kommer"
+        "ayah_sv": "Guds hjälp kommer",
+        "type": "noun"
     },
     {
         "id": "284",
@@ -2553,7 +2836,8 @@ const quranData = [
         "meaning_ar": "فتح مكة",
         "word_sv": "Segern",
         "ayah_full": "نَصْرُ اللَّهِ وَالْفَتْحُ",
-        "ayah_sv": "Guds hjälp kommer och segern"
+        "ayah_sv": "Guds hjälp kommer och segern",
+        "type": "noun"
     },
     {
         "id": "285",
@@ -2562,7 +2846,8 @@ const quranData = [
         "meaning_ar": "جماعات",
         "word_sv": "I skaror",
         "ayah_full": "فِي دِينِ اللَّهِ أَفْوَاجًا",
-        "ayah_sv": "ansluta sig till Guds religion i skaror"
+        "ayah_sv": "ansluta sig till Guds religion i skaror",
+        "type": "phrase"
     },
     {
         "id": "286",
@@ -2571,7 +2856,8 @@ const quranData = [
         "meaning_ar": "خسرت",
         "word_sv": "Förgås",
         "ayah_full": "تَبَّتْ يَدَا أَبِي لَهَبٍ",
-        "ayah_sv": "MÅ ABU LAHEB förgås"
+        "ayah_sv": "MÅ ABU LAHEB förgås",
+        "type": "noun"
     },
     {
         "id": "287",
@@ -2580,7 +2866,8 @@ const quranData = [
         "meaning_ar": "نفع ودفع",
         "word_sv": "Hjälpa",
         "ayah_full": "مَا أَغْنَىٰ عَنْهُ مَالُهُ",
-        "ayah_sv": "Vad kan hans rikedom hjälpa honom"
+        "ayah_sv": "Vad kan hans rikedom hjälpa honom",
+        "type": "word"
     },
     {
         "id": "288",
@@ -2589,7 +2876,8 @@ const quranData = [
         "meaning_ar": "شعلة نار",
         "word_sv": "Flammande",
         "ayah_full": "نَارًا ذَاتَ لَهَبٍ",
-        "ayah_sv": "en flammande eld"
+        "ayah_sv": "en flammande eld",
+        "type": "adjective"
     },
     {
         "id": "289",
@@ -2598,7 +2886,8 @@ const quranData = [
         "meaning_ar": "عنقها",
         "word_sv": "Halsen",
         "ayah_full": "فِي جِيدِهَا",
-        "ayah_sv": "och om halsen"
+        "ayah_sv": "och om halsen",
+        "type": "noun"
     },
     {
         "id": "290",
@@ -2607,7 +2896,8 @@ const quranData = [
         "meaning_ar": "ليف خشن",
         "word_sv": "Tvinnade fibrer",
         "ayah_full": "حَبْلٌ مِّن مَّسَدٍ",
-        "ayah_sv": "ett rep av tvinnade fibrer"
+        "ayah_sv": "ett rep av tvinnade fibrer",
+        "type": "phrase"
     },
     {
         "id": "291",
@@ -2616,7 +2906,8 @@ const quranData = [
         "meaning_ar": "واحد",
         "word_sv": "Den Ende",
         "ayah_full": "قُلْ هُوَ اللَّهُ أَحَدٌ",
-        "ayah_sv": "SÄG: Han är Gud, den Ende"
+        "ayah_sv": "SÄG: Han är Gud, den Ende",
+        "type": "noun"
     },
     {
         "id": "292",
@@ -2625,7 +2916,8 @@ const quranData = [
         "meaning_ar": "المقصود للحوائج",
         "word_sv": "Den Evige",
         "ayah_full": "اللَّهُ الصَّمَدُ",
-        "ayah_sv": "Gud, den Evige"
+        "ayah_sv": "Gud, den Evige",
+        "type": "noun"
     },
     {
         "id": "293",
@@ -2634,7 +2926,8 @@ const quranData = [
         "meaning_ar": "مماثلاً/نظيراً",
         "word_sv": "Jämlike",
         "ayah_full": "وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
-        "ayah_sv": "och ingen finns som kan liknas vid Honom"
+        "ayah_sv": "och ingen finns som kan liknas vid Honom",
+        "type": "noun"
     },
     {
         "id": "294",
@@ -2643,7 +2936,8 @@ const quranData = [
         "meaning_ar": "الصبح",
         "word_sv": "Gryningens",
         "ayah_full": "بِرَبِّ الْفَلَقِ",
-        "ayah_sv": "Gryningens Herre"
+        "ayah_sv": "Gryningens Herre",
+        "type": "noun"
     },
     {
         "id": "295",
@@ -2652,7 +2946,8 @@ const quranData = [
         "meaning_ar": "ليل مظلم",
         "word_sv": "Mörkret",
         "ayah_full": "وَمِن شَرِّ غَاسِقٍ",
-        "ayah_sv": "och mot det onda i mörkret"
+        "ayah_sv": "och mot det onda i mörkret",
+        "type": "noun"
     },
     {
         "id": "296",
@@ -2661,7 +2956,8 @@ const quranData = [
         "meaning_ar": "دخل ظلامه",
         "word_sv": "Sänker sig",
         "ayah_full": "إِذَا وَقَبَ",
-        "ayah_sv": "när det sänker sig"
+        "ayah_sv": "när det sänker sig",
+        "type": "phrase"
     },
     {
         "id": "297",
@@ -2670,7 +2966,8 @@ const quranData = [
         "meaning_ar": "الساحرات",
         "word_sv": "De som blåser",
         "ayah_full": "وَمِن شَرِّ النَّفَّاثَاتِ",
-        "ayah_sv": "och mot det onda hos dem som blåser"
+        "ayah_sv": "och mot det onda hos dem som blåser",
+        "type": "phrase"
     },
     {
         "id": "298",
@@ -2679,7 +2976,8 @@ const quranData = [
         "meaning_ar": "ما يعقد للسحر",
         "word_sv": "Knutar",
         "ayah_full": "فِي الْعُقَدِ",
-        "ayah_sv": "på knutar"
+        "ayah_sv": "på knutar",
+        "type": "noun"
     },
     {
         "id": "299",
@@ -2688,7 +2986,8 @@ const quranData = [
         "meaning_ar": "المختفي",
         "word_sv": "Den som drar sig undan",
         "ayah_full": "الْوَسْوَاسِ الْخَنَّاسِ",
-        "ayah_sv": "viskaren som drar sig undan"
+        "ayah_sv": "viskaren som drar sig undan",
+        "type": "noun"
     },
     {
         "id": "300",
@@ -2697,7 +2996,8 @@ const quranData = [
         "meaning_ar": "الجن",
         "word_sv": "Osynliga väsen",
         "ayah_full": "مِنَ الْجِنَّةِ وَالنَّاسِ",
-        "ayah_sv": "av osynliga väsen och människor"
+        "ayah_sv": "av osynliga väsen och människor",
+        "type": "phrase"
     }
 ];
 

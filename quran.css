@@ -59,6 +59,61 @@
     --bg-gradient: radial-gradient(circle at top right, #15803d, #0f172a, #020617);
 }
 
+/* Sky Blue (Sama) */
+[data-quran-theme="sky"] {
+    --quran-gold: #f0f9ff;
+    /* White-Blue */
+    --quran-gold-glow: rgba(224, 242, 254, 0.4);
+    --quran-green: #0ea5e9;
+    /* Sky Blue */
+    --quran-green-light: #38bdf8;
+    --bg-gradient: radial-gradient(circle at top right, #0284c7, #0c4a6e, #0f172a);
+}
+
+/* Dark Blue (Ocean) */
+[data-quran-theme="ocean"] {
+    --quran-gold: #fbbf24;
+    /* Gold contrast */
+    --quran-gold-glow: rgba(251, 191, 36, 0.3);
+    --quran-green: #1e40af;
+    /* Blue 800 */
+    --quran-green-light: #60a5fa;
+    --bg-gradient: radial-gradient(circle at top right, #1e3a8a, #172554, #020617);
+}
+
+/* Navy Blue (Kohl) */
+[data-quran-theme="navy"] {
+    --quran-gold: #e2e8f0;
+    /* Silver/Slate */
+    --quran-gold-glow: rgba(226, 232, 240, 0.3);
+    --quran-green: #312e81;
+    /* Indigo 900 */
+    --quran-green-light: #818cf8;
+    --bg-gradient: radial-gradient(circle at top right, #1e1b4b, #0f172a, #000000);
+}
+
+/* Black (Obsidian) */
+[data-quran-theme="obsidian"] {
+    --quran-gold: #ffffff;
+    /* Stark White */
+    --quran-gold-glow: rgba(255, 255, 255, 0.2);
+    --quran-green: #27272a;
+    /* Zinc 800 */
+    --quran-green-light: #71717a;
+    --bg-gradient: radial-gradient(circle at top right, #18181b, #000000, #000000);
+}
+
+/* Grey (Slate) */
+[data-quran-theme="slate"] {
+    --quran-gold: #f1f5f9;
+    /* Slate 100 */
+    --quran-gold-glow: rgba(241, 245, 249, 0.3);
+    --quran-green: #475569;
+    /* Slate 600 */
+    --quran-green-light: #94a3b8;
+    --bg-gradient: radial-gradient(circle at top right, #334155, #1e293b, #0f172a);
+}
+
 body {
     background: var(--bg-gradient);
     color: white;
@@ -330,7 +385,8 @@ body {
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.6s;
+    transition: transform 0.8s;
+    /* Smooth flip */
     transform-style: preserve-3d;
 }
 
@@ -345,29 +401,40 @@ body {
     height: 100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    border-radius: 20px;
+    border-radius: 24px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 2rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.4);
+    /* Base dark glass */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
+/* Front Face Styling */
 .fc-front {
-    /* Front specific styling */
+    border: 1px solid var(--quran-green-light);
+    /* Theme Border */
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent),
+        rgba(0, 0, 0, 0.3);
+    /* Subtle gradient overlay */
+}
+
+/* Back Face Styling */
+.fc-back {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, rgba(6, 78, 59, 0.8), rgba(0, 0, 0, 0.9));
+    /* Default Greenish */
+    /* Dynamic Background using Theme Vars */
+    background: linear-gradient(135deg, var(--quran-green), rgba(0, 0, 0, 0.8));
     border: 1px solid var(--quran-gold);
 }
 
-.fc-back {
-    transform: rotateY(180deg);
-    background: rgba(6, 78, 59, 0.9);
-    /* Darker green for back */
-}
+
 
 .fc-surah-badge {
     position: absolute;
@@ -551,15 +618,104 @@ body {
 }
 
 /* =========================================
-   Filters & Settings
+   Flashcard Controls & Favorites
    ========================================= */
-.filter-bar {
+.fc-top-bar {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.fav-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.fav-btn.active {
+    color: var(--quran-gold);
+    text-shadow: 0 0 10px var(--quran-gold-glow);
+    transform: scale(1.1);
+}
+
+.rating-controls {
+    display: flex;
     gap: 10px;
-    margin-bottom: 20px;
-    padding: 0 1rem;
-    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.rating-controls.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.rate-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.rate-btn small {
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.rate-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.rate-btn.wrong {
+    border-bottom: 3px solid #ef4444;
+}
+
+.rate-btn.hard {
+    border-bottom: 3px solid #f59e0b;
+}
+
+.rate-btn.good {
+    border-bottom: 3px solid #22c55e;
+}
+
+.rate-btn.easy {
+    border-bottom: 3px solid #3b82f6;
+}
+
+.rate-btn.wrong:active {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.rate-btn.hard:active {
+    background: rgba(245, 158, 11, 0.2);
+}
+
+.rate-btn.good:active {
+    background: rgba(34, 197, 94, 0.2);
+}
+
+.rate-btn.easy:active {
+    background: rgba(59, 130, 246, 0.2);
 }
 
 .glass-select {
@@ -694,6 +850,7 @@ input:checked+.slider:before {
     font-size: 0.8rem;
     margin-left: 10px;
 }
+
 /* =========================================
    Header Controls
    ========================================= */
@@ -735,7 +892,8 @@ input:checked+.slider:before {
 body.mobile-view .quran-list,
 body.mobile-view .search-container,
 body.mobile-view .mode-tabs {
-    max-width: 480px; /* Constrain width to mobile size center */
+    max-width: 480px;
+    /* Constrain width to mobile size center */
 }
 
 body.mobile-view .quran-card {
@@ -747,5 +905,6 @@ body.mobile-view .target-word {
 }
 
 body.mobile-view .quran-header {
-    justify-content: space-between; /* Ensure spread */
+    justify-content: space-between;
+    /* Ensure spread */
 }

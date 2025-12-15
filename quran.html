@@ -31,7 +31,12 @@
             <select id="themeSelector" class="glass-select mini">
                 <option value="emerald">🌲 Emerald</option>
                 <option value="oasis">🌴 Oasis</option>
-                <option value="midnight">🌌 Midnight</option>
+                <option value="sky">☁️ Himmel</option>
+                <option value="ocean">🌊 Hav</option>
+                <option value="navy">🌌 Nattblå</option>
+                <option value="obsidian">⚫ Svart</option>
+                <option value="slate">🗿 Grå</option>
+                <option value="midnight">🌠 Midnight</option>
                 <option value="sunset">🌅 Sunset</option>
                 <option value="amethyst">🔮 Amethyst</option>
             </select>
@@ -58,7 +63,16 @@
     <div class="filter-bar" id="filterBar">
         <select id="surahFilter" class="glass-select">
             <option value="all">Alla Suror / كل السور</option>
+            <option value="favorites">⭐ Favoriter / المفضلة</option>
             <!-- Populated via JS -->
+        </select>
+        <select id="typeFilter" class="glass-select">
+            <option value="all">Alla Typer / كل الأنواع</option>
+            <option value="noun">Substantiv / اسم</option>
+            <option value="verb">Verb / فعل</option>
+            <option value="adjective">Adjektiv/Adverb / صفة/حال</option>
+            <option value="phrase">Fras / عبارة</option>
+            <option value="word">Ord / كلمة</option>
         </select>
     </div>
 
@@ -70,24 +84,63 @@
     <!-- Flashcard Mode -->
     <div id="flashcardMode" class="mode-container hidden">
         <div class="fc-wrapper">
+            <!-- Flashcard Settings -->
+            <div class="quiz-settings">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="fcLangToggle">
+                    <span class="slider round"></span>
+                </label>
+                <span id="fcModeLabel">🇸🇦 Arabiska (Framsida)</span>
+            </div>
+
+            <!-- Flashcard Container -->
             <div class="quran-flashcard" id="quranFlashcard">
                 <div class="fc-inner">
                     <div class="fc-front">
-                        <span class="fc-surah-badge" id="fcSurah">Surah</span>
+                        <div class="fc-top-bar">
+                            <span class="badger surah-badge" id="fcSurah">Surah</span>
+                            <button class="fav-btn" id="fcFavBtn">☆</button>
+                        </div>
                         <div class="fc-word-large" id="fcWord">Word</div>
                         <div class="fc-hint">Klicka för att vända</div>
                     </div>
                     <div class="fc-back">
+                        <div class="fc-top-bar">
+                            <span class="badger" style="opacity:0">.</span> <!-- Spacer -->
+                            <button class="fav-btn" id="fcFavBtnBack">☆</button>
+                        </div>
                         <div class="fc-meaning" id="fcMeaning">Meaning</div>
                         <div class="fc-ayah-context" id="fcAyah">Ayah Context</div>
                         <div class="fc-ayah-trans" id="fcTrans">Translation</div>
                     </div>
                 </div>
             </div>
-            <div class="fc-controls">
-                <button class="control-btn" id="prevCardBtn">❮ Föregående</button>
+
+            <!-- Rating Controls (Hidden until flipped, or always visible? Usually hidden) -->
+            <div class="fc-controls rating-controls" id="ratingControls">
+                <button class="rate-btn wrong" data-rating="again">
+                    <span>❌</span>
+                    <small>Igen</small>
+                </button>
+                <button class="rate-btn hard" data-rating="hard">
+                    <span>🤔</span>
+                    <small>Svår</small>
+                </button>
+                <button class="rate-btn good" data-rating="good">
+                    <span>✅</span>
+                    <small>Bra</small>
+                </button>
+                <button class="rate-btn easy" data-rating="easy">
+                    <span>🚀</span>
+                    <small>Lätt</small>
+                </button>
+            </div>
+
+            <!-- Navigation Controls (Secondary) -->
+            <div class="fc-controls nav-only" style="margin-top:10px; opacity:0.7">
+                <button class="control-btn" id="prevCardBtn">❮</button>
                 <div class="fc-progress" id="fcProgress">1 / 100</div>
-                <button class="control-btn" id="nextCardBtn">Nästa ❯</button>
+                <button class="control-btn" id="nextCardBtn">❯</button>
             </div>
         </div>
     </div>

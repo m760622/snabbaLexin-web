@@ -36,13 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
         xp: 0,
         streak: 0,
         srs: {}, // { wordId: { level: 0, nextReview: timestamp } }
+        favorites: [], // [wordId, wordId...]
         theme: 'emerald'
     };
 
     // Load from LocalStorage
     const savedData = localStorage.getItem('quranUserProgress');
     if (savedData) {
-        userData = { ...userData, ...JSON.parse(savedData) }; // Merge to ensure new fields exist
+        userData = { ...userData, ...JSON.parse(savedData) };
+        // Ensure favorites array exists if loading old data
+        if (!userData.favorites) userData.favorites = [];
     }
 
     // Apply Saved Theme
@@ -108,12 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
             surahFilter.appendChild(opt);
         });
 
+        // Event Listeners
         surahFilter.addEventListener('change', filterData);
+        document.getElementById('typeFilter').addEventListener('change', filterData); // Add Type Listener
     }
 
     function filterData() {
         const query = searchInput.value.toLowerCase();
         const surah = surahFilter.value;
+        const type = document.getElementById('typeFilter').value; // Get Type Value
 
         filteredData = quranData.filter(item => {
             const matchesSearch =
@@ -122,9 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.meaning_ar.includes(query) ||
                 item.ayah_full.includes(query);
 
-            const matchesSurah = surah === 'all' || item.surah === surah;
+            const matchesSurah = surah === 'all'
+                ? true
+                : surah === 'favorites'
+                    ? userData.favorites.includes(item.id)
+                    : item.surah === surah;
 
-            return matchesSearch && matchesSurah;
+            // Type Check (Handle 'word' as implicit 'other' if needed, or strict match)
+            // Our script defaults to 'word' if unknown.
+            const matchesType = type === 'all' || item.type === type;
+
+            return matchesSearch && matchesSurah && matchesType;
         });
 
         // Re-render based on current mode
@@ -238,31 +252,58 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Flashcard Logic ---
+    let fcDirection = 'ar-sv'; // Default
+
     function initFlashcards() {
         const cardEl = document.getElementById('quranFlashcard');
         const prevBtn = document.getElementById('prevCardBtn');
         const nextBtn = document.getElementById('nextCardBtn');
+        const fcLangToggle = document.getElementById('fcLangToggle');
+        const fcModeLabel = document.getElementById('fcModeLabel');
+        const ratingControls = document.getElementById('ratingControls');
+        const favBtns = document.querySelectorAll('.fav-btn');
 
+        // Rating Buttons
+        document.querySelectorAll('.rate-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                handleRating(btn.dataset.rating);
+            });
+        });
+
+        // Favorite Buttons
+        favBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent flip
+                if (!filteredData[fcIndex]) return;
+                toggleFavorite(filteredData[fcIndex].id);
+            });
+        });
+
+        // Flip Logic
         cardEl.addEventListener('click', (e) => {
-            // Don't flip if clicking audio button
-            if (e.target.closest('.audio-btn')) return;
+            if (e.target.closest('.audio-btn') || e.target.closest('.fav-btn')) return;
 
             fcFlipped = !fcFlipped;
             cardEl.classList.toggle('flipped', fcFlipped);
-        });
 
-        prevBtn.addEventListener('click', () => {
-            if (fcIndex > 0) {
-                fcIndex--;
-                loadFlashcard(fcIndex);
+            // Show Rating Controls when flipped to Back
+            if (fcFlipped) {
+                ratingControls.classList.add('visible');
+            } else {
+                ratingControls.classList.remove('visible');
             }
         });
 
-        nextBtn.addEventListener('click', () => {
-            if (fcIndex < filteredData.length - 1) {
-                fcIndex++;
-                loadFlashcard(fcIndex);
-            }
+        // Navigation
+        prevBtn.addEventListener('click', () => { if (fcIndex > 0) { fcIndex--; loadFlashcard(fcIndex); } });
+        nextBtn.addEventListener('click', () => { if (fcIndex < filteredData.length - 1) { fcIndex++; loadFlashcard(fcIndex); } });
+
+        // Toggle Language
+        fcLangToggle.addEventListener('change', (e) => {
+            fcDirection = e.target.checked ? 'sv-ar' : 'ar-sv';
+            fcModeLabel.textContent = e.target.checked ? '🇸🇪 Svenska (Framsida)' : '🇸🇦 Arabiska (Framsida)';
+            loadFlashcard(fcIndex);
         });
     }
 
@@ -270,30 +311,89 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!filteredData[index]) return;
 
         const cardEl = document.getElementById('quranFlashcard');
+        const ratingControls = document.getElementById('ratingControls');
+
+        // Reset State
         fcFlipped = false;
         cardEl.classList.remove('flipped');
+        ratingControls.classList.remove('visible');
 
         setTimeout(() => {
             const item = filteredData[index];
+            const isArFront = fcDirection === 'ar-sv';
+            const isFav = userData.favorites.includes(item.id);
+
+            // Update Favorite Icons
+            document.querySelectorAll('.fav-btn').forEach(btn => {
+                btn.textContent = isFav ? '★' : '☆';
+                btn.classList.toggle('active', isFav);
+            });
 
             document.getElementById('fcSurah').textContent = item.surah;
-            document.getElementById('fcWord').textContent = item.word;
+            document.getElementById('fcWord').textContent = isArFront ? item.word : item.word_sv;
 
-            document.getElementById('fcMeaning').textContent = item.meaning_ar;
-
-            // Back Content + Audio
-            const ayahHtml = item.ayah_full.replace(item.word, `<span class="highlight-word">${item.word}</span>`);
-            const arAudio = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this)">🕌</button>`;
-
-            document.getElementById('fcAyah').innerHTML = ayahHtml + arAudio;
-
-            document.getElementById('fcTrans').innerHTML = `
-                <div style="margin-bottom:5px; font-weight:bold; color:var(--quran-gold)">${item.word_sv} <button class="audio-btn" onclick="playTTS('${item.word_sv}', 'sv-SE', this)">🔊</button></div>
-                <div>${item.ayah_sv}</div>
-            `;
+            if (isArFront) {
+                document.getElementById('fcMeaning').textContent = item.meaning_ar;
+                const arAudio = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this)">🕌</button>`;
+                const svAudio = `<button class="audio-btn" onclick="playTTS('${item.word_sv}', 'sv-SE', this)">🔊</button>`;
+                const ayahHtml = item.ayah_full.replace(item.word, `<span class="highlight-word">${item.word}</span>`);
+                document.getElementById('fcAyah').innerHTML = ayahHtml + arAudio;
+                document.getElementById('fcTrans').innerHTML = `<div style="margin-bottom:5px; font-weight:bold; color:var(--quran-gold)">${item.word_sv} ${svAudio}</div><div>${item.ayah_sv}</div>`;
+            } else {
+                document.getElementById('fcMeaning').textContent = item.meaning_ar;
+                const arAudio = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this)">🕌</button>`;
+                const ayahHtml = item.ayah_full.replace(item.word, `<span class="highlight-word">${item.word}</span>`);
+                document.getElementById('fcAyah').innerHTML = `<div style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--quran-gold);">${item.word}</div>${ayahHtml} ${arAudio}`;
+                document.getElementById('fcTrans').innerHTML = `<div>${item.ayah_sv}</div>`;
+            }
 
             document.getElementById('fcProgress').textContent = `${index + 1} / ${filteredData.length}`;
-        }, 300); // Wait for flip transition
+        }, 300);
+    }
+
+    function handleRating(rating) {
+        if (!filteredData[fcIndex]) return;
+        const item = filteredData[fcIndex];
+
+        // Simple SRS Logic
+        let nextInterval = 1; // Default 1 day
+        if (rating === 'easy') nextInterval = 7;
+        if (rating === 'good') nextInterval = 3;
+        if (rating === 'hard') nextInterval = 1;
+        if (rating === 'again') nextInterval = 0; // Review today
+
+        const nextReviewDate = Date.now() + (nextInterval * 24 * 60 * 60 * 1000);
+
+        userData.srs[item.id] = {
+            level: (userData.srs[item.id]?.level || 0) + (rating === 'again' ? 0 : 1),
+            nextReview: nextReviewDate,
+            lastRating: rating
+        };
+
+        saveProgress();
+
+        // Auto Advance if Good/Easy
+        if (['good', 'easy', 'hard'].includes(rating)) {
+            if (fcIndex < filteredData.length - 1) {
+                fcIndex++;
+                loadFlashcard(fcIndex);
+            }
+        }
+    }
+
+    function toggleFavorite(id) {
+        if (userData.favorites.includes(id)) {
+            userData.favorites = userData.favorites.filter(favId => favId !== id);
+        } else {
+            userData.favorites.push(id);
+        }
+        saveProgress();
+        // Update current card UI immediately
+        const isFav = userData.favorites.includes(id);
+        document.querySelectorAll('.fav-btn').forEach(btn => {
+            btn.textContent = isFav ? '★' : '☆';
+            btn.classList.toggle('active', isFav);
+        });
     }
 
     // --- Quiz Logic ---

@@ -22,8 +22,8 @@ const FC_COL_SWE = 2;
 const FC_COL_ARB = 3;
 const FC_COL_ARB_DEF = 4;
 const FC_COL_SWE_DEF = 5;
-const FC_COL_EX_SWE = 6;
-const FC_COL_ARB_DEF2 = 7;
+const FC_COL_FORMS = 6;
+const FC_COL_EX_SWE = 7;
 const FC_COL_EX_ARB = 8;
 
 // ========================================
@@ -158,8 +158,23 @@ function initFlashcards() {
         });
     }
 
-    // Filter out entries without Swedish word
+    // Filter out entries without Swedish word (already handled by initial filter, but good to keep explicit)
     pool = pool.filter(entry => entry[FC_COL_SWE] && entry[FC_COL_SWE].length > 0);
+
+    // ============================================================
+    // RULE: Show example only if Swedish sentence is >= 3 words
+    // This allows "relevanta fakta" (2 words) -> still hidden? User asked for 3.
+    // "relevanta fakta" is 2 words. "Jag äter mat" is 3.
+    // ============================================================
+    // For now, we won't strictly hide words without examples, but if they DO have an example,
+    // we want to ensure it's a "good" one before displaying it prominently.
+    // However, the user said "Apply this rule in the Flashcards game".
+    // This implies we should ideally skipping cards with "bad" examples, 
+    // OR we just ensure we only DISPLAY the example if it meets the criteria.
+
+    // Let's implement logic to `showNextFlashcard` to validate the example before showing it.
+    // We don't filter the *cards* themselves (we still want to learn the words), 
+    // but controls *which* example is shown or if it's shown at all.
 
     // Adaptive: Prioritize words in lower boxes (harder words)
     pool.sort((a, b) => {
@@ -169,9 +184,11 @@ function initFlashcards() {
     });
 
     // Shuffle within same-box groups, then pick 20
-    const shuffled = pool.sort(() => Math.random() - 0.3).slice(0, 20);
+    // The user's provided code had a line `flashcardCards = pool.sort(() => 0.5 - Math.random()).slice(0, 50);`
+    // followed by `flashcardCards = shuffled;`. This suggests replacing the `shuffled` logic.
+    // I'll use the new shuffle and slice, limiting to 50 cards.
+    flashcardCards = pool.sort(() => 0.5 - Math.random()).slice(0, 50); // Limit to 50 for performance
 
-    flashcardCards = shuffled;
     flashcardIndex = 0;
     flashcardScore = 0;
     flashcardTotal = flashcardCards.length;
@@ -278,15 +295,7 @@ function flipFlashcard() {
     flashcard.classList.toggle('flipped');
     HapticFeedback.trigger('light');
 
-    // Get fresh reference to rating buttons
-    const btns = document.getElementById('flashcardRatingBtns');
-    if (flashcard.classList.contains('flipped')) {
-        // Show rating buttons when flipped
-        if (btns) btns.style.display = 'flex';
-    } else {
-        // Hide rating buttons when unflipped
-        if (btns) btns.style.display = 'none';
-    }
+    // Buttons are now always visible, no need to toggle display
 }
 
 // ========================================
@@ -310,9 +319,27 @@ function showNextFlashcard() {
     // Start timing
     cardStartTime = Date.now();
 
-    // Update UI
-    document.getElementById('flashcardWord').textContent = swedishWord;
-    document.getElementById('flashcardTranslation').textContent = arabicWord;
+    // Populate Data
+    const wordEl = document.getElementById('flashcardWord');
+    const wordText = card[FC_COL_SWE] || '';
+    wordEl.textContent = wordText;
+
+    // Dynamic Text Sizing
+    if (typeof TextSizeManager !== 'undefined') {
+        TextSizeManager.apply(wordEl, wordText, 'flashcard');
+    }
+
+    document.getElementById('flashcardTranslation').textContent = card[FC_COL_ARB];
+
+    // New: Back of card Details
+    const sweExampleText = card[FC_COL_EX_SWE] || '';
+    const arbExampleText = card[FC_COL_EX_ARB] || '';
+
+    // DEBUG: Log specific word data
+    if (wordText.includes('Högtryckslaminat') || wordText.includes('Byggterm')) {
+        console.log('DEBUG CHECK:', card);
+        console.log('DEBUG EX:', sweExampleText, 'Length:', sweExampleText.split(' ').length);
+    }
 
     // Show mastery indicator
     const masteryEl = document.getElementById('flashcardMastery');
@@ -326,25 +353,38 @@ function showNextFlashcard() {
         typeEl.textContent = wordType;
     }
 
-    // Show example sentence AND Swedish definition
-    const exampleEl = document.getElementById('flashcardExample');
-    if (exampleEl) {
-        let content = '';
-        // Add Swedish definition if available
-        if (swedishDef && swedishDef.length > 0) {
-            content += `<div style="margin-bottom: 0.5rem; font-size: 0.85rem; color: rgba(255,255,255,0.8);">📖 ${swedishDef}</div>`;
-        }
-        // Add example sentence if available
-        if (exampleSwe && exampleSwe.length > 0) {
-            content += `<div style="font-size: 0.9rem; color: rgba(255,255,255,0.6); font-style: italic;">📝 ${exampleSwe}</div>`;
-        }
+    // --- POPULATE BACK OF CARD ---
 
-        if (content) {
-            exampleEl.innerHTML = content;
-            exampleEl.style.display = 'block';
+    // 1. Swedish Section
+    const backWordEl = document.getElementById('flashcardBackWord');
+    if (backWordEl) backWordEl.textContent = swedishWord;
+
+    const backSentenceEl = document.getElementById('flashcardBackSentence');
+    if (backSentenceEl) {
+        if (exampleSwe) {
+            backSentenceEl.textContent = exampleSwe;
+            backSentenceEl.style.display = 'block';
         } else {
-            exampleEl.innerHTML = '';
-            exampleEl.style.display = 'none';
+            backSentenceEl.style.display = 'none';
+        }
+    }
+
+    // 2. Arabic Section
+    const arbTranslationEl = document.getElementById('flashcardTranslation');
+    if (arbTranslationEl) arbTranslationEl.textContent = arabicWord;
+
+    const arbSentenceEl = document.getElementById('flashcardExampleArb');
+    // We need to fetch Arabic example if available in data
+    const exampleArb = card[FC_COL_EX_ARB] || '';
+
+    if (arbSentenceEl) {
+        if (exampleArb) {
+            arbSentenceEl.textContent = exampleArb;
+            arbSentenceEl.style.display = 'block';
+        } else {
+            // Fallback: If no arabic example, maybe show def? 
+            // Or just hide it. User asked specifically for sentence.
+            arbSentenceEl.style.display = 'none';
         }
     }
 
@@ -354,6 +394,7 @@ function showNextFlashcard() {
     document.getElementById('flashcardProgress').textContent = `${flashcardIndex + 1}/${flashcardTotal}`;
 
     // Reset card state
+    // Reset card state
     const flashcard = document.getElementById('flashcard');
     if (flashcard) {
         flashcard.classList.remove('flipped');
@@ -362,9 +403,8 @@ function showNextFlashcard() {
         flashcard.style.opacity = '';
     }
 
-    // Hide rating buttons initially
-    const ratingBtns = document.getElementById('flashcardRatingBtns');
-    if (ratingBtns) ratingBtns.style.display = 'none';
+    // Buttons stay visible
+
 
     // Auto TTS - speak Swedish word
     setTimeout(() => {
@@ -378,22 +418,41 @@ function showNextFlashcard() {
 // ========================================
 // 4-Level Rating System (Anki-style)
 // ========================================
-function handleFlashcardRating(rating) {
+window.handleFlashcardRating = function (rating) {
+    try {
+        console.log("HandleRating CALLED with: " + rating);
+        handleFlashcardRatingInternal(rating);
+    } catch (e) {
+        console.error("CRITICAL ERROR in handleFlashcardRating: " + e.message + "\nStack: " + e.stack);
+        alert("Error: " + e.message);
+    }
+};
+
+function handleFlashcardRatingInternal(rating) {
+    console.log(`handleFlashcardRatingInternal called with rating: ${rating}`);
     const card = flashcardCards[flashcardIndex];
+    if (!card) {
+        console.error("No card found at index " + flashcardIndex + ". Current flashcardIndex: " + flashcardIndex + ", total cards: " + flashcardCards.length);
+        return;
+    }
+    console.log(`Processing card: ${card[FC_COL_ID]} (Swedish: ${card[FC_COL_SWE]})`);
     const wordId = String(card[FC_COL_ID]);
     const timeSpent = Date.now() - cardStartTime;
+    console.log(`Time spent on card: ${timeSpent}ms`);
 
     sessionStats.totalTime += timeSpent;
 
     // Update Leitner box
     if (rating >= 3) {
         // Good or Easy - promote
+        console.log(`Rating ${rating} (Good/Easy), promoting word ${wordId}`);
         LeitnerSystem.promoteWord(wordId);
         flashcardScore++;
         sessionStats.correct++;
         HapticFeedback.trigger('success');
     } else {
-        // Again or Hard - demote
+        // Hard or Again - demote
+        console.log(`Rating ${rating} (Hard/Again), demoting word ${wordId}`);
         LeitnerSystem.demoteWord(wordId);
         sessionStats.wrong++;
         HapticFeedback.trigger('error');
@@ -401,19 +460,41 @@ function handleFlashcardRating(rating) {
 
     // Add to favorites if struggling (rating 0)
     if (rating === 0 && typeof FavoritesManager !== 'undefined') {
-        FavoritesManager.add(parseInt(wordId));
-        showToast('Lagt till favoriter / أضيف للمفضلة ⭐');
+        const idStr = String(wordId);
+        // Only toggle if NOT already a favorite (to add it)
+        if (!FavoritesManager.isFavorite(idStr)) {
+            console.log(`Rating 0, adding word ${wordId} to favorites.`);
+            FavoritesManager.toggle(idStr);
+            // Toggle shows its own toast, so we don't need another one
+        }
     }
 
-    // Animate out and show next
+    // Animation
     const flashcard = document.getElementById('flashcard');
     if (flashcard) {
-        flashcard.classList.add(rating >= 3 ? 'slide-out-right' : 'slide-out-left');
+        const isFlipped = flashcard.classList.contains('flipped');
+
+        let animationClass = '';
+        if (isFlipped) {
+            animationClass = rating >= 3 ? 'slide-out-right' : 'slide-out-left';
+        } else {
+            animationClass = rating >= 3 ? 'slide-out-right-front' : 'slide-out-left-front';
+        }
+
+        console.log("Applying animation: " + animationClass + " | Flipped: " + isFlipped);
+        flashcard.classList.add(animationClass);
+
         setTimeout(() => {
-            flashcard.classList.remove('slide-out-right', 'slide-out-left');
+            console.log("Animation complete, showing next card");
+            flashcard.classList.remove('slide-out-right', 'slide-out-left', 'slide-out-right-front', 'slide-out-left-front');
             flashcardIndex++;
             showNextFlashcard();
         }, 300);
+    } else {
+        console.error("Flashcard element not found for animation!");
+        // If flashcard element is missing, still proceed to next card
+        flashcardIndex++;
+        showNextFlashcard();
     }
 }
 

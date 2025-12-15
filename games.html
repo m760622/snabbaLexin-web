@@ -12,8 +12,9 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="style.min.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="games.min.css">
+    <link rel="stylesheet" href="flashcards_pro.css?v=8">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#6366f1">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
@@ -363,7 +364,7 @@
                     <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
             </button>
-            <h3>Minneskort / بطاقات الذاكرة</h3>
+            <h1 id="pageTitle">Minneskort / بطاقات الذاكرة</h1>
             <!-- Progress Ring -->
             <div class="fc-progress-ring-wrapper">
                 <svg class="fc-progress-ring" width="44" height="44">
@@ -405,14 +406,26 @@
                         onclick="event.stopPropagation(); TTSManager?.speak(document.getElementById('flashcardWord').textContent, 'sv')">🔊</button>
                 </div>
                 <div class="fc-back-pro">
-                    <h2 id="flashcardTranslation" class="fc-translation-pro">...</h2>
-                    <p id="flashcardExample" class="fc-example-pro"></p>
+                    <!-- Swedish Section -->
+                    <div class="fc-section-swe">
+                        <h3 id="flashcardBackWord" class="fc-word-back">...</h3>
+                        <p id="flashcardBackSentence" class="fc-sentence-back"></p>
+                    </div>
+
+                    <div class="fc-divider"></div>
+
+                    <!-- Arabic Section -->
+                    <div class="fc-section-arb">
+                        <h3 id="flashcardTranslation" class="fc-translation-back">...</h3>
+                        <p id="flashcardExampleArb" class="fc-sentence-back"></p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Simple Know / Don't Know Buttons -->
-        <div class="fc-rating-container" id="flashcardRatingBtns" style="display: none;">
+        <!-- ALWAYS VISIBLE as per request -->
+        <div class="fc-rating-container" id="flashcardRatingBtns">
             <button class="fc-simple-btn fc-dont-know" onclick="handleFlashcardRating(0)">
                 <span class="fc-btn-icon">❌</span>
                 <span class="fc-btn-text">Inte än<br>لا أعرفها</span>
@@ -907,7 +920,7 @@
     <script src="games.js?v=2"></script>
     <script src="grammarGame.js"></script>
     <!-- <script src="missingWordGame.js"></script> -->
-    <script src="flashcardsGame.js"></script>
+    <script src="flashcardsGame.js?v=8"></script>
     <script src="pronunciationGame.js"></script>
     <script src="spellingGame.js"></script>
     <script src="wordWheelGame.js"></script>
@@ -916,16 +929,21 @@
     <script src="wordleGame.js"></script>
     <script src="wordConnectData.js?v=8"></script>
     <script src="wordConnectGame_v2.js?v=3"></script>
+    <!-- Flashcards Script -->
+    <script src="flashcardsGame.js?v=9"></script>
+
     <script>console.log("Inline script after games.js");</script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
                     .then(registration => {
-                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        console.log('SW registered: ', registration);
+                        // Check for updates
+                        registration.update();
                     })
-                    .catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
                     });
             });
         }
@@ -945,6 +963,21 @@
             document.addEventListener('DOMContentLoaded', () => {
                 const btn = document.getElementById('mobileToggle');
                 if (btn) btn.classList.add('active');
+                if (typeof TextSizeManager !== 'undefined') {
+                    const title = document.getElementById('pageTitle');
+                    if (title) {
+                        TextSizeManager.apply(title, title.textContent, 'header');
+                        // Ensure it uses primary color
+                        title.style.color = 'var(--text-primary)';
+                        // Force single line and use responsive sizing if class is applied
+                        title.style.whiteSpace = 'nowrap';
+
+                        // If it's extra small (long text), force an even smaller responsive size to fit mobile
+                        if (title.classList.contains('text-xs')) {
+                            title.style.fontSize = 'clamp(0.8rem, 4vw, 1rem)';
+                        }
+                    }
+                }
             });
         }
 
@@ -1053,8 +1086,7 @@
             loadDailyChallenge();
         });
     </script>
-
+    <script src="pwa.js" defer></script>
 </body>
-
 
 </html>

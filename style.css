@@ -64,6 +64,60 @@
 }
 
 /* ========================================
+   NATIVE APP FEEL
+   ======================================== */
+body {
+    /* Prevent text selection */
+    -webkit-user-select: none;
+    user-select: none;
+
+    /* Prevent tap highlight flicker */
+    -webkit-tap-highlight-color: transparent;
+
+    /* Prevent pull-to-refresh */
+    overscroll-behavior-y: none;
+
+    /* Improve touch response */
+    touch-action: manipulation;
+}
+
+/* Global Text Sizing Classes (Managed by TextSizeManager) */
+.text-xs {
+    font-size: 0.8em !important;
+}
+
+.text-sm {
+    font-size: 0.9em !important;
+}
+
+.text-md {
+    font-size: 1.1em !important;
+}
+
+.text-lg {
+    font-size: 1.3em !important;
+}
+
+.text-xl {
+    font-size: 1.5em !important;
+}
+
+/* Mobile specific optimisations */
+@media (max-width: 480px) {
+    .text-xl {
+        font-size: 1.3em !important;
+    }
+}
+
+/* Allow selection in inputs */
+input,
+textarea,
+[contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* ========================================
    COLOR THEMES
    ======================================== */
 

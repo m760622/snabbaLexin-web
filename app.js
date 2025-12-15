@@ -7,26 +7,14 @@ let renderedCount = 0; // Track how many are currently shown
 let favorites = new Set(); // Store favorite IDs
 const BATCH_SIZE = 50; // Number of items to load per batch
 
-// iOS Audio Unlock - Must happen on first user touch/click
-let audioUnlockHandled = false;
-const unlockAudioOnFirstTouch = () => {
-    if (audioUnlockHandled) return;
-    audioUnlockHandled = true;
+// iOS Audio Unlock, Zoom Prevention, and Install Prompt are now handled in pwa.js
 
-    // Use TTSManager's unlock function if available
-    if (typeof TTSManager !== 'undefined' && TTSManager.unlockAudio) {
-        TTSManager.unlockAudio();
-    }
+// Daily Streaks Logic (Main calculation remains here if needed, or fully handled by pwa.js)
+// Keeping core streak calculation if it runs on app load only? 
+// Actually pwa.js handles display, but app.js was calculating update.
+// Let's keep the UPDATE mechanism in app.js as it runs primarily on the home/app page
+// but simplify.
 
-    // Remove listeners after first touch
-    document.removeEventListener('touchstart', unlockAudioOnFirstTouch);
-    document.removeEventListener('click', unlockAudioOnFirstTouch);
-    console.log('[Audio] Unlocked on first user interaction');
-};
-document.addEventListener('touchstart', unlockAudioOnFirstTouch, { once: true, passive: true });
-document.addEventListener('click', unlockAudioOnFirstTouch, { once: true });
-
-// Daily Streaks Logic
 function initStreaks() {
     const lastVisitKey = 'lastVisitDate';
     const streakKey = 'dailyStreak';
@@ -36,7 +24,7 @@ function initStreaks() {
     let streak = parseInt(localStorage.getItem(streakKey) || '0');
 
     if (lastVisit === today) {
-        // Already visited today, do nothing
+        // Already visited today
     } else {
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
@@ -45,18 +33,17 @@ function initStreaks() {
         if (lastVisit === yesterdayStr) {
             streak++;
         } else {
-            streak = 1; // Reset or start new
+            streak = 1; // Reset
         }
 
         localStorage.setItem(lastVisitKey, today);
         localStorage.setItem(streakKey, streak.toString());
     }
 
-    // Update UI if element exists
+    // UI Update handled by pwa.js / local DOM check
     const streakEl = document.getElementById('streakCounter');
     if (streakEl) {
         streakEl.innerHTML = `🔥 ${streak} Dag${streak > 1 ? 'ar' : ''}`;
-        streakEl.title = `${streak} dagar i rad!`;
         if (streak > 0) streakEl.style.display = 'inline-block';
     }
 }
@@ -624,22 +611,7 @@ async function init() {
         }
     }
 
-    // Mobile View Toggle
-    const mobileViewToggle = document.getElementById('mobileViewToggle');
-    if (mobileViewToggle) {
-        mobileViewToggle.addEventListener('click', () => {
-            document.body.classList.toggle('iphone-view');
-            // Save state as string for consistency across all pages
-            const isMobileView = document.body.classList.contains('iphone-view');
-            localStorage.setItem('mobileView', isMobileView ? 'true' : 'false');
-        });
-
-
-        // Restore state
-        if (localStorage.getItem('mobileView') === 'true') {
-            document.body.classList.add('iphone-view');
-        }
-    }
+    // Mobile View Toggle logic moved to pwa.js
 
     // TTS Speed Slider Control
     const ttsSpeedSlider = document.getElementById('ttsSpeedSlider');

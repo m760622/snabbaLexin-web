@@ -140,81 +140,40 @@ function showToast(message, duration = 3000) {
 // ========================================
 // Text Size Manager - Dynamic Font Sizing
 // ========================================
+// ========================================
+// Text Size Manager - Dynamic Font Sizing
+// ========================================
 const TextSizeManager = {
-    // Size classes that can be applied
-    SIZES: ['text-xs', 'text-sm', 'text-md', 'text-lg', 'text-xl'],
-
     // Thresholds for different container types
     THRESHOLDS: {
-        // For flashcards (smaller container)
         flashcard: { xs: 50, sm: 30, md: 20, lg: 10 },
-        // For cards (medium container)
-        card: { xs: 80, sm: 50, md: 30, lg: 15 },
-        // For modals (larger container)
-        modal: { xs: 120, sm: 80, md: 50, lg: 25 },
-        // Default
+        // Header: stricter thresholds to ensure single-line fit
+        // 28 chars should trigger text-xs
+        header: { xs: 20, sm: 18, md: 15, lg: 10 },
         default: { xs: 50, sm: 30, md: 20, lg: 10 }
     },
 
-    /**
-     * Apply dynamic font size to an element based on text length
-     * @param {HTMLElement} element - The element to adjust
-     * @param {string} text - The text content
-     * @param {string} containerType - Type of container: 'flashcard', 'card', 'modal', or 'default'
-     */
     apply(element, text, containerType = 'default') {
         if (!element || !text) return;
 
-        // Remove all size classes first
-        this.SIZES.forEach(size => element.classList.remove(size));
+        // Clean up previous size classes
+        element.classList.remove('text-xs', 'text-sm', 'text-md', 'text-lg', 'text-xl');
 
         const len = text.length;
-        const thresholds = this.THRESHOLDS[containerType] || this.THRESHOLDS.default;
 
-        // Determine appropriate size
-        if (len > thresholds.xs) {
-            element.classList.add('text-xs');
-        } else if (len > thresholds.sm) {
-            element.classList.add('text-sm');
-        } else if (len > thresholds.md) {
-            element.classList.add('text-md');
-        } else if (len > thresholds.lg) {
-            element.classList.add('text-lg');
-        } else {
-            element.classList.add('text-xl');
-        }
+        // Use user's logic
+        if (len > 50) element.classList.add('text-xs');      // Very small
+        else if (len > 30) element.classList.add('text-sm'); // Small
+        else if (len > 20) element.classList.add('text-md'); // Medium
+        else if (len > 10) element.classList.add('text-lg'); // Large
+        else element.classList.add('text-xl');               // Extra Large
     },
 
-    /**
-     * Auto-apply sizing to all elements with data-auto-size attribute
-     * Usage: <span data-auto-size="flashcard">Long text here</span>
-     */
+    // Auto-apply to elements with data-auto-size
     autoApply() {
-        const elements = document.querySelectorAll('[data-auto-size]');
-        elements.forEach(el => {
-            const containerType = el.getAttribute('data-auto-size') || 'default';
-            this.apply(el, el.textContent, containerType);
+        document.querySelectorAll('[data-auto-size]').forEach(el => {
+            this.apply(el, el.textContent, el.dataset.autoSize);
         });
-    },
-
-    /**
-     * Observe an element and auto-resize when content changes
-     * @param {HTMLElement} element - Element to observe
-     * @param {string} containerType - Container type for thresholds
-     */
-    observe(element, containerType = 'default') {
-        if (!element) return;
-
-        // Initial apply
-        this.apply(element, element.textContent, containerType);
-
-        // Create mutation observer for content changes
-        const observer = new MutationObserver(() => {
-            this.apply(element, element.textContent, containerType);
-        });
-
-        observer.observe(element, { childList: true, characterData: true, subtree: true });
-        return observer;
     }
 };
 

@@ -1309,6 +1309,22 @@
             });
         })();
     </script>
+    <script>
+        // Auto-apply text sizing to titles/headers
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof TextSizeManager !== 'undefined') {
+                // Apply to main title if needed
+                const mainTitle = document.querySelector('h1');
+                if (mainTitle) TextSizeManager.apply(mainTitle, mainTitle.textContent, 'default');
+
+                // Apply to all game cards titles
+                document.querySelectorAll('.game-card h3').forEach(el => {
+                    TextSizeManager.apply(el, el.textContent, 'default');
+                });
+            }
+        });
+    </script>
+<script src="pwa.js" defer></script>
 </body>
 
 </html>

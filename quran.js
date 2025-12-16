@@ -188,14 +188,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Filter Logic ---
     function initFilters() {
         // Populate Surah Filter
-        // Use trim() to normalize and Set to deduplicate
-        const uniqueSurahs = [...new Set(quranData.map(item => item.surah ? item.surah.trim() : ''))]
+        // Helper to clean surah name: "Al-Ala (11)" -> "Al-Ala"
+        const cleanSurahName = (name) => name ? name.replace(/\s*\(\d+\)$/, '').trim() : '';
+
+        // Use trim() to normalize and Set to deduplicate based on CLEANED name
+        const uniqueSurahs = [...new Set(quranData.map(item => cleanSurahName(item.surah)))]
             .filter(Boolean) // Remove empties
             .sort(); // Optional: Sort alphabetically/numerically
 
         uniqueSurahs.forEach(surah => {
             const opt = document.createElement('option');
-            opt.value = surah;
+            opt.value = surah; // Value is now the cleaned name
             opt.textContent = surah;
             surahFilter.appendChild(opt);
         });
@@ -208,8 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function filterData() {
         if (!searchInput) return; // Guard
         const query = searchInput.value.toLowerCase();
-        const surah = surahFilter.value;
+        const selectedSurah = surahFilter.value; // This is the CLEANED name
         const type = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
+
+        const cleanSurahName = (name) => name ? name.replace(/\s*\(\d+\)$/, '').trim() : '';
 
         filteredData = quranData.filter(item => {
             const matchesSearch =
@@ -219,11 +224,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 (item.ayah_full && item.ayah_full.includes(query)) ||
                 (item.ayah_sv && item.ayah_sv.toLowerCase().includes(query));
 
-            const matchesSurah = surah === 'all'
-                ? true
-                : surah === 'favorites'
-                    ? userData.favorites.includes(item.id)
-                    : item.surah === surah;
+            let matchesSurah = true;
+            if (selectedSurah !== 'all') {
+                if (selectedSurah === 'favorites') {
+                    matchesSurah = userData.favorites.includes(item.id);
+                } else {
+                    // Compare cleaned name
+                    matchesSurah = cleanSurahName(item.surah) === selectedSurah;
+                }
+            }
 
             const matchesType = type === 'all' || item.type === type;
 
@@ -468,7 +477,13 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div class="card-header">
                     <div class="left-actions">
-                        <button class="share-btn" data-item='${JSON.stringify(item).replace(/'/g, "&apos;")}' onclick="shareCard(JSON.parse(this.dataset.item), event)" title="Dela">
+                        <span class="badger surah-badge">${item.surah}</span>
+                    </div>
+                    <div class="action-group">
+                        <button class="share-btn" 
+                            data-item='${JSON.stringify(item).replace(/'/g, "&apos;")}' 
+                            onclick="shareCard(JSON.parse(this.dataset.item), event)"
+                            title="Dela">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="18" cy="5" r="3"></circle>
                                 <circle cx="6" cy="12" r="3"></circle>
@@ -477,9 +492,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                             </svg>
                         </button>
-                        <span class="badger surah-badge">${item.surah}</span>
+                        <button class="${favClass}" onclick="toggleFavorite('${item.id}')" data-id="${item.id}" title="Spara till favoriter">${favIcon}</button>
                     </div>
-                    <button class="${favClass}" onclick="toggleFavorite('${item.id}')" data-id="${item.id}" title="Spara till favoriter">${favIcon}</button>
                 </div>
                 
                 <div class="main-word-section">

@@ -16,9 +16,16 @@
 
 <body>
     <header class="quran-header">
+        <button class="back-btn" onclick="window.history.back()" aria-label="Tillbaka">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" style="width:24px;height:24px;">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
         </button>
-        <span class="quran-icon">📖</span>
-        <h1 class="quran-title">Koranord</h1>
+        <div class="title-container">
+            <span class="quran-icon">📖</span>
+            <h1 class="quran-title">Koranord</h1>
         </div>
 
         <button id="settingsBtn" class="settings-trigger" aria-label="Inställningar">

@@ -303,6 +303,7 @@ body.iphone-view {
 .quran-icon {
     font-size: 2rem;
     filter: drop-shadow(0 0 10px var(--quran-gold));
+    animation: quranPulse 4s infinite ease-in-out;
 }
 
 .quran-title {
@@ -311,6 +312,7 @@ body.iphone-view {
     color: var(--quran-gold);
     text-shadow: 0 0 15px var(--quran-gold-glow);
     margin: 0;
+    animation: quranTitlePulse 4s infinite ease-in-out;
 }
 
 /* Search Bar */
@@ -964,13 +966,12 @@ body.iphone-view {
     transition: all 0.3s ease;
 }
 
-@media (hover: hover) {
-
-    .fav-btn:hover,
-    .share-btn:hover {
-        color: rgba(255, 255, 255, 0.9);
-        transform: scale(1.1);
-    }
+/* Normalized Hover Effects */
+.fav-btn:hover,
+.share-btn:hover {
+    color: rgba(255, 255, 255, 1) !important;
+    transform: scale(1.2) !important;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
 }
 
 /* Active States */
@@ -999,6 +1000,43 @@ body.iphone-view {
 
     100% {
         transform: scale(1);
+    }
+}
+
+@keyframes quranPulse {
+    0% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px var(--quran-gold));
+    }
+
+    50% {
+        transform: scale(1.15);
+        filter: drop-shadow(0 0 20px var(--quran-gold-glow));
+    }
+
+    100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px var(--quran-gold));
+    }
+}
+
+@keyframes quranTitlePulse {
+    0% {
+        transform: scale(1.05);
+        text-shadow: 0 0 25px var(--quran-gold), 0 0 10px var(--quran-gold);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(0.95);
+        text-shadow: 0 0 5px var(--quran-gold-glow);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1.05);
+        text-shadow: 0 0 25px var(--quran-gold), 0 0 10px var(--quran-gold);
+        opacity: 1;
     }
 }
 

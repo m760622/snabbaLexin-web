@@ -14,34 +14,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterBar = document.getElementById('filterBar');
 
     // Quiz Settings & Theme
-    const quizLangToggle = document.getElementById('quizLangToggle');
-    const quizModeLabel = document.getElementById('quizModeLabel');
+    // Quiz Settings & Theme
+    const quizLangToggle = document.getElementById('quizLangToggle'); // Keep for specific quiz mode override if needed
+    const globalFcLangToggle = document.getElementById('globalFcLangToggle');
     const userXPEl = document.getElementById('userXP');
     const themeSelector = document.getElementById('themeSelector');
-    const mobileToggleBtn = document.getElementById('mobileToggleBtn');
 
-    // --- Mobile Toggle ---
-    window.toggleMobileView = function () {
-        document.body.classList.toggle('iphone-view');
-        const isActive = document.body.classList.contains('iphone-view');
-        localStorage.setItem('mobileView', isActive ? 'true' : 'false');
+    // Settings Modal UI
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const mobileViewToggle = document.getElementById('mobileViewToggle');
 
-        const btn = document.getElementById('mobileToggleBtn');
-        if (btn) btn.classList.toggle('active', isActive);
-
-        // Force resize trigger for charts/layout
+    // --- Mobile View Logic ---
+    function updateMobileView(isMobile) {
+        document.body.classList.toggle('iphone-view', isMobile);
+        localStorage.setItem('mobileView', isMobile ? 'true' : 'false');
+        if (mobileViewToggle) mobileViewToggle.checked = isMobile;
         window.dispatchEvent(new Event('resize'));
-    };
+    }
 
     // Apply saved mobile preference
-    if (localStorage.getItem('mobileView') === 'true') {
-        document.body.classList.add('iphone-view');
-        if (mobileToggleBtn) mobileToggleBtn.classList.add('active');
+    const savedMobile = localStorage.getItem('mobileView') === 'true';
+    updateMobileView(savedMobile);
+
+    if (mobileViewToggle) {
+        mobileViewToggle.addEventListener('change', (e) => {
+            updateMobileView(e.target.checked);
+        });
     }
 
-    if (mobileToggleBtn) {
-        mobileToggleBtn.addEventListener('click', toggleMobileView);
+    // --- Settings Modal Logic ---
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+            if (settingsModal) {
+                settingsModal.classList.remove('hidden');
+                // Sync theme to modal for CSS variables
+                const currentTheme = document.body.getAttribute('data-quran-theme');
+                const modalContent = settingsModal.querySelector('.settings-content');
+                if (modalContent) {
+                    if (currentTheme) {
+                        modalContent.setAttribute('data-quran-theme', currentTheme);
+                    } else {
+                        modalContent.removeAttribute('data-quran-theme');
+                    }
+                }
+            }
+        });
     }
+
+    if (closeSettingsBtn) {
+        closeSettingsBtn.addEventListener('click', () => {
+            if (settingsModal) settingsModal.classList.add('hidden');
+        });
+    }
+
+    // Close on click outside
+    window.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.classList.add('hidden');
+        }
+    });
 
     // --- State & SRS Data ---
     let currentMode = 'list';
@@ -76,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let quizScore = 0;
     let quizStreak = 0; // Session streak
     let currentQuizItem = null;
-    let quizDirection = 'ar-sv'; // 'ar-sv' or 'sv-ar'
+    let quizDirection = 'sv-ar'; // 'ar-sv' or 'sv-ar'
 
     // --- Initialization ---
     initFilters();
@@ -95,6 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateXPDisplay() {
         if (userXPEl) userXPEl.textContent = userData.xp;
+
+        // Update Donut Visuals (Assume 100 XP = 1 Level Circle)
+        const donut = document.getElementById('xpDonut');
+        if (donut) {
+            const percentage = (userData.xp % 100) / 100 * 100; // 0-100 range for current level
+            donut.style.setProperty('--p', percentage);
+            // Optional: Change color based on total level?
+        }
     }
 
     // --- Theme Logic ---
@@ -108,11 +149,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function applyTheme(theme) {
-        if (theme === 'emerald') {
+        const modalContent = document.querySelector('.settings-content');
+        if (theme === 'emerald' || theme === 'default') {
             document.body.removeAttribute('data-quran-theme');
+            if (modalContent) modalContent.removeAttribute('data-quran-theme');
         } else {
             document.body.setAttribute('data-quran-theme', theme);
+            if (modalContent) modalContent.setAttribute('data-quran-theme', theme);
         }
+    }
+
+
+    // --- Daily Goal Logic ---
+    function checkDailyGoal() {
+        const today = new Date().toISOString().split('T')[0];
+        if (!userData.daily || userData.daily.date !== today) {
+            userData.daily = { date: today, count: 0 };
+        }
+        updateGoalUI();
+    }
+
+    function updateGoalUI() {
+        const goal = 5;
+        const count = userData.daily.count;
+        const pct = Math.min((count / goal) * 100, 100);
+
+        document.getElementById('dailyGoalText').textContent = `${count}/${goal}`;
+        document.getElementById('dailyGoalFill').style.width = `${pct}%`;
+    }
+
+    window.incrementDailyGoal = function () {
+        checkDailyGoal();
+        userData.daily.count++;
+        saveProgress();
+        updateGoalUI();
     }
 
     // --- Filter Logic ---
@@ -136,9 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function filterData() {
+        if (!searchInput) return; // Guard
         const query = searchInput.value.toLowerCase();
         const surah = surahFilter.value;
-        const type = document.getElementById('typeFilter').value; // Get Type Value
+        const type = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
 
         filteredData = quranData.filter(item => {
             const matchesSearch =
@@ -154,8 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     ? userData.favorites.includes(item.id)
                     : item.surah === surah;
 
-            // Type Check (Handle 'word' as implicit 'other' if needed, or strict match)
-            // Our script defaults to 'word' if unknown.
             const matchesType = type === 'all' || item.type === type;
 
             return matchesSearch && matchesSurah && matchesType;
@@ -167,6 +236,54 @@ document.addEventListener('DOMContentLoaded', () => {
             fcIndex = 0;
             loadFlashcard(fcIndex);
         }
+    }
+
+    // --- Audio Helper & Surah Map ---
+    // Mapping Arabic Surah Names to 3-digit IDs for EveryAyah API
+    const surahMap = {
+        "الفاتحة": "001", "البقرة": "002", "آل عمران": "003", "النساء": "004", "المائدة": "005",
+        "الأنعام": "006", "الأعراف": "007", "الأنفال": "008", "التوبة": "009", "يونس": "010",
+        "هود": "011", "يوسف": "012", "الرعد": "013", "إبراهيم": "014", "الحجر": "015",
+        "النحل": "016", "الإسراء": "017", "الكهف": "018", "مريم": "019", "طه": "020",
+        "الأنبياء": "021", "الحج": "022", "المؤمنون": "023", "النور": "024", "الفرقان": "025",
+        "الشعراء": "026", "النمل": "027", "القصص": "028", "العنكبوت": "029", "الروم": "030",
+        "لقمان": "031", "السجدة": "032", "الأحزاب": "033", "سبأ": "034", "فاطر": "035",
+        "يس": "036", "الصافات": "037", "ص": "038", "الزمر": "039", "غافر": "040",
+        "فصلت": "041", "الشورى": "042", "الزخرف": "043", "الدخان": "044", "الجاثية": "045",
+        "الأحقاف": "046", "محمد": "047", "الفتح": "048", "الحجرات": "049", "ق": "050",
+        "الذاريات": "051", "الطور": "052", "النجم": "053", "القمر": "054", "الرحمن": "055",
+        "الواقعة": "056", "الحديد": "057", "المجادلة": "058", "الحشر": "059", "الممتحنة": "060",
+        "الصف": "061", "الجمعة": "062", "المنافقون": "063", "التغابن": "064", "الطلاق": "065",
+        "التحريم": "066", "الملك": "067", "القلم": "068", "الحاقة": "069", "المعارج": "070",
+        "نوح": "071", "الجن": "072", "المزمل": "073", "المدثر": "074", "القيامة": "075",
+        "الإنسان": "076", "المرسلات": "077", "النبأ": "078", "النازعات": "079", "عبس": "080",
+        "التكوير": "081", "الإنفطار": "082", "المطففين": "083", "الإنشقاق": "084", "البروج": "085",
+        "الطارق": "086", "الأعلى": "087", "الغاشية": "088", "الفجر": "089", "البلد": "090",
+        "الشمس": "091", "الليل": "092", "الضحى": "093", "الشرح": "094", "التين": "095",
+        "العلق": "096", "القدر": "097", "البينة": "098", "الزلزلة": "099", "العاديات": "100",
+        "القارعة": "101", "التكاثر": "102", "العصر": "103", "الهمزة": "104", "الفيل": "105",
+        "قريش": "106", "الماعون": "107", "الكوثر": "108", "الكافرون": "109", "النصر": "110",
+        "المسد": "111", "الإخلاص": "112", "الفلق": "113", "الناس": "114"
+    };
+
+    function getAudioUrl(surahStr) {
+        // Expected format: "SurahName (AyahNum)" ex: "المجادلة (21)" or "النبأ (1)"
+        try {
+            const matches = surahStr.match(/(.+)\s\((\d+)\)/);
+            if (matches && matches.length === 3) {
+                const name = matches[1].trim();
+                const ayah = matches[2].trim().padStart(3, '0');
+                const surahID = surahMap[name];
+
+                if (surahID) {
+                    // Using Mishary Rashid Alafasy 128kbps
+                    return `https://everyayah.com/data/Alafasy_128kbps/${surahID}${ayah}.mp3`;
+                }
+            }
+        } catch (err) {
+            console.error("Error parsing audio URL:", err);
+        }
+        return null;
     }
 
     // --- Tab Logic ---
@@ -202,6 +319,102 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- List & Search ---
     searchInput.addEventListener('input', filterData);
+    // --- Root / Related Words Logic (Heuristic) ---
+    window.findRelatedWords = function (currentWord) {
+        if (!currentWord) return [];
+        const cleanWord = currentWord.replace(/[^\u0621-\u064A]/g, '');
+        if (cleanWord.length < 3) return [];
+        const rootProxy = cleanWord.substring(0, 3);
+
+        return quranData.filter(item => {
+            if (item.word === currentWord) return false;
+            const itemClean = item.word.replace(/[^\u0621-\u064A]/g, '');
+            return itemClean.includes(rootProxy);
+        });
+    }
+
+    window.showRelatedList = function (sourceWord) {
+        // Switch to list view and filter
+        document.querySelector('.tab-btn[data-mode="list"]').click();
+
+        const related = findRelatedWords(sourceWord);
+
+        // Custom rendering for related items
+        listContainer.innerHTML = `<div class="related-header" style="padding:1rem; text-align:center;">
+            <h3 style="color:var(--quran-gold)">Orden från samma rot "${sourceWord}" (Ungefär)</h3>
+            <button onclick="renderCards(quranData)" class="control-btn" style="margin-top:10px">Visa alla</button>
+        </div>`;
+
+        renderCards(related); // Use the existing renderCards function
+    }
+
+    // --- Audio Recording Logic ---
+    let mediaRecorder;
+    let audioChunks = [];
+
+    window.startRecording = async function (btn) {
+        btn.classList.add('recording');
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.start();
+        } catch (err) {
+            console.error("Mic access denied", err);
+            alert("Behöver mikrofon-tillåtelse!");
+            btn.classList.remove('recording');
+        }
+    }
+
+    window.stopRecording = function (btn) {
+        if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+
+        btn.classList.remove('recording');
+        mediaRecorder.stop();
+
+        mediaRecorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.play();
+        };
+    }
+
+
+    // --- Share Logic ---
+
+
+    // --- Modal Logic ---
+    window.openInfoModal = function (id) {
+        const item = quranData.find(d => d.id == id);
+        if (!item) return;
+
+        const modal = document.getElementById('infoModal');
+        const title = document.getElementById('modalTitle');
+        const body = document.getElementById('modalBody');
+
+        title.textContent = `Tafsir: ${item.word}`;
+        body.innerHTML = `
+            <div class="tafsir-text">
+                <strong>📝 Rot/Ursprung (Estimat):</strong> ${item.word.replace(/[^\u0621-\u064A]/g, '').substring(0, 3)}<br><br>
+                <strong>📖 Kontext (Svenska):</strong><br> "${item.ayah_sv}"<br><br>
+                <strong>💡 Betydelse (Utökad):</strong><br> ${item.meaning_ar}<br><br>
+                <em>(Tafsir Al-Jalalayn - Kommer snart)</em>
+            </div>
+            <button class="control-btn" style="background:var(--quran-green); width:100%" onclick="closeInfoModal()">Stäng</button>
+        `;
+
+        modal.classList.remove('hidden');
+    }
+
+    window.closeInfoModal = function () {
+        document.getElementById('infoModal').classList.add('hidden');
+    }
 
     function renderCards(items) {
         listContainer.innerHTML = '';
@@ -214,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Optimize rendering with fragment
         const fragment = document.createDocumentFragment();
 
-        items.forEach(item => {
+        items.forEach((item, index) => {
             const card = document.createElement('div');
             card.className = 'quran-card';
 
@@ -227,40 +440,163 @@ document.addEventListener('DOMContentLoaded', () => {
             // Audio Buttons HTML
             const svAudioBtn = `<button class="audio-btn" onclick="playTTS('${item.word_sv}', 'sv-SE', this)">🔊</button>`;
 
-            // Arabic Audio (Placeholder logic - uses TTS for now, ideally external MP3)
-            const arAudioBtn = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this)">🕌</button>`;
+            // Share Buttons HTML 
+
+
+
+            // Arabic Audio (Real Recitation)
+            const audioUrl = getAudioUrl(item.surah);
+            const arAudioBtn = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this, '${audioUrl}')">🕌</button>`;
+            const micBtn = `<button class="audio-btn mic-btn" onmousedown="startRecording(this)" onmouseup="stopRecording(this)" ontouchstart="startRecording(this)" ontouchend="stopRecording(this)" title="Håll in för att spela in">🎙️</button>`;
+            // Root Button (Only show if potential matches exist - optimization: always show but check count on click? Let's just show it)
+            const rootBtn = `<button class="audio-btn" onclick="showRelatedList('${item.word}')" style="margin-left:5px" title="Visa relaterade ord">🌱</button>`;
+
+            const infoBtn = `<button class="audio-btn" onclick="openInfoModal('${item.id}')" style="margin-left:5px">ℹ️</button>`;
+
+
+
+
+
+            // Star logic (SVG)
+            const isFav = userData.favorites.includes(item.id);
+            const favClass = isFav ? 'fav-btn active' : 'fav-btn';
+            const favIcon = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>`;
 
             card.innerHTML = `
                 <div class="card-header">
-                    <span class="surah-badge">${item.surah}</span>
-                    <span class="card-number">#${item.id}</span>
+                    <div class="left-actions">
+                        <button class="share-btn" data-item='${JSON.stringify(item).replace(/'/g, "&apos;")}' onclick="shareCard(JSON.parse(this.dataset.item), event)" title="Dela">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                        </button>
+                        <span class="badger surah-badge">${item.surah}</span>
+                    </div>
+                    <button class="${favClass}" onclick="toggleFavorite('${item.id}')" data-id="${item.id}" title="Spara till favoriter">${favIcon}</button>
                 </div>
                 
                 <div class="main-word-section">
                     <span class="target-word">${item.word}</span>
                     <span class="meaning-ar">${item.meaning_ar}</span>
-                    <span class="word-sv">${item.word_sv} ${svAudioBtn}</span>
+                    <span class="word-sv">${item.word_sv} ${svAudioBtn} ${infoBtn}</span>
                 </div>
 
                 <div class="ayah-section">
-                    <div class="ayah-full">${displayAyah} ${arAudioBtn}</div>
+                    <div class="ayah-full">${displayAyah} ${arAudioBtn} ${micBtn} ${rootBtn}</div>
                     <div class="ayah-sv">${item.ayah_sv}</div>
                 </div>
             `;
+
+
+
+
             fragment.appendChild(card);
         });
 
         listContainer.appendChild(fragment);
     }
 
-    // --- Audio Logic ---
-    window.playTTS = function (text, lang, btn) {
-        if (btn) {
-            btn.classList.add('playing');
-            // Remove playing class after animation
-            setTimeout(() => btn.classList.remove('playing'), 2000);
+    window.shareCard = async function (item, e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
         }
 
+        if (!item) {
+            console.error("No item to share");
+            return;
+        }
+
+        const text = `🔹 ${item.word} (${item.surah})\n\nMeaning: ${item.meaning_ar}\n\n📖 ${item.ayah_full}\n\n🇸🇪 "${item.ayah_sv}"\n\n- Snabbalexin Quran`;
+        const shareData = {
+            title: 'Koranord - SnabbaLexin',
+            text: text,
+        };
+
+        try {
+            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+                console.log('Shared successfully');
+            } else {
+                throw new Error('Web Share API not supported');
+            }
+        } catch (err) {
+            console.warn('Share failed/unsupported, falling back to clipboard', err);
+            try {
+                await navigator.clipboard.writeText(text);
+
+                // Show a temporary visual feedback instead of alert if possible, or a nice toast
+                // For now, simpler alert but maybe styled? Let's use standard alert or custom logic later.
+                // Resetting button state or similar could be good.
+                const btn = e ? e.currentTarget : null;
+                const originalContent = btn ? btn.innerHTML : '';
+
+                if (btn) {
+                    btn.innerHTML = '✅';
+                    setTimeout(() => btn.innerHTML = originalContent, 2000);
+                }
+
+                alert("Text kopierad till urklipp!");
+            } catch (clipboardErr) {
+                console.error('Clipboard failed', clipboardErr);
+                alert("Kunde inte dela eller kopiera texten.");
+            }
+        }
+    }
+
+    window.playTTS = function (text, lang, btn, audioUrl = null) {
+        if (btn) {
+            btn.classList.add('playing');
+            // Remove playing class after animation (backup if audio end event fails)
+            setTimeout(() => btn.classList.remove('playing'), 5000); // Increased timeout for real audio
+
+            // --- Karaoke Effect ---
+            // Find the closest card container (list or flashcard)
+            const card = btn.closest('.quran-card') || btn.closest('.fc-inner');
+            if (card) {
+                // Find highlighting span
+                const highlight = card.querySelector('.highlight-word');
+                if (highlight) {
+                    highlight.classList.add('highlight-karaoke');
+                    // Remove after roughly 5 seconds (matched with audio timeout roughly)
+                    setTimeout(() => highlight.classList.remove('highlight-karaoke'), 5000);
+                }
+            }
+        }
+
+        // --- Real Audio Logic ---
+        if (lang === 'ar-SA' && audioUrl) {
+            const audio = new Audio(audioUrl);
+            audio.onended = () => {
+                if (btn) btn.classList.remove('playing');
+                const card = btn ? (btn.closest('.quran-card') || btn.closest('.fc-inner')) : null;
+                if (card) {
+                    const highlight = card.querySelector('.highlight-word');
+                    if (highlight) highlight.classList.remove('highlight-karaoke');
+                }
+            };
+            audio.onerror = () => {
+                console.warn('Audio playback failed, falling back to TTS.');
+                speakFallback(text, lang);
+            };
+            audio.play().catch(e => {
+                console.error("Audio play error:", e);
+                speakFallback(text, lang);
+            });
+            return;
+        }
+
+        speakFallback(text, lang);
+    };
+
+    function speakFallback(text, lang) {
         // Use unified TTSManager from utils.js
         if (typeof TTSManager !== 'undefined') {
             TTSManager.speak(text, lang);
@@ -270,10 +606,10 @@ document.addEventListener('DOMContentLoaded', () => {
             u.lang = lang;
             window.speechSynthesis.speak(u);
         }
-    };
+    }
 
     // --- Flashcard Logic ---
-    let fcDirection = 'ar-sv'; // Default
+    let fcDirection = 'sv-ar'; // Default
 
     function initFlashcards() {
         const cardEl = document.getElementById('quranFlashcard');
@@ -301,13 +637,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        // Share Buttons Logic
+        const shareBtns = [document.getElementById('fcShareBtn'), document.getElementById('fcShareBtnBack')];
+        shareBtns.forEach(btn => {
+            if (!btn) return;
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!filteredData[fcIndex]) return;
+                shareCard(filteredData[fcIndex], e);
+            });
+        });
+
         // Flip Logic
         cardEl.addEventListener('click', (e) => {
-            if (e.target.closest('.audio-btn') || e.target.closest('.fav-btn')) return;
+            if (e.target.closest('.audio-btn') || e.target.closest('.fav-btn') || e.target.closest('.share-btn')) return;
 
             fcFlipped = !fcFlipped;
             cardEl.classList.toggle('flipped', fcFlipped);
-
             // Show Rating Controls when flipped to Back
             if (fcFlipped) {
                 ratingControls.classList.add('visible');
@@ -320,12 +667,27 @@ document.addEventListener('DOMContentLoaded', () => {
         prevBtn.addEventListener('click', () => { if (fcIndex > 0) { fcIndex--; loadFlashcard(fcIndex); } });
         nextBtn.addEventListener('click', () => { if (fcIndex < filteredData.length - 1) { fcIndex++; loadFlashcard(fcIndex); } });
 
-        // Toggle Language
-        fcLangToggle.addEventListener('change', (e) => {
-            fcDirection = e.target.checked ? 'sv-ar' : 'ar-sv';
-            fcModeLabel.textContent = e.target.checked ? '🇸🇪 Svenska (Framsida)' : '🇸🇦 Arabiska (Framsida)';
-            loadFlashcard(fcIndex);
-        });
+        // Toggle Language (Global Handler)
+        if (globalFcLangToggle) {
+            globalFcLangToggle.addEventListener('change', (e) => {
+                fcDirection = e.target.checked ? 'sv-ar' : 'ar-sv';
+                // Update local toggle if it exists
+                if (fcLangToggle) fcLangToggle.checked = e.target.checked;
+
+                if (fcModeLabel) fcModeLabel.textContent = e.target.checked ? '🇸🇪 Svenska (Framsida)' : '🇸🇦 Arabiska (Framsida)';
+                loadFlashcard(fcIndex);
+            });
+        }
+
+        // Local Flashcard Toggle (Keep solely for backward compatibility or if user uses that one)
+        if (fcLangToggle) {
+            fcLangToggle.addEventListener('change', (e) => {
+                fcDirection = e.target.checked ? 'sv-ar' : 'ar-sv';
+                if (globalFcLangToggle) globalFcLangToggle.checked = e.target.checked;
+                fcModeLabel.textContent = e.target.checked ? '🇸🇪 Svenska (Framsida)' : '🇸🇦 Arabiska (Framsida)';
+                loadFlashcard(fcIndex);
+            });
+        }
     }
 
     function loadFlashcard(index) {
@@ -346,7 +708,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update Favorite Icons
             document.querySelectorAll('.fav-btn').forEach(btn => {
-                btn.textContent = isFav ? '★' : '☆';
+                btn.textContent = isFav ? '❤️' : '🤍';
+                btn.style.filter = isFav ? "drop-shadow(0 0 5px red)" : "none";
                 btn.classList.toggle('active', isFav);
             });
 
@@ -355,16 +718,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (isArFront) {
                 document.getElementById('fcMeaning').textContent = item.meaning_ar;
-                const arAudio = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this)">🕌</button>`;
+                const audioUrl = getAudioUrl(item.surah);
+                const arAudio = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this, '${audioUrl}')">🕌</button>`;
                 const svAudio = `<button class="audio-btn" onclick="playTTS('${item.word_sv}', 'sv-SE', this)">🔊</button>`;
+                // Share button is now in header, removing from here to avoid duplication if user wants clean UI, 
+                // BUT user asked "Where is it", maybe they expect it near text?
+                // Actually header is better. Let's keep Info button near translation since it adds context.
+                const infoBtn = `<button class="audio-btn" onclick="openInfoModal('${item.id}')" style="margin-left:5px" title="Tafsir/Info">ℹ️</button>`;
+
                 const ayahHtml = item.ayah_full.replace(item.word, `<span class="highlight-word">${item.word}</span>`);
-                document.getElementById('fcAyah').innerHTML = ayahHtml + arAudio;
+                document.getElementById('fcAyah').innerHTML = ayahHtml + arAudio + infoBtn; // Added Info Button
                 document.getElementById('fcTrans').innerHTML = `<div style="margin-bottom:5px; font-weight:bold; color:var(--quran-gold)">${item.word_sv} ${svAudio}</div><div>${item.ayah_sv}</div>`;
             } else {
                 document.getElementById('fcMeaning').textContent = item.meaning_ar;
                 const arAudio = `<button class="audio-btn" onclick="playTTS('${item.ayah_full}', 'ar-SA', this)">🕌</button>`;
+                const infoBtn = `<button class="audio-btn" onclick="openInfoModal('${item.id}')" style="margin-left:5px" title="Tafsir/Info">ℹ️</button>`;
+
                 const ayahHtml = item.ayah_full.replace(item.word, `<span class="highlight-word">${item.word}</span>`);
-                document.getElementById('fcAyah').innerHTML = `<div style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--quran-gold);">${item.word}</div>${ayahHtml} ${arAudio}`;
+                document.getElementById('fcAyah').innerHTML = `<div style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--quran-gold);">${item.word}</div>${ayahHtml} ${arAudio} ${infoBtn}`; // Added Info Button
                 document.getElementById('fcTrans').innerHTML = `<div>${item.ayah_sv}</div>`;
             }
 
@@ -402,7 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function toggleFavorite(id) {
+    window.toggleFavorite = function (id) {
         if (userData.favorites.includes(id)) {
             userData.favorites = userData.favorites.filter(favId => favId !== id);
         } else {
@@ -411,10 +782,16 @@ document.addEventListener('DOMContentLoaded', () => {
         saveProgress();
         // Update current card UI immediately
         const isFav = userData.favorites.includes(id);
-        document.querySelectorAll('.fav-btn').forEach(btn => {
-            btn.textContent = isFav ? '★' : '☆';
-            btn.classList.toggle('active', isFav);
+        // Only update buttons correpsonding to THIS id
+        document.querySelectorAll(`.fav-btn[data-id="${id}"]`).forEach(btn => {
+            btn.textContent = isFav ? '❤️' : '🤍';
+            // btn.classList.toggle('active', isFav); // Optional class for CSS styling if needed
+            if (isFav) btn.style.filter = "drop-shadow(0 0 5px red)";
+            else btn.style.filter = "none";
         });
+
+        // If in 'favorites' filter mode, re-render to remove un-favorited item visually if desired?
+        // For now, let's keep it simple.
     }
 
     // --- Quiz Logic ---

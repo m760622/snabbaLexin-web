@@ -100,7 +100,8 @@
     --quran-green: #27272a;
     /* Zinc 800 */
     --quran-green-light: #71717a;
-    --bg-gradient: radial-gradient(circle at top right, #18181b, #000000, #000000);
+    --bg-gradient: #000000;
+    /* True OLED Black */
 }
 
 /* Grey (Slate) */
@@ -115,10 +116,157 @@
     --bg-gradient: radial-gradient(circle at top right, #334155, #1e293b, #0f172a);
 }
 
+/* Sage (Matte Green) */
+[data-quran-theme="sage"] {
+    --quran-gold: #d4d4d8;
+    /* Muted Silver/White */
+    --quran-gold-glow: rgba(212, 212, 216, 0.2);
+    --quran-green: #3f4e4f;
+    /* Matte Dark Green */
+    --quran-green-light: #a27b5c;
+    /* Earthy contrast */
+    --bg-gradient: radial-gradient(circle at top right, #2c3639, #395b64, #2c3333);
+}
+
+/* Luxury (Golden Green) */
+[data-quran-theme="luxury"] {
+    --quran-gold: #ffd700;
+    /* Pure Gold */
+    --quran-gold-glow: rgba(255, 215, 0, 0.5);
+    --quran-green: #064e3b;
+    /* Deep Emerald */
+    --quran-green-light: #10b981;
+    --bg-gradient: radial-gradient(circle at top right, #022c22, #064e3b, #000000);
+}
+
+/* Teal (Blue-Green) */
+[data-quran-theme="teal"] {
+    --quran-gold: #ccfbf1;
+    /* Minty White */
+    --quran-gold-glow: rgba(204, 251, 241, 0.3);
+    --quran-green: #115e59;
+    /* Teal 800 */
+    --quran-green-light: #2dd4bf;
+    /* Teal 400 */
+    --bg-gradient: radial-gradient(circle at top right, #134e4a, #0f766e, #042f2e);
+}
+
+/* Royal Ruby (Premium 1) */
+[data-quran-theme="ruby"] {
+    --quran-gold: #fb7185;
+    /* Rose */
+    --quran-gold-glow: rgba(251, 113, 133, 0.4);
+    --quran-green: #881337;
+    /* Rose 900 */
+    --quran-green-light: #f43f5e;
+    /* Rose 500 */
+    --bg-gradient: radial-gradient(circle at top right, #4c0519, #881337, #000000);
+}
+
+/* Bronze/Amber (Premium 2) */
+[data-quran-theme="bronze"] {
+    --quran-gold: #fcd34d;
+    /* Amber 300 */
+    --quran-gold-glow: rgba(252, 211, 77, 0.4);
+    --quran-green: #78350f;
+    /* Amber 900 */
+    --quran-green-light: #d97706;
+    /* Amber 600 */
+    --bg-gradient: radial-gradient(circle at top right, #451a03, #78350f, #292524);
+}
+
+/* ===========================================
+   Settings Content Theme Variables
+   =========================================== */
+.settings-content[data-quran-theme="midnight"] {
+    --quran-gold: #38bdf8;
+    --quran-gold-glow: rgba(56, 189, 248, 0.4);
+    --quran-green: #1e3a8a;
+}
+
+.settings-content[data-quran-theme="sunset"] {
+    --quran-gold: #fcd34d;
+    --quran-gold-glow: rgba(252, 211, 77, 0.4);
+    --quran-green: #7c2d12;
+}
+
+.settings-content[data-quran-theme="amethyst"] {
+    --quran-gold: #e879f9;
+    --quran-gold-glow: rgba(232, 121, 249, 0.4);
+    --quran-green: #581c87;
+}
+
+.settings-content[data-quran-theme="oasis"] {
+    --quran-gold: #fde047;
+    --quran-gold-glow: rgba(253, 224, 71, 0.4);
+    --quran-green: #22c55e;
+}
+
+.settings-content[data-quran-theme="sky"] {
+    --quran-gold: #f0f9ff;
+    --quran-gold-glow: rgba(224, 242, 254, 0.4);
+    --quran-green: #0ea5e9;
+}
+
+.settings-content[data-quran-theme="ocean"] {
+    --quran-gold: #fbbf24;
+    --quran-gold-glow: rgba(251, 191, 36, 0.3);
+    --quran-green: #1e40af;
+}
+
+.settings-content[data-quran-theme="navy"] {
+    --quran-gold: #e2e8f0;
+    --quran-gold-glow: rgba(226, 232, 240, 0.3);
+    --quran-green: #312e81;
+}
+
+.settings-content[data-quran-theme="obsidian"] {
+    --quran-gold: #ffffff;
+    --quran-gold-glow: rgba(255, 255, 255, 0.2);
+    --quran-green: #27272a;
+}
+
+.settings-content[data-quran-theme="slate"] {
+    --quran-gold: #f1f5f9;
+    --quran-gold-glow: rgba(241, 245, 249, 0.3);
+    --quran-green: #475569;
+}
+
+.settings-content[data-quran-theme="sage"] {
+    --quran-gold: #d4d4d8;
+    --quran-gold-glow: rgba(212, 212, 216, 0.2);
+    --quran-green: #3f4e4f;
+}
+
+.settings-content[data-quran-theme="luxury"] {
+    --quran-gold: #ffd700;
+    --quran-gold-glow: rgba(255, 215, 0, 0.5);
+    --quran-green: #064e3b;
+}
+
+.settings-content[data-quran-theme="teal"] {
+    --quran-gold: #ccfbf1;
+    --quran-gold-glow: rgba(204, 251, 241, 0.3);
+    --quran-green: #115e59;
+}
+
+.settings-content[data-quran-theme="ruby"] {
+    --quran-gold: #fb7185;
+    --quran-gold-glow: rgba(251, 113, 133, 0.4);
+    --quran-green: #881337;
+}
+
+.settings-content[data-quran-theme="bronze"] {
+    --quran-gold: #fcd34d;
+    --quran-gold-glow: rgba(252, 211, 77, 0.4);
+    --quran-green: #78350f;
+}
+
 body {
     background: var(--bg-gradient);
     color: white;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter',
+        sans-serif;
     min-height: 100vh;
     transition: background 0.5s ease;
 }
@@ -134,8 +282,8 @@ body.iphone-view {
 /* Header */
 .quran-header {
     background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem;
     position: sticky;
@@ -203,8 +351,8 @@ body.iphone-view {
 /* Quran Card */
 .quran-card {
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
     padding: 1.5rem;
@@ -220,13 +368,30 @@ body.iphone-view {
     border-color: rgba(251, 191, 36, 0.3);
 }
 
-/* Card Header: Badge & Number */
+/* Card Header: Badge & Action Buttons */
 .card-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 1rem;
 }
+
+/* Action group in list cards - horizontal layout */
+.card-header .action-group {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Left side of card header */
+.left-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+}
+
 
 .surah-badge {
     background: rgba(16, 185, 129, 0.2);
@@ -252,20 +417,57 @@ body.iphone-view {
 }
 
 .target-word {
-    font-family: var(--font-arabic-quran);
     font-size: 3rem;
-    color: white;
+    font-weight: 700;
+    color: var(--quran-gold);
+    font-family: 'Amiri Quran', 'Amiri', serif;
+    /* Use specialized font */
     display: block;
-    margin-bottom: 0.5rem;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2px;
+    line-height: 1.6;
+}
+
+.highlight-word {
+    color: var(--quran-gold);
+    display: inline-block;
+}
+
+.highlight-karaoke {
+    color: #34d399 !important;
+    /* Green highlight */
+    text-shadow: 0 0 15px #34d399, 0 0 5px white;
+    transform: scale(1.1);
+    transition: all 0.3s ease;
+}
+
+.mic-btn.recording {
+    background-color: #ef4444 !important;
+    animation: pulseMic 1s infinite;
+}
+
+@keyframes pulseMic {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+
+    70% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    }
 }
 
 .meaning-ar {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Amiri', serif;
+    margin-bottom: 12px;
     display: block;
-    color: var(--quran-gold);
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
 }
 
 .word-sv {
@@ -283,11 +485,11 @@ body.iphone-view {
 }
 
 .ayah-full {
-    font-family: var(--font-arabic-quran);
-    font-size: 1.4rem;
-    line-height: 2;
-    color: #e2e8f0;
-    margin-bottom: 0.8rem;
+    font-family: 'Amiri Quran', 'Amiri', serif;
+    font-size: 1.5rem;
+    line-height: 2.2;
+    color: var(--text-primary);
+    margin-bottom: 10px;
     text-align: right;
     direction: rtl;
 }
@@ -301,8 +503,9 @@ body.iphone-view {
 /* Highlight matching word in ayah */
 .highlight-word {
     color: var(--quran-gold);
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    text-shadow: 0 0 10px rgba(234, 180, 87, 0.3);
     font-weight: bold;
+    font-family: 'Amiri Quran', serif;
 }
 
 /* Mobile Tweaks */
@@ -371,6 +574,11 @@ body.iphone-view {
     display: none !important;
 }
 
+/* Hide Daily Goal Widget */
+.daily-goal-widget {
+    display: none !important;
+}
+
 /* =========================================
    Flashcard Mode
    ========================================= */
@@ -418,8 +626,8 @@ body.iphone-view {
     justify-content: center;
     background: rgba(15, 23, 42, 0.4);
     /* Base dark glass */
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
@@ -445,10 +653,11 @@ body.iphone-view {
 
 
 
-.fc-surah-badge {
-    position: absolute;
-    top: 20px;
-    left: 20px;
+/* .fc-surah-badge renamed to match HTML */
+.surah-badge {
+    /* position: absolute; - Removed to allow flexbox in top-bar to work */
+    /* top: 20px; */
+    /* left: 20px; */
     background: rgba(251, 191, 36, 0.2);
     color: var(--quran-gold);
     padding: 4px 10px;
@@ -457,10 +666,12 @@ body.iphone-view {
 }
 
 .fc-word-large {
-    font-size: 4rem;
-    font-family: var(--font-arabic-quran);
-    color: white;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--quran-gold);
+    font-family: 'Amiri Quran', 'Amiri', serif;
+    margin-bottom: 20px;
+    line-height: 1.5;
 }
 
 .fc-hint {
@@ -538,8 +749,8 @@ body.iphone-view {
 
 .quiz-card {
     background: rgba(30, 41, 59, 0.6);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border-radius: 20px;
     padding: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -597,6 +808,46 @@ body.iphone-view {
     opacity: 0.6;
 }
 
+/* XP Donut Chart */
+.xp-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.xp-donut {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: conic-gradient(var(--quran-gold) calc(var(--p) * 1%), rgba(255, 255, 255, 0.1) 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.xp-donut-inner {
+    width: 42px;
+    height: 42px;
+    background: #1e293b;
+    /* Matches dark bg */
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    line-height: 1;
+}
+
+.xp-donut-inner small {
+    font-size: 0.5rem;
+    color: #94a3b8;
+}
+
 .quiz-feedback {
     margin-top: 1.5rem;
     padding: 10px;
@@ -629,28 +880,244 @@ body.iphone-view {
 /* =========================================
    Flashcard Controls & Favorites
    ========================================= */
+
+
+
+/* Top Bar (Absolute Positioning for overlay) */
 .fc-top-bar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    width: auto;
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    margin-bottom: 10px;
+    align-items: flex-start;
+    z-index: 100;
+    pointer-events: none;
+}
+
+/* Allow interaction with children */
+.fc-top-bar>* {
+    pointer-events: auto;
+}
+
+/* Action Group: Horizontal Stack */
+.action-group {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px;
     align-items: center;
 }
 
-.fav-btn {
+
+
+/* Base Button Styles - Same size for both */
+.fav-btn,
+.share-btn {
     background: none;
     border: none;
-    font-size: 1.8rem;
-    color: rgba(255, 255, 255, 0.3);
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: all 0.3s;
+    color: rgba(255, 255, 255, 0.6);
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s;
 }
 
-.fav-btn.active {
-    color: var(--quran-gold);
-    text-shadow: 0 0 10px var(--quran-gold-glow);
-    transform: scale(1.1);
+/* FIX: Override global absolute positioning from style.css */
+.card-header .share-btn,
+.quran-card .share-btn {
+    position: static !important;
+    right: auto !important;
+    top: auto !important;
+    margin: 0;
 }
+
+
+/* Flashcard Specific Sizes (Larger) */
+.fc-top-bar .fav-btn,
+.fc-top-bar .share-btn {
+    width: 60px;
+    /* Reduced from 80px to be less overwhelming */
+    height: 60px;
+}
+
+.fc-top-bar .fav-btn svg,
+.fc-top-bar .share-btn svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* Icons & Hover Effects */
+.fav-btn svg,
+.share-btn svg {
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+@media (hover: hover) {
+
+    .fav-btn:hover,
+    .share-btn:hover {
+        color: rgba(255, 255, 255, 0.9);
+        transform: scale(1.1);
+    }
+}
+
+/* Active States */
+.fav-btn.active {
+    color: #ef4444;
+}
+
+.fav-btn.active svg {
+    fill: #ef4444;
+    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+    animation: heartBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.share-btn:active {
+    transform: scale(0.9);
+}
+
+@keyframes heartBounce {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.4);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* =========================================
+   Settings & Modal Styles
+   ========================================= */
+.settings-trigger {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background 0.3s;
+}
+
+.settings-trigger:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+}
+
+.settings-content {
+    /* Use theme colors with linear gradient */
+    background: linear-gradient(145deg,
+            var(--quran-green) 0%,
+            rgba(0, 0, 0, 0.95) 100%);
+    position: relative;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--quran-gold);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 0 40px var(--quran-gold-glow),
+        0 0 80px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: var(--quran-gold);
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    padding: 1rem;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.setting-item label {
+    font-size: 1rem;
+    color: #e2e8f0;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Transitions */
+.hidden {
+    display: none !important;
+    opacity: 0;
+}
+
+.modal {
+    transition: opacity 0.3s ease;
+}
+
+.modal:not(.hidden) {
+    display: flex !important;
+    opacity: 1;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Tab Transitions */
+.mode-container {
+    animation: slideUpFade 0.4s ease-out;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
 
 .rating-controls {
     display: flex;
@@ -927,4 +1394,69 @@ body.mobile-view .target-word {
 body.mobile-view .quran-header {
     justify-content: space-between;
     /* Ensure spread */
+}
+
+/* --- Modal Styles --- */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.05);
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: #fff;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.settings-content {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), var(--quran-green));
+    border: 1px solid var(--quran-gold);
+    transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: var(--quran-gold);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.close-modal:hover {
+    transform: scale(1.1);
+}
+
+.tafsir-text {
+    line-height: 1.6;
+    margin-bottom: 20px;
 }

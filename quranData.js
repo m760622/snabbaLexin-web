@@ -1,4 +1,26 @@
 const quranData = [
+    // --- Root: k-t-b (كتب) ---
+    { id: "ktb-1", word: "كَتَبَ", root: "كتب", surah: "المجادلة (21)", meaning_ar: "قضى وأوجب", word_sv: "Skrev / Bestämde", ayah_full: "كَتَبَ اللَّهُ لَأَغْلِبَنَّ أَنَا وَرُسُلِي", ayah_sv: "Gud har skrivit: Jag skall viss segra", type: "verb" },
+    { id: "ktb-2", word: "الْكِتَابَ", root: "كتب", surah: "البقرة (2)", meaning_ar: "القرآن الكريم", word_sv: "Boken (Koranen)", ayah_full: "ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ", ayah_sv: "Detta är Skriften...", type: "noun" },
+    { id: "ktb-3", word: "مَكْتُوبًا", root: "كتب", surah: "الإسراء (58)", meaning_ar: "مسطوراً", word_sv: "Nedskrivet", ayah_full: "كَانَ ذَٰلِكَ فِي الْكِتَابِ مَسْطُورًا", ayah_sv: "Detta är nedskrivet i boken", type: "noun" },
+    { id: "ktb-4", word: "يَكْتُبُونَ", root: "كتب", surah: "البقرة (79)", meaning_ar: "يخطون بأيديهم", word_sv: "De skriver", ayah_full: "فَوَيْلٌ لِّلَّذِينَ يَكْتُبُونَ الْكِتَابَ بِأَيْدِيهِمْ", ayah_sv: "Ve dem som skriver Skriften", type: "verb" },
+
+    // --- Root: ʿ-l-m (علم) ---
+    { id: "alm-1", word: "عَلِمَ", root: "علم", surah: "البقرة (22)", meaning_ar: "عرف وأدرك", word_sv: "Visste / Lärde känna", ayah_full: "عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ", ayah_sv: "Han vet att sjukdom...", type: "verb" },
+    { id: "alm-2", word: "يَعْلَمُونَ", root: "علم", surah: "البقرة (13)", meaning_ar: "يدركون الحقيقة", word_sv: "De vet", ayah_full: "أَلَا إِنَّهُمْ هُمُ السُّفَهَاءُ وَلَٰكِن لَّا يَعْلَمُونَ", ayah_sv: "Men de vet inte om det", type: "verb" },
+    { id: "alm-3", word: "عَلِيمٌ", root: "علم", surah: "البقرة (29)", meaning_ar: "واسع العلم", word_sv: "Allvetande", ayah_full: "وَهُوَ بِكُلِّ شَيْءٍ عَلِيمٌ", ayah_sv: "Han har kunskap om allt", type: "noun" },
+    { id: "alm-4", word: "الْعِلْمِ", root: "علم", surah: "آل عمران (7)", meaning_ar: "المعرفة اليقينية", word_sv: "Kunskapen", ayah_full: "وَالرَّاسِخُونَ فِي الْعِلْمِ", ayah_sv: "Och de som har djup kunskap", type: "noun" },
+
+    // --- Root: r-ḥ-m (رحم) ---
+    { id: "rhm-1", word: "الرَّحْمَٰنِ", root: "رحم", surah: "الفاتحة (1)", meaning_ar: "واسع الرحمة", word_sv: "Den Nåderike", ayah_full: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", ayah_sv: "I Guds, den Nåderikes namn", type: "noun" },
+    { id: "rhm-2", word: "رَحْمَةً", root: "رحم", surah: "الأنعام (12)", meaning_ar: "رقة وعطف", word_sv: "Nåd / Barmhärtighet", ayah_full: "كَتَبَ عَلَىٰ نَفْسِهِ الرَّحْمَةَ", ayah_sv: "Han har föreskrivit Sig barmhärtighet", type: "noun" },
+    { id: "rhm-3", word: "تَرْحَمْنَا", root: "رحم", surah: "الأعراف (23)", meaning_ar: "تغفر لنا وترأف بنا", word_sv: "Förbarmar Dig över oss", ayah_full: "وَإِن لَّمْ تَغْفِرْ لَنَا وَتَرْحَمْنَا", ayah_sv: "Om Du inte förlåter oss och förbarmar Dig", type: "verb" },
+
+    // --- Root: ḵ-l-q (خلق) ---
+    { id: "khl-1", word: "خَلَقَ", root: "خلق", surah: "العلق (1)", meaning_ar: "أوجد من عدم", word_sv: "Skapade", ayah_full: "خَلَقَ الْإِنسَانَ مِنْ عَلَقٍ", ayah_sv: "Skapade människan av en grodd", type: "verb" },
+    { id: "khl-2", word: "الْخَالِقُ", root: "خلق", surah: "الحشر (24)", meaning_ar: "المبدع للكائنات", word_sv: "Skaparen", ayah_full: "هُوَ اللَّهُ الْخَالِقُ الْبَارِئُ", ayah_sv: "Han är Gud, Skaparen", type: "noun" },
+    { id: "khl-3", word: "خَلْقًا", root: "خلق", surah: "لقمان (11)", meaning_ar: "مخلوقات", word_sv: "Skapelse", ayah_full: "هَٰذَا خَلْقُ اللَّهِ", ayah_sv: "Detta är Guds skapelse", type: "noun" },
+
     {
         "id": "1",
         "word": "يَتَسَاءَلُونَ",

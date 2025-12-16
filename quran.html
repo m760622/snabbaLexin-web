@@ -3,22 +3,24 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SnabbaLexin - Quran Learning</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Arabic:wght@300;400;600;700&family=Amiri:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="quran.css">
+    <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#064e3b">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#064e3b" media="(prefers-color-scheme: dark)">
 </head>
 
 <body>
     <header class="quran-header">
         <button class="back-btn" onclick="window.history.back()" aria-label="Tillbaka">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" style="width:24px;height:24px;">
+            <svg viewBox="0 0 24 24" fill="none" class="icon-md" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
@@ -49,12 +51,12 @@
 
     <!-- Filter Bar -->
     <div class="filter-bar" id="filterBar">
-        <select class="glass-select" id="surahFilter">
+        <select class="glass-select" id="surahFilter" aria-label="Filtrera efter Surah">
             <option value="all">Alla Suror</option>
             <option value="favorites">❤️ Favoriter</option>
             <!-- Populated via JS -->
         </select>
-        <select class="glass-select" id="typeFilter">
+        <select class="glass-select" id="typeFilter" aria-label="Filtrera efter ordtyp">
             <option value="all">Alla Typer</option>
             <option value="verb">Verb</option>
             <option value="noun">Noun</option>
@@ -68,7 +70,7 @@
     <div class="daily-goal-widget hidden" id="dailyGoalWidget">
         <span>📅 Dagens Mål:</span>
         <div class="goal-track">
-            <div class="goal-fill" id="dailyGoalFill" style="width:0%"></div>
+            <div class="goal-fill" id="dailyGoalFill"></div>
         </div>
         <span id="dailyGoalText">0/5</span>
     </div>
@@ -122,7 +124,7 @@
                     </div>
                     <div class="fc-back">
                         <div class="fc-top-bar">
-                            <span class="badger" style="opacity:0">.</span> <!-- Spacer -->
+                            <span class="badger opacity-0">.</span> <!-- Spacer -->
                             <div class="action-group">
                                 <button class="share-btn" id="fcShareBtnBack" title="Dela">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -172,7 +174,7 @@
             </div>
 
             <!-- Navigation Controls (Secondary) -->
-            <div class="fc-controls nav-only" style="margin-top:10px; opacity:0.7">
+            <div class="fc-controls nav-only mt-10px opacity-70">
                 <button class="control-btn" id="prevCardBtn">❮</button>
                 <div class="fc-progress" id="fcProgress">1 / 100</div>
                 <button class="control-btn" id="nextCardBtn">❯</button>
@@ -186,7 +188,7 @@
             <div class="quiz-stats">
                 <span>Poäng: <span id="quizScore">0</span> | Streak: <span id="quizStreak">0</span>🔥</span>
                 <div class="xp-container">
-                    <div class="xp-donut" id="xpDonut" style="--p:0">
+                    <div class="xp-donut" id="xpDonut">
                         <div class="xp-donut-inner">
                             <span id="userXP">0</span>
                             <small>XP</small>
@@ -276,9 +278,9 @@
             </div>
         </div>
     </div>
-
-    <script src="utils.js"></script>
+    <!-- Scripts -->
     <script src="quranData.js"></script>
+    <script src="utils.js"></script>
     <script src="quran.js"></script>
 </body>
 

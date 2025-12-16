@@ -491,6 +491,34 @@ function prioritizePopularGames() {
 }
 
 
+// ========================================
+// Scroll Animation Observer
+// ========================================
+function initScrollAnimations() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('scroll-in-view');
+                observer.unobserve(entry.target); // Run once
+            }
+        });
+    }, observerOptions);
+
+    // Target elements to animate
+    const targets = document.querySelectorAll('.game-card-item, .stats-hero, .daily-banner, .category-filter-container, .wc-header-compact');
+
+    targets.forEach(target => {
+        observer.observe(target);
+    });
+}
+
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize prioritization
@@ -506,6 +534,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadScores();
     initDarkMode();
+    initScrollAnimations(); // Initialize Scroll Animations
 
     const flashcard = document.getElementById('flashcard');
     const fcWrongBtn = document.getElementById('fcWrongBtn');

@@ -1046,7 +1046,6 @@ html {
 /* Native Feel: Smooth scrolling */
 html {
     scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
 }
 
 /* Prevent pull-to-refresh on PWA */
@@ -1278,8 +1277,8 @@ body::after {
     gap: 0.5rem;
     padding: 0.4rem 0.8rem;
     background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-radius: 20px;
     border: 1px solid rgba(56, 189, 248, 0.2);
     font-size: 0.85rem;
@@ -1349,6 +1348,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 }
 
@@ -1389,8 +1389,8 @@ body::after {
     border-radius: 20px;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
@@ -1439,8 +1439,8 @@ body::after {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -1451,8 +1451,8 @@ body::after {
 
 .flashcard-front-inline {
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.85) 0%, rgba(37, 99, 235, 0.9) 100%);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
@@ -1460,8 +1460,8 @@ body::after {
 
 .flashcard-back-inline {
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.85) 0%, rgba(217, 119, 6, 0.9) 100%);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     transform: rotateY(180deg);
@@ -1530,8 +1530,8 @@ body::after {
     height: 44px;
     border: none;
     background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-radius: 50%;
     font-size: 1.5rem;
     cursor: pointer;
@@ -1891,8 +1891,8 @@ body::after {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
     z-index: 9999;
     justify-content: center;
     align-items: center;
@@ -1900,9 +1900,6 @@ body::after {
     overflow-y: auto;
 }
 
-.modal.progress-modal {
-    /* Additional styles for progress modal if needed */
-}
 
 .progress-modal-content {
 
@@ -2063,6 +2060,7 @@ body::after {
 
 .weekly-progress-fill {
     height: 100%;
+    width: 0%;
     background: linear-gradient(90deg, #F59E0B, #3B82F6);
     border-radius: 6px;
     transition: width 0.6s ease;
@@ -2469,6 +2467,7 @@ header {
     position: relative;
     padding-top: 4.5rem;
     /* Increased for breathing room from phone edge */
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     /* Slight blur for header area */
 }
@@ -2526,8 +2525,8 @@ header {
     padding: 0.3rem 0.8rem;
     background: rgba(0, 0, 0, 0.05);
     /* More transparent */
-    backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     border-radius: 20px;
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: none;
@@ -2596,8 +2595,8 @@ header {
     display: flex;
     align-items: center;
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border-radius: 50px;
     padding: 0.5rem 0.2rem 0.5rem 1rem;
     /* Reduced right padding for mic */
@@ -2743,8 +2742,8 @@ header {
     justify-content: center;
     /* Light Mode Glassmorphism - Blue Tint */
     background: rgba(240, 248, 255, 0.7);
-    backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
     color: #33A1FD;
     border: 1px solid rgba(51, 161, 253, 0.4);
     padding: 0;
@@ -2931,8 +2930,8 @@ header {
 
 /* Chip Styled Select (Transparent) */
 .chip-select {
-    appearance: none;
     -webkit-appearance: none;
+    appearance: none;
     padding: 0.25rem 0.25rem 0.25rem 0.2rem;
     /* Left padding small gap */
     border-radius: 50px;
@@ -3333,8 +3332,8 @@ header {
     max-height: 80vh;
     overflow-y: auto;
     background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     border-radius: 1rem;
     padding: 0.5rem;
     box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.15), 0 8px 20px -6px rgba(0, 0, 0, 0.1);
@@ -4094,8 +4093,8 @@ header {
     z-index: 40;
     background: transparent;
     /* Matches light theme background */
-    backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     padding: 0 0 0.5rem 0;
     margin: 0 -2rem;
     /* Extend to edges */
@@ -4209,8 +4208,8 @@ h1 {
     font-size: 0.9rem;
     /* Light Mode Glassmorphism - Blue Tint */
     background: rgba(240, 248, 255, 0.7);
-    backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
     border: 1.5px solid rgba(51, 161, 253, 0.4);
     border-radius: 50px;
     color: var(--text-main);
@@ -4267,8 +4266,8 @@ h1 {
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(51, 161, 253, 0.3);
     color: var(--accent);
     font-weight: 700;
@@ -4286,8 +4285,8 @@ h1 {
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border: 1px solid rgba(51, 161, 253, 0.3);
     color: var(--accent);
     font-weight: 700;
@@ -4518,8 +4517,8 @@ h1 {
     transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     /* Glass effect */
-    backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 /* Category-specific gradients and colors */
@@ -4951,8 +4950,8 @@ h1 {
     font-size: 0.9rem;
     color: var(--text-secondary);
     border-radius: 0;
-    backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     text-shadow: none;
     opacity: 0.8;
 }
@@ -4993,8 +4992,8 @@ h1 {
 .card {
     /* Glassmorphism effect */
     background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     border-radius: 0.75rem;
     padding: 0.5rem 0.75rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
@@ -5028,8 +5027,8 @@ h1 {
 [data-theme="dark"] .card {
     /* Dark mode glassmorphism */
     background: rgba(30, 30, 30, 0.6);
-    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
@@ -5479,8 +5478,8 @@ h1 {
     box-shadow: 0 4px 15px rgba(0, 91, 150, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: 2px solid rgba(0, 91, 150, 0.2);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     position: relative;
     overflow: hidden;
 }
@@ -5617,8 +5616,8 @@ h1 {
     left: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding: 1.5rem 1rem;
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
@@ -5780,8 +5779,8 @@ h1 {
     left: 50%;
     transform: translateX(-50%) translateY(-120%);
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(37, 99, 235, 0.95) 100%);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     color: white;
     padding: 1rem 2rem;
     border-radius: 0 0 20px 20px;
@@ -6104,8 +6103,8 @@ h1 {
     width: calc(90% - env(safe-area-inset-left) - env(safe-area-inset-right));
     max-width: 400px;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border-radius: 1.25rem;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.08);
     padding: 1.25rem;
@@ -6520,8 +6519,8 @@ body.flashcard-active .revealed {
 .wod-action-btn {
     /* Deep Glass Effect */
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px) saturate(150%);
     -webkit-backdrop-filter: blur(12px) saturate(150%);
+    backdrop-filter: blur(12px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-top: 1px solid rgba(255, 255, 255, 0.25);
     /* Top shine */
@@ -6634,8 +6633,8 @@ body.flashcard-active .revealed {
     animation: float-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    hyphens: none;
     -webkit-hyphens: none;
+    hyphens: none;
 }
 
 /* Dynamic font sizing for long Swedish words */
@@ -6852,8 +6851,8 @@ body.flashcard-active .revealed {
 .wod-form-chip {
     /* Glass Chip */
     background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     padding: 0.5rem 1rem;
     border-radius: 50px;
@@ -7117,8 +7116,8 @@ body.flashcard-active .revealed {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
     animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -7275,8 +7274,8 @@ body.flashcard-active .revealed {
     line-height: 1.5;
     word-wrap: break-word;
     overflow-wrap: break-word;
-    hyphens: none;
     -webkit-hyphens: none;
+    hyphens: none;
     max-width: 100%;
     padding: 0 1rem;
 }
@@ -8631,4 +8630,129 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
 [data-theme="dark"] .spinner {
     border-color: var(--surface-raised);
     border-top-color: var(--primary);
+}
+
+/* ========================================
+   UTILITY CLASSES FOR INLINE STYLE REPLACEMENT
+   ======================================== */
+
+/* Display utilities */
+.hidden {
+    display: none;
+}
+
+.visibility-hidden {
+    visibility: hidden;
+}
+
+/* Settings dropdown layout */
+.settings-dropdown-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Icon color utilities */
+.icon-color-purple {
+    color: #8b5cf6;
+}
+
+.icon-color-amber {
+    color: #f59e0b;
+}
+
+.icon-color-star {
+    color: #F59E0B;
+}
+
+.icon-color-indigo {
+    color: #6366f1;
+}
+
+.icon-color-violet {
+    color: #8B5CF6;
+}
+
+.icon-color-blue {
+    color: #3B82F6;
+}
+
+.icon-color-green {
+    color: #22c55e;
+}
+
+.icon-color-emerald {
+    color: #10b981;
+}
+
+.icon-color-cyan {
+    color: #06b6d4;
+}
+
+.icon-color-slate {
+    color: #64748b;
+}
+
+.icon-color-purple-light {
+    color: #a855f7;
+}
+
+/* Profile link styling */
+.profile-link {
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    margin-right: 12px;
+}
+
+/* Container utilities */
+.container-flashcard-inline {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 29;
+}
+
+.container-quiz-inline {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 30;
+}
+
+/* Next button styled */
+.next-btn-styled {
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+/* Embedded image in text */
+.inline-icon-img {
+    width: 20px;
+    vertical-align: middle;
+}
+
+/* Challenges section */
+.challenges-section-styled {
+    max-width: 1200px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+
+.challenges-card-styled {
+    background: var(--surface);
+    padding: 1rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.challenges-card-styled h3 {
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.challenges-list-styled {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
 }

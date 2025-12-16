@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Svensk-Arabiskt Lexikon | SnabbaLexin - القاموس السويدي العربي</title>
     <meta name="description"
         content="Gratis svensk-arabiskt lexikon med 34000+ ord, uttal, grammatik och lärspel. Offline-stöd för iOS och Android. القاموس السويدي العربي المجاني مع أكثر من 34000 كلمة.">
@@ -18,7 +17,8 @@
     <link rel="stylesheet" href="style.css?v=2">
     <link rel="stylesheet" href="details-premium.css?v=7">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1f2937" media="(prefers-color-scheme: dark)">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="apple-touch-icon" href="icon.svg">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -47,8 +47,7 @@
     <nav class="top-nav">
         <div class="nav-left">
 
-            <div class="settings-dropdown"
-                style="display: flex; flex-direction: column; gap: 0.5rem; align-items: center;">
+            <div class="settings-dropdown settings-dropdown-layout">
                 <button id="settingsBtn" class="theme-toggle" aria-label="Inställningar / الإعدادات">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,7 +64,7 @@
                 </button>
             </div>
 
-            <div id="settingsMenu" class="settings-menu" style="display: none;">
+            <div id="settingsMenu" class="settings-menu hidden">
                 <!-- Section: Appearance / المظهر -->
                 <div class="settings-section-header">🎨 Utseende</div>
 
@@ -127,7 +126,7 @@
 
                 <!-- TTS Speed Control -->
                 <div class="menu-item tts-speed-control">
-                    <span class="icon-box" style="color: #8b5cf6;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-purple"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
@@ -138,14 +137,15 @@
                             <span>Uttalshastighet</span>
                             <span id="ttsSpeedValue" class="tts-speed-badge">85%</span>
                         </div>
-                        <input type="range" id="ttsSpeedSlider" min="50" max="150" value="85" class="tts-slider">
+                        <input type="range" id="ttsSpeedSlider" min="50" max="150" value="85" class="tts-slider"
+                            title="Uttalshastighet / سرعة النطق">
                         <button id="ttsTestBtn" class="tts-test-btn">🔊 Testa</button>
                     </div>
                 </div>
 
                 <!-- Reminder Notifications Control -->
                 <div class="menu-item reminder-control">
-                    <span class="icon-box" style="color: #f59e0b;">
+                    <span class="icon-box icon-color-amber">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -156,12 +156,14 @@
                         <div class="reminder-header">
                             <span>Påminnelse</span>
                             <label class="toggle-switch">
-                                <input type="checkbox" id="reminderToggle">
+                                <input type="checkbox" id="reminderToggle"
+                                    title="Påminnelse på/av / التذكير تشغيل/إيقاف">
                                 <span class="toggle-slider"></span>
                             </label>
                         </div>
-                        <div id="reminderTimeContainer" class="reminder-time-container" style="display: none;">
-                            <input type="time" id="reminderTime" value="18:00" class="reminder-time-input">
+                        <div id="reminderTimeContainer" class="reminder-time-container hidden">
+                            <input type="time" id="reminderTime" value="18:00" class="reminder-time-input"
+                                title="Påminnelsetid / وقت التذكير">
                             <button id="testReminderBtn" class="tts-test-btn">🔔 Testa</button>
                         </div>
                     </div>
@@ -171,7 +173,7 @@
                 <div class="settings-section-header">📚 Lärverktyg</div>
 
                 <button id="showFavoritesBtn" class="menu-item" aria-label="Visa favoriter / عرض المفضلة">
-                    <span class="icon-box" style="color: #F59E0B;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-star"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <polygon
@@ -182,7 +184,7 @@
                 </button>
 
                 <button id="quizBtn" class="menu-item" aria-label="Snabbtest / تحدي السرعة">
-                    <span class="icon-box" style="color: #6366f1;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-indigo"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
@@ -191,7 +193,7 @@
                 </button>
 
                 <button id="favQuizBtn" class="menu-item" aria-label="اختبار المفضلات">
-                    <span class="icon-box" style="color: #F59E0B;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-star"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <polygon
@@ -202,7 +204,7 @@
                 </button>
 
                 <button id="flashcardsBtn" class="menu-item" aria-label="Flashcards / بطاقات">
-                    <span class="icon-box" style="color: #8B5CF6;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-violet"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="4" width="20" height="16" rx="2"></rect>
@@ -216,7 +218,7 @@
                 <div class="settings-section-header">🧭 Navigation</div>
 
                 <a href="games.html" id="gameBtn" class="menu-item" aria-label="Spel / ألعاب">
-                    <span class="icon-box" style="color: #3B82F6;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-blue"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="7" height="7"></rect>
@@ -228,7 +230,7 @@
                 </a>
 
                 <a href="learn.html" class="menu-item" aria-label="Lär dig / تعلم">
-                    <span class="icon-box" style="color: #22c55e;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-green"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
@@ -238,7 +240,7 @@
                 </a>
 
                 <a href="add.html" class="menu-item" aria-label="Lägg till ord / إضافة كلمة">
-                    <span class="icon-box" style="color: #10b981;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-emerald"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -251,7 +253,7 @@
                 <div class="settings-section-header">💾 Data</div>
 
                 <button id="exportCustom" class="menu-item" aria-label="Exportera">
-                    <span class="icon-box" style="color: #06b6d4;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-cyan"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -262,7 +264,7 @@
                 </button>
 
                 <button id="importCustom" class="menu-item" aria-label="Importera">
-                    <span class="icon-box" style="color: #06b6d4;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-cyan"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -276,7 +278,7 @@
                 <div class="settings-section-header">ℹ️ Info</div>
 
                 <a href="device.html" class="menu-item" aria-label="Device Info / معلومات الجهاز">
-                    <span class="icon-box" style="color: #64748b;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-slate"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -287,7 +289,7 @@
                 </a>
 
                 <a href="changelog.html" class="menu-item" aria-label="Changelog / سجل التحديثات">
-                    <span class="icon-box" style="color: #a855f7;"><svg xmlns="http://www.w3.org/2000/svg" width="18"
+                    <span class="icon-box icon-color-purple-light"><svg xmlns="http://www.w3.org/2000/svg" width="18"
                             height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round">
                             <line x1="8" y1="6" x2="21" y2="6"></line>
@@ -318,8 +320,7 @@
 
 
 
-            <a href="profile.html" class="icon-btn" aria-label="Min Profil / ملفي الشخصي"
-                style="text-decoration: none; margin-bottom: 0.5rem; margin-right: 12px;">
+            <a href="profile.html" class="icon-btn profile-link" aria-label="Min Profil / ملفي الشخصي">
                 👤
             </a>
 
@@ -339,9 +340,10 @@
         </div>
 
         <!-- Hidden elements kept for functionality -->
-        <button id="installApp" style="display: none;"></button>
-        <input type="file" id="importCustomFile" accept=".json" style="display: none;">
-        <input type="file" id="importFile" accept=".json" style="display: none;">
+        <button id="installApp" class="hidden" title="Installera appen / تثبيت التطبيق"></button>
+        <input type="file" id="importCustomFile" accept=".json" class="hidden"
+            title="Importera anpassade ord / استيراد كلمات مخصصة">
+        <input type="file" id="importFile" accept=".json" class="hidden" title="Importera data / استيراد البيانات">
     </nav>
 
     <script>
@@ -414,8 +416,8 @@
     <!-- <p class="subtitle">Svensk-Arabiskt Lexikon / القاموس السويدي العربي</p> -->
 
     <!-- Flashcard Inline Container (moved above search bar) -->
-    <div class="container" style="max-width: 700px; margin: 0 auto; position: relative; z-index: 29;">
-        <div id="flashcardInlineContainer" class="game-container flashcard-inline" style="display: none;">
+    <div class="container container-flashcard-inline">
+        <div id="flashcardInlineContainer" class="game-container flashcard-inline hidden">
             <div class="quiz-header-compact">
                 <div class="flashcard-progress-inline">
                     <span id="flashcardCurrentInline">1</span>/<span id="flashcardTotalInline">10</span>
@@ -447,7 +449,7 @@
                 </div>
 
 
-                <div class="flashcard-controls-inline" id="flashcardControlsInline" style="display: none;">
+                <div class="flashcard-controls-inline hidden" id="flashcardControlsInline">
                     <button class="fc-btn-inline fc-again" data-quality="0">
                         <span class="fc-emoji">😅</span>
                         <span class="fc-label">Igen</span>
@@ -479,7 +481,7 @@
 
                     <input type="text" id="searchInput" placeholder="Sök ord / ابحث عن كلمة..." autocomplete="off"
                         autocorrect="off" spellcheck="false">
-                    <button id="clearSearch" class="clear-btn" aria-label="Rensa / مسح" style="display: none;">
+                    <button id="clearSearch" class="clear-btn hidden" aria-label="Rensa / مسح">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -518,7 +520,7 @@
                 </button>
             </div>
 
-            <div id="filterChipsContainer" class="filter-chips-container" style="display: none;">
+            <div id="filterChipsContainer" class="filter-chips-container hidden">
                 <!-- Filter Mode Dropdown (Styled as Chip) -->
                 <div class="select-chip-wrapper">
                     <select id="filterModeSelect" class="chip-select" aria-label="Välj sökläge">
@@ -585,7 +587,7 @@
 
     <main id="resultsArea">
         <!-- Word of the Day -->
-        <div id="wordOfTheDay" class="word-of-day-card" style="display: none;">
+        <div id="wordOfTheDay" class="word-of-day-card hidden">
             <div class="wod-header">
                 <div class="wod-title-col">
                     <span>📅 Dagens Ord</span>
@@ -625,7 +627,7 @@
                 </div>
 
                 <!-- Forms Preview Section -->
-                <div class="wod-forms-preview" style="display: none;">
+                <div class="wod-forms-preview hidden">
                     <div class="preview-label">
                         <span class="preview-icon">🔤</span>
                         <span>Böjningar / تصريفات</span>
@@ -635,14 +637,14 @@
 
                 <!-- Definition Section - Bilingual -->
                 <div class="wod-definitions-preview">
-                    <div class="wod-def-preview" style="display: none;">
+                    <div class="wod-def-preview hidden">
                         <div class="preview-label">
                             <span class="preview-icon">📖</span>
                             <span>Definition (Svenska)</span>
                         </div>
                         <div class="wod-def-text wod-def-swe"></div>
                     </div>
-                    <div class="wod-def-arb-preview" style="display: none;">
+                    <div class="wod-def-arb-preview hidden">
                         <div class="preview-label">
                             <span class="preview-icon">📘</span>
                             <span>التعريف (عربي)</span>
@@ -653,14 +655,14 @@
 
                 <!-- Example Section - Bilingual -->
                 <div class="wod-examples-preview">
-                    <div class="wod-example-preview" style="display: none;">
+                    <div class="wod-example-preview hidden">
                         <div class="preview-label">
                             <span class="preview-icon">💡</span>
                             <span>Exempel (Svenska)</span>
                         </div>
                         <div class="wod-example-text wod-ex-swe"></div>
                     </div>
-                    <div class="wod-example-arb-preview" style="display: none;">
+                    <div class="wod-example-arb-preview hidden">
                         <div class="preview-label">
                             <span class="preview-icon">✨</span>
                             <span>مثال (عربي)</span>
@@ -671,7 +673,7 @@
 
                 <!-- Idiom Section - Bilingual -->
                 <div class="wod-idioms-preview">
-                    <div class="wod-idiom-preview" style="display: none;">
+                    <div class="wod-idiom-preview hidden">
                         <div class="preview-label">
                             <span class="preview-icon">💬</span>
                             <span>Uttryck / تعبير</span>
@@ -691,7 +693,7 @@
     </div>
 
     <!-- PWA Install Prompt -->
-    <div id="pwa-install-prompt" class="pwa-prompt" style="display: none;">
+    <div id="pwa-install-prompt" class="pwa-prompt hidden">
         <div class="pwa-content">
             <p>Installera appen för bättre upplevelse! / قم بتثبيت التطبيق لتجربة أفضل</p>
             <div class="pwa-buttons">
@@ -718,23 +720,23 @@
             });
         }
     </script>
-    <div id="iosInstallPrompt" class="ios-prompt" style="display: none;">
+    <div id="iosInstallPrompt" class="ios-prompt hidden">
         <div class="ios-prompt-content">
             <p>För att installera appen: Tryck på <img
                     src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDdlZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgM3YxMm0wIDBsLTQtNG00IDRsNCA0TTQgMjBoMTYiLz48L3N2Zz4="
-                    alt="Share" style="width: 20px; vertical-align: middle;"> och välj <strong>"Lägg till på
+                    alt="Share" class="inline-icon-img"> och välj <strong>"Lägg till på
                     hemskärmen"</strong></p>
             <p dir="rtl">لتثبيت التطبيق: اضغط على <img
                     src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDdlZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgM3YxMm0wIDBsLTQtNG00IDRsNCA0TTQgMjBoMTYiLz48L3N2Zz4="
-                    alt="Share" style="width: 20px; vertical-align: middle;"> واختر <strong>"إضافة إلى الشاشة
+                    alt="Share" class="inline-icon-img"> واختر <strong>"إضافة إلى الشاشة
                     الرئيسية"</strong></p>
             <button id="closeIosPrompt">OK</button>
         </div>
     </div>
 
     <!-- Quiz Container (Inline) -->
-    <div class="container" style="max-width: 700px; margin: 0 auto; position: relative; z-index: 30;">
-        <div id="quizInlineContainer" class="game-container" style="display: none;">
+    <div class="container container-quiz-inline">
+        <div id="quizInlineContainer" class="game-container hidden">
             <div class="quiz-header-compact">
                 <h2>Snabbtest</h2>
                 <div class="quiz-header-right">
@@ -757,10 +759,9 @@
                 </div>
                 <div id="quizOptions" class="quiz-options"></div>
                 <div id="quizFeedback" class="quiz-feedback"></div>
-                <button id="nextQuestion" class="action-btn primary"
-                    style="display: none; margin-top: 0.5rem; width: 100%;">Nästa</button>
+                <button id="nextQuestion" class="action-btn primary next-btn-styled hidden">Nästa</button>
 
-                <div id="quizEndScreen" class="quiz-end-screen" style="display: none;">
+                <div id="quizEndScreen" class="quiz-end-screen hidden">
                     <div class="end-icon">🎉</div>
                     <h3 class="end-title">Testet avslutat!</h3>
                     <div class="end-score"><span class="end-score-value" id="endScoreValue">0</span><span
@@ -774,7 +775,7 @@
 
     <!-- Word of the Day Modal -->
 
-    <div id="wodModal" class="modal" style="display: none;">
+    <div id="wodModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Dagens Ord</h2>
@@ -788,7 +789,7 @@
     </div>
 
     <!-- Progress Dashboard Modal -->
-    <div id="progressModal" class="modal progress-modal" style="display: none;">
+    <div id="progressModal" class="modal progress-modal hidden">
         <div class="modal-content progress-modal-content">
             <div class="modal-header progress-modal-header">
                 <h2>📊 Min Progress / تقدمي</h2>
@@ -824,7 +825,7 @@
                 <div class="progress-section weekly-progress-section">
                     <h4>🎯 Veckomål / هدف الأسبوع</h4>
                     <div class="weekly-progress-bar">
-                        <div class="weekly-progress-fill" id="weeklyProgressFill" style="width: 0%"></div>
+                        <div class="weekly-progress-fill" id="weeklyProgressFill"></div>
                     </div>
                     <div class="weekly-progress-info">
                         <span class="weekly-progress-text">
@@ -872,12 +873,11 @@
                 <div class="progress-section stats-section">
                     <h4>📊 Statistik / الإحصائيات</h4>
                     <!-- Daily Challenges -->
-                    <section class="challenges-section" style="max-width: 1200px; margin: 1rem auto; padding: 0 1rem;">
-                        <div class="challenges-card"
-                            style="background: var(--surface); padding: 1rem; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                            <h3 style="margin-bottom: 1rem; color: var(--text);"><i class="fas fa-tasks"></i> Dagens
+                    <section class="challenges-section challenges-section-styled">
+                        <div class="challenges-card-styled">
+                            <h3><i class="fas fa-tasks"></i> Dagens
                                 Utmaningar / تحديات اليوم</h3>
-                            <div id="challengesList" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <div id="challengesList" class="challenges-list-styled">
                                 <!-- Rendered by JS -->
                             </div>
                         </div>
@@ -940,7 +940,7 @@
                         </button>
                         <label class="import-btn">
                             📤 Importera data
-                            <input type="file" id="importDataFile" accept=".json" style="display: none;"
+                            <input type="file" id="importDataFile" accept=".json" class="hidden"
                                 onchange="if(typeof ExportManager !== 'undefined' && this.files[0]) ExportManager.importFromJSON(this.files[0]);">
                         </label>
                     </div>
@@ -951,7 +951,7 @@
     </div>
 
     <!-- Flashcards Modal -->
-    <div id="flashcardModal" class="modal flashcard-modal" style="display: none;">
+    <div id="flashcardModal" class="modal flashcard-modal hidden">
         <div class="modal-content flashcard-modal-content">
             <div class="flashcard-header">
                 <div class="flashcard-progress">
@@ -975,7 +975,7 @@
                     </div>
                 </div>
 
-                <div class="flashcard-controls" id="flashcardControls" style="display: none;">
+                <div class="flashcard-controls hidden" id="flashcardControls">
                     <button class="fc-btn fc-again" data-quality="0">
                         <span class="fc-emoji">😅</span>
                         <span class="fc-label">Igen / مرة أخرى</span>
@@ -1003,7 +1003,7 @@
     </div>
 
     <!-- Onboarding Modal -->
-    <div id="onboardingModal" class="onboarding-overlay" style="display: none;">
+    <div id="onboardingModal" class="onboarding-overlay hidden">
         <div class="onboarding-container">
             <button class="onboarding-skip" id="skipOnboarding">Hoppa över ❯</button>
 
@@ -1053,7 +1053,7 @@
             </div>
 
             <div class="onboarding-nav">
-                <button class="onboarding-btn secondary" id="prevSlide" style="visibility: hidden;">⟵ Tillbaka</button>
+                <button class="onboarding-btn secondary visibility-hidden" id="prevSlide">⟵ Tillbaka</button>
                 <button class="onboarding-btn primary" id="nextSlide">Nästa ⟶</button>
             </div>
         </div>
@@ -1276,10 +1276,10 @@
             }
 
             function closeOnboarding() {
+                localStorage.setItem('onboardingComplete', 'true');
                 modal.style.opacity = '0';
                 setTimeout(() => {
                     modal.style.display = 'none';
-                    localStorage.setItem('onboardingComplete', 'true');
                 }, 300);
             }
 
@@ -1324,7 +1324,7 @@
             }
         });
     </script>
-<script src="pwa.js" defer></script>
+    <script src="pwa.js" defer></script>
 </body>
 
 </html>

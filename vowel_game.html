@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Svenska Vokaler - المتشابهات الصوتية</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +38,7 @@
 
         * {
             box-sizing: border-box;
+            -webkit-user-select: none;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
@@ -203,6 +204,7 @@
             gap: 0.25rem;
             align-items: center;
             background: rgba(15, 23, 42, 0.8);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
@@ -659,6 +661,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
+            -webkit-backdrop-filter: blur(8px);
             backdrop-filter: blur(8px);
             text-align: center;
             border-radius: 20px;
@@ -973,6 +976,7 @@
             display: none;
             overflow-y: auto;
             padding: 2rem 1rem;
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
 
@@ -1181,6 +1185,7 @@
 
         .audio-mode .word-text {
             filter: blur(12px);
+            -webkit-user-select: none;
             user-select: none;
             transition: filter 0.3s;
         }
@@ -1220,6 +1225,54 @@
                 transform: scale(1.05);
             }
         }
+
+        /* Inline style replacements */
+        .start-orb-large {
+            width: 200px;
+            height: 200px;
+        }
+
+        .start-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .start-hint {
+            margin-top: 2rem;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+
+        .level-badge-clickable {
+            cursor: pointer;
+        }
+
+        .stage-map-title {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .stage-map-close-btn {
+            display: block;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            background: #ef4444;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .daily-badge-amount {
+            font-size: 2rem;
+        }
+
+        .play-area-container {
+            width: 100%;
+            display: none;
+        }
     </style>
 </head>
 
@@ -1232,13 +1285,13 @@
 
     <!-- START SCREEN -->
     <div id="startScreen" class="start-screen">
-        <div class="orb orb-1" style="width:200px; height:200px;"></div>
-        <h1 class="start-title">Svenska Vokaler<br><span style="font-size:1.5rem; font-weight:400; opacity:0.8;">تحدي
+        <div class="orb orb-1 start-orb-large"></div>
+        <h1 class="start-title">Svenska Vokaler<br><span class="start-subtitle">تحدي
                 الأصوات السويدية</span></h1>
         <button class="start-btn" onclick="startGame()">Börja Spela ▶</button>
         <button class="daily-btn" id="dailyBtn" onclick="startDailyChallenge()">🌟 Dagens Utmaning</button>
         <button class="audio-btn" onclick="startAudioMode()">🔊 Ljudläge</button>
-        <p style="margin-top:2rem; opacity:0.5; font-size:0.9rem;">Turn on sound 🔊</p>
+        <p class="start-hint">Turn on sound 🔊</p>
     </div>
 
     <div class="progress-container">
@@ -1246,7 +1299,7 @@
     </div>
 
     <header>
-        <button class="back-btn" onclick="window.history.back()">
+        <button class="back-btn" onclick="window.history.back()" aria-label="Tillbaka" title="Tillbaka">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -1260,7 +1313,7 @@
             <div class="lives-container" id="livesContainer">
                 <span class="heart">❤️</span><span class="heart">❤️</span><span class="heart">❤️</span>
             </div>
-            <div class="level-badge" id="levelBadge" onclick="toggleStageMap()" style="cursor: pointer;">Start!</div>
+            <div class="level-badge level-badge-clickable" id="levelBadge" onclick="toggleStageMap()">Start!</div>
         </div>
     </header>
 
@@ -1272,10 +1325,9 @@
 
         <!-- Stage Map Modal -->
         <div id="stageMapOverlay" class="stage-map-overlay">
-            <h2 style="text-align:center; color:#fff; margin-bottom:1rem;">Kartläggning 🗺️</h2>
+            <h2 class="stage-map-title">Kartläggning 🗺️</h2>
             <div id="stageGrid" class="stage-grid"></div>
-            <button onclick="toggleStageMap()"
-                style="display:block; margin:2rem auto; padding:1rem 2rem; background:#ef4444; border:none; border-radius:10px; color:#fff; font-weight:bold;">Close</button>
+            <button onclick="toggleStageMap()" class="stage-map-close-btn">Close</button>
         </div>
 
         <!-- Celebration Container -->
@@ -1285,10 +1337,10 @@
         <div class="daily-timer" id="dailyTimer">⏱️ 00:00</div>
         <div class="daily-badge" id="dailyBadge">
             🏆 Dagens Utmaning Avklarad!<br>
-            <span style="font-size:2rem;">+3 ❤️</span>
+            <span class="daily-badge-amount">+3 ❤️</span>
         </div>
 
-        <div id="playArea" style="width: 100%; display:none;">
+        <div id="playArea" class="play-area-container">
 
             <div id="bossBanner" class="boss-banner">⚠️ BOSS WAVE ⚠️</div>
 

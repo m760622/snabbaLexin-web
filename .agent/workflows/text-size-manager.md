@@ -5,17 +5,20 @@ description: Dynamic text sizing rule to keep text within card/container boundar
 # Text Size Manager Usage Guide
 
 ## Overview
+
 Use `TextSizeManager` to dynamically adjust font size based on text length, keeping content within container boundaries.
 
 ## JavaScript API
 
 ### Basic Usage
+
 ```javascript
 // Apply dynamic sizing to an element
 TextSizeManager.apply(element, text, containerType);
 ```
 
 ### Container Types
+
 | Type | Use Case | Thresholds |
 |------|----------|------------|
 | `flashcard` | Small cards (180px height) | xs:50, sm:30, md:20, lg:10 |
@@ -26,20 +29,24 @@ TextSizeManager.apply(element, text, containerType);
 ### Methods
 
 1. **apply(element, text, containerType)** - Apply sizing to single element
+
 ```javascript
 const el = document.getElementById('myText');
 TextSizeManager.apply(el, el.textContent, 'flashcard');
 ```
 
-2. **autoApply()** - Auto-apply to all elements with `data-auto-size` attribute
+1. **autoApply()** - Auto-apply to all elements with `data-auto-size` attribute
+
 ```html
 <span data-auto-size="flashcard">Dynamic text here</span>
 ```
+
 ```javascript
 TextSizeManager.autoApply();
 ```
 
-3. **observe(element, containerType)** - Watch for content changes and auto-resize
+1. **observe(element, containerType)** - Watch for content changes and auto-resize
+
 ```javascript
 const observer = TextSizeManager.observe(myElement, 'card');
 ```
@@ -59,6 +66,7 @@ The system applies these classes automatically:
 ## Examples
 
 ### Flashcards
+
 ```javascript
 // In updateUIInline()
 TextSizeManager.apply(frontEl, frontText, 'flashcard');
@@ -66,11 +74,13 @@ TextSizeManager.apply(backEl, backText, 'flashcard');
 ```
 
 ### Word of the Day
+
 ```javascript
 TextSizeManager.apply(wodSweElement, swedishWord, 'card');
 ```
 
 ### Quiz Questions
+
 ```javascript
 TextSizeManager.apply(questionElement, questionText, 'modal');
 ```

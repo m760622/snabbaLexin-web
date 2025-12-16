@@ -3,8 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changelog - SnabbaLexin</title>
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -80,6 +82,7 @@
             gap: 0.5rem;
             padding: 1rem;
             background: rgba(30, 41, 59, 0.9);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
@@ -229,15 +232,15 @@
 
 <body>
     <header>
-        <button class="back-btn" onclick="window.location.href='index.html'">
+        <button class="back-btn" onclick="window.location.href='index.html'" aria-label="Back / رجوع">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </button>
-        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
-            title="وضع الموبايل">📱</button>
+        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()" title="وضع الموبايل"
+            aria-label="Mobile View / وضع الموبايل">📱</button>
         <h1>Changelog / سجل التحديثات</h1>
     </header>
 
@@ -511,7 +514,7 @@
             document.getElementById('mobileToggle')?.classList.add('active');
         }
     </script>
-<script src="pwa.js" defer></script>
+    <script src="pwa.js" defer></script>
 </body>
 
 </html>

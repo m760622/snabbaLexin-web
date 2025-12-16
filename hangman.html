@@ -32,6 +32,7 @@
 
         * {
             box-sizing: border-box;
+            -webkit-user-select: none;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
             margin: 0;
@@ -716,12 +717,12 @@
     </header>
 
     <div class="controls-bar">
-        <select class="control-select" id="difficultySelect" onchange="changeDifficulty()">
+        <select class="control-select" id="difficultySelect" onchange="changeDifficulty()" title="Välj svårighetsgrad">
             <option value="easy">🟢 Lätt / سهل</option>
             <option value="medium" selected>🟡 Medel / متوسط</option>
             <option value="hard">🔴 Svår / صعب</option>
         </select>
-        <select class="control-select" id="categorySelect" onchange="changeCategory()">
+        <select class="control-select" id="categorySelect" onchange="changeCategory()" title="Välj kategori">
             <option value="all">📚 Alla / الكل</option>
             <option value="substantiv">📦 Substantiv / أسماء</option>
             <option value="verb">🏃 Verb / أفعال</option>
@@ -1306,7 +1307,7 @@
             }
         });
     </script>
-<script src="pwa.js" defer></script>
+    <script src="pwa.js" defer></script>
 </body>
 
 </html>

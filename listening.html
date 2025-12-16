@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listening Test - اختبار السمع</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -151,6 +151,7 @@
             gap: 0.25rem;
             padding: 1rem;
             background: rgba(30, 41, 59, 0.8);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
         }
 
@@ -204,8 +205,8 @@
             width: 120px;
             height: 120px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border: none;
-            border-radius: 50%;
+            -webkit-user-select: none;
+            user-select: none;
             font-size: 3rem;
             cursor: pointer;
             display: flex;
@@ -373,15 +374,15 @@
     </div>
 
     <header>
-        <button class="back-btn" onclick="window.location.href='games.html'">
+        <button class="back-btn" onclick="window.location.href='games.html'" aria-label="Back / رجوع">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
         </button>
-        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
-            title="وضع الموبايل">📱</button>
+        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()" title="وضع الموبايل"
+            aria-label="Mobile View / وضع الموبايل">📱</button>
         <div class="stats">
             <div>✅ <span id="score">0</span></div>
             <div>📝 <span id="current">1</span>/<span id="total">10</span></div>
@@ -404,14 +405,13 @@
             <button class="diff-btn" onclick="setDifficulty('hard', this)">Svår</button>
         </div>
 
-        <button class="speaker-btn" id="speakerBtn" onclick="playWord()">🔊</button>
+        <button class="speaker-btn" id="speakerBtn" onclick="playWord()" aria-label="Play / استمع">🔊</button>
         <div class="hint-text">Klicka för att lyssna / انقر للاستماع</div>
 
         <div class="translation-hint" id="translationHint"></div>
 
         <div class="input-container">
-            <input type="text" class="word-input" id="wordInput" placeholder="Skriv ordet..." autocomplete="off"
-                autocapitalize="none">
+            <input type="text" class="word-input" id="wordInput" placeholder="Skriv ordet..." autocomplete="off">
             <button class="submit-btn" onclick="checkAnswer()">Kontrollera ✓</button>
         </div>
     </div>
@@ -628,7 +628,7 @@
             startNewGame();
         });
     </script>
-<script src="pwa.js" defer></script>
+    <script src="pwa.js" defer></script>
 </body>
 
 </html>

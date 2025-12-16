@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neon Blocks</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -21,8 +21,8 @@
         * {
             box-sizing: border-box;
             touch-action: none;
-            user-select: none;
             -webkit-user-select: none;
+            user-select: none;
         }
 
         body {
@@ -75,6 +75,7 @@
             align-items: center;
             padding: 15px 20px;
             background: rgba(15, 15, 19, 0.9);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--glass-border);
             z-index: 10;
@@ -88,6 +89,7 @@
             letter-spacing: 1px;
             background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
         }
@@ -185,6 +187,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.85);
+            -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
             display: flex;
             justify-content: center;
@@ -311,6 +314,26 @@
             font-weight: 800;
             font-size: 20px;
         }
+
+        /* Extracted Inline Styles */
+        .modal-content-large {
+            width: 400px;
+        }
+
+        .modal-subtitle {
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+
+        #resumeBtn {
+            display: none;
+        }
+
+        #newHighScoreLabel {
+            display: none;
+            color: var(--primary-neon);
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 
@@ -341,9 +364,9 @@
 
         <!-- Main Menu -->
         <div id="mainMenu" class="modal-overlay active">
-            <div class="modal-content" style="width: 400px;">
+            <div class="modal-content modal-content-large">
                 <div class="modal-title">Neon Blocks</div>
-                <p style="opacity: 0.7; margin-bottom: 20px;">Select Game Mode / اختر نمط اللعبة</p>
+                <p class="modal-subtitle">Select Game Mode / اختر نمط اللعبة</p>
 
                 <div class="mode-grid">
                     <div class="mode-card" onclick="game.startMode('classic')">
@@ -364,7 +387,7 @@
                     </div>
                 </div>
 
-                <button class="modal-btn secondary" onclick="game.resume()" id="resumeBtn" style="display:none;">Resume
+                <button class="modal-btn secondary" onclick="game.resume()" id="resumeBtn">Resume
                     / استكمال</button>
             </div>
         </div>
@@ -375,8 +398,7 @@
                 <div class="modal-title">Game Over</div>
                 <div class="score-label">Final Score</div>
                 <div class="final-score" id="finalScore">0</div>
-                <div class="score-label" id="newHighScoreLabel"
-                    style="display:none; color: var(--primary-neon); margin-bottom: 15px;">New High Score!</div>
+                <div class="score-label" id="newHighScoreLabel">New High Score!</div>
                 <button class="modal-btn" onclick="game.showMenu()">Menu / القائمة</button>
                 <button class="modal-btn secondary" onclick="game.restart()">Replay / إعادة</button>
             </div>
@@ -1067,7 +1089,7 @@
         }
     </script>
     <script src="utils.js"></script>
-<script src="pwa.js" defer></script>
+    <script src="pwa.js" defer></script>
 </body>
 
 

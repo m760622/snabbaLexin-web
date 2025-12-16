@@ -5,14 +5,17 @@ description: Apply mobile view mode to all screens and future screens
 # Mobile View Mode Rule
 
 ## Implementation
+
 When creating or modifying any HTML screen/page, always include:
 
 ### 1. Viewport Meta Tag
+
 ```html
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 ```
 
 ### 2. Mobile View Detection Script (before other scripts)
+
 ```html
 <script>
     // Apply saved theme (default: dark)
@@ -27,6 +30,7 @@ When creating or modifying any HTML screen/page, always include:
 ```
 
 ### 3. Mobile-First CSS
+
 ```css
 /* Mobile first approach */
 body {
@@ -47,6 +51,7 @@ body {
 ```
 
 ### 4. Theme CSS Variables
+
 ```css
 :root {
     /* Dark mode (default) */

@@ -72,31 +72,45 @@ window.startGame = function (gameType) {
         // Hide Menu
         if (gameMenu) gameMenu.style.display = 'none';
 
+        // Hide Global UI Elements (Stats, Banner, Filters)
+        document.querySelectorAll('.stats-hero, .daily-banner, .category-filter-container')
+            .forEach(el => el.style.display = 'none');
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+
         // Reset Score for new game session
         resetGameScore();
 
         if (gameType === 'missing-word') {
+            if (missingWordGame) missingWordGame.classList.remove('hidden');
             missingWordGame.style.display = 'block';
             startMissingWordGame();
         } else if (gameType === 'flashcards') {
+            if (flashcardsGame) flashcardsGame.classList.remove('hidden');
             flashcardsGame.style.display = 'block';
             initFlashcards();
         } else if (gameType === 'pronunciation') {
+            if (pronunciationGame) pronunciationGame.classList.remove('hidden');
             pronunciationGame.style.display = 'block';
             startPronunciationGame();
         } else if (gameType === 'spelling') {
+            if (spellingGame) spellingGame.classList.remove('hidden');
             spellingGame.style.display = 'block';
             startSpellingGame();
         } else if (gameType === 'word-wheel') {
+            if (wordWheelGame) wordWheelGame.classList.remove('hidden');
             wordWheelGame.style.display = 'block';
             // Reset Wheel State
             wheelLevel = 3;
             wheelWordsSolved = 0;
             startWordWheelGame();
         } else if (gameType === 'sentence-builder') {
+            if (sentenceGame) sentenceGame.classList.remove('hidden');
             sentenceGame.style.display = 'block';
             startSentenceGame();
         } else if (gameType === 'word-rain') {
+            if (rainGame) rainGame.classList.remove('hidden');
             if (rainGame) rainGame.style.display = 'block';
             else console.error("rainGame element not found!");
 
@@ -106,12 +120,15 @@ window.startGame = function (gameType) {
                 console.error("initRainGame function not found!");
             }
         } else if (gameType === 'wordle') {
+            if (wordleGame) wordleGame.classList.remove('hidden');
             wordleGame.style.display = 'block';
             startWordleGame();
         } else if (gameType === 'grammar') {
+            if (grammarGame) grammarGame.classList.remove('hidden');
             grammarGame.style.display = 'block';
             startGrammarGame();
         } else if (gameType === 'word-connect') {
+            if (wordConnectGame) wordConnectGame.classList.remove('hidden');
             wordConnectGame.style.display = 'flex'; // Flex for full height layout
             initWordConnect();
         }
@@ -142,6 +159,13 @@ window.showGameMenu = function () {
 
         // Show menu
         if (gameMenu) gameMenu.style.display = 'block';
+
+        // Show Global UI Elements
+        document.querySelectorAll('.stats-hero, .daily-banner, .category-filter-container')
+            .forEach(el => el.style.display = '');
+
+        // Scroll to top
+        window.scrollTo(0, 0);
 
         // Hide all games safely
         gameElements.forEach(id => {
@@ -174,121 +198,9 @@ function resetGameScore() {
 
 // --- MISSING WORD GAME ---
 
-let missingWordCurrentItem = null;
-let missingWordScore = 0;
+// --- MISSING WORD GAME ---
+// Logic moved to missingWordGame.js
 
-function startMissingWordGame() {
-    missingWordScore = 0;
-    document.getElementById('gameScore').textContent = '0';
-    loadMissingWordQuestion();
-}
-
-function loadMissingWordQuestion() {
-    const sentenceEl = document.getElementById('gameSentence');
-    const hintEl = document.getElementById('gameHint');
-    const optionsEl = document.getElementById('gameOptions');
-    const feedbackEl = document.getElementById('gameFeedback');
-    const nextBtn = document.getElementById('nextQuestionBtn');
-
-    feedbackEl.innerHTML = '';
-    nextBtn.style.display = 'none';
-    optionsEl.innerHTML = '<div class="skeleton-loader">Laddar...</div>';
-
-    // Find a word with an example sentence
-    let candidate = null;
-    let attempts = 0;
-
-    while (!candidate && attempts < 200) {
-        const item = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
-        if (item && item[COL_EX] && item[COL_SWE] && item[COL_ARB]) {
-            const example = item[COL_EX];
-            const word = item[COL_SWE];
-            // Check if the word appears in the example
-            if (example.toLowerCase().includes(word.toLowerCase()) && word.length > 2) {
-                candidate = item;
-            }
-        }
-        attempts++;
-    }
-
-    if (!candidate) {
-        sentenceEl.textContent = "Kunde inte hitta en fråga. Försök igen.";
-        hintEl.textContent = "";
-        optionsEl.innerHTML = '<button class="game-option" onclick="loadMissingWordQuestion()">Försök igen</button>';
-        return;
-    }
-
-    missingWordCurrentItem = candidate;
-    const word = candidate[COL_SWE];
-    const example = candidate[COL_EX];
-    const translation = candidate[COL_ARB];
-
-    // Create sentence with blank
-    const regex = new RegExp(word, 'i');
-    const sentenceWithBlank = example.replace(regex, '______');
-
-    sentenceEl.innerHTML = sentenceWithBlank;
-    hintEl.textContent = translation;
-
-    // Generate options (1 correct + 3 wrong)
-    const options = [word];
-    let optionAttempts = 0;
-
-    while (options.length < 4 && optionAttempts < 100) {
-        const randomItem = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
-        if (randomItem && randomItem[COL_SWE] &&
-            randomItem[COL_SWE] !== word &&
-            !options.includes(randomItem[COL_SWE]) &&
-            randomItem[COL_SWE].length > 2) {
-            options.push(randomItem[COL_SWE]);
-        }
-        optionAttempts++;
-    }
-
-    // Shuffle options
-    options.sort(() => Math.random() - 0.5);
-
-    // Render options
-    optionsEl.innerHTML = '';
-    options.forEach(option => {
-        const btn = document.createElement('button');
-        btn.className = 'game-option';
-        btn.textContent = option;
-        btn.onclick = () => checkMissingWordAnswer(option, word, btn);
-        optionsEl.appendChild(btn);
-    });
-}
-
-function checkMissingWordAnswer(selected, correct, btnEl) {
-    const feedbackEl = document.getElementById('gameFeedback');
-    const nextBtn = document.getElementById('nextQuestionBtn');
-    const allBtns = document.querySelectorAll('.game-option');
-
-    // Disable all buttons
-    allBtns.forEach(btn => btn.disabled = true);
-
-    if (selected === correct) {
-        btnEl.classList.add('correct');
-        feedbackEl.innerHTML = '✅ Rätt! / صحيح!';
-        feedbackEl.className = 'game-feedback success';
-        missingWordScore++;
-        document.getElementById('gameScore').textContent = missingWordScore;
-        saveScore('missing-word', missingWordScore);
-    } else {
-        btnEl.classList.add('wrong');
-        feedbackEl.innerHTML = `❌ Fel! Rätt svar: <strong>${correct}</strong>`;
-        feedbackEl.className = 'game-feedback error';
-        // Highlight correct answer
-        allBtns.forEach(btn => {
-            if (btn.textContent === correct) {
-                btn.classList.add('correct');
-            }
-        });
-    }
-
-    nextBtn.style.display = 'block';
-    nextBtn.onclick = loadMissingWordQuestion;
-}
 
 // --- FLASHCARDS GAME ---
 
@@ -585,237 +497,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- WORDLE GAME ---
-function startWordleGame() {
-    const grid = document.getElementById('wordleGrid');
-    const keyboard = document.getElementById('wordleKeyboard');
-    const messageEl = document.getElementById('wordleMessage');
-    const nextBtn = document.getElementById('nextWordleBtn');
-    const typeFilter = document.getElementById('wordleTypeFilter').value;
-    const difficultyEl = document.getElementById('wordleDifficulty');
-    const difficulty = difficultyEl ? difficultyEl.value : 'medium';
-
-    // Difficulty settings: word length range
-    let minLen = 5, maxLen = 5;
-    if (difficulty === 'easy') {
-        minLen = 4; maxLen = 4; // Short 4-letter words
-    } else if (difficulty === 'medium') {
-        minLen = 5; maxLen = 5; // Standard 5-letter words
-    } else if (difficulty === 'hard') {
-        minLen = 6; maxLen = 6; // Longer 6-letter words
-    }
-
-    // Reset State
-    wordleGuesses = [];
-    wordleCurrentGuess = '';
-    wordleGameOver = false;
-    messageEl.textContent = '';
-    nextBtn.style.display = 'none';
-    grid.innerHTML = '';
-    keyboard.innerHTML = '';
-
-    // Select Target Word based on difficulty
-    let candidate = null;
-    let attempts = 0;
-    while (!candidate && attempts < 500) {
-        const item = dictionaryData[Math.floor(Math.random() * dictionaryData.length)];
-        if (item && item[COL_SWE] && item[COL_SWE].length >= minLen && item[COL_SWE].length <= maxLen &&
-            !item[COL_SWE].includes(' ') && !item[COL_SWE].includes('-') && /^[a-zA-ZåäöÅÄÖ]+$/.test(item[COL_SWE])) {
-            // Filter by type if selected
-            if (typeFilter !== 'all') {
-                if (item[COL_TYPE] && item[COL_TYPE].toLowerCase().includes(typeFilter)) {
-                    candidate = item;
-                }
-            } else {
-                candidate = item;
-            }
-        }
-        attempts++;
-    }
-
-    if (!candidate) {
-        messageEl.textContent = "Kunde inte hitta ett ord. Försök igen.";
-        return;
-    }
-
-    wordleTarget = candidate[COL_SWE].toUpperCase();
-    const wordLength = wordleTarget.length;
-    console.log("Wordle Target:", wordleTarget, "Difficulty:", difficulty);
-
-    // Create Grid (6 rows, 5 cols) - FIXED: use wordle-tile not wordle-cell
-    for (let i = 0; i < 30; i++) {
-        const cell = document.createElement('div');
-        cell.className = 'wordle-tile';
-        grid.appendChild(cell);
-    }
-
-    // Create Keyboard
-    const keys = [
-        'QWERTYUIOPÅ',
-        'ASDFGHJKLÖÄ',
-        'ZXCVBNM'
-    ];
-
-    keys.forEach(row => {
-        const rowEl = document.createElement('div');
-        rowEl.className = 'keyboard-row';
-
-        row.split('').forEach(key => {
-            const keyBtn = document.createElement('button');
-            keyBtn.className = 'key-btn';
-            keyBtn.textContent = key;
-            keyBtn.onclick = () => handleWordleInput(key);
-            keyBtn.dataset.key = key;
-            rowEl.appendChild(keyBtn);
-        });
-
-        if (row === 'ZXCVBNM') {
-            // Add Enter and Backspace
-            const enterBtn = document.createElement('button');
-            enterBtn.className = 'key-btn wide';
-            enterBtn.textContent = 'ENTER';
-            enterBtn.onclick = submitWordleGuess;
-            rowEl.appendChild(enterBtn);
-
-            const backBtn = document.createElement('button');
-            backBtn.className = 'key-btn wide';
-            backBtn.textContent = '⌫';
-            backBtn.onclick = () => handleWordleInput('BACKSPACE');
-            rowEl.prepend(backBtn);
-        }
-
-        keyboard.appendChild(rowEl);
-    });
-
-    // Keyboard Listeners (Physical)
-    document.onkeydown = (e) => {
-        if (document.getElementById('wordleGame').style.display === 'none') return;
-
-        const key = e.key.toUpperCase();
-        if (key === 'ENTER') submitWordleGuess();
-        else if (key === 'BACKSPACE') handleWordleInput('BACKSPACE');
-        else if (/^[A-ZÅÄÖ]$/.test(key)) handleWordleInput(key);
-    };
-}
-
-function handleWordleInput(key) {
-    if (wordleGameOver) return;
-
-    if (key === 'BACKSPACE') {
-        wordleCurrentGuess = wordleCurrentGuess.slice(0, -1);
-    } else if (wordleCurrentGuess.length < 5) {
-        wordleCurrentGuess += key;
-    }
-    updateWordleGrid();
-}
-
-function updateWordleGrid() {
-    const grid = document.getElementById('wordleGrid');
-    const currentRow = wordleGuesses.length;
-    const startIdx = currentRow * 5;
-
-    // Clear current row
-    for (let i = 0; i < 5; i++) {
-        const cell = grid.children[startIdx + i];
-        cell.textContent = '';
-        cell.classList.remove('typing');
-    }
-
-    // Fill current guess
-    for (let i = 0; i < wordleCurrentGuess.length; i++) {
-        const cell = grid.children[startIdx + i];
-        cell.textContent = wordleCurrentGuess[i];
-        cell.classList.add('typing');
-    }
-}
-
-function submitWordleGuess() {
-    if (wordleGameOver) return;
-    if (wordleCurrentGuess.length !== 5) {
-        showToast("Ordet måste ha 5 bokstäver");
-        return;
-    }
-
-    // Check if word exists (optional, but good for UX)
-    // For now, we allow any 5-letter combo to keep it simple, or check dictionary
-    /*
-    const exists = dictionaryData.some(d => d[COL_SWE].toUpperCase() === wordleCurrentGuess);
-    if (!exists) {
-        showToast("Finns inte i ordlistan");
-        return;
-    }
-    */
-
-    const guess = wordleCurrentGuess;
-    wordleGuesses.push(guess);
-
-    // Color the grid
-    const rowStart = (wordleGuesses.length - 1) * 5;
-    const grid = document.getElementById('wordleGrid');
-    const targetChars = wordleTarget.split('');
-
-    // First pass: Correct (Green)
-    const guessChars = guess.split('');
-    const states = Array(5).fill('absent'); // absent, present, correct
-
-    guessChars.forEach((char, i) => {
-        if (char === targetChars[i]) {
-            states[i] = 'correct';
-            targetChars[i] = null; // Mark as used
-            guessChars[i] = null;
-        }
-    });
-
-    // Second pass: Present (Yellow)
-    guessChars.forEach((char, i) => {
-        if (char && targetChars.includes(char)) {
-            states[i] = 'present';
-            const targetIdx = targetChars.indexOf(char);
-            targetChars[targetIdx] = null;
-        }
-    });
-
-    // Apply styles with animation delay
-    states.forEach((state, i) => {
-        const cell = grid.children[rowStart + i];
-        setTimeout(() => {
-            cell.classList.add(state);
-            // Update Keyboard
-            const keyBtn = document.querySelector(`.key-btn[data-key="${guess[i]}"]`);
-            if (keyBtn) {
-                // Only upgrade status (absent -> present -> correct)
-                const currentClass = keyBtn.classList.contains('correct') ? 'correct' :
-                    keyBtn.classList.contains('present') ? 'present' : 'absent';
-
-                if (state === 'correct') keyBtn.className = `key-btn correct`;
-                else if (state === 'present' && currentClass !== 'correct') keyBtn.className = `key-btn present`;
-                else if (state === 'absent' && currentClass === 'absent') keyBtn.className = `key-btn absent`;
-                else if (state === 'absent' && !keyBtn.classList.contains('correct') && !keyBtn.classList.contains('present')) keyBtn.classList.add('absent');
-            }
-        }, i * 100);
-    });
-
-    // Check Win/Loss
-    if (guess === wordleTarget) {
-        wordleGameOver = true;
-        setTimeout(() => {
-            document.getElementById('wordleMessage').textContent = "Grattis! Du klarade det! 🎉";
-            wordleStreak++;
-            document.getElementById('wordleStreak').textContent = wordleStreak;
-            triggerConfetti();
-            document.getElementById('nextWordleBtn').style.display = 'block';
-        }, 2000);
-    } else if (wordleGuesses.length >= 6) {
-        wordleGameOver = true;
-        setTimeout(() => {
-            document.getElementById('wordleMessage').innerHTML = `Tyvärr! Rätt ord var: <strong>${wordleTarget}</strong>`;
-            wordleStreak = 0;
-            document.getElementById('wordleStreak').textContent = wordleStreak;
-            document.getElementById('nextWordleBtn').style.display = 'block';
-        }, 2000);
-    }
-
-    wordleCurrentGuess = '';
-}
+// Logic moved to wordleGame.js
+// Leftover Wordle logic removed
 
 // Set up Wordle Next button event listener (outside submitWordleGuess to avoid multiple bindings)
 if (document.getElementById('nextWordleBtn')) {

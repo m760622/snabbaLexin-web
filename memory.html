@@ -430,48 +430,80 @@
 
         // Get random words
         function getRandomWords(count) {
-            const suitable = dictionaryData.filter(entry => {
-                const word = entry[COL_SWE];
-                return word && word.length >= 2 && word.length <= 10;
-            });
+            try {
+                if (typeof dictionaryData === 'undefined' || !Array.isArray(dictionaryData)) {
+                    throw new Error("Dictionary data not loaded");
+                }
 
-            const shuffled = suitable.sort(() => Math.random() - 0.5);
-            return shuffled.slice(0, count).map(entry => ({
-                swedish: entry[COL_SWE],
-                arabic: entry[COL_ARB]
-            }));
+                const suitable = dictionaryData.filter(entry => {
+                    if (!Array.isArray(entry)) return false;
+                    const word = entry[COL_SWE];
+                    const translation = entry[COL_ARB]; // Explicitly check for translation
+                    return word && translation && word.length >= 2 && word.length <= 10;
+                });
+
+                if (suitable.length < count) {
+                    console.warn(`Not enough words found. Needed ${count}, found ${suitable.length}`);
+                    // Fallback: use whatever we have loops
+                    if (suitable.length === 0) throw new Error("No suitable words found in dictionary");
+                }
+
+                const shuffled = suitable.sort(() => Math.random() - 0.5);
+                // Safe slice even if we have fewer words
+                return shuffled.slice(0, count).map(entry => ({
+                    swedish: entry[COL_SWE],
+                    arabic: entry[COL_ARB]
+                }));
+            } catch (e) {
+                console.error("Error getting random words:", e);
+                showError("Kunde inte ladda ord. Försök ladda om sidan. / تعذر تحميل الكلمات. حاول تحديث الصفحة.");
+                return [];
+            }
         }
 
         // Create cards array
         function createCards() {
-            const words = getRandomWords(numPairs);
-            cards = [];
+            try {
+                const words = getRandomWords(numPairs);
 
-            words.forEach((word, i) => {
-                // Swedish card
-                cards.push({
-                    id: `swe-${i}`,
-                    pairId: i,
-                    type: 'swedish',
-                    content: word.swedish
-                });
-                // Arabic card
-                cards.push({
-                    id: `arb-${i}`,
-                    pairId: i,
-                    type: 'arabic',
-                    content: word.arabic
-                });
-            });
+                if (words.length === 0) return; // Error already handled in getRandomWords
 
-            // Shuffle
-            cards.sort(() => Math.random() - 0.5);
+                cards = [];
+
+                words.forEach((word, i) => {
+                    // Swedish card
+                    cards.push({
+                        id: `swe-${i}`,
+                        pairId: i,
+                        type: 'swedish',
+                        content: word.swedish
+                    });
+                    // Arabic card
+                    cards.push({
+                        id: `arb-${i}`,
+                        pairId: i,
+                        type: 'arabic',
+                        content: word.arabic
+                    });
+                });
+
+                // Shuffle
+                cards.sort(() => Math.random() - 0.5);
+            } catch (err) {
+                console.error("Error creating cards:", err);
+                showError("Ett fel uppstod när spelet skulle skapas.");
+            }
         }
 
         // Render grid
         function renderGrid() {
             const grid = document.getElementById('cardGrid');
             grid.innerHTML = '';
+
+            if (cards.length === 0) {
+                grid.innerHTML = '<div style="color:white; text-align:center; grid-column: 1/-1;">Kunde inte ladda korten. / تعذر تحميل البطاقات.</div>';
+                return;
+            }
 
             // Adjust grid columns based on card count
             const cols = cards.length <= 12 ? 4 : cards.length <= 16 ? 4 : 6;
@@ -499,6 +531,8 @@
             const cardEl = document.querySelectorAll('.card')[index];
             const card = cards[index];
 
+            if (!cardEl || !card) return; // Safety check
+
             // Skip if already flipped or matched
             if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
             if (flippedCards.length >= 2) return;
@@ -508,14 +542,21 @@
             flippedCards.push({ index, card, el: cardEl });
 
             // Speak Swedish words
-            if (card.type === 'swedish' && typeof TTSManager !== 'undefined') {
-                TTSManager.speak(card.content, 'sv');
+            if (card.type === 'swedish') {
+                try {
+                    if (typeof TTSManager !== 'undefined') {
+                        TTSManager.speak(card.content, 'sv');
+                    }
+                } catch (e) {
+                    console.warn("TTS Error:", e);
+                }
             }
 
             // Check for match
             if (flippedCards.length === 2) {
                 moves++;
-                document.getElementById('moves').textContent = moves;
+                const movesEl = document.getElementById('moves');
+                if (movesEl) movesEl.textContent = moves;
                 checkMatch();
             }
         }
@@ -528,15 +569,18 @@
             if (first.card.pairId === second.card.pairId) {
                 // Match!
                 setTimeout(() => {
-                    first.el.classList.add('matched');
-                    second.el.classList.add('matched');
+                    if (first.el) first.el.classList.add('matched');
+                    if (second.el) second.el.classList.add('matched');
                     matchedPairs++;
-                    document.getElementById('matched').textContent = matchedPairs;
+
+                    const matchedEl = document.getElementById('matched');
+                    if (matchedEl) matchedEl.textContent = matchedPairs;
+
                     flippedCards = [];
                     isProcessing = false;
 
                     // Check win
-                    if (matchedPairs === numPairs) {
+                    if (matchedPairs === numPairs || matchedPairs === cards.length / 2) {
                         clearInterval(timerInterval);
                         setTimeout(showResult, 500);
                     }
@@ -544,8 +588,8 @@
             } else {
                 // No match - flip back
                 setTimeout(() => {
-                    first.el.classList.remove('flipped');
-                    second.el.classList.remove('flipped');
+                    if (first.el) first.el.classList.remove('flipped');
+                    if (second.el) second.el.classList.remove('flipped');
                     flippedCards = [];
                     isProcessing = false;
                 }, 1000);
@@ -560,7 +604,8 @@
                 seconds++;
                 const min = Math.floor(seconds / 60);
                 const sec = seconds % 60;
-                document.getElementById('timer').textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+                const timerEl = document.getElementById('timer');
+                if (timerEl) timerEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
             }, 1000);
         }
 
@@ -575,29 +620,71 @@
         // Show result
         function showResult() {
             const overlay = document.getElementById('resultOverlay');
-            document.getElementById('resultText').textContent = 'Grattis! / مبروك! 🎉';
-            document.getElementById('resultStats').innerHTML = `
-                <div>⏱️ Tid: ${document.getElementById('timer').textContent}</div>
-                <div>🔄 Drag: ${moves}</div>
-            `;
+            if (!overlay) return;
+
+            const timerEl = document.getElementById('timer');
+            const timeStr = timerEl ? timerEl.textContent : '0:00';
+
+            const textEl = document.getElementById('resultText');
+            if (textEl) textEl.textContent = 'Grattis! / مبروك! 🎉';
+
+            const statsEl = document.getElementById('resultStats');
+            if (statsEl) {
+                statsEl.innerHTML = `
+                    <div>⏱️ Tid: ${timeStr}</div>
+                    <div>🔄 Drag: ${moves}</div>
+                `;
+            }
             overlay.classList.add('visible');
 
             if (typeof ProgressManager !== 'undefined') {
-                ProgressManager.trackGame();
+                ProgressManager.trackGame('memory', moves * 10); // Dummy score
             }
+        }
+
+        // Helper to show errors
+        function showError(msg) {
+            const grid = document.getElementById('cardGrid');
+            if (grid) {
+                grid.innerHTML = `<div style="color:#ef4444; padding:20px; text-align:center; grid-column: 1/-1; background: rgba(0,0,0,0.5); border-radius: 12px;">
+                    <h3>Oops!</h3>
+                    <p>${msg}</p>
+                 </div>`;
+            }
+            if (typeof showToast === 'function') showToast(msg);
         }
 
         // Start new game
         function startNewGame() {
-            document.getElementById('resultOverlay').classList.remove('visible');
+            // Check data availability first
+            if (typeof dictionaryData === 'undefined') {
+                // Retry once after 1 second if data might be loading
+                setTimeout(() => {
+                    if (typeof dictionaryData === 'undefined') {
+                        showError("Datafiler laddades inte korrekt. Kontrollera din internetanslutning. / لم يتم تحميل ملفات البيانات. تحقق من الاتصال.");
+                    } else {
+                        startNewGame();
+                    }
+                }, 1000);
+                return;
+            }
+
+            const overlay = document.getElementById('resultOverlay');
+            if (overlay) overlay.classList.remove('visible');
+
             matchedPairs = 0;
             moves = 0;
             flippedCards = [];
             isProcessing = false;
 
-            document.getElementById('moves').textContent = '0';
-            document.getElementById('matched').textContent = '0';
-            document.getElementById('total').textContent = numPairs;
+            const movesEl = document.getElementById('moves');
+            if (movesEl) movesEl.textContent = '0';
+
+            const matchedEl = document.getElementById('matched');
+            if (matchedEl) matchedEl.textContent = '0';
+
+            const totalEl = document.getElementById('total');
+            if (totalEl) totalEl.textContent = numPairs;
 
             createCards();
             renderGrid();

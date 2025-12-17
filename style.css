@@ -8756,3 +8756,186 @@ html:not([data-theme="dark"]) #nextQuestion:hover {
     flex-direction: column;
     gap: 0.8rem;
 }
+/* ========================================
+   ONBOARDING STYLES (from index.html)
+   ======================================== */
+.onboarding-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.onboarding-container {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 24px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.onboarding-skip {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.onboarding-skip:hover {
+    color: #f8fafc;
+}
+
+.onboarding-slides {
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.onboarding-slide {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    animation: slideIn 0.4s ease;
+}
+
+.onboarding-slide.active {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.onboarding-slide h2 {
+    color: #f8fafc;
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.onboarding-slide h3 {
+    color: #6366f1;
+    font-size: 1.2rem;
+    margin: 0 0 1rem 0;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+.onboarding-slide p {
+    color: #94a3b8;
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+}
+
+.onboarding-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #334155;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.dot.active {
+    background: #6366f1;
+    transform: scale(1.2);
+}
+
+.onboarding-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.onboarding-btn {
+    flex: 1;
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.onboarding-btn.primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+}
+
+.onboarding-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+}
+
+.onboarding-btn.secondary {
+    background: #334155;
+    color: #f8fafc;
+}
+
+.onboarding-btn.secondary:hover {
+    background: #475569;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .onboarding-container {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}

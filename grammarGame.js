@@ -34,7 +34,21 @@ function initializeGrammarRules() {
 }
 
 // --- GRAMMAR GAME ---
-function startGrammarGame() {
+function startGrammarGame(retryCount = 0) {
+    if (!grammarInitialized || grammarRules.length === 0) {
+        // Try initializing rules again if empty
+        initializeGrammarRules();
+
+        if (retryCount < 10) {
+            console.warn(`Rules not ready for Grammar Game. Retrying (${retryCount + 1}/10)...`);
+            if (typeof showToast === 'function') showToast("Laddar grammatik... / جاري تحميل القواعد...", 'info');
+            setTimeout(() => startGrammarGame(retryCount + 1), 500);
+        } else {
+            console.error("Critical: Failed to load grammar rules.");
+            if (typeof showToast === 'function') showToast("Kunde inte ladda speldata. / تعذر تحميل البيانات.", 'error');
+        }
+        return;
+    }
     const hintEl = document.getElementById('grammarHint');
     const dropZone = document.getElementById('grammarDropZone');
     const wordBank = document.getElementById('grammarWordBank');

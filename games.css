@@ -2047,89 +2047,156 @@ body.dark-mode .spelling-option-btn {
 }
 
 /* Word Wheel Styles */
+/* --- PREMIUM WORD WHEEL REDESIGN (COMPACT) --- */
+
 .word-wheel-area {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+}
+
+/* Background Glow Effect */
+.word-wheel-area::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+    z-index: 0;
+    pointer-events: none;
 }
 
 .wheel-answer-box {
-    min-height: 60px;
-    background: rgba(99, 102, 241, 0.1);
-    border-radius: 1rem;
-    padding: 1rem 2rem;
-    font-size: 2rem;
-    font-weight: 700;
-    letter-spacing: 0.2rem;
-    margin-bottom: 1rem;
-    color: #6366f1;
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+    min-height: 70px;
+    margin-bottom: 2rem;
+    perspective: 1000px;
+    /* Glowing Pulsating Border */
+    border: 2px solid rgba(99, 102, 241, 0.5);
+    border-radius: 16px;
+    padding: 10px;
+    animation: neonPulse 3s infinite ease-in-out;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes neonPulse {
+    0% {
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.3), inset 0 0 5px rgba(99, 102, 241, 0.1);
+        border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.6), inset 0 0 15px rgba(99, 102, 241, 0.2);
+        border-color: rgba(99, 102, 241, 0.8);
+    }
+
+    100% {
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.3), inset 0 0 5px rgba(99, 102, 241, 0.1);
+        border-color: rgba(99, 102, 241, 0.4);
+    }
+}
+
+.wheel-answer-letter {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 200px;
-    min-height: 50px;
-    /* Ensure height */
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 1rem;
-    padding: 0.5rem 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
+    width: 44px;
+    height: 54px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    font-size: 1.8rem;
+    font-weight: 800;
     color: #4f46e5;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow:
+        0 3px 5px rgba(0, 0, 0, 0.1),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    animation: popInTile 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    transition: all 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
-body.dark-mode .wheel-answer-box {
-    background: rgba(99, 102, 241, 0.2);
+body.dark-mode .wheel-answer-letter {
+    background: rgba(30, 41, 59, 1);
     color: #818cf8;
+    box-shadow:
+        0 3px 5px rgba(0, 0, 0, 0.3),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.3);
 }
 
-.wheel-answer-box.correct {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    color: white !important;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.3);
-    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-    border: none;
+.wheel-answer-letter:hover {
+    transform: translateY(-4px);
+    background: #6366f1;
+    color: white;
 }
 
-.wheel-answer-box.wrong {
-    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
-    color: white !important;
-    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
-    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-    border: none;
+@keyframes popInTile {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
-.game-hint {
-    font-size: 1.2rem;
-    color: var(--text-secondary-light);
-    margin-bottom: 1rem;
-    font-style: italic;
-    direction: rtl;
-    /* Ensure Arabic is RTL */
-    font-family: 'Noto Sans Arabic', sans-serif;
-    /* Use Arabic font */
-    line-height: 1.6;
+/* Small Text Variant for Long Words */
+.wheel-answer-box.small-text .wheel-answer-letter {
+    font-size: 1.3rem;
+    width: 36px;
+    height: 48px;
 }
 
 .wheel-hint {
-    font-size: 1.2rem;
-    color: var(--text-sub-light);
-    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    /* Significantly Larger */
+    font-weight: 800;
+    color: #fbbf24;
+    /* Golden Amber */
+    margin-bottom: 1.5rem;
     font-family: 'Noto Sans Arabic', sans-serif;
     min-height: 1.5em;
-    /* Prevent layout shift */
+    text-align: center;
+    text-shadow: 0 4px 10px rgba(251, 191, 36, 0.4);
+    /* Vibrant Glow */
+    animation: floatHint 4s ease-in-out infinite;
+}
+
+@keyframes floatHint {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
 }
 
 body.dark-mode .wheel-hint {
-    color: var(--text-sub-dark);
+    color: #fbbf24;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
 }
 
 .wheel-container {
     position: relative;
-    width: 300px;
-    height: 300px;
-    margin: 0 auto 2rem auto;
-    /* Ensure it has space */
+    width: 240px;
+    /* Slightly increased to fit larger letters */
+    height: 240px;
+    margin: 1rem auto 2rem auto;
+    border-radius: 50%;
+    /* Subtle guide ring */
+    border: 1px dashed rgba(99, 102, 241, 0.15);
 }
 
 .wheel-center {
@@ -2140,97 +2207,258 @@ body.dark-mode .wheel-hint {
     z-index: 10;
 }
 
+/* Central Action Button (Shuffle/Check) */
 .wheel-center-btn {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    /* Increased */
+    height: 60px;
     border-radius: 50%;
-    background: #6366f1;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
     color: white;
     border: none;
     font-size: 1.8rem;
     cursor: pointer;
-    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
-    transition: all 0.2s;
+    box-shadow:
+        0 6px 15px rgba(99, 102, 241, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .wheel-center-btn:hover {
-    transform: scale(1.1);
-    background: #4f46e5;
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 10px 25px rgba(99, 102, 241, 0.6);
 }
 
+.wheel-center-btn:active {
+    transform: scale(0.95);
+}
+
+/* Floating Letters */
 .wheel-letter {
     position: absolute;
-    width: 60px;
-    /* Increased from 50px */
-    height: 60px;
-    /* Increased from 50px */
+    width: 58px;
+    /* Enlarged to be the STAR */
+    height: 58px;
     border-radius: 50%;
-    background: var(--card-bg-light);
-    border: 2px solid #e5e7eb;
+    background: linear-gradient(145deg, #ffffff, #f3f4f6);
+    border: 2px solid rgba(255, 255, 255, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    /* Increased from 1.5rem */
-    font-weight: 700;
-    color: var(--text-main-light);
+    font-size: 1.6rem;
+    /* Larger font */
+    font-weight: 800;
+    color: #1f2937;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow:
+        4px 4px 10px rgba(0, 0, 0, 0.1),
+        -3px -3px 8px rgba(255, 255, 255, 0.9);
     z-index: 5;
     text-transform: uppercase;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 body.dark-mode .wheel-letter {
-    background: var(--card-bg-dark);
-    border-color: #4b5563;
-    color: var(--text-main-dark);
+    background: linear-gradient(145deg, #1e293b, #0f172a);
+    border-color: rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+    box-shadow:
+        3px 3px 10px rgba(0, 0, 0, 0.3),
+        inset 1px 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 .wheel-letter:hover {
-    transform: scale(1.1);
-    border-color: #6366f1;
+    transform: translate(-50%, -50%) scale(1.15) !important;
     color: #6366f1;
     z-index: 20;
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+    border-color: #6366f1;
 }
 
-.wheel-letter.selected {
-    transform: scale(0);
+.wheel-letter.used {
+    background: rgba(203, 213, 225, 0.3);
+    color: rgba(148, 163, 184, 0.5);
+    box-shadow: none;
+    transform: translate(-50%, -50%) scale(0.9) !important;
+    pointer-events: none;
+    border-color: transparent;
+}
+
+body.dark-mode .wheel-letter.used {
+    background: rgba(30, 41, 59, 0.5);
+    color: rgba(100, 116, 139, 0.5);
+}
+
+/* Premium Game Control Buttons */
+.game-controls-row {
+    display: flex;
+    gap: 1.5rem;
+    /* More space for larger buttons */
+    justify-content: center;
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.game-controls-row button {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    /* Perfect Circle */
+    width: 68px;
+    /* Fixed size */
+    height: 68px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Bouncy spring */
+    box-shadow:
+        0 10px 20px -5px rgba(0, 0, 0, 0.15),
+        inset 0 2px 5px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: unset;
+    /* Override previous */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Icon Styling */
+.game-controls-row button svg {
+    color: white;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+    z-index: 2;
+}
+
+/* Shine Effect */
+.game-controls-row button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
     opacity: 0;
+    transform: scale(0.5);
+    transition: opacity 0.3s, transform 0.3s;
     pointer-events: none;
 }
 
-body.dark-mode .wheel-letter.selected {
-    background: rgba(99, 102, 241, 0.2);
+.game-controls-row button:hover::after {
+    opacity: 1;
+    transform: scale(1);
 }
 
-.game-controls-row {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 1rem;
-    width: 100%;
-    flex-wrap: wrap;
+.game-controls-row button:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.game-controls-row button:hover svg {
+    transform: scale(1.1);
+}
+
+.game-controls-row button:active {
+    transform: translateY(2px) scale(0.95);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Undo Button - Amber/Gold */
+#undoWheelBtn {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.9), rgba(217, 119, 6, 0.95));
+    box-shadow: 0 8px 25px -5px rgba(245, 158, 11, 0.5), inset 0 2px 10px rgba(255, 255, 255, 0.2);
+}
+
+#undoWheelBtn:hover {
+    box-shadow: 0 15px 35px -5px rgba(245, 158, 11, 0.6), inset 0 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+/* Skip Button - Cyan/Electric Blue */
+#skipWheelBtn {
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.9), rgba(2, 132, 199, 0.95));
+    box-shadow: 0 8px 25px -5px rgba(6, 182, 212, 0.5), inset 0 2px 10px rgba(255, 255, 255, 0.2);
+}
+
+#skipWheelBtn:hover {
+    box-shadow: 0 15px 35px -5px rgba(6, 182, 212, 0.6), inset 0 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+/* Show Answer (Eye) Button - Magic Purple */
+#wheelShowAnswerBtn {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(168, 85, 247, 0.95));
+    box-shadow: 0 8px 25px -5px rgba(139, 92, 246, 0.5), inset 0 2px 10px rgba(255, 255, 255, 0.2);
+}
+
+#wheelShowAnswerBtn:hover {
+    box-shadow: 0 15px 35px -5px rgba(139, 92, 246, 0.6), inset 0 2px 10px rgba(255, 255, 255, 0.4);
+}
+
+#wheelShowAnswerBtn:hover svg {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+}
+
+/* Disabled State for Hint Button */
+#wheelShowAnswerBtn:disabled {
+    background: #e2e8f0;
+    color: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    border-color: transparent;
+    filter: grayscale(100%);
+    opacity: 0.6;
+}
+
+body.dark-mode #wheelShowAnswerBtn:disabled {
+    background: #334155;
+    color: #64748b;
+}
+
+/* Error Shake Animation */
+@keyframes shakeError {
+
+    0%,
+    100% {
+        transform: translateX(0);
+        border-color: #ef4444;
+    }
+
+    20% {
+        transform: translateX(-10px);
+    }
+
+    40% {
+        transform: translateX(10px);
+    }
+
+    60% {
+        transform: translateX(-10px);
+    }
+
+    80% {
+        transform: translateX(10px);
+    }
+}
+
+.shake-error {
+    animation: shakeError 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    background: rgba(239, 68, 68, 0.1) !important;
 }
 
 .fixed-controls {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    /* 4 equal columns */
-    gap: 0.5rem;
-    width: 100%;
-    max-width: 600px;
-    margin: 2rem auto 0;
-    align-items: center;
-}
-
-.fixed-controls button {
-    /* width: 100%; Removed to allow circular shape */
-    margin: 0 auto;
-    /* Center in grid cell */
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
 }
 
 #undoWheelBtn {

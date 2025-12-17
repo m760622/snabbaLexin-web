@@ -127,77 +127,99 @@ function triggerConfetti() {
 // ========================================
 // Initialize Flashcards Game
 // ========================================
-function initFlashcards() {
+// ========================================
+// Initialize Flashcards Game (Robost Version)
+// ========================================
+function initFlashcards(retryCount = 0) {
     const typeFilter = document.getElementById('flashcardTypeFilter')?.value || 'all';
 
-    if (typeof dictionaryData === 'undefined' || dictionaryData.length === 0) {
-        console.error("dictionaryData not loaded!");
+    // Check for data availability
+    if (typeof dictionaryData === 'undefined' || !Array.isArray(dictionaryData) || dictionaryData.length === 0) {
+        if (retryCount < 5) {
+            console.log(`Data not ready, retrying... (${retryCount + 1}/5)`);
+            if (typeof showToast === 'function' && retryCount === 0) {
+                showToast("Laddar data... / جاري تحميل البيانات...", 'default');
+            }
+            setTimeout(() => initFlashcards(retryCount + 1), 500);
+        } else {
+            console.error("dictionaryData failed to load.");
+            if (typeof showToast === 'function') {
+                showToast("Kunde inte ladda data. Kontrollera din anslutning. / تعذر تحميل البيانات.", 'error');
+            }
+            // Show visible error in game container
+            const container = document.getElementById('flashcardWord');
+            if (container) container.innerHTML = '<span style="color:red; font-size: 1rem;">Datafel / Error</span>';
+        }
         return;
     }
 
-    let pool = [...dictionaryData];
+    try {
+        let pool = [...dictionaryData];
 
-    // Apply type filter
-    if (typeFilter !== 'all') {
-        pool = pool.filter(entry => {
-            const type = (entry[FC_COL_TYPE] || '').toLowerCase();
-            return type.includes(typeFilter);
+        // Apply type filter
+        if (typeFilter !== 'all') {
+            pool = pool.filter(entry => {
+                if (!entry) return false;
+                const type = (entry[FC_COL_TYPE] || '').toLowerCase();
+                return type.includes(typeFilter);
+            });
+        }
+
+        // Filter out entries without Swedish word
+        pool = pool.filter(entry => entry && entry[FC_COL_SWE] && entry[FC_COL_SWE].length > 0);
+
+        if (pool.length === 0) {
+            console.warn("No words found for filter:", typeFilter);
+            if (typeof showToast === 'function') showToast("Inga ord hittades för detta filter.", 'error');
+            return;
+        }
+
+        // Adaptive: Prioritize words in lower boxes (harder words)
+        pool.sort((a, b) => {
+            const boxA = LeitnerSystem.getWordBox(String(a[FC_COL_ID]));
+            const boxB = LeitnerSystem.getWordBox(String(b[FC_COL_ID]));
+            return boxA - boxB; // Lower box = higher priority
         });
+
+        // Limit to 50 cards for performance
+        flashcardCards = pool.sort(() => 0.5 - Math.random()).slice(0, 50);
+
+        flashcardIndex = 0;
+        flashcardScore = 0;
+        flashcardTotal = flashcardCards.length;
+        sessionStats = { correct: 0, wrong: 0, totalTime: 0 };
+
+        // Update active game container visibility just in case
+        const gameContainer = document.getElementById('flashcardsGame');
+        if (gameContainer && gameContainer.style.display !== 'block') {
+            gameContainer.style.display = 'block';
+        }
+
+        // Update progress display
+        updateProgressRing(0);
+        initSegmentedProgress(); // Initialize segments
+        const progressEl = document.getElementById('flashcardProgress');
+        if (progressEl) progressEl.textContent = `0/${flashcardTotal}`;
+
+        // Reset flashcard state
+        const flashcard = document.getElementById('flashcard');
+        if (flashcard) flashcard.classList.remove('flipped');
+
+        // Setup swipe gestures
+        setupSwipeGestures();
+
+        // Show first card
+        showNextFlashcard();
+
+        // Enter full screen on mobile
+        enterFullScreenMode();
+
+        console.log("Flashcards initialized successfully with", flashcardTotal, "cards.");
+
+    } catch (e) {
+        console.error("Critical error starting Flashcards:", e);
+        if (typeof showToast === 'function') showToast("Ett fel uppstod. / حدث خطأ.", 'error');
     }
-
-    // Filter out entries without Swedish word (already handled by initial filter, but good to keep explicit)
-    pool = pool.filter(entry => entry[FC_COL_SWE] && entry[FC_COL_SWE].length > 0);
-
-    // ============================================================
-    // RULE: Show example only if Swedish sentence is >= 3 words
-    // This allows "relevanta fakta" (2 words) -> still hidden? User asked for 3.
-    // "relevanta fakta" is 2 words. "Jag äter mat" is 3.
-    // ============================================================
-    // For now, we won't strictly hide words without examples, but if they DO have an example,
-    // we want to ensure it's a "good" one before displaying it prominently.
-    // However, the user said "Apply this rule in the Flashcards game".
-    // This implies we should ideally skipping cards with "bad" examples, 
-    // OR we just ensure we only DISPLAY the example if it meets the criteria.
-
-    // Let's implement logic to `showNextFlashcard` to validate the example before showing it.
-    // We don't filter the *cards* themselves (we still want to learn the words), 
-    // but controls *which* example is shown or if it's shown at all.
-
-    // Adaptive: Prioritize words in lower boxes (harder words)
-    pool.sort((a, b) => {
-        const boxA = LeitnerSystem.getWordBox(String(a[FC_COL_ID]));
-        const boxB = LeitnerSystem.getWordBox(String(b[FC_COL_ID]));
-        return boxA - boxB; // Lower box = higher priority
-    });
-
-    // Shuffle within same-box groups, then pick 20
-    // The user's provided code had a line `flashcardCards = pool.sort(() => 0.5 - Math.random()).slice(0, 50);`
-    // followed by `flashcardCards = shuffled;`. This suggests replacing the `shuffled` logic.
-    // I'll use the new shuffle and slice, limiting to 50 cards.
-    flashcardCards = pool.sort(() => 0.5 - Math.random()).slice(0, 50); // Limit to 50 for performance
-
-    flashcardIndex = 0;
-    flashcardScore = 0;
-    flashcardTotal = flashcardCards.length;
-    sessionStats = { correct: 0, wrong: 0, totalTime: 0 };
-
-    // Update progress display
-    updateProgressRing(0);
-    initSegmentedProgress(); // Initialize segments
-    document.getElementById('flashcardProgress').textContent = `0/${flashcardTotal}`;
-
-    // Reset flashcard state
-    const flashcard = document.getElementById('flashcard');
-    if (flashcard) flashcard.classList.remove('flipped');
-
-    // Setup swipe gestures
-    setupSwipeGestures();
-
-    // Show first card
-    showNextFlashcard();
-
-    // Enter full screen on mobile
-    enterFullScreenMode();
 }
 
 // ========================================

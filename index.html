@@ -60,6 +60,12 @@
             </div>
 
             <div id="settingsMenu" class="settings-menu hidden">
+                <!-- Section: Profile / الملف الشخصي -->
+                <a href="profile.html" class="menu-item profile-link" aria-label="Min Profil / ملفي الشخصي">
+                    <span class="icon-box">👤</span>
+                    <span>Min Profil / ملفي</span>
+                </a>
+
                 <!-- Section: Appearance / المظهر -->
                 <div class="settings-section-header">🎨 Utseende</div>
 
@@ -306,18 +312,12 @@
 
         <div class="nav-center">
             <div class="brand-header">
-                <h1 class="brand-title-swe">Svensk-Arabiskt Lexikon</h1>
-                <h2 class="brand-title-arb">القاموس العربي السويدي</h2>
+                <h1 class="brand-title-swe">Snabba Lexin</h1>
+                <h2 class="brand-title-arb">القاموس السريع</h2>
             </div>
         </div>
 
         <div class="nav-right">
-
-
-
-            <a href="profile.html" class="icon-btn profile-link" aria-label="Min Profil / ملفي الشخصي">
-                👤
-            </a>
 
             <!-- Progress Stats Badge -->
             <div class="progress-stats-badge" id="progressBadge" title="Dagens framsteg / تقدم اليوم"
@@ -350,13 +350,12 @@
             if (settingsBtn && settingsMenu) {
                 settingsBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const isHidden = settingsMenu.style.display === 'none';
-                    settingsMenu.style.display = isHidden ? 'flex' : 'none';
+                    settingsMenu.classList.toggle('hidden');
                 });
 
                 document.addEventListener('click', (e) => {
                     if (!settingsMenu.contains(e.target) && e.target !== settingsBtn) {
-                        settingsMenu.style.display = 'none';
+                        settingsMenu.classList.add('hidden');
                     }
                 });
             }
@@ -375,8 +374,10 @@
                 });
             }
 
-            // Apply only to Swedish title (Arabic letters need to stay connected)
-            splitLetters(document.querySelector('.brand-title-swe'));
+            // Apply only to Swedish title on desktop (not mobile/tablet - too wide)
+            if (window.innerWidth > 600) {
+                splitLetters(document.querySelector('.brand-title-swe'));
+            }
 
             // Progress Badge Click Handler
             const progressBadge = document.getElementById('progressBadge');
@@ -580,20 +581,19 @@
 
     <!-- شريط الاختصارات السريعة -->
     <div class="quick-actions-bar">
+        <button class="quick-action-btn" id="quickWodBtn" title="كلمة اليوم / Dagens Ord">
+            <span class="quick-label">Ord</span>
+        </button>
         <a href="games.html" class="quick-action-btn" title="ألعاب / Spel">
-            <span class="quick-icon">🎮</span>
             <span class="quick-label">Spel</span>
         </a>
         <a href="learn.html" class="quick-action-btn" title="تعلم / Lär">
-            <span class="quick-icon">📚</span>
             <span class="quick-label">Lär</span>
         </a>
         <button class="quick-action-btn" id="quickFavBtn" title="مفضلة / Favoriter">
-            <span class="quick-icon">⭐</span>
             <span class="quick-label">Favoriter</span>
         </button>
         <button class="quick-action-btn" id="quickQuizBtn" title="اختبار / Quiz">
-            <span class="quick-icon">⚡</span>
             <span class="quick-label">Quiz</span>
         </button>
     </div>
@@ -618,7 +618,7 @@
         <p class="challenge-text" id="challengeText">Lär dig 5 nya ord idag! / تعلم 5 كلمات جديدة اليوم!</p>
         <div class="challenge-progress">
             <span id="challengeProgress">0/5</span>
-            <button class="challenge-claim-btn hidden" id="claimChallengeBtn">🎁 Claim</button>
+            <button class="challenge-claim-btn hidden" id="claimChallengeBtn">🎁 Hämta Belöning</button>
         </div>
     </div>
 

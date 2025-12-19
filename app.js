@@ -3075,20 +3075,32 @@ function initDailyChallenge() {
     const today = new Date().toDateString();
     let challengeData = JSON.parse(localStorage.getItem('dailyChallenge') || '{}');
 
-    // تحدي جديد كل يوم
-    if (challengeData.date !== today) {
-        const randomChallenge = DAILY_CHALLENGES[Math.floor(Math.random() * DAILY_CHALLENGES.length)];
+    // تحدي جديد كل يوم - دائماً تعلم 5 كلمات
+    // أو إصلاح التحدي إذا كان من نوع مختلف
+    if (challengeData.date !== today || challengeData.type !== 'words') {
+        // الحفاظ على التقدم الحالي إذا كان نفس اليوم
+        const currentProgress = (challengeData.date === today) ? (challengeData.current || 0) : 0;
         challengeData = {
             date: today,
-            ...randomChallenge,
-            current: 0,
-            completed: false,
+            text: 'Lär dig 5 nya ord! / تعلم 5 كلمات جديدة!',
+            target: 5,
+            type: 'words',
+            current: currentProgress,
+            completed: currentProgress >= 5,
             claimed: false
         };
         localStorage.setItem('dailyChallenge', JSON.stringify(challengeData));
     }
 
     renderChallenge(challengeData);
+
+    // ربط زر المطالبة بالمكافأة
+    const claimBtn = document.getElementById('claimChallengeBtn');
+    if (claimBtn) {
+        claimBtn.addEventListener('click', () => {
+            window.claimChallenge();
+        });
+    }
 }
 
 function renderChallenge(data) {
@@ -3106,8 +3118,8 @@ function renderChallenge(data) {
         claimBtn?.classList.remove('hidden');
         card.style.border = '2px solid #22c55e';
     } else if (data.claimed) {
-        card.style.opacity = '0.6';
-        progressEl.textContent = '✅ مكتمل!';
+        // إخفاء البطاقة عند اكتمال التحدي
+        card.classList.add('hidden');
     }
 }
 
@@ -3211,9 +3223,44 @@ function checkAchievements() {
 function initQuickActions() {
     const quickFavBtn = document.getElementById('quickFavBtn');
     const quickQuizBtn = document.getElementById('quickQuizBtn');
+    const quickWodBtn = document.getElementById('quickWodBtn');
+
+    // تأثير haptic مشترك
+    const triggerHaptic = () => {
+        if (typeof HapticManager !== 'undefined') {
+            HapticManager.trigger('light');
+        }
+    };
+
+    // تأثير حركة الأيقونة
+    const animateIcon = (btn) => {
+        const icon = btn.querySelector('.quick-icon');
+        if (icon) {
+            icon.style.transform = 'scale(1.3) rotate(10deg)';
+            setTimeout(() => {
+                icon.style.transform = 'scale(1) rotate(0deg)';
+            }, 200);
+        }
+    };
+
+    if (quickWodBtn) {
+        quickWodBtn.addEventListener('click', () => {
+            triggerHaptic();
+            animateIcon(quickWodBtn);
+            // القفز لكلمة اليوم
+            const wodCard = document.getElementById('wordOfTheDay');
+            if (wodCard) {
+                wodCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                wodCard.style.animation = 'pulse 0.5s ease';
+                setTimeout(() => wodCard.style.animation = '', 500);
+            }
+        });
+    }
 
     if (quickFavBtn) {
         quickFavBtn.addEventListener('click', () => {
+            triggerHaptic();
+            animateIcon(quickFavBtn);
             // عرض المفضلة
             const showFavoritesBtn = document.getElementById('showFavoritesBtn');
             if (showFavoritesBtn) showFavoritesBtn.click();
@@ -3222,11 +3269,29 @@ function initQuickActions() {
 
     if (quickQuizBtn) {
         quickQuizBtn.addEventListener('click', () => {
+            triggerHaptic();
+            animateIcon(quickQuizBtn);
             // بدء اختبار
             const quizBtn = document.getElementById('quizBtn');
             if (quizBtn) quizBtn.click();
         });
     }
+
+    // إضافة تأثيرات hover للأيقونات
+    document.querySelectorAll('.quick-action-btn').forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            const icon = btn.querySelector('.quick-icon');
+            if (icon) {
+                icon.style.transform = 'scale(1.2)';
+            }
+        });
+        btn.addEventListener('mouseleave', () => {
+            const icon = btn.querySelector('.quick-icon');
+            if (icon) {
+                icon.style.transform = 'scale(1)';
+            }
+        });
+    });
 }
 
 // تهيئة عند التحميل

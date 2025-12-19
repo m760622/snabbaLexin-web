@@ -82,55 +82,37 @@ window.startGame = function (gameType) {
         // Reset Score for new game session
         resetGameScore();
 
+        // Redirect to standalone pages
         if (gameType === 'missing-word') {
-            if (missingWordGame) missingWordGame.classList.remove('hidden');
-            missingWordGame.style.display = 'block';
-            startMissingWordGame();
+            window.location.href = 'missing_word.html';
+            return;
         } else if (gameType === 'flashcards') {
-            if (flashcardsGame) flashcardsGame.classList.remove('hidden');
-            flashcardsGame.style.display = 'block';
-            initFlashcards();
+            window.location.href = 'flashcards.html';
+            return;
         } else if (gameType === 'pronunciation') {
-            if (pronunciationGame) pronunciationGame.classList.remove('hidden');
-            pronunciationGame.style.display = 'block';
-            startPronunciationGame();
+            window.location.href = 'pronunciation.html';
+            return;
         } else if (gameType === 'spelling') {
-            if (spellingGame) spellingGame.classList.remove('hidden');
-            spellingGame.style.display = 'block';
-            startSpellingGame();
+            window.location.href = 'spelling.html';
+            return;
         } else if (gameType === 'word-wheel') {
-            if (wordWheelGame) wordWheelGame.classList.remove('hidden');
-            wordWheelGame.style.display = 'block';
-            // Reset Wheel State
-            wheelLevel = 3;
-            wheelWordsSolved = 0;
-            startWordWheelGame();
+            window.location.href = 'word_wheel.html';
+            return;
         } else if (gameType === 'sentence-builder') {
-            if (sentenceGame) sentenceGame.classList.remove('hidden');
-            sentenceGame.style.display = 'block';
-            startSentenceGame();
+            window.location.href = 'sentence_builder.html';
+            return;
         } else if (gameType === 'word-rain') {
-            if (rainGame) rainGame.classList.remove('hidden');
-            if (rainGame) rainGame.style.display = 'block';
-            else console.error("rainGame element not found!");
-
-            if (typeof initRainGame === 'function') {
-                initRainGame();
-            } else {
-                console.error("initRainGame function not found!");
-            }
+            window.location.href = 'word_rain.html';
+            return;
         } else if (gameType === 'wordle') {
-            if (wordleGame) wordleGame.classList.remove('hidden');
-            wordleGame.style.display = 'block';
-            startWordleGame();
+            window.location.href = 'wordle.html';
+            return;
         } else if (gameType === 'grammar') {
-            if (grammarGame) grammarGame.classList.remove('hidden');
-            grammarGame.style.display = 'block';
-            startGrammarGame();
+            window.location.href = 'grammar.html';
+            return;
         } else if (gameType === 'word-connect') {
-            if (wordConnectGame) wordConnectGame.classList.remove('hidden');
-            wordConnectGame.style.display = 'flex'; // Flex for full height layout
-            initWordConnect();
+            window.location.href = 'word_connect.html';
+            return;
         }
     } catch (error) {
         console.error("❌ Game Error:", error);
@@ -330,6 +312,40 @@ function initDarkMode() {
     });
 }
 
+// Toggle Mobile View Mode
+window.toggleMobileView = function () {
+    const body = document.body;
+    const isMobile = body.classList.toggle('mobile-view-mode');
+
+    // Save preference
+    localStorage.setItem('mobileViewMode', isMobile);
+
+    // Update button visual
+    const btn = document.getElementById('mobileToggle');
+    if (btn) {
+        btn.textContent = isMobile ? '🖥️' : '📱';
+        btn.title = isMobile ? 'Desktop View' : 'Mobile View';
+    }
+
+    // Show toast
+    if (typeof showToast === 'function') {
+        showToast(isMobile ? '📱 Mobile View' : '🖥️ Desktop View', 'success');
+    }
+}
+
+// Initialize Mobile View on page load
+function initMobileView() {
+    const savedMode = localStorage.getItem('mobileViewMode');
+    if (savedMode === 'true') {
+        document.body.classList.add('mobile-view-mode');
+        const btn = document.getElementById('mobileToggle');
+        if (btn) {
+            btn.textContent = '🖥️';
+            btn.title = 'Desktop View';
+        }
+    }
+}
+
 // Update game end logic to save scores
 // We need to inject saveScore calls into the existing game logic
 
@@ -446,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     loadScores();
     initDarkMode();
+    initMobileView(); // Initialize Mobile View
     initScrollAnimations(); // Initialize Scroll Animations
 
     const flashcard = document.getElementById('flashcard');

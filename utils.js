@@ -118,6 +118,54 @@ const VoiceSearchManager = {
 };
 
 // ========================================
+// Sentence Generator Manager
+// ========================================
+function generateEducationalSentence(word, translation, exampleSwe, exampleArb, definitionSwe, type) {
+    const cleanWord = (word || '').trim();
+    const cleanType = (type || '').toLowerCase().replace('.', '');
+    const cleanDef = definitionSwe ? definitionSwe.replace(/[\.,]$/g, '').trim() : '';
+
+    // 1. BEST CASE: Example (Relaxed length constraint)
+    // Relaxed to length > 10 chars to catch shorter but valid examples
+    if (exampleSwe && exampleSwe.length > 10) {
+        return {
+            s: exampleSwe,
+            a: exampleArb || translation
+        };
+    }
+
+    // 2. STRONG FALLBACK: Definition (Aggressive Usage)
+    // Using definition as the sentence if > 3 chars, barring "see also" references
+    if (cleanDef && cleanDef.length > 3) {
+        if (!cleanDef.toLowerCase().startsWith('se ')) {
+            const capDef = cleanDef.charAt(0).toUpperCase() + cleanDef.slice(1);
+            return {
+                s: `${capDef} (${cleanWord}).`,
+                a: translation
+            };
+        }
+    }
+
+    // 3. LAST RESORT: Contextual Template (Only if NO data exists at all)
+    // Avoids "is a word" phrasing as requested
+    let sweTemplate = '';
+    if (cleanType.includes('verb')) {
+        sweTemplate = `Att ${cleanWord.toLowerCase()} betyder att man gör något.`;
+    } else if (cleanType.includes('subst')) {
+        sweTemplate = `En ${cleanWord} är en sak, person eller plats.`;
+    } else if (cleanType.includes('adj')) {
+        sweTemplate = `${cleanWord} beskriver hur något är eller ser ut.`;
+    } else {
+        sweTemplate = `Ordet används i svenskan.`;
+    }
+
+    return {
+        s: sweTemplate,
+        a: translation
+    };
+}
+
+// ========================================
 // Toast Notification System
 // ========================================
 function showToast(message, duration = 3000) {

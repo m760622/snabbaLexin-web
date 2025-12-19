@@ -3,406 +3,739 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory Match - الذاكرة</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SnabbaLexin - Neural Memory Ultra</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600&family=Inter:wght@400;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap"
         rel="stylesheet">
-    <style>
-        :root {
-            --primary: #38bdf8;
-            --primary-dark: #0284c7;
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #22c55e;
-            --error: #ef4444;
-        }
 
-        /* Light mode */
-        [data-theme="light"] {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-color: #1e293b;
-            --text-muted: #64748b;
-        }
+    <!-- Styles -->
+    <link rel="stylesheet" href="memory.css">
 
-
-        * {
-            box-sizing: border-box;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* iPhone view mode */
-        html.iphone-mode {
-            background: var(--bg-color);
-        }
-
-        body.iphone-view {
-            max-width: 430px;
-            margin: 0 auto;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body.iphone-view .ambient-bg {
-            position: absolute;
-        }
-
-        /* Mobile Toggle Button */
-        .mobile-toggle-btn {
-            background: rgba(56, 189, 248, 0.2);
-            border: 2px solid #38bdf8;
-            border-radius: 12px;
-            padding: 8px 12px;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-left: 0.25px;
-        }
-
-
-        .mobile-toggle-btn:hover {
-            background: rgba(56, 189, 248, 0.4);
-            transform: scale(1.1);
-        }
-
-        .mobile-toggle-btn.active {
-            background: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
-        }
-
-        /* Title Bar */
-        .title-bar {
-            background: rgba(56, 189, 248, 0.1);
-            padding: 12px 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-        }
-
-        .game-title {
-            color: var(--text-color);
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-
-        /* Ambient Background */
-        .ambient-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-        }
-
-        .orb-1 {
-            width: 300px;
-            height: 300px;
-            top: -50px;
-            left: -50px;
-            background: #a855f7;
-            animation: float 10s infinite alternate;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            bottom: -100px;
-            right: -100px;
-            background: #38bdf8;
-            animation: float 12s infinite alternate-reverse;
-        }
-
-        @keyframes float {
-            from {
-                transform: translate(0, 0);
-            }
-
-            to {
-                transform: translate(30px, 30px);
-            }
-        }
-
-        /* Header */
-        header {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            padding: 1rem;
-            background: rgba(30, 41, 59, 0.8);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-        }
-
-        .stats {
-            margin-left: auto;
-        }
-
-
-        .back-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            padding: 0.5rem;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        .stats {
-            display: flex;
-            gap: 1rem;
-            font-weight: 600;
-        }
-
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        /* Game Container */
-        .game-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            gap: 1rem;
-        }
-
-        /* Card Grid */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 0.6rem;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        /* Card */
-        .card {
-            aspect-ratio: 1;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-
-        .card-inner {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .card.flipped .card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .card-front,
-        .card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            text-align: center;
-            padding: 0.3rem;
-        }
-
-        .card-front {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            font-size: 2rem;
-        }
-
-        .card-back {
-            background: var(--card-bg);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            transform: rotateY(180deg);
-            font-size: 0.85rem;
-            line-height: 1.2;
-        }
-
-        .card-back.swedish {
-            color: var(--primary);
-        }
-
-        .card-back.arabic {
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            color: #fbbf24;
-            direction: rtl;
-        }
-
-        .card.matched .card-inner {
-            transform: rotateY(180deg) scale(0.95);
-            opacity: 0.7;
-        }
-
-        .card.matched .card-back {
-            border-color: var(--success);
-            background: rgba(34, 197, 94, 0.2);
-        }
-
-        /* Result */
-        .result-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 1rem;
-            z-index: 100;
-        }
-
-        .result-overlay.visible {
-            display: flex;
-        }
-
-        .result-emoji {
-            font-size: 5rem;
-        }
-
-        .result-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .play-again-btn {
-            padding: 1rem 2rem;
-            background: var(--primary);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        /* Difficulty */
-        .difficulty-select {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .diff-btn {
-            padding: 0.5rem 1rem;
-            border: 2px solid var(--primary);
-            background: transparent;
-            color: var(--primary);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .diff-btn.active,
-        .diff-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-    </style>
+    <!-- Core Assets -->
+    <script src="js/soundEffects.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
-    <div class="ambient-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
+    <script>
+        // Apply theme from localStorage (Default: Dark)
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    </script>
+    <div class="particles"></div>
 
     <header>
-        <button class="back-btn" onclick="window.location.href='games.html'" aria-label="Back / رجوع">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-        </button>
-        <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()" title="وضع الموبايل"
-            aria-label="Mobile View / وضع الموبايل">📱</button>
-        <div class="stats">
-            <div class="stat">⏱️ <span id="timer">0:00</span></div>
-            <div class="stat">🔄 <span id="moves">0</span></div>
-            <div class="stat">✅ <span id="matched">0</span>/<span id="total">8</span></div>
+        <!-- Top Row: Back + Title -->
+        <div class="header-title-row">
+            <button class="back-btn" onclick="window.location.href='games.html'" aria-label="Tillbaka">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5" />
+                    <path d="M12 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <h1 class="game-title">Minnespel / لعبة الذاكرة</h1>
+        </div>
+
+        <div class="header-top">
+
+            <!-- Mobile Toggle + Restart Group -->
+            <div class="action-group">
+                <button id="mobileToggle" class="mobile-toggle-btn" onclick="toggleMobileView()"
+                    title="Mobilvy / وضع الموبايل">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                </button>
+
+                <button class="restart-btn" onclick="game.init()" aria-label="Starta om">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Stats Group Container -->
+            <div class="header-stats-wrapper">
+                <!-- Row 1: XP & Level (Persistent) -->
+                <div class="header-stats-lite xp-row">
+                    <div class="stat-item">
+                        <span class="stat-label">Level</span>
+                        <span class="stat-val" id="levelVal">1</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-label">XP</span>
+                        <span class="stat-val" id="xpVal">0</span>
+                    </div>
+                </div>
+
+                <!-- Row 2: Time & Moves (Session) -->
+                <div class="header-stats-lite session-row">
+                    <div class="stat-item">
+                        <span class="stat-label">Tid</span>
+                        <span class="stat-val" id="timer">00:00</span>
+                        <div class="timer-bar-container">
+                            <div class="timer-bar-fill" id="timerBar"></div>
+                        </div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-label">Drag</span>
+                        <span class="stat-val" id="moves">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unified Control Bar -->
+        <div class="control-bar">
+            <!-- Difficulty Selector -->
+            <div class="difficulty-group">
+                <div class="difficulty-pills" id="difficultyPills">
+                    <button class="pill active" data-level="1">1</button>
+                    <button class="pill" data-level="2">2</button>
+                    <button class="pill" data-level="3">3</button>
+                </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <!-- Categories Dropdown -->
+            <div class="category-group">
+                <div class="custom-dropdown" id="categoryDropdown">
+                    <button class="dropdown-trigger" id="catTrigger">
+                        <span class="curr-icon">🎲</span>
+                        <span class="curr-text">Alla Ord</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-item active" data-cat="all" data-icon="🎲">
+                            <span class="item-icon">🎲</span> Alla Ord
+                        </div>
+                        <div class="dropdown-item" data-cat="verb" data-icon="🏃">
+                            <span class="item-icon">🏃</span> Verb
+                        </div>
+                        <div class="dropdown-item" data-cat="substantiv" data-icon="📦">
+                            <span class="item-icon">📦</span> Saker
+                        </div>
+                        <div class="dropdown-item" data-cat="adjektiv" data-icon="🎨">
+                            <span class="item-icon">🎨</span> Egenskaper
+                        </div>
+                        <div class="dropdown-item" data-cat="adverb" data-icon="⚡">
+                            <span class="item-icon">⚡</span> Adverb
+                        </div>
+                        <div class="dropdown-item" data-cat="preposition" data-icon="📍">
+                            <span class="item-icon">📍</span> Prepositioner
+                        </div>
+                        <div class="dropdown-item" data-cat="pronomen" data-icon="👥">
+                            <span class="item-icon">👥</span> Pronomen
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div class="title-bar">
-        <h1 class="game-title">🃏 Memory / الذاكرة</h1>
-    </div>
-
-    <div class="game-container">
-
-        <div class="difficulty-select">
-            <button class="diff-btn active" data-pairs="6" onclick="setDifficulty(6, this)">Lätt (6)</button>
-            <button class="diff-btn" data-pairs="8" onclick="setDifficulty(8, this)">Medel (8)</button>
-            <button class="diff-btn" data-pairs="12" onclick="setDifficulty(12, this)">Svår (12)</button>
+    <div class="game-board-container">
+        <div class="memory-grid" id="grid">
+            <!-- Cards Injected JS -->
         </div>
-
-        <div class="card-grid" id="cardGrid"></div>
     </div>
 
-    <div class="result-overlay" id="resultOverlay">
-        <div class="result-emoji">🎉</div>
-        <div class="result-text" id="resultText">Bra jobbat!</div>
-        <div id="resultStats"></div>
-        <button class="play-again-btn" onclick="startNewGame()">Spela igen 🔄</button>
+    <!-- On-Screen Feedback Banner -->
+    <div class="feedback-toast" id="feedbackToast">
+        <div class="ft-word" id="ftWord"></div>
+        <div class="ft-sent-box">
+            <div class="ft-swe" id="ftSwe"></div>
+            <div class="ft-arb" id="ftArb"></div>
+        </div>
     </div>
+
+    <!-- Game Over -->
+    <div class="game-over-modal" id="gameOverModal">
+        <div class="go-content">
+            <h1 class="go-title">Grattis! / مبروك</h1>
+
+            <div class="stars-container" id="finalStars">
+                <!-- Injected via JS: ⭐⭐⭐ -->
+            </div>
+
+            <div class="go-score" id="finalScore">0</div>
+            <p class="go-msg" id="finalMsg">Poäng / نقاط</p>
+            <button class="restart-btn" style="width: 100%; padding: 1rem; font-size: 1.2rem; justify-content: center;"
+                onclick="location.reload()">SPELA IGEN 🔄</button>
+        </div>
+    </div>
+
+    <!-- Scripts with Cache Busting -->
+    <script src="data.js?v=2"></script>
+    <script src="utils.js?v=2"></script>
 
     <script>
-        // Apply saved theme
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        /**
+         * Memory Game 2.0 - Core Class
+         */
+        class MemoryGame {
+            constructor() {
+                this.cards = [];
+                this.flipped = []; // [cardEl, cardEl]
+                this.matchedCount = 0;
+                this.matchedCount = 0;
+                this.moves = 0;
+                this.streak = 0;
+                this.timer = 0;
 
+                // Load XP
+                this.totalXP = parseInt(localStorage.getItem('memoryTotalXP') || '0');
+                this.updateXPUI();
+                this.timerInterval = null;
+                this.isLocked = false; // Prevents clicks during animations
+                this.toastTimeout = null; // For managing feedback toast visibility
+
+                // Settings
+                this.gridSize = 12; // 12 cards = 6 pairs
+            }
+
+            async init() {
+                const debugEl = document.getElementById('debugStatus');
+                if (debugEl) debugEl.textContent = 'Loading...';
+
+                // Direct data check
+                const data = (typeof dictionaryData !== 'undefined') ? dictionaryData : window.dictionaryData;
+                if (!data) {
+                    setTimeout(() => this.init(), 500);
+                    return;
+                }
+
+                if (debugEl) debugEl.style.display = 'none'; // Hide debug if loaded
+
+                // Setup Pill Listeners (Difficulty)
+                const diffContainer = document.getElementById('difficultyPills');
+                if (diffContainer && !diffContainer.getAttribute('data-listening')) {
+                    diffContainer.addEventListener('click', (e) => {
+                        const pill = e.target.closest('.pill');
+                        if (!pill) return;
+                        diffContainer.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+                        pill.classList.add('active');
+                        this.init();
+                    });
+                    diffContainer.setAttribute('data-listening', 'true');
+                }
+
+                // --- RESET PROPER ---
+                this.moves = 0;
+                this.timer = 0;
+                this.matchedCount = 0;
+                this.flipped = [];
+                this.isLocked = false;
+                this.gameActive = true;
+
+                // Stop any previous timers
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                this.timerInterval = null;
+
+                // Update UI Stats
+                document.getElementById('moves').textContent = '0';
+                document.getElementById('timer').textContent = '0:00';
+                document.getElementById('feedbackToast').classList.remove('visible');
+                document.getElementById('gameOverModal').classList.remove('visible');
+
+                // Determine Difficulty
+                const diffPill = diffContainer ? diffContainer.querySelector('.pill.active') : null;
+                const level = diffPill ? parseInt(diffPill.getAttribute('data-level')) : 1;
+
+                // Level 1: 6 cards (3 pairs)
+                // Level 2: 8 cards (4 pairs) - Nearest even to 9
+                // Level 3: 12 cards (6 pairs)
+                if (level === 1) this.gridSize = 6;
+                else if (level === 2) this.gridSize = 8;
+                else this.gridSize = 12;
+
+                this.startTimer();
+                this.createLevel();
+                this.updateGridColumns(this.gridSize);
+            }
+
+            updateGridColumns(size) {
+                const grid = document.getElementById('grid');
+                grid.style.gridTemplateColumns = `repeat(3, 1fr)`;
+            }
+
+            createLevel() {
+                const words = this.getRandomWords(this.gridSize / 2);
+
+                // Create card pairs
+                this.cards = [];
+                words.forEach((w, i) => {
+                    // Swedish Card
+                    this.cards.push({
+                        id: `swe-${i}`,
+                        pairId: i,
+                        type: 'swe',
+                        data: w,
+                        text: w.swedish,
+                        aria: `Svenska: ${w.swedish}`
+                    });
+                    // Arabic Card
+                    this.cards.push({
+                        id: `arb-${i}`,
+                        pairId: i,
+                        type: 'arb',
+                        data: w,
+                        text: w.arabic,
+                        aria: `Arabiska: ${w.arabic}`
+                    });
+                });
+
+                // Shuffle
+                this.cards.sort(() => Math.random() - 0.5);
+
+                this.renderGrid();
+            }
+
+            renderGrid() {
+                const grid = document.getElementById('grid');
+                grid.innerHTML = '';
+
+                // Responsive columns
+                const cols = this.cards.length <= 12 ? 3 : 4;
+                grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+                this.cards.forEach((card, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'card';
+                    el.dataset.index = index;
+                    el.tabIndex = 0; // Focusable
+                    el.setAttribute('role', 'button');
+                    el.setAttribute('aria-label', card.aria || `Card ${index + 1}`);
+                    el.style.cursor = 'pointer';
+
+                    // Interaction
+                    const trigger = () => this.handleCardClick(index);
+                    el.onclick = trigger;
+                    el.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            trigger();
+                        }
+                    });
+
+                    // Back (Text side) customization
+                    const langClass = card.type === 'arb' ? 'arabic' : 'swedish';
+                    // Check for short Arabic words (< 7 chars)
+                    const isShort = (card.type === 'arb' && card.text.length < 7) ? 'is-short' : '';
+
+                    el.innerHTML = `
+                        <div class="face front"></div>
+                        <div class="face back ${langClass} ${isShort}">
+                            <div class="card-content">${card.text}</div>
+                        </div>
+                    `;
+                    grid.appendChild(el);
+
+                    // Map DOM element for safer reference (optional but good practice)
+                    card.el = el;
+                });
+            }
+
+            handleCardClick(index) {
+                if (this.isLocked) return;
+
+                const cardEl = document.getElementById('grid').children[index];
+
+                // Prevent double click or clicking matched
+                if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+
+                // Flip it
+                this.flipCard(cardEl);
+                this.flipped.push({ index, el: cardEl, data: this.cards[index] });
+
+                // Check logic
+                if (this.flipped.length === 2) {
+                    this.moves++;
+                    document.getElementById('moves').textContent = this.moves;
+
+                    // Wait for flip animation (600ms) before checking match/shake
+                    setTimeout(() => {
+                        this.checkForMatch();
+                    }, 600);
+                }
+            }
+
+            flipCard(el) {
+                el.classList.add('flipped');
+                if (window.soundManager && window.soundManager.playClick) window.soundManager.playClick();
+            }
+
+            unflipCard(el) {
+                el.classList.remove('flipped');
+            }
+
+            checkForMatch() {
+                this.isLocked = true; // Block input
+                const [c1, c2] = this.flipped;
+
+                if (c1.data.pairId === c2.data.pairId) {
+                    // MATCH!
+                    setTimeout(() => {
+                        this.handleMatchSuccess(c1, c2);
+                    }, 500);
+                } else {
+                    // MISMATCH
+                    c1.el.classList.add('shake');
+                    c2.el.classList.add('shake');
+
+                    if (window.soundManager && window.soundManager.playError) window.soundManager.playError();
+                    if (navigator.vibrate) navigator.vibrate(200);
+
+                    // Increased delay to 1.5s so user can read the second card
+                    setTimeout(() => {
+                        this.unflipCard(c1.el);
+                        this.unflipCard(c2.el);
+                        c1.el.classList.remove('shake');
+                        c2.el.classList.remove('shake');
+                        c2.el.classList.remove('shake');
+                        this.flipped = [];
+                        this.isLocked = false;
+                        this.streak = 0; // Reset streak on error
+                    }, 1500);
+                }
+            }
+
+            handleMatchSuccess(c1, c2) {
+                c1.el.classList.add('matched');
+                c2.el.classList.add('matched');
+                c2.el.classList.add('matched');
+                this.matchedCount++;
+                this.streak++;
+
+                // Score Logic: Base 100 + Streak Bonus * 20
+                const points = 100 + (this.streak > 1 ? (this.streak - 1) * 20 : 0);
+                this.totalXP += points;
+                localStorage.setItem('memoryTotalXP', this.totalXP);
+
+                // Update UI
+                this.updateXPUI();
+
+                // Pulse Logic for XP
+                const xpEl = document.getElementById('xpVal');
+                if (xpEl) {
+                    xpEl.style.color = '#fbbf24';
+                    xpEl.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        xpEl.style.color = 'white';
+                        xpEl.style.transform = 'scale(1)';
+                    }, 300);
+                }
+
+                // Floating Points Animation
+                if (c1.el) {
+                    const rect = c1.el.getBoundingClientRect();
+                    this.showFloatingPoints(points + ' XP', rect.left + rect.width / 2, rect.top);
+                }
+
+                // Safe Sound
+                if (window.soundManager && window.soundManager.playSuccess) window.soundManager.playSuccess();
+                if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+
+                // TTS
+                if ('speechSynthesis' in window && 'SpeechSynthesisUtterance' in window) {
+                    const u = new SpeechSynthesisUtterance(c1.data.data.swedish);
+                    u.lang = 'sv-SE';
+                    window.speechSynthesis.speak(u);
+                }
+
+                // Safe Confetti
+                if (window.confetti) window.confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+
+                // Show Non-Blocking Feedback
+                this.showFeedback(c1.data.data);
+
+                // Unlock game immediately so user can continue
+                this.flipped = [];
+                this.isLocked = false;
+
+                // Check Win
+                if (this.matchedCount === this.gridSize / 2) {
+                    setTimeout(() => this.gameWin(), 1000);
+                }
+            }
+
+            showFeedback(data) {
+                // Generate Sentence
+                let sent = null;
+                try {
+                    if (typeof generateEducationalSentence === 'function') {
+                        sent = generateEducationalSentence(
+                            data.swedish, data.arabic,
+                            data.exampleSwe, data.exampleArb,
+                            data.definition, data.type
+                        );
+                    }
+                } catch (e) { console.warn("SentGen Error", e); }
+
+                // Fallback if generator fails completely (rare now with smart logic)
+                if (!sent || !sent.s || sent.s.trim().length === 0) {
+                    sent = {
+                        s: data.definition || data.exampleSwe || data.swedish,
+                        a: data.arabic || ''
+                    };
+                }
+
+                // Update Toast
+                const toast = document.getElementById('feedbackToast');
+                document.getElementById('ftWord').textContent = data.swedish;
+                document.getElementById('ftSwe').textContent = sent.s; // Use textContent for safety unless HTML needed
+                document.getElementById('ftArb').textContent = sent.a;
+
+                // Show permanent (until next match or game over)
+                toast.classList.add('visible');
+
+                // Clear any previous timeout just in case, though we don't set new ones anymore
+                if (this.toastTimeout) {
+                    clearTimeout(this.toastTimeout);
+                    this.toastTimeout = null;
+                }
+            }
+
+            gameWin() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+
+                // Calculate Stars
+                let stars = 1;
+                const pairs = this.gridSize / 2;
+                // Heuristic: Perfect game = pairs moves.
+                // 3 Stars: <= pairs + 2 errors
+                // 2 Stars: <= pairs + 6 errors
+
+                if (this.moves <= pairs + 2) stars = 3;
+                else if (this.moves <= pairs + 6) stars = 2;
+                else stars = 1;
+
+                let starStr = '';
+                for (let i = 0; i < 3; i++) {
+                    starStr += i < stars ? '⭐' : '☆';
+                }
+
+                const finalStarsEl = document.getElementById('finalStars');
+                if (finalStarsEl) finalStarsEl.textContent = starStr;
+
+                // Update Final Screen
+                const scoreEl = document.getElementById('finalScore');
+                const msgEl = document.getElementById('finalMsg');
+
+                scoreEl.textContent = this.totalXP;
+                // Level Progress
+                const level = Math.floor(this.totalXP / 1000) + 1;
+                const nextLevelXP = level * 1000;
+                const progress = this.totalXP - ((level - 1) * 1000);
+
+                msgEl.innerHTML = `Total XP / مجموع النقاط<br>
+                <div style="font-size:0.5em; margin-top:10px; background:rgba(255,255,255,0.1); height:6px; border-radius:3px; overflow:hidden">
+                    <div style="width:${(progress / 1000) * 100}%; background:#4ade80; height:100%"></div>
+                </div>
+                <span style="font-size:0.6em; opacity:0.8">${progress} / 1000 to Level ${level + 1}</span>`;
+
+                document.getElementById('gameOverModal').classList.add('visible');
+
+                if (window.soundManager && window.soundManager.playSuccess) window.soundManager.playSuccess();
+                if (window.confetti) window.confetti({ particleCount: 200, spread: 150 });
+            }
+
+            updateXPUI() {
+                const xpEl = document.getElementById('xpVal');
+                const lvlEl = document.getElementById('levelVal');
+                if (xpEl) xpEl.textContent = this.totalXP;
+                if (lvlEl) {
+                    const level = Math.floor(this.totalXP / 1000) + 1;
+                    lvlEl.textContent = level;
+                }
+            }
+
+            showFloatingPoints(points, x, y) {
+                const el = document.createElement('div');
+                el.className = 'floating-points';
+                el.textContent = `+${points}`;
+                el.style.left = `${x}px`;
+                el.style.top = `${y}px`;
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1000);
+            }
+
+            startTimer() {
+                if (this.timerInterval) clearInterval(this.timerInterval);
+                this.timer = 0;
+
+                // Heuristic Max Time for bar: 5s per card (gridSize)
+                // 8 cards -> 40s. 16 cards -> 80s.
+                const maxTime = this.gridSize * 5;
+
+                this.timerInterval = setInterval(() => {
+                    this.timer++;
+                    const m = Math.floor(this.timer / 60);
+                    const s = this.timer % 60;
+                    document.getElementById('timer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+
+                    // Update Bar
+                    const pct = Math.max(0, 100 - (this.timer / maxTime * 100));
+                    const bar = document.getElementById('timerBar');
+                    if (bar) {
+                        bar.style.width = `${pct}%`;
+                        if (pct < 30) bar.style.background = '#ef4444';
+                        else if (pct < 60) bar.style.background = '#f59e0b';
+                        else bar.style.background = '#38bdf8';
+                    }
+                }, 1000);
+            }
+
+            // Helper: Get robust random words
+            getRandomWords(count) {
+                const data = (typeof dictionaryData !== 'undefined') ? dictionaryData : window.dictionaryData;
+
+                // Logic for Dropdown
+                const activeItem = document.querySelector('.dropdown-item.active');
+                const selectedType = activeItem ? activeItem.getAttribute('data-cat') : 'all';
+
+                if (!data || !Array.isArray(data)) {
+                    alert("Error: Dictionary data is missing!");
+                    return [];
+                }
+
+                const valid = data.filter(e => {
+                    // 1. Basic Structure Check
+                    if (!Array.isArray(e) || !e[2] || !e[3]) return false;
+
+                    // 2. Length Check (>= 3 letters)
+                    // We trim to ensure no whitespace tricks
+                    if (e[2].trim().length < 3) return false;
+
+                    // 3. Quality Check ("Clear and useful meaning")
+                    // Must have a Definition (col 5) OR a good Example (col 7)
+                    // And the definition shouldn't be a lazy "se X" reference
+                    // NEW: Filter out long Arabic translations (> 12 chars)
+                    if (e[3].length > 12) return false;
+
+                    const hasDef = e[5] && e[5].length > 4 && !e[5].toLowerCase().startsWith('se ');
+                    const hasEx = e[7] && e[7].length > 10;
+
+                    if (!hasDef && !hasEx) return false;
+
+                    // 4. Category Filter
+                    if (selectedType === 'all') return true;
+
+                    const type = (e[1] || '').toLowerCase();
+                    if (selectedType === 'verb') return type.startsWith('verb');
+                    if (selectedType === 'substantiv') return type.startsWith('subst');
+                    if (selectedType === 'adjektiv') return type.startsWith('adj');
+
+                    // New Categories
+                    if (selectedType === 'adverb') return type.startsWith('adv');
+                    if (selectedType === 'preposition') return type.startsWith('prep');
+                    if (selectedType === 'pronomen') return type.startsWith('pron');
+
+                    return true;
+                });
+
+                if (valid.length === 0) {
+                    console.warn("No words found for category:", selectedType);
+                    if (selectedType !== 'all') {
+                        alert("Inga ord hittades i denna kategori. Visar blandade ord.");
+                        // Reset pills to All
+                        const pills = document.querySelectorAll('.category-pills .pill');
+                        pills.forEach(p => p.classList.remove('active'));
+                        if (pills[0]) pills[0].classList.add('active');
+
+                        return this.getRandomWords(count);
+                    }
+                    return [];
+                }
+
+                const shuffled = valid.sort(() => Math.random() - 0.5);
+                return shuffled.slice(0, count).map(e => {
+                    // Sanitize Content
+                    let definition = e[5] || '';
+                    let exampleSwe = e[7] || '';
+                    let exampleArb = e[8] || '';
+
+                    // Remove robotic phrases
+                    const roboticPhrases = [
+                        "Detta är ett svenskt begrepp:",
+                        "Exempel på användning:",
+                        "Det betyder:",
+                        "Ordet används så här:"
+                    ];
+
+                    roboticPhrases.forEach(phrase => {
+                        definition = definition.replace(phrase, '').trim();
+                        exampleSwe = exampleSwe.replace(phrase, '').trim();
+                        exampleArb = exampleArb.replace(phrase, '').trim();
+                    });
+
+                    // Clean Arabic redundant prefixes
+                    // Regex to remove "Word تعني:" pattern
+                    const arRegex = /.*? تعني:\s*/;
+                    if (e[3]) definition = definition.replace(new RegExp(e[3] + ".*?:\\s*"), "").trim();
+
+                    return {
+                        swedish: e[2],
+                        arabic: e[3],
+                        exampleSwe: exampleSwe,
+                        exampleArb: exampleArb,
+                        definition: definition,
+                        type: e[1]
+                    };
+                });
+            }
+        }
+
+        // Initialize
+        window.game = new MemoryGame(); // Make Global
+        const game = window.game;       // Keep local ref for compatibility
+        window.addEventListener('DOMContentLoaded', () => {
+            // Add debug element if missing
+            if (!document.getElementById('debugStatus')) {
+                const el = document.createElement('div');
+                el.id = 'debugStatus';
+                el.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:white;font-size:1.5rem;background:rgba(0,0,0,0.8);padding:1rem;border-radius:10px;pointer-events:none;z-index:9999;';
+                document.body.appendChild(el);
+            }
+            game.init();
+        });
+
+    </script>
+
+    <script>
         // Toggle Mobile View Function
         function toggleMobileView() {
-            document.documentElement.classList.toggle('iphone-mode');
             document.body.classList.toggle('iphone-view');
             const isActive = document.body.classList.contains('iphone-view');
             localStorage.setItem('mobileView', isActive ? 'true' : 'false');
             const btn = document.getElementById('mobileToggle');
             if (btn) btn.classList.toggle('active', isActive);
+
+            // Adjust grid if needed
+            if (window.game) window.game.updateGridColumns(window.game.gridSize);
         }
 
         // Apply mobile view from localStorage
         if (localStorage.getItem('mobileView') === 'true') {
-            document.documentElement.classList.add('iphone-mode');
             document.body.classList.add('iphone-view');
             document.addEventListener('DOMContentLoaded', () => {
                 const btn = document.getElementById('mobileToggle');
@@ -411,293 +744,101 @@
         }
     </script>
 
-    <script src="utils.js"></script>
-
-    <script src="data.js"></script>
     <script>
-        // Game state
-        let cards = [];
-        let flippedCards = [];
-        let matchedPairs = 0;
-        let moves = 0;
-        let timerInterval = null;
-        let seconds = 0;
-        let numPairs = 6;
-        let isProcessing = false;
-
-        const COL_SWE = 2;
-        const COL_ARB = 3;
-
-        // Get random words
-        function getRandomWords(count) {
-            try {
-                if (typeof dictionaryData === 'undefined' || !Array.isArray(dictionaryData)) {
-                    throw new Error("Dictionary data not loaded");
-                }
-
-                const suitable = dictionaryData.filter(entry => {
-                    if (!Array.isArray(entry)) return false;
-                    const word = entry[COL_SWE];
-                    const translation = entry[COL_ARB]; // Explicitly check for translation
-                    return word && translation && word.length >= 2 && word.length <= 10;
-                });
-
-                if (suitable.length < count) {
-                    console.warn(`Not enough words found. Needed ${count}, found ${suitable.length}`);
-                    // Fallback: use whatever we have loops
-                    if (suitable.length === 0) throw new Error("No suitable words found in dictionary");
-                }
-
-                const shuffled = suitable.sort(() => Math.random() - 0.5);
-                // Safe slice even if we have fewer words
-                return shuffled.slice(0, count).map(entry => ({
-                    swedish: entry[COL_SWE],
-                    arabic: entry[COL_ARB]
-                }));
-            } catch (e) {
-                console.error("Error getting random words:", e);
-                showError("Kunde inte ladda ord. Försök ladda om sidan. / تعذر تحميل الكلمات. حاول تحديث الصفحة.");
-                return [];
-            }
-        }
-
-        // Create cards array
-        function createCards() {
-            try {
-                const words = getRandomWords(numPairs);
-
-                if (words.length === 0) return; // Error already handled in getRandomWords
-
-                cards = [];
-
-                words.forEach((word, i) => {
-                    // Swedish card
-                    cards.push({
-                        id: `swe-${i}`,
-                        pairId: i,
-                        type: 'swedish',
-                        content: word.swedish
-                    });
-                    // Arabic card
-                    cards.push({
-                        id: `arb-${i}`,
-                        pairId: i,
-                        type: 'arabic',
-                        content: word.arabic
-                    });
-                });
-
-                // Shuffle
-                cards.sort(() => Math.random() - 0.5);
-            } catch (err) {
-                console.error("Error creating cards:", err);
-                showError("Ett fel uppstod när spelet skulle skapas.");
-            }
-        }
-
-        // Render grid
-        function renderGrid() {
-            const grid = document.getElementById('cardGrid');
-            grid.innerHTML = '';
-
-            if (cards.length === 0) {
-                grid.innerHTML = '<div style="color:white; text-align:center; grid-column: 1/-1;">Kunde inte ladda korten. / تعذر تحميل البطاقات.</div>';
-                return;
-            }
-
-            // Adjust grid columns based on card count
-            const cols = cards.length <= 12 ? 4 : cards.length <= 16 ? 4 : 6;
-            grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-
-            cards.forEach((card, i) => {
-                const cardEl = document.createElement('div');
-                cardEl.className = 'card';
-                cardEl.dataset.index = i;
-                cardEl.innerHTML = `
-                    <div class="card-inner">
-                        <div class="card-front">🃏</div>
-                        <div class="card-back ${card.type}">${card.content}</div>
-                    </div>
-                `;
-                cardEl.onclick = () => flipCard(i);
-                grid.appendChild(cardEl);
-            });
-        }
-
-        // Flip card
-        function flipCard(index) {
-            if (isProcessing) return;
-
-            const cardEl = document.querySelectorAll('.card')[index];
-            const card = cards[index];
-
-            if (!cardEl || !card) return; // Safety check
-
-            // Skip if already flipped or matched
-            if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
-            if (flippedCards.length >= 2) return;
-
-            // Flip
-            cardEl.classList.add('flipped');
-            flippedCards.push({ index, card, el: cardEl });
-
-            // Speak Swedish words
-            if (card.type === 'swedish') {
-                try {
-                    if (typeof TTSManager !== 'undefined') {
-                        TTSManager.speak(card.content, 'sv');
-                    }
-                } catch (e) {
-                    console.warn("TTS Error:", e);
-                }
-            }
-
-            // Check for match
-            if (flippedCards.length === 2) {
-                moves++;
-                const movesEl = document.getElementById('moves');
-                if (movesEl) movesEl.textContent = moves;
-                checkMatch();
-            }
-        }
-
-        // Check match
-        function checkMatch() {
-            isProcessing = true;
-            const [first, second] = flippedCards;
-
-            if (first.card.pairId === second.card.pairId) {
-                // Match!
-                setTimeout(() => {
-                    if (first.el) first.el.classList.add('matched');
-                    if (second.el) second.el.classList.add('matched');
-                    matchedPairs++;
-
-                    const matchedEl = document.getElementById('matched');
-                    if (matchedEl) matchedEl.textContent = matchedPairs;
-
-                    flippedCards = [];
-                    isProcessing = false;
-
-                    // Check win
-                    if (matchedPairs === numPairs || matchedPairs === cards.length / 2) {
-                        clearInterval(timerInterval);
-                        setTimeout(showResult, 500);
-                    }
-                }, 500);
-            } else {
-                // No match - flip back
-                setTimeout(() => {
-                    if (first.el) first.el.classList.remove('flipped');
-                    if (second.el) second.el.classList.remove('flipped');
-                    flippedCards = [];
-                    isProcessing = false;
-                }, 1000);
-            }
-        }
-
-        // Timer
-        function startTimer() {
-            seconds = 0;
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                seconds++;
-                const min = Math.floor(seconds / 60);
-                const sec = seconds % 60;
-                const timerEl = document.getElementById('timer');
-                if (timerEl) timerEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        // Set difficulty
-        function setDifficulty(pairs, btn) {
-            numPairs = pairs;
-            document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            startNewGame();
-        }
-
-        // Show result
-        function showResult() {
-            const overlay = document.getElementById('resultOverlay');
-            if (!overlay) return;
-
-            const timerEl = document.getElementById('timer');
-            const timeStr = timerEl ? timerEl.textContent : '0:00';
-
-            const textEl = document.getElementById('resultText');
-            if (textEl) textEl.textContent = 'Grattis! / مبروك! 🎉';
-
-            const statsEl = document.getElementById('resultStats');
-            if (statsEl) {
-                statsEl.innerHTML = `
-                    <div>⏱️ Tid: ${timeStr}</div>
-                    <div>🔄 Drag: ${moves}</div>
-                `;
-            }
-            overlay.classList.add('visible');
-
-            if (typeof ProgressManager !== 'undefined') {
-                ProgressManager.trackGame('memory', moves * 10); // Dummy score
-            }
-        }
-
-        // Helper to show errors
-        function showError(msg) {
-            const grid = document.getElementById('cardGrid');
-            if (grid) {
-                grid.innerHTML = `<div style="color:#ef4444; padding:20px; text-align:center; grid-column: 1/-1; background: rgba(0,0,0,0.5); border-radius: 12px;">
-                    <h3>Oops!</h3>
-                    <p>${msg}</p>
-                 </div>`;
-            }
-            if (typeof showToast === 'function') showToast(msg);
-        }
-
-        // Start new game
-        function startNewGame() {
-            // Check data availability first
-            if (typeof dictionaryData === 'undefined') {
-                // Retry once after 1 second if data might be loading
-                setTimeout(() => {
-                    if (typeof dictionaryData === 'undefined') {
-                        showError("Datafiler laddades inte korrekt. Kontrollera din internetanslutning. / لم يتم تحميل ملفات البيانات. تحقق من الاتصال.");
-                    } else {
-                        startNewGame();
-                    }
-                }, 1000);
-                return;
-            }
-
-            const overlay = document.getElementById('resultOverlay');
-            if (overlay) overlay.classList.remove('visible');
-
-            matchedPairs = 0;
-            moves = 0;
-            flippedCards = [];
-            isProcessing = false;
-
-            const movesEl = document.getElementById('moves');
-            if (movesEl) movesEl.textContent = '0';
-
-            const matchedEl = document.getElementById('matched');
-            if (matchedEl) matchedEl.textContent = '0';
-
-            const totalEl = document.getElementById('total');
-            if (totalEl) totalEl.textContent = numPairs;
-
-            createCards();
-            renderGrid();
-            startTimer();
-        }
-
-        // Init
+        // Dropdown Logic
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof ThemeManager !== 'undefined') ThemeManager.init();
-            startNewGame();
+            console.log("Initializing Dropdown Logic...");
+
+            const dropdown = document.getElementById('categoryDropdown');
+            const trigger = document.getElementById('catTrigger');
+
+            if (!dropdown || !trigger) {
+                console.error("Dropdown elements not found!");
+                return;
+            }
+
+            const items = document.querySelectorAll('.dropdown-item');
+            const currText = trigger.querySelector('.curr-text');
+            const currIcon = trigger.querySelector('.curr-icon');
+
+            // Force close on init
+            dropdown.classList.remove('open');
+
+            // Toggle Open
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // e.preventDefault(); REMOVED to allow touch events
+
+                const isOpen = dropdown.classList.contains('open');
+
+                // Close all others if any (not needed here but good practice)
+                document.querySelectorAll('.custom-dropdown.open').forEach(d => {
+                    if (d !== dropdown) d.classList.remove('open');
+                });
+
+                if (isOpen) {
+                    dropdown.classList.remove('open');
+                } else {
+                    dropdown.classList.add('open');
+                    // Check if off-screen (Simple check)
+                    const menu = dropdown.querySelector('.dropdown-menu');
+                    if (menu) {
+                        const rect = menu.getBoundingClientRect();
+                        if (rect.right > window.innerWidth) {
+                            menu.style.right = '0';
+                            menu.style.left = 'auto'; // Anchor right
+                        }
+                    }
+                }
+            });
+
+            // Close on Outside Click
+            document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove('open');
+                }
+            });
+
+            // Handle Selection
+            items.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Stop bubbling
+                    console.log("Item selected:", item.textContent);
+
+                    // Update Active State
+                    items.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // Update Trigger Text
+                    // Robust check for structure
+                    let icon = "🎲";
+                    let text = "Alla Ord";
+
+                    const iconEl = item.querySelector('.icon');
+                    if (iconEl) icon = iconEl.textContent;
+
+                    // Text is usually the last span or just text content
+                    const textEl = item.querySelector('span:last-child');
+                    if (textEl) text = textEl.textContent;
+
+                    if (currIcon) currIcon.textContent = icon;
+                    if (currText) currText.textContent = text;
+
+                    // Close Dropdown
+                    dropdown.classList.remove('open');
+
+                    // Restart Game
+                    if (window.game) {
+                        try {
+                            window.game.init();
+                        } catch (err) {
+                            console.error("Game Init Error:", err);
+                        }
+                    }
+                });
+            });
         });
     </script>
-    <script src="pwa.js" defer></script>
 </body>
 
 </html>

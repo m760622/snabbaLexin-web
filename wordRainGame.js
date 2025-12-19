@@ -1,17 +1,21 @@
 // ========================================
 // WORD RAIN GAME - مطر الكلمات
 // ========================================
-console.log("wordRainGame.js LOADED");
+console.log("wordRainGame.js LOADED (Premium Upgrade)");
 
 // State
 let rainCanvas, rainCtx;
 let rainWords = [];
+let rainParticles = []; // For "dazzling" effects
 let rainScore = 0;
 let rainLives = 3;
 let rainGameActive = false;
 let rainAnimationId = null;
 let rainLastSpawnTime = 0;
 let rainSpawnInterval = 2000; // ms between spawns
+
+// Colors for particles
+const PARTICLE_COLORS = ['#fbbf24', '#f59e0b', '#ffffff', '#60a5fa'];
 
 // Initialize Rain Game
 window.initRainGame = function (retryCount = 0) {
@@ -35,6 +39,7 @@ window.initRainGame = function (retryCount = 0) {
 
     // Reset state
     rainWords = [];
+    rainParticles = [];
     rainScore = 0;
     rainLives = 3;
     rainGameActive = false;
@@ -46,8 +51,14 @@ window.initRainGame = function (retryCount = 0) {
     document.getElementById('rainInput').value = '';
     document.getElementById('startRainBtn').style.display = 'block';
 
-    // Draw initial state
-    drawRainCanvas();
+    // Draw initial state (transparent)
+    rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
+    // Draw "Ready" text
+    rainCtx.font = '24px Inter, sans-serif';
+    rainCtx.fillStyle = 'rgba(255,255,255,0.8)';
+    rainCtx.textAlign = 'center';
+    rainCtx.fillText('Redo att spela? / مستعد للعب؟', rainCanvas.width / 2, rainCanvas.height / 2);
+
 
     // Bind buttons
     const startBtn = document.getElementById('startRainBtn');
@@ -69,6 +80,7 @@ window.initRainGame = function (retryCount = 0) {
 function startRainGame() {
     rainGameActive = true;
     rainWords = [];
+    rainParticles = [];
     rainScore = 0;
     rainLives = 3;
     rainLastSpawnTime = Date.now();
@@ -93,20 +105,38 @@ function gameLoop() {
     if (now - rainLastSpawnTime > rainSpawnInterval) {
         spawnRainWord();
         rainLastSpawnTime = now;
-        // Speed up over time
+        // Speed up
         rainSpawnInterval = Math.max(800, rainSpawnInterval - 20);
     }
 
-    // Update word positions
+    // Update word positions (add drift)
     rainWords.forEach(word => {
         word.y += word.speed;
+        word.x += Math.sin(word.y * 0.05) * 0.5; // Slight horizontal drift
     });
 
-    // Check for words that fell off screen
+    // Update Particles
+    for (let i = rainParticles.length - 1; i >= 0; i--) {
+        let p = rainParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.02;
+        p.vy += 0.05; // Gravity
+        if (p.life <= 0) {
+            rainParticles.splice(i, 1);
+        }
+    }
+
+    // Check bounds
     rainWords = rainWords.filter(word => {
-        if (word.y > rainCanvas.height) {
+        if (word.y > rainCanvas.height + 20) { // Allow to fall slightly past
             rainLives--;
             document.getElementById('rainLives').textContent = rainLives;
+
+            // Screen shake effect on life lost
+            rainCanvas.style.transform = `translateX(${Math.random() * 10 - 5}px)`;
+            setTimeout(() => rainCanvas.style.transform = 'none', 100);
+
             if (rainLives <= 0) {
                 endRainGame();
             }
@@ -136,8 +166,9 @@ function spawnRainWord() {
                 swedish: item[COL_SWE],
                 arabic: item[COL_ARB],
                 x: Math.random() * (rainCanvas.width - 100) + 50,
-                y: 0,
-                speed: 0.5 + Math.random() * 0.5
+                y: -40,
+                speed: 1 + Math.random() * 1.5, // Faster start
+                color: `hsl(${Math.random() * 60 + 200}, 80%, 70%)` // Random blue/cyan tint
             };
         }
         attempts++;
@@ -150,39 +181,66 @@ function spawnRainWord() {
 
 // Draw Canvas
 function drawRainCanvas() {
-    // Clear canvas
-    rainCtx.fillStyle = '#0f172a';
-    rainCtx.fillRect(0, 0, rainCanvas.width, rainCanvas.height);
+    // Clear canvas (Transparent to let CSS gradient show)
+    rainCtx.clearRect(0, 0, rainCanvas.width, rainCanvas.height);
 
-    // Draw gradient overlay
-    const gradient = rainCtx.createLinearGradient(0, 0, 0, rainCanvas.height);
-    gradient.addColorStop(0, 'rgba(30, 41, 59, 0.8)');
-    gradient.addColorStop(1, 'rgba(15, 23, 42, 1)');
-    rainCtx.fillStyle = gradient;
-    rainCtx.fillRect(0, 0, rainCanvas.width, rainCanvas.height);
+    // Draw Particles (Behind words)
+    rainParticles.forEach(p => {
+        rainCtx.globalAlpha = p.life;
+        rainCtx.fillStyle = p.color;
+        rainCtx.beginPath();
+        rainCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        rainCtx.fill();
+    });
+    rainCtx.globalAlpha = 1;
 
     // Draw words
     rainWords.forEach(word => {
-        // Background pill
+        // "Glass" Pill Background
+        const textWidth = rainCtx.measureText(word.arabic).width + 30;
+
+        // Glow Shadow
+        rainCtx.shadowColor = word.color;
+        rainCtx.shadowBlur = 15;
+
         rainCtx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-        const textWidth = rainCtx.measureText(word.arabic).width + 20;
+        rainCtx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        rainCtx.lineWidth = 1;
+
         rainCtx.beginPath();
-        rainCtx.roundRect(word.x - textWidth / 2, word.y - 15, textWidth + 20, 35, 8);
+        rainCtx.roundRect(word.x - textWidth / 2, word.y - 18, textWidth, 40, 20);
         rainCtx.fill();
+        rainCtx.stroke();
 
-        // Arabic text (primary)
-        rainCtx.font = 'bold 18px "Noto Sans Arabic", sans-serif';
-        rainCtx.fillStyle = '#fbbf24';
+        // Reset Shadow for Text
+        rainCtx.shadowBlur = 0;
+
+        // Arabic text
+        rainCtx.font = 'bold 20px "Noto Sans Arabic", sans-serif';
+        rainCtx.fillStyle = '#fbbf24'; // Gold text
         rainCtx.textAlign = 'center';
-        rainCtx.fillText(word.arabic, word.x, word.y + 8);
+        rainCtx.fillText(word.arabic, word.x, word.y + 10);
+
+        // Small "Highlight" reflection on top of pill
+        rainCtx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+        rainCtx.beginPath();
+        rainCtx.ellipse(word.x, word.y - 12, textWidth / 4, 3, 0, 0, Math.PI * 2);
+        rainCtx.fill();
     });
+}
 
-    // Draw instructions if no active words
-    if (rainWords.length === 0 && rainGameActive) {
-        rainCtx.font = '16px sans-serif';
-        rainCtx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-        rainCtx.textAlign = 'center';
-        rainCtx.fillText('Väntar på ord... / في انتظار الكلمات', rainCanvas.width / 2, rainCanvas.height / 2);
+// Spawn Particles
+function spawnExplosion(x, y) {
+    for (let i = 0; i < 20; i++) {
+        rainParticles.push({
+            x: x,
+            y: y,
+            vx: (Math.random() - 0.5) * 8,
+            vy: (Math.random() - 0.5) * 8,
+            life: 1.0,
+            size: Math.random() * 3 + 2,
+            color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)]
+        });
     }
 }
 
@@ -201,6 +259,11 @@ function checkRainInput() {
 
     if (matchIndex !== -1) {
         // Correct!
+        const word = rainWords[matchIndex];
+
+        // Trigger Explosion at word position
+        spawnExplosion(word.x, word.y);
+
         rainWords.splice(matchIndex, 1);
         rainScore += 10;
         document.getElementById('rainScore').textContent = rainScore;
@@ -209,7 +272,7 @@ function checkRainInput() {
         inputEl.classList.add('correct-flash');
         setTimeout(() => inputEl.classList.remove('correct-flash'), 300);
 
-        // Speak the word
+        // Speak
         if (typeof TTSManager !== 'undefined') {
             TTSManager.speak(guess, 'sv');
         }
@@ -217,6 +280,7 @@ function checkRainInput() {
         // Wrong
         inputEl.classList.add('wrong-flash');
         setTimeout(() => inputEl.classList.remove('wrong-flash'), 300);
+        if (typeof soundManager !== 'undefined') soundManager.playError();
     }
 }
 
@@ -226,7 +290,6 @@ function endRainGame() {
     if (rainAnimationId) {
         cancelAnimationFrame(rainAnimationId);
     }
-
     document.getElementById('rainFinalScore').textContent = rainScore;
     document.getElementById('rainGameOver').classList.remove('hidden');
     document.getElementById('rainInput').disabled = true;

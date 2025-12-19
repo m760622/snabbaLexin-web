@@ -1213,9 +1213,28 @@
         function showResult(won, score) {
             const overlay = document.getElementById('resultOverlay');
             document.getElementById('resultEmoji').textContent = won ? '🎉' : '😢';
-            document.getElementById('resultText').textContent = won ? 'Bra jobbat! / أحسنت!' : 'Tyvärr! / للأسف!';
-            document.getElementById('resultWord').textContent = `${currentWord} = ${currentHint}`;
-            document.getElementById('resultExample').textContent = currentEntry[COL_SWE_EX] || '';
+            document.getElementById('resultText').innerText = won ? 'Bra jobbat! / أحسنت!' : 'Tyvärr! / للأسف!'; // Changed to innerText to support HTML if needed
+
+            // Generate educational sentence
+            const sent = generateEducationalSentence(
+                currentWord,
+                currentHint,
+                currentEntry[COL_SWE_EX],
+                currentEntry[COL_ARB], // We need example translation, assume handled or fallback
+                null, // No definition available in currentEntry directly, but could be added if needed
+                currentEntry[COL_TYPE]
+            );
+
+            // Display sentence instead of just basic info
+            document.getElementById('resultWord').innerHTML = `
+                <div style="margin-bottom: 0.5rem; font-size: 1.4rem; color: #4ade80;">${currentWord}</div>
+                <div style="font-size: 1.1rem; color: #cbd5e1;">${sent.s}</div>
+                <div style="font-size: 1rem; color: #fbbf24; margin-top: 0.3rem; font-family: 'IBM Plex Sans Arabic', sans-serif;">${sent.a}</div>
+            `;
+
+            // Clear old static example as it's now part of the sentence
+            document.getElementById('resultExample').style.display = 'none';
+
             document.getElementById('resultScore').textContent = won ? `+${score}` : '0';
             document.getElementById('resultStreak').textContent = currentStreak;
             overlay.classList.add('visible');

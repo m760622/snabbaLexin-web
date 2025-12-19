@@ -882,7 +882,7 @@ async function init() {
 
             // Show filter chips container
             if (filterChipsContainer) {
-                filterChipsContainer.style.display = 'flex';
+                filterChipsContainer.classList.remove('hidden');
             }
             if (filterToggleBtn) {
                 filterToggleBtn.classList.add('active');
@@ -1264,12 +1264,11 @@ let activeFilterMode = 'start'; // Default mode
 if (filterToggleBtn && filterChipsContainer) {
     // Toggle Filters with Animation
     filterToggleBtn.addEventListener('click', () => {
-        const isHidden = filterChipsContainer.style.display === 'none';
+        const isHidden = filterChipsContainer.classList.contains('hidden');
 
         if (isHidden) {
             // OPENING
-            filterChipsContainer.classList.remove('closing');
-            filterChipsContainer.style.display = 'flex';
+            filterChipsContainer.classList.remove('hidden', 'closing');
             filterToggleBtn.classList.add('active');
         } else {
             // CLOSING
@@ -1280,7 +1279,7 @@ if (filterToggleBtn && filterChipsContainer) {
             setTimeout(() => {
                 // Check if it's still supposed to be closed (user didn't click again fast)
                 if (filterChipsContainer.classList.contains('closing')) {
-                    filterChipsContainer.style.display = 'none';
+                    filterChipsContainer.classList.add('hidden');
                     filterChipsContainer.classList.remove('closing');
                 }
             }, 280); // Slightly less than 0.3s to prevent flicker
@@ -3011,3 +3010,231 @@ function initPhysicsLogo() {
         }, 2000);
     });
 }
+
+// ========================================
+//  NEW HOMEPAGE FEATURES - التحسينات الجديدة
+// ========================================
+
+// شريط التقدم اليومي
+function updateDailyProgressBar() {
+    const progressFill = document.getElementById('dailyProgressFill');
+    const progressCount = document.getElementById('dailyProgressCount');
+
+    if (!progressFill || !progressCount) return;
+
+    const today = new Date().toDateString();
+    const progressData = JSON.parse(localStorage.getItem('homepageProgress') || '{}');
+
+    // Reset if new day
+    if (progressData.date !== today) {
+        progressData.date = today;
+        progressData.count = 0;
+        localStorage.setItem('homepageProgress', JSON.stringify(progressData));
+    }
+
+    const count = progressData.count || 0;
+    const goal = 10; // هدف يومي
+    const percentage = Math.min((count / goal) * 100, 100);
+
+    progressCount.textContent = count;
+    progressFill.style.width = `${percentage}%`;
+
+    // تأثير عند الوصول للهدف
+    if (percentage >= 100) {
+        progressFill.style.background = 'linear-gradient(90deg, #22c55e, #16a34a, #15803d)';
+    }
+}
+
+// تحديث التقدم عند عرض كلمة
+function incrementDailyProgress() {
+    const today = new Date().toDateString();
+    const progressData = JSON.parse(localStorage.getItem('homepageProgress') || '{}');
+
+    if (progressData.date !== today) {
+        progressData.date = today;
+        progressData.count = 0;
+    }
+
+    progressData.count = (progressData.count || 0) + 1;
+    localStorage.setItem('homepageProgress', JSON.stringify(progressData));
+
+    updateDailyProgressBar();
+    updateChallengeProgress();
+    checkAchievements();
+}
+
+// التحديات اليومية
+const DAILY_CHALLENGES = [
+    { text: 'Lär dig 5 nya ord! / تعلم 5 كلمات جديدة!', target: 5, type: 'words' },
+    { text: 'Sök efter 10 ord! / ابحث عن 10 كلمات!', target: 10, type: 'searches' },
+    { text: 'Spela ett spel! / العب لعبة!', target: 1, type: 'games' },
+    { text: 'Läs 3 definitioner! / اقرأ 3 تعريفات!', target: 3, type: 'definitions' }
+];
+
+function initDailyChallenge() {
+    const today = new Date().toDateString();
+    let challengeData = JSON.parse(localStorage.getItem('dailyChallenge') || '{}');
+
+    // تحدي جديد كل يوم
+    if (challengeData.date !== today) {
+        const randomChallenge = DAILY_CHALLENGES[Math.floor(Math.random() * DAILY_CHALLENGES.length)];
+        challengeData = {
+            date: today,
+            ...randomChallenge,
+            current: 0,
+            completed: false,
+            claimed: false
+        };
+        localStorage.setItem('dailyChallenge', JSON.stringify(challengeData));
+    }
+
+    renderChallenge(challengeData);
+}
+
+function renderChallenge(data) {
+    const textEl = document.getElementById('challengeText');
+    const progressEl = document.getElementById('challengeProgress');
+    const claimBtn = document.getElementById('claimChallengeBtn');
+    const card = document.getElementById('dailyChallengeCard');
+
+    if (!textEl || !progressEl || !card) return;
+
+    textEl.textContent = data.text;
+    progressEl.textContent = `${data.current}/${data.target}`;
+
+    if (data.completed && !data.claimed) {
+        claimBtn?.classList.remove('hidden');
+        card.style.border = '2px solid #22c55e';
+    } else if (data.claimed) {
+        card.style.opacity = '0.6';
+        progressEl.textContent = '✅ مكتمل!';
+    }
+}
+
+function updateChallengeProgress() {
+    let challengeData = JSON.parse(localStorage.getItem('dailyChallenge') || '{}');
+    if (challengeData.completed || challengeData.claimed) return;
+
+    // تحديث بناءً على نوع التحدي
+    const progressData = JSON.parse(localStorage.getItem('homepageProgress') || '{}');
+
+    if (challengeData.type === 'words') {
+        challengeData.current = progressData.count || 0;
+    } else if (challengeData.type === 'searches') {
+        challengeData.current = parseInt(localStorage.getItem('totalSearches') || '0');
+    }
+
+    // التحقق من الإكمال
+    if (challengeData.current >= challengeData.target) {
+        challengeData.completed = true;
+        showAchievementToast('🎯', 'تحدي مكتمل! / Utmaning klar!');
+    }
+
+    localStorage.setItem('dailyChallenge', JSON.stringify(challengeData));
+    renderChallenge(challengeData);
+}
+
+// المطالبة بمكافأة التحدي
+window.claimChallenge = function () {
+    let challengeData = JSON.parse(localStorage.getItem('dailyChallenge') || '{}');
+    if (!challengeData.completed || challengeData.claimed) return;
+
+    challengeData.claimed = true;
+    localStorage.setItem('dailyChallenge', JSON.stringify(challengeData));
+
+    // إضافة مكافأة
+    let points = parseInt(localStorage.getItem('totalPoints') || '0');
+    points += 50;
+    localStorage.setItem('totalPoints', points.toString());
+
+    showAchievementToast('🎁', 'فزت بـ 50 نقطة! / Du fick 50 poäng!');
+    renderChallenge(challengeData);
+};
+
+// إشعارات الإنجازات
+function showAchievementToast(icon, message) {
+    // إزالة أي toast موجود
+    const existing = document.querySelector('.achievement-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'achievement-toast';
+    toast.innerHTML = `
+        <span class="achievement-icon">${icon}</span>
+        <span>${message}</span>
+    `;
+    document.body.appendChild(toast);
+
+    // إظهار
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    // إخفاء بعد 3 ثواني
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+
+    // صوت
+    if (typeof soundManager !== 'undefined' && soundManager.playSuccess) {
+        soundManager.playSuccess();
+    }
+}
+
+// التحقق من الإنجازات
+function checkAchievements() {
+    const progressData = JSON.parse(localStorage.getItem('homepageProgress') || '{}');
+    const achievements = JSON.parse(localStorage.getItem('homepageAchievements') || '{}');
+    const count = progressData.count || 0;
+
+    // إنجاز 10 كلمات
+    if (count >= 10 && !achievements.words10) {
+        achievements.words10 = true;
+        showAchievementToast('🏆', '10 كلمات اليوم! / 10 ord idag!');
+    }
+
+    // إنجاز 25 كلمة
+    if (count >= 25 && !achievements.words25) {
+        achievements.words25 = true;
+        showAchievementToast('🥇', '25 كلمة! رائع! / 25 ord! Fantastiskt!');
+    }
+
+    // إنجاز 50 كلمة
+    if (count >= 50 && !achievements.words50) {
+        achievements.words50 = true;
+        showAchievementToast('👑', '50 كلمة! أنت بطل! / 50 ord! Du är en mästare!');
+    }
+
+    localStorage.setItem('homepageAchievements', JSON.stringify(achievements));
+}
+
+// ربط أزرار الاختصارات
+function initQuickActions() {
+    const quickFavBtn = document.getElementById('quickFavBtn');
+    const quickQuizBtn = document.getElementById('quickQuizBtn');
+
+    if (quickFavBtn) {
+        quickFavBtn.addEventListener('click', () => {
+            // عرض المفضلة
+            const showFavoritesBtn = document.getElementById('showFavoritesBtn');
+            if (showFavoritesBtn) showFavoritesBtn.click();
+        });
+    }
+
+    if (quickQuizBtn) {
+        quickQuizBtn.addEventListener('click', () => {
+            // بدء اختبار
+            const quizBtn = document.getElementById('quizBtn');
+            if (quizBtn) quizBtn.click();
+        });
+    }
+}
+
+// تهيئة عند التحميل
+document.addEventListener('DOMContentLoaded', () => {
+    updateDailyProgressBar();
+    initDailyChallenge();
+    initQuickActions();
+});
+
+// تصدير للاستخدام الخارجي
+window.incrementDailyProgress = incrementDailyProgress;

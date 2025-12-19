@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="sv" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minneskort - SnabbaLexin</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="games.css">
+    <!-- flashcards_pro.css might be needed if styling is separate, checking -->
+    <link rel="stylesheet" href="flashcards_pro.css?v=8">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="data.js"></script>
+    <script src="utils.js"></script>
+    <script src="js/soundEffects.js"></script>
+    <script src="js/TTSManager.js"></script>
+</head>
+
+<body class="game-page-body">
+    <div id="flashcardsGame" class="active-game-container">
+        <div class="game-header-inner">
+            <button class="game-back-btn" onclick="window.location.href='games.html'" aria-label="Menu / القائمة">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+            <h1 id="pageTitle">Minneskort / بطاقات الذاكرة</h1>
+            <!-- Progress Ring -->
+            <div class="fc-progress-ring-wrapper">
+                <svg class="fc-progress-ring" width="44" height="44">
+                    <circle class="fc-progress-ring-bg" stroke-width="4" fill="transparent" r="18" cx="22" cy="22" />
+                    <circle class="fc-progress-ring-circle" stroke-width="4" fill="transparent" r="18" cx="22" cy="22"
+                        stroke-dasharray="113.1" stroke-dashoffset="113.1" />
+                </svg>
+                <span class="fc-progress-text" id="flashcardProgress">0/0</span>
+            </div>
+        </div>
+
+        <div class="game-controls-header fc-controls-header">
+            <select id="flashcardTypeFilter" class="game-filter-select" onchange="initFlashcards()"
+                title="Filter by word type">
+                <option value="all">📚 Alla ord / كل الكلمات</option>
+                <option value="substantiv">📦 Substantiv / اسم</option>
+                <option value="verb">⚡ Verb / فعل</option>
+                <option value="adjektiv">🎨 Adjektiv / صفة</option>
+                <option value="adverb">🏃 Adverb / ظرف</option>
+                <option value="preposition">📍 Preposition / حرف جر</option>
+            </select>
+            <div class="fc-mastery-badge" id="flashcardMastery">❄️ Box 1</div>
+            <button id="fcAutoPlayToggle" class="fc-autoplay-btn" onclick="toggleAutoPlay()"
+                title="Toggle Auto-play">🔊</button>
+        </div>
+
+        <!-- Swipe Hint -->
+        <div class="fc-swipe-hint" id="swipeHint">
+            <span>👈 لا أعرفها</span>
+            <span>اسحب / Svep</span>
+            <span>أعرفها 👉</span>
+        </div>
+
+        <div class="flashcard-container fc-container-pro">
+            <!-- Segmented Progress Bar -->
+            <div class="fc-progress-segmented" id="fcSegmentedProgress"></div>
+
+            <div class="flashcard fc-card-pro" id="flashcard">
+                <div class="fc-front-pro">
+                    <span class="fc-type-badge" id="flashcardType"></span>
+                    <h2 id="flashcardWord" class="fc-word-pro">...</h2>
+                    <p class="hint-text fc-hint-pro">👆 Tryck för att vända / اضغط للقلب</p>
+                    <button class="fc-speak-btn"
+                        onclick="event.stopPropagation(); TTSManager?.speak(document.getElementById('flashcardWord').textContent, 'sv')">🔊</button>
+                </div>
+                <div class="fc-back-pro">
+                    <!-- Swedish Section -->
+                    <div class="fc-section-swe">
+                        <h3 id="flashcardBackWord" class="fc-word-back">...</h3>
+                        <p id="flashcardBackSentence" class="fc-sentence-back"></p>
+                    </div>
+
+                    <div class="fc-divider"></div>
+
+                    <!-- Arabic Section -->
+                    <div class="fc-section-arb">
+                        <h3 id="flashcardTranslation" class="fc-translation-back">...</h3>
+                        <p id="flashcardExampleArb" class="fc-sentence-back"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simple Know / Don't Know Buttons -->
+        <div class="fc-rating-container" id="flashcardRatingBtns">
+            <button class="fc-simple-btn fc-dont-know" onclick="handleFlashcardRating(0)">
+                <span class="fc-btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon-white">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </span>
+                <span class="fc-btn-text">Inte än / لا أعرفها</span>
+            </button>
+            <button class="fc-simple-btn fc-know" onclick="handleFlashcardRating(4)">
+                <span class="fc-btn-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon-white">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </span>
+                <span class="fc-btn-text">Kan det / أعرفها</span>
+            </button>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="fc-quick-actions">
+            <button class="fc-quick-btn"
+                onclick="if (typeof FavoritesManager !== 'undefined') { const id = flashcardCards[flashcardIndex]?.[0]; if(id) FavoritesManager.toggle(id); }"
+                title="Favorit">❤️</button>
+            <button class="fc-quick-btn"
+                onclick="TTSManager?.speak(document.getElementById('flashcardWord').textContent, 'sv')"
+                title="Lyssna">🔊</button>
+        </div>
+    </div>
+
+    <script src="games.js"></script>
+    <script src="flashcardsGame.js?v=9"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof initFlashcards === 'function') {
+                initFlashcards();
+            }
+        });
+    </script>
+</body>
+
+</html>

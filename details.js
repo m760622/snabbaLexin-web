@@ -543,6 +543,33 @@ async function init() {
                 if (typeof ProgressManager !== 'undefined') {
                     ProgressManager.trackWordView(id, item[COL_SWE]);
                 }
+
+                // تحديث تقدم الصفحة الرئيسية والتحدي اليومي
+                if (typeof window.incrementDailyProgress === 'function') {
+                    window.incrementDailyProgress();
+                } else {
+                    // Fallback: تحديث مباشر في localStorage
+                    const today = new Date().toDateString();
+                    const progressData = JSON.parse(localStorage.getItem('homepageProgress') || '{}');
+                    if (progressData.date !== today) {
+                        progressData.date = today;
+                        progressData.count = 0;
+                    }
+                    progressData.count = (progressData.count || 0) + 1;
+                    localStorage.setItem('homepageProgress', JSON.stringify(progressData));
+
+                    // تحديث التحدي اليومي أيضاً
+                    let challengeData = JSON.parse(localStorage.getItem('dailyChallenge') || '{}');
+                    if (challengeData.date === today && !challengeData.completed && !challengeData.claimed) {
+                        if (challengeData.type === 'words') {
+                            challengeData.current = progressData.count;
+                            if (challengeData.current >= challengeData.target) {
+                                challengeData.completed = true;
+                            }
+                            localStorage.setItem('dailyChallenge', JSON.stringify(challengeData));
+                        }
+                    }
+                }
             } else {
                 detailsArea.innerHTML = '<div class="placeholder-message">Ord hittades inte / لم يتم العثور على الكلمة</div>';
             }

@@ -1533,3 +1533,29 @@ body.mobile-view .quran-header {
     line-height: 1.6;
     margin-bottom: 20px;
 }
+
+/* Helper to ensure icons are centered in circular buttons - Consistency update */
+.back-btn,
+.rate-btn,
+.control-btn,
+.share-btn,
+.fav-btn,
+.wc-modal-close,
+.settings-trigger {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    line-height: 1 !important;
+    padding: 0 !important;
+}
+
+/* Ensure SVGs inside these are blocks to avoid baseline issues */
+.back-btn svg,
+.rate-btn svg,
+.control-btn svg,
+.share-btn svg,
+.fav-btn svg,
+.settings-trigger svg {
+    display: block;
+    margin: 0 auto;
+}

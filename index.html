@@ -57,11 +57,6 @@
                         </path>
                     </svg>
                 </button>
-
-                <button class="theme-toggle" onclick="window.location.href='games.html'" aria-label="Spel / الألعاب"
-                    title="Spel / الألعاب">
-                    🎮
-                </button>
             </div>
 
             <div id="settingsMenu" class="settings-menu hidden">
@@ -583,7 +578,49 @@
 
     </header>
 
+    <!-- شريط الاختصارات السريعة -->
+    <div class="quick-actions-bar">
+        <a href="games.html" class="quick-action-btn" title="ألعاب / Spel">
+            <span class="quick-icon">🎮</span>
+            <span class="quick-label">Spel</span>
+        </a>
+        <a href="learn.html" class="quick-action-btn" title="تعلم / Lär">
+            <span class="quick-icon">📚</span>
+            <span class="quick-label">Lär</span>
+        </a>
+        <button class="quick-action-btn" id="quickFavBtn" title="مفضلة / Favoriter">
+            <span class="quick-icon">⭐</span>
+            <span class="quick-label">Favoriter</span>
+        </button>
+        <button class="quick-action-btn" id="quickQuizBtn" title="اختبار / Quiz">
+            <span class="quick-icon">⚡</span>
+            <span class="quick-label">Quiz</span>
+        </button>
+    </div>
 
+    <!-- شريط التقدم اليومي -->
+    <div class="daily-progress-bar">
+        <div class="progress-info">
+            <span class="progress-label">📖 Dagens mål / هدف اليوم</span>
+            <span class="progress-count"><span id="dailyProgressCount">0</span> / 10</span>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill" id="dailyProgressFill" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- بطاقة التحدي اليومي -->
+    <div class="daily-challenge-card" id="dailyChallengeCard">
+        <div class="challenge-header">
+            <span class="challenge-icon">🎯</span>
+            <span class="challenge-title">Daglig Utmaning / تحدي اليوم</span>
+        </div>
+        <p class="challenge-text" id="challengeText">Lär dig 5 nya ord idag! / تعلم 5 كلمات جديدة اليوم!</p>
+        <div class="challenge-progress">
+            <span id="challengeProgress">0/5</span>
+            <button class="challenge-claim-btn hidden" id="claimChallengeBtn">🎁 Claim</button>
+        </div>
+    </div>
 
     <main id="resultsArea">
         <!-- Word of the Day -->

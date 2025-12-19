@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snabba-lexin-v10';
+const CACHE_NAME = 'snabba-lexin-v12';
 const STATIC_ASSETS = [
     './',
     './index.html',
@@ -16,6 +16,7 @@ const STATIC_ASSETS = [
     './fill_blank.html',
     './hangman.html',
     './unblock_me.html',
+    './word_connect.html',
     './style.css',
     './style.min.css',
     './games.css',
@@ -35,7 +36,7 @@ const DYNAMIC_ASSETS = [
     './data.js',
     './utils.js',
     './wordConnectData.js',
-    './wordConnectGame_v2.js',
+    './wordConnectGame.js',
     './grammarData.js',
     './grammarGame.js',
     './flashcardsGame.js',

@@ -157,6 +157,11 @@ function selectWheelLetter(btn, letter) {
     btn.classList.add('used');
     wheelCurrentWord += letter;
     updateWheelAnswerBox();
+
+    // Auto-check if word length matches
+    if (wheelCurrentWord.length === wheelTarget.word.length) {
+        checkWordWheel();
+    }
 }
 
 // Update Answer Box

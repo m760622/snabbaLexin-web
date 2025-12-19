@@ -2190,7 +2190,7 @@ function initWordOfTheDay() {
     renderWod(initialWord, '📅 Dagens Ord');
 
     console.log('WOD: Displaying card');
-    wodCard.style.display = 'block';
+    wodCard.classList.remove('hidden');
 }
 
 // Quiz Mode Logic
@@ -2208,19 +2208,19 @@ function initQuiz() {
         quizBtn.addEventListener('click', (e) => {
             // Close settings menu if open
             const settingsMenu = document.getElementById('settingsMenu');
-            if (settingsMenu) settingsMenu.style.display = 'none';
+            if (settingsMenu) settingsMenu.classList.add('hidden');
 
             // Set quiz mode to all words
             quizMode = 'all';
 
             // Toggle Quiz
-            if (quizContainer.style.display === 'none') {
-                quizContainer.style.display = 'block';
+            if (quizContainer.classList.contains('hidden')) {
+                quizContainer.classList.remove('hidden');
                 startQuiz();
                 // Smooth scroll to quiz
                 quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
-                quizContainer.style.display = 'none';
+                quizContainer.classList.add('hidden');
             }
         });
     }
@@ -2230,7 +2230,7 @@ function initQuiz() {
         favQuizBtn.addEventListener('click', (e) => {
             // Close settings menu if open
             const settingsMenu = document.getElementById('settingsMenu');
-            if (settingsMenu) settingsMenu.style.display = 'none';
+            if (settingsMenu) settingsMenu.classList.add('hidden');
 
             // Check if user has favorites
             const favIds = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -2243,20 +2243,20 @@ function initQuiz() {
             quizMode = 'favorites';
 
             // Toggle Quiz
-            if (quizContainer.style.display === 'none') {
-                quizContainer.style.display = 'block';
+            if (quizContainer.classList.contains('hidden')) {
+                quizContainer.classList.remove('hidden');
                 startQuiz();
                 // Smooth scroll to quiz
                 quizContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
-                quizContainer.style.display = 'none';
+                quizContainer.classList.add('hidden');
             }
         });
     }
 
     if (closeQuiz && quizContainer) {
         closeQuiz.addEventListener('click', () => {
-            quizContainer.style.display = 'none';
+            quizContainer.classList.add('hidden');
         });
     }
 

@@ -642,12 +642,52 @@
         </div>
     </div>
 
+    <!-- Quiz Container (Inline) - تحت تحدي اليوم -->
+    <div class="container container-quiz-inline">
+        <div id="quizInlineContainer" class="game-container hidden">
+            <div class="quiz-header-compact">
+                <h2>Snabbtest</h2>
+                <div class="quiz-header-right">
+                    <div class="quiz-score-inline" id="quizScore">0</div>
+                    <button id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                            </polygon>
+                        </svg>
+                    </button>
+                    <button id="closeQuiz" class="close-btn">&times;</button>
+                </div>
+            </div>
+            <div class="quiz-body">
+                <div class="question-card">
+                    <h3 id="quizQuestion">...</h3>
+                    <p id="quizExample" class="quiz-example"></p>
+                </div>
+                <div id="quizOptions" class="quiz-options"></div>
+                <div id="quizFeedback" class="quiz-feedback"></div>
+                <button id="nextQuestion" class="action-btn primary next-btn-styled">Nästa ➡️</button>
+
+                <div id="quizEndScreen" class="quiz-end-screen hidden">
+                    <div class="end-icon">🎉</div>
+                    <h3 class="end-title">Testet avslutat!</h3>
+                    <div class="end-score"><span class="end-score-value" id="endScoreValue">0</span><span
+                            class="end-score-total">/ 10</span></div>
+                    <p class="end-message" id="endMessage">Bra jobbat!</p>
+                    <button id="restartQuiz" class="action-btn primary">Spela igen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main id="resultsArea">
         <!-- Word of the Day -->
         <div id="wordOfTheDay" class="word-of-day-card hidden">
             <div class="wod-header">
                 <div class="wod-title-col">
                     <span>📅 Dagens Ord</span>
+                    <button id="wodTTSBtn" class="wod-action-btn wod-tts-btn" aria-label="Lyssna / استمع">🔊</button>
                 </div>
                 <div class="wod-header-actions">
                     <span class="wod-type-badge"></span>
@@ -679,7 +719,7 @@
             </div>
             <div class="wod-content">
                 <div class="wod-main-words">
-                    <div class="wod-swe"></div>
+                    <div class="wod-swe" title="اضغط للاستماع / Klicka för att lyssna"></div>
                     <div class="wod-arb"></div>
                 </div>
 
@@ -788,45 +828,6 @@
                     alt="Share" class="inline-icon-img"> واختر <strong>"إضافة إلى الشاشة
                     الرئيسية"</strong></p>
             <button id="closeIosPrompt">OK</button>
-        </div>
-    </div>
-
-    <!-- Quiz Container (Inline) -->
-    <div class="container container-quiz-inline">
-        <div id="quizInlineContainer" class="game-container hidden">
-            <div class="quiz-header-compact">
-                <h2>Snabbtest</h2>
-                <div class="quiz-header-right">
-                    <div class="quiz-score-inline" id="quizScore">0</div>
-                    <button id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon
-                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                            </polygon>
-                        </svg>
-                    </button>
-                    <button id="closeQuiz" class="close-btn">&times;</button>
-                </div>
-            </div>
-            <div class="quiz-body">
-                <div class="question-card">
-                    <h3 id="quizQuestion">...</h3>
-                    <p id="quizExample" class="quiz-example"></p>
-                </div>
-                <div id="quizOptions" class="quiz-options"></div>
-                <div id="quizFeedback" class="quiz-feedback"></div>
-                <button id="nextQuestion" class="action-btn primary next-btn-styled hidden">Nästa</button>
-
-                <div id="quizEndScreen" class="quiz-end-screen hidden">
-                    <div class="end-icon">🎉</div>
-                    <h3 class="end-title">Testet avslutat!</h3>
-                    <div class="end-score"><span class="end-score-value" id="endScoreValue">0</span><span
-                            class="end-score-total">/ 10</span></div>
-                    <p class="end-message" id="endMessage">Bra jobbat!</p>
-                    <button id="restartQuiz" class="action-btn primary">Spela igen</button>
-                </div>
-            </div>
         </div>
     </div>
 

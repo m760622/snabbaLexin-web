@@ -2163,18 +2163,45 @@ function initWordOfTheDay() {
 
     // TTS Button - Speak the Swedish word
     const wodTTSBtn = wodCard.querySelector('#wodTTSBtn');
+
+    // Helper function to speak the word
+    const speakCurrentWord = () => {
+        if (!currentWodWord) return;
+        const sweWord = currentWodWord[COL_SWE];
+        if (sweWord) {
+            // Use TTS if available
+            if (typeof TTSManager !== 'undefined') {
+                TTSManager.speak(sweWord, 'sv');
+            } else if ('speechSynthesis' in window) {
+                // Fallback to browser TTS
+                const utterance = new SpeechSynthesisUtterance(sweWord);
+                utterance.lang = 'sv-SE';
+                utterance.rate = 0.85;
+                speechSynthesis.speak(utterance);
+            }
+            // Visual feedback
+            if (wodTTSBtn) {
+                wodTTSBtn.style.transform = 'scale(1.2)';
+                setTimeout(() => wodTTSBtn.style.transform = 'scale(1)', 200);
+            }
+        }
+    };
+
+    // TTS Button click
     if (wodTTSBtn) {
         wodTTSBtn.onclick = (e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (!currentWodWord) return;
+            speakCurrentWord();
+        };
+    }
 
-            const sweWord = currentWodWord[COL_SWE];
-            if (sweWord && typeof TTSManager !== 'undefined') {
-                TTSManager.speak(sweWord, 'sv');
-                HapticManager.trigger('light');
-                AnimationManager.animate(wodTTSBtn, 'pulse');
-            }
+    // Click on Swedish word to speak
+    if (wodSwe) {
+        wodSwe.style.cursor = 'pointer';
+        wodSwe.onclick = (e) => {
+            e.preventDefault();
+            speakCurrentWord();
         };
     }
 
@@ -2360,6 +2387,11 @@ function loadQuestion() {
             document.getElementById('restartQuiz').onclick = () => {
                 startQuiz();
             };
+
+            // Track quiz completion for daily progress
+            if (typeof ProgressManager !== 'undefined') {
+                ProgressManager.trackGame('snabbtest', quizScore);
+            }
         }
         return;
     }
@@ -2499,6 +2531,16 @@ function checkAnswer(selectedOptionText, btn) {
 
         document.getElementById('quizScore').textContent = quizScore;
         quizFeedback.textContent = '';
+
+        // Track the word for daily progress (counts towards daily goal)
+        if (typeof ProgressManager !== 'undefined' && currentQuestion) {
+            ProgressManager.trackWordView(currentQuestion[COL_ID], currentQuestion[COL_SWE]);
+        }
+
+        // Update the homepage daily progress bar immediately
+        if (typeof incrementDailyProgress === 'function') {
+            incrementDailyProgress();
+        }
 
         // Particles for fun
         const rect = btn.getBoundingClientRect();

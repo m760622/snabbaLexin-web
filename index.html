@@ -360,24 +360,44 @@
                 });
             }
 
-            // Split title letters for individual animation (Swedish only)
-            function splitLetters(element) {
+            // Split title letters for individual reveal animation (Swedish - by letters)
+            // DISABLED for Gradient Flow style - uncomment for Split Reveal style
+            /*
+            function splitLettersReveal(element) {
                 if (!element) return;
                 const text = element.textContent;
                 element.innerHTML = '';
                 [...text].forEach((char, i) => {
                     const span = document.createElement('span');
-                    span.className = 'pulse-char';
+                    span.className = 'reveal-char';
                     span.textContent = char === ' ' ? '\u00A0' : char;
                     span.style.animationDelay = `${i * 0.08}s`;
                     element.appendChild(span);
                 });
             }
 
-            // Apply only to Swedish title on desktop (not mobile/tablet - too wide)
-            if (window.innerWidth > 600) {
-                splitLetters(document.querySelector('.brand-title-swe'));
+            // Split title by words for Arabic (keeps letters connected)
+            function splitWordsReveal(element) {
+                if (!element) return;
+                const words = element.textContent.trim().split(' ');
+                element.innerHTML = '';
+                words.forEach((word, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'reveal-word';
+                    span.textContent = word;
+                    span.style.animationDelay = `${i * 0.2}s`;
+                    element.appendChild(span);
+                    // Add space between words
+                    if (i < words.length - 1) {
+                        element.appendChild(document.createTextNode('\u00A0'));
+                    }
+                });
             }
+
+            // Apply letter animation to Swedish, word animation to Arabic
+            splitLettersReveal(document.querySelector('.brand-title-swe'));
+            splitWordsReveal(document.querySelector('.brand-title-arb'));
+            */
 
             // Progress Badge Click Handler
             const progressBadge = document.getElementById('progressBadge');

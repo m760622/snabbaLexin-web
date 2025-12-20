@@ -321,12 +321,18 @@ function getWordTypeCategory(type, word = '', forms = '') {
     const formsLower = (forms || '').toLowerCase();
 
     // Standard type detection
+    if (normalizedType.includes('verbmn') || (normalizedType.includes('verb') && word.includes(' '))) return 'phrasal';
     if (normalizedType === 'verb') return 'verb';
     if (normalizedType === 'subst' || normalizedType === 'substantiv' || normalizedType.includes('subst')) return 'noun';
     if (normalizedType === 'adj' || normalizedType === 'adjektiv') return 'adj';
     if (normalizedType === 'adv' || normalizedType === 'adverb') return 'adv';
     if (normalizedType === 'prep' || normalizedType === 'preposition') return 'prep';
     if (normalizedType === 'konj' || normalizedType === 'konjunktion') return 'conj';
+    if (normalizedType.includes('pron')) return 'pronoun';
+    if (normalizedType.includes('jurid')) return 'legal';
+    if (normalizedType.includes('interj')) return 'interj';
+    if (normalizedType.includes('räkn')) return 'num';
+    if (normalizedType.includes('förk')) return 'abbr';
 
     // Detect NOUNS by forms patterns (ett-words: -et ending, en-words: -en/-an ending)
     if (formsLower) {
@@ -387,6 +393,52 @@ window.copyWord = function (word, event) {
 
 // Initialize
 
+// ==========================================
+// Consolidated Search Listener Setup
+// ==========================================
+function setupSearchListeners() {
+    const searchInput = document.getElementById('searchInput');
+
+    if (!searchInput) return;
+
+    // 1. Main Search Logic (Debounced)
+    // Using 150ms debounce for responsiveness
+    // handleSearch calls updateResults internally if needed.
+    const debouncedSearch = debounce((e) => {
+        handleSearch(e);
+    }, 150);
+
+    searchInput.addEventListener('input', debouncedSearch);
+
+    // 2. Icon Visibility Logic
+    const clearSearch = document.getElementById('clearSearch');
+    const searchIcon = document.querySelector('.search-icon');
+
+    const updateSearchIconVisibility = () => {
+        const hasValue = searchInput.value.length > 0;
+        if (clearSearch) clearSearch.style.display = hasValue ? 'flex' : 'none';
+
+        if (searchIcon) {
+            searchIcon.style.opacity = hasValue ? '0' : '1';
+            searchIcon.style.width = hasValue ? '0' : '';
+            searchIcon.style.marginRight = hasValue ? '0' : '';
+        }
+    };
+
+    searchInput.addEventListener('input', updateSearchIconVisibility);
+    searchInput.addEventListener('focus', updateSearchIconVisibility);
+
+    // Initial check in case value exists
+    updateSearchIconVisibility();
+
+    // 3. Pulse Animation on Load
+    setTimeout(() => {
+        searchInput.classList.add('pulse-on-load');
+    }, 500);
+
+    console.log('[App] Search listeners attached successfully');
+}
+
 async function init() {
     // Theme Logic handled by utils.js (ThemeManager.init called on DOMContentLoaded)
 
@@ -394,6 +446,9 @@ async function init() {
     themeToggle.addEventListener('click', () => {
         ThemeManager.toggle();
     });
+
+    // CRITICAL FIX: Setup search listeners immediately, don't wait for data
+    setupSearchListeners();
 
     // Load Favorites using Manager
     favorites = FavoritesManager.getFavorites();
@@ -769,7 +824,7 @@ async function init() {
         loadingContainer.className = 'loading-container';
         loadingContainer.innerHTML = `
             <div class="spinner"></div>
-            <div class="loading-text">Laddar ordbok... / جاري تحميل القاموس...</div>
+            <div class="loading-text">Laddar... / جاري التحميل...</div>
             <div class="loading-progress" id="loadingProgress" style="display:none;">
                 <div class="progress-bar-container">
                     <div class="progress-bar-fill" id="loadingProgressBar"></div>
@@ -780,9 +835,33 @@ async function init() {
         statsElement.innerHTML = '';
         statsElement.appendChild(loadingContainer);
 
+        // FAILSAFE: Force hide loading after 8 seconds
+        setTimeout(() => {
+            const loadingIndicator = document.getElementById('dataLoadingIndicator');
+            if (loadingIndicator && loadingIndicator.isConnected) {
+                console.warn('[App] Loading timed out, forcing render...');
+                if (typeof dictionaryData !== 'undefined' && dictionaryData.length > 0) {
+                    loadingIndicator.remove();
+                    // buildSearchIndex and renderResults/updateResultCount will handle UI
+                    // But we might be mid-await. 
+                    // Let's just update text to error if it's REALLY stuck
+                    // Or usually, if logic hangs, it's stuck in await.
+                    // If we remove indicator, resultsArea might be empty.
+                    // Check if we can proceed.
+                    if (currentResults.length === 0) {
+                        // Fallback init
+                        buildSearchIndex();
+                        handleSearch({ target: searchInput });
+                    }
+                } else {
+                    loadingIndicator.innerHTML = '<div style="color:red;padding:20px;">Kunde inte ladda data. Kontrollera anslutningen. <br> تعذر تحميل البيانات. تحقق من الاتصال.</div>';
+                }
+            }
+        }, 8000);
+
         // Try to use IndexedDB cache first (via DataLoader)
         let dataLoaded = false;
-        if (typeof DataLoader !== 'undefined') {
+        if (false && typeof DataLoader !== 'undefined') { // DISABLED for performance test
             try {
                 console.log('[App] Checking IndexedDB cache...');
                 await DictionaryDB.init();
@@ -808,7 +887,7 @@ async function init() {
                     // Need to cache fresh data.js
                     console.log('[App] Caching data.js to IndexedDB...');
                     loadingContainer.querySelector('.loading-text').textContent =
-                        'Sparar i cache... / جاري حفظ الذاكرة...';
+                        'Förbereder data... / جاري تجهيز البيانات...';
 
                     // Show progress bar for caching
                     const progressContainer = document.getElementById('loadingProgress');
@@ -1018,13 +1097,10 @@ async function init() {
         statsElement.classList.add('fade-in');
 
         // Enable search and sort
-        const debouncedSearch = debounce(handleSearch, 150);
-        searchInput.addEventListener('input', debouncedSearch);
+        // Search listeners moved to setupSearchListeners() called at start of init()
 
         // Delight: Pulse Search Bar on Load
-        setTimeout(() => {
-            searchInput.classList.add('pulse-on-load');
-        }, 500);
+        // Pulse animation moved to setupSearchListeners
 
         // Clear Button Logic
         const clearSearch = document.getElementById('clearSearch');
@@ -1043,10 +1119,10 @@ async function init() {
             };
 
             // Update on input
-            searchInput.addEventListener('input', updateSearchIconVisibility);
+            // Listener moved to setupSearchListeners
 
             // Also update on focus (in case page loads with text in search)
-            searchInput.addEventListener('focus', updateSearchIconVisibility);
+            // Listener moved to setupSearchListeners
 
             clearSearch.addEventListener('click', () => {
                 searchInput.value = '';
@@ -1067,9 +1143,7 @@ async function init() {
         }
 
         // Search Listener
-        searchInput.addEventListener('input', debounce(() => {
-            updateResults();
-        }, 300));
+        // Search listener moved to setupSearchListeners
 
         // Sort Listener
         sortSelect.addEventListener('change', () => {
@@ -1350,89 +1424,76 @@ function handleSearch(e) {
         ProgressManager.trackSearch(rawQuery);
     }
 
-    // Get Filter Values (Restore missing vars)
+    // Get Filter Values
     const selectedType = typeSelect.value;
     const sortMethod = sortSelect.value;
 
-    // If query is empty -> show landing page OR filtered results
+    // Element selectors to toggle
+    const mainContentElements = [
+        '.quick-actions-bar',
+        '.daily-progress-bar',
+        '#dailyChallengeCard',
+        '.container-flashcard-inline',
+        '.container-quiz-inline',
+        '#wordOfTheDay'
+    ];
+
+    // Toggle Content Helper - REMOVED (Replaced by landingPageContent toggle)
+    // No longer need individual element toggling since they are wrapper in #landingPageContent
+
+
+    const emptyState = document.getElementById('emptyState');
+    const landingPageContent = document.getElementById('landingPageContent');
+    const resultsGrid = document.getElementById('searchResults');
+
+    // If query is empty -> show landing page AND RESTORE MAIN CONTENT
     if (rawQuery.length === 0) {
-        // If type is 'all' AND not favorites mode, show empty/landing state
-        // Exception: Favorites mode should show favorites even with empty query
-        if (selectedType === 'all' && activeFilterMode !== 'favorites') {
+        // If type is 'all' OR we are just clearing text, and NOT in favorites mode
+        if (activeFilterMode !== 'favorites') {
             currentResults = [];
             currentPage = 1;
 
-            // Show Empty State (Landing)
-            const emptyState = document.getElementById('emptyState');
-            const resultsGrid = document.getElementById('searchResults');
+            // Show Landing Page Content, Hide Search Results
+            if (landingPageContent) landingPageContent.classList.remove('hidden');
+            if (resultsGrid) {
+                resultsGrid.classList.remove('visible');
+                resultsGrid.innerHTML = ''; // Safe to clear THIS container now
+            }
 
+            // Ensure Empty State inside landing is visible if needed (history)
             if (emptyState) {
                 renderHistory();
                 emptyState.style.display = 'block';
             }
-            if (resultsGrid) resultsGrid.style.display = 'none';
-            // Show total dictionary count when on landing page
+
+            // Show total dictionary count
             updateResultCount(dictionaryData.length);
             if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = dictionaryData.length.toLocaleString();
 
-            // Clear the results area
-            resultsArea.innerHTML = '';
             return;
         }
 
-        // Handle favorites mode when search is empty
+        // Handle favorites mode...
         if (activeFilterMode === 'favorites') {
+            if (landingPageContent) landingPageContent.classList.add('hidden');
+            if (resultsGrid) resultsGrid.classList.add('visible');
+
             currentResults = dictionaryData.filter(item =>
                 favorites.has(String(item[COL_ID]))
             );
             currentPage = 1;
             renderResults();
-
-            const emptyState = document.getElementById('emptyState');
-            const resultsGrid = document.getElementById('searchResults');
-            if (emptyState) emptyState.style.display = 'none';
-            if (resultsGrid) resultsGrid.style.display = 'grid';
-
-            if (currentResults.length === 0) {
-                updateResultCount(0);
-            } else {
-                updateResultCount(currentResults.length);
-            }
             return;
         }
-
-        // Type filter is selected, show filtered results
-        currentResults = dictionaryData.slice();
-
-        // Filter by Type
-        const selectedTypeLower = selectedType.toLowerCase();
-        currentResults = currentResults.filter(item => {
-            const typeLower = (item[COL_TYPE] || '').toLowerCase();
-            if (selectedTypeLower === 'abbrev') return typeLower.includes('förk') || typeLower.includes('abbrev');
-            return typeLower.includes(selectedTypeLower);
-        });
-
-        currentPage = 1;
-        renderResults();
-
-        // Hide empty state, show results
-        const emptyState = document.getElementById('emptyState');
-        const resultsGrid = document.getElementById('searchResults');
-
-        if (emptyState) emptyState.style.display = 'none';
-        if (resultsGrid) resultsGrid.style.display = 'grid';
-        updateResultCount(currentResults.length);
-        if (document.getElementById('resultCount')) document.getElementById('resultCount').textContent = currentResults.length.toLocaleString();
-
-        return;
     }
 
-    // Hide Empty State when searching
-    const emptyState = document.getElementById('emptyState');
-    const resultsGrid = document.getElementById('searchResults');
-    if (emptyState) emptyState.style.display = 'none';
-    if (resultsGrid) resultsGrid.style.display = 'grid';
+    // NOT EMPTY QUERY -> HIDE LANDING CONTENT, SHOW RESULTS
+    if (landingPageContent) landingPageContent.classList.add('hidden');
+    if (resultsGrid) resultsGrid.classList.add('visible');
+    if (emptyState) emptyState.style.display = 'none'; // Ensure history hidden if outside landing (it's inside now but safe to keep)
 
+
+    // Core Search Logic
     let results = [];
     const data = dictionaryData;
 
@@ -1715,21 +1776,26 @@ function updateTypeDropdown(items) {
 function renderResults() {
     // Reset Pagination
     renderedCount = 0;
-    resultsArea.innerHTML = ''; // Clear previous results
+    const resultsGrid = document.getElementById('searchResults');
+    if (!resultsGrid) return; // Safeguard
+
+    resultsGrid.innerHTML = ''; // Clear previous results SAFELY in new container
 
     if (currentResults.length === 0) {
-        resultsArea.innerHTML = `
+        resultsGrid.innerHTML = `
             <div class="placeholder-message">
                 Inga resultat hittades / لم يتم العثور على نتائج
             </div>
         `;
         updateResultCount(0);
-        return;
+        return; // Exit early if no results
     }
 
-    // Render first batch
+    // Render first batch of results
     renderNextBatch();
 }
+
+
 
 function updateResults() {
     handleSearch({ target: searchInput });
@@ -1739,17 +1805,22 @@ function updateResults() {
 function renderNextBatch() {
     if (renderedCount >= currentResults.length) return;
 
+    const resultsGrid = document.getElementById('searchResults');
+    if (!resultsGrid) return;
+
     const nextBatch = currentResults.slice(renderedCount, renderedCount + BATCH_SIZE);
     const html = nextBatch.map((item, index) => createCard(item, renderedCount + index)).join('');
 
     // Append to existing content
-    resultsArea.insertAdjacentHTML('beforeend', html);
+    resultsGrid.insertAdjacentHTML('beforeend', html);
 
     renderedCount += nextBatch.length;
 
     // Re-attach Tilt Listeners for new cards
     attachTiltListeners();
 }
+
+
 
 
 
@@ -1782,7 +1853,7 @@ function createCard(item, index = 0) {
                     ${exArb ? `<div class="ex-arb" dir="rtl">${exArb}</div>` : ''}
                 </div>
             </div>
-        `;
+            `;
     }
 
     // Idioms
@@ -1796,7 +1867,7 @@ function createCard(item, index = 0) {
                     ${idiomArb ? `<div class="ex-arb" dir="rtl">${idiomArb}</div>` : ''}
                 </div>
             </div>
-        `;
+            `;
     }
 
     const isFav = favorites.has(id);
@@ -1817,17 +1888,17 @@ function createCard(item, index = 0) {
                     <div class="card-actions">
                         ${grammarBadge}
                         <button class="copy-btn" onclick="copyWord('${swe.replace(/'/g, "\\'")}', event)" aria-label="Kopiera / نسخ">
-                            ${copyIcon}
-                        </button>
-                        <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this, event)" aria-label="Spara som favorit">
-                            ${starIcon}
-                        </button>
-                    </div>
+                        ${copyIcon}
+                    </button>
+                    <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}', this, event)" aria-label="Spara som favorit">
+                        ${starIcon}
+                    </button>
+                </div>
                 </div>
                 ${arb ? `<p class="word-arb" dir="rtl">${arb}</p>` : ''}
             </div>
         </a>
-    `;
+        `;
 }
 
 
@@ -1930,13 +2001,13 @@ function createParticles(x, y, specificColor = null) {
 
         // Random size
         const size = Math.random() * 8 + 4;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
+        particle.style.width = `${size} px`;
+        particle.style.height = `${size} px`;
         particle.style.borderRadius = '50%';
 
         // Set initial position
-        particle.style.left = `${x}px`;
-        particle.style.top = `${y}px`;
+        particle.style.left = `${x} px`;
+        particle.style.top = `${y} px`;
 
         // Random direction
         const angle = Math.random() * Math.PI * 2;
@@ -1944,8 +2015,8 @@ function createParticles(x, y, specificColor = null) {
         const tx = Math.cos(angle) * velocity;
         const ty = Math.sin(angle) * velocity;
 
-        particle.style.setProperty('--tx', `${tx}px`);
-        particle.style.setProperty('--ty', `${ty}px`);
+        particle.style.setProperty('--tx', `${tx} px`);
+        particle.style.setProperty('--ty', `${ty} px`);
 
         document.body.appendChild(particle);
 
@@ -2064,8 +2135,8 @@ function initWordOfTheDay() {
             const formsArray = word[COL_FORMS].split(',').map(f => f.trim()).filter(f => f);
             if (formsArray.length > 0) {
                 const previewForms = formsArray.slice(0, 5);
-                wodFormsChips.innerHTML = previewForms.map(form => `<span class="wod-form-chip">${form}</span>`).join('');
-                if (formsArray.length > 5) wodFormsChips.innerHTML += `<span class="wod-form-chip">+${formsArray.length - 5}</span>`;
+                wodFormsChips.innerHTML = previewForms.map(form => `< span class="wod-form-chip" > ${form}</span > `).join('');
+                if (formsArray.length > 5) wodFormsChips.innerHTML += `< span class="wod-form-chip" > +${formsArray.length - 5}</span > `;
                 wodFormsPreview.style.display = 'block';
             }
         }
@@ -2151,6 +2222,7 @@ function initWordOfTheDay() {
             window.location.href = `details.html?id=${currentWodWord[COL_ID]}`;
         };
     }
+
 
     if (wodLoopBtn) {
         wodLoopBtn.onclick = (e) => {
@@ -2397,7 +2469,7 @@ function loadQuestion() {
         if (quizEndScreen) {
             quizEndScreen.style.display = 'flex';
             document.getElementById('endScoreValue').textContent = quizScore;
-            document.querySelector('.end-score-total').textContent = `/ ${quizQuestions.length}`;
+            document.querySelector('.end-score-total').textContent = `/ ${quizQuestions.length} `;
 
             // Set message based on score
             const percentage = (quizScore / quizQuestions.length) * 100;
@@ -2645,23 +2717,23 @@ function showWordInfoTooltip(element, wordData) {
     const swedishExample = wordData[COL_EX] || '';
 
     tooltip.innerHTML = `
-        <div class="tooltip-header">${swedishWord}</div>
-        <div class="tooltip-arabic-word">${arabicWord}</div>
-        ${arabicDef ? `<div class="tooltip-arabic-def"><span class="def-label">المعنى:</span> ${arabicDef}</div>` : ''}
-        ${swedishExample ? `<div class="tooltip-example"><span class="example-label">🇸🇪</span> "${swedishExample}"</div>` : ''}
-        <div class="tooltip-close">×</div>
-    `;
+            <div class="tooltip-header">${swedishWord}</div>
+            <div class="tooltip-arabic-word">${arabicWord}</div>
+            ${arabicDef ? `<div class="tooltip-arabic-def"><span class="def-label">المعنى:</span> ${arabicDef}</div>` : ''}
+            ${swedishExample ? `<div class="tooltip-example"><span class="example-label">🇸🇪</span> "${swedishExample}"</div>` : ''}
+            <div class="tooltip-close">×</div>
+        `;
 
     document.body.appendChild(tooltip);
 
     // Position tooltip
     const rect = element.getBoundingClientRect();
-    tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`;
-    tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+    tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10} px`;
+    tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2} px`;
 
     // If tooltip goes off screen top, show below
     if (parseFloat(tooltip.style.top) < 10) {
-        tooltip.style.top = `${rect.bottom + 10}px`;
+        tooltip.style.top = `${rect.bottom + 10} px`;
     }
 
     // Close on click
@@ -2690,14 +2762,14 @@ function renderHistory() {
 
     if (!searchHistory || searchHistory.length === 0) {
         emptyState.innerHTML = `
-            <div class="placeholder-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.3;">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-            </div>
-            <div class="placeholder-text">Börja skriva för att söka / ابدأ الكتابة للبحث</div>
-        `;
+                <div class="placeholder-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.3;">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </div>
+                <div class="placeholder-text">Börja skriva för att söka / ابدأ الكتابة للبحث</div>
+            `;
         return;
     }
 
@@ -2718,6 +2790,9 @@ function renderHistory() {
         </div>
     `;
 }
+
+// Expose renderHistory globally so handleSearch can call it
+window.renderHistory = renderHistory;
 
 // Helper to clear history
 window.clearHistory = function (e) {

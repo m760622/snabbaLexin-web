@@ -599,200 +599,212 @@
 
     </header>
 
-    <!-- شريط الاختصارات السريعة -->
-    <div class="quick-actions-bar">
-        <button class="quick-action-btn" id="quickWodBtn" title="كلمة اليوم / Dagens Ord">
-            <span class="quick-label">Ord</span>
-        </button>
-        <a href="games.html" class="quick-action-btn" title="ألعاب / Spel">
-            <span class="quick-label">Spel</span>
-        </a>
-        <a href="learn.html" class="quick-action-btn" title="تعلم / Lär">
-            <span class="quick-label">Lär</span>
-        </a>
-        <button class="quick-action-btn" id="quickFavBtn" title="مفضلة / Favoriter">
-            <span class="quick-label">Favoriter</span>
-        </button>
-        <button class="quick-action-btn" id="quickQuizBtn" title="اختبار / Quiz">
-            <span class="quick-label">Quiz</span>
-        </button>
-    </div>
+    <!-- Landing Page Content - Everything that shows when NOT searching -->
+    <div id="landingPageContent">
+        <!-- شريط الاختصارات السريعة -->
+        <div class="quick-actions-bar">
+            <button class="quick-action-btn" id="quickWodBtn" title="كلمة اليوم / Dagens Ord">
+                <span class="quick-label">Ord</span>
+            </button>
+            <a href="games.html" class="quick-action-btn" title="ألعاب / Spel">
+                <span class="quick-label">Spel</span>
+            </a>
+            <a href="learn.html" class="quick-action-btn" title="تعلم / Lär">
+                <span class="quick-label">Lär</span>
+            </a>
+            <button class="quick-action-btn" id="quickFavBtn" title="مفضلة / Favoriter">
+                <span class="quick-label">Favoriter</span>
+            </button>
+            <button class="quick-action-btn" id="quickQuizBtn" title="اختبار / Quiz">
+                <span class="quick-label">Quiz</span>
+            </button>
+        </div>
 
-    <!-- شريط التقدم اليومي -->
-    <div class="daily-progress-bar">
-        <div class="progress-info">
-            <span class="progress-label">📖 Dagens mål / هدف اليوم</span>
-            <span class="progress-count"><span id="dailyProgressCount">0</span> / 10</span>
-        </div>
-        <div class="progress-track">
-            <div class="progress-fill" id="dailyProgressFill"></div>
-        </div>
-    </div>
-
-    <!-- بطاقة التحدي اليومي -->
-    <div class="daily-challenge-card" id="dailyChallengeCard">
-        <div class="challenge-header">
-            <span class="challenge-icon">🎯</span>
-            <span class="challenge-title">Daglig Utmaning / تحدي اليوم</span>
-        </div>
-        <p class="challenge-text" id="challengeText">Lär dig 5 nya ord idag! / تعلم 5 كلمات جديدة اليوم!</p>
-        <div class="challenge-progress">
-            <span id="challengeProgress">0/5</span>
-            <button class="challenge-claim-btn hidden" id="claimChallengeBtn">🎁 Hämta Belöning</button>
-        </div>
-    </div>
-
-    <!-- Quiz Container (Inline) - تحت تحدي اليوم -->
-    <div class="container container-quiz-inline">
-        <div id="quizInlineContainer" class="game-container hidden">
-            <div class="quiz-header-compact">
-                <h2>Snabbtest</h2>
-                <div class="quiz-header-right">
-                    <select id="quizDifficultySelect" class="difficulty-select-compact" aria-label="Svårighetsgrad">
-                        <option value="easy">Lätt / سهل</option>
-                        <option value="medium" selected>Medel / متوسط</option>
-                        <option value="hard">Svårt / صعب</option>
-                    </select>
-                    <div class="quiz-score-inline" id="quizScore">0</div>
-                    <button id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon
-                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                            </polygon>
-                        </svg>
-                    </button>
-                    <button id="closeQuiz" class="close-btn">&times;</button>
-                </div>
+        <!-- شريط التقدم اليومي -->
+        <div class="daily-progress-bar">
+            <div class="progress-info">
+                <span class="progress-label">📖 Dagens mål / هدف اليوم</span>
+                <span class="progress-count"><span id="dailyProgressCount">0</span> / 10</span>
             </div>
-            <div class="quiz-body">
-                <div class="question-card">
-                    <h3 id="quizQuestion">...</h3>
-                    <p id="quizExample" class="quiz-example"></p>
-                </div>
-                <div id="quizOptions" class="quiz-options"></div>
-                <div id="quizFeedback" class="quiz-feedback"></div>
-                <button id="nextQuestion" class="action-btn primary next-btn-styled">Nästa ➡️</button>
-
-                <div id="quizEndScreen" class="quiz-end-screen hidden">
-                    <div class="end-icon">🎉</div>
-                    <h3 class="end-title">Testet avslutat!</h3>
-                    <div class="end-score"><span class="end-score-value" id="endScoreValue">0</span><span
-                            class="end-score-total">/ 10</span></div>
-                    <p class="end-message" id="endMessage">Bra jobbat!</p>
-                    <button id="restartQuiz" class="action-btn primary">Spela igen</button>
-                </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="dailyProgressFill"></div>
             </div>
         </div>
-    </div>
 
-    <main id="resultsArea">
-        <!-- Word of the Day -->
-        <div id="wordOfTheDay" class="word-of-day-card hidden">
-            <div class="wod-header">
-                <div class="wod-title-col">
-                    <span>📅 Dagens Ord</span>
-                    <button id="wodTTSBtn" class="wod-action-btn wod-tts-btn" aria-label="Lyssna / استمع">🔊</button>
-                </div>
-                <div class="wod-header-actions">
-                    <span class="wod-type-badge"></span>
-                    <button id="wodDetailsBtn" class="wod-action-btn" aria-label="Se detaljer / التفاصيل">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="15 3 21 3 21 9"></polyline>
-                            <polyline points="9 21 3 21 3 15"></polyline>
-                            <line x1="21" y1="3" x2="14" y2="10"></line>
-                            <line x1="3" y1="21" x2="10" y2="14"></line>
-                        </svg>
-                    </button>
-                    <button id="wodLoopBtn" class="wod-action-btn" aria-label="Ny mening / جملة جديدة">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
-                        </svg>
-                    </button>
-                    <button id="wodFavBtn" class="wod-action-btn" aria-label="Spara / حفظ">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path
-                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
+        <!-- بطاقة التحدي اليومي -->
+        <div class="daily-challenge-card" id="dailyChallengeCard">
+            <div class="challenge-header">
+                <span class="challenge-icon">🎯</span>
+                <span class="challenge-title">Daglig Utmaning / تحدي اليوم</span>
             </div>
-            <div class="wod-content">
-                <div class="wod-main-words">
-                    <div class="wod-swe" title="اضغط للاستماع / Klicka för att lyssna"></div>
-                    <div class="wod-arb"></div>
-                </div>
+            <p class="challenge-text" id="challengeText">Lär dig 5 nya ord idag! / تعلم 5 كلمات جديدة اليوم!</p>
+            <div class="challenge-progress">
+                <span id="challengeProgress">0/5</span>
+                <button class="challenge-claim-btn hidden" id="claimChallengeBtn">🎁 Hämta Belöning</button>
+            </div>
+        </div>
 
-                <!-- Forms Preview Section -->
-                <div class="wod-forms-preview hidden">
-                    <div class="preview-label">
-                        <span class="preview-icon">🔤</span>
-                        <span>Böjningar / تصريفات</span>
-                    </div>
-                    <div class="wod-forms-chips"></div>
-                </div>
-
-                <!-- Definition Section - Bilingual -->
-                <div class="wod-definitions-preview">
-                    <div class="wod-def-preview hidden">
-                        <div class="preview-label">
-                            <span class="preview-icon">📖</span>
-                            <span>Definition (Svenska)</span>
-                        </div>
-                        <div class="wod-def-text wod-def-swe"></div>
-                    </div>
-                    <div class="wod-def-arb-preview hidden">
-                        <div class="preview-label">
-                            <span class="preview-icon">📘</span>
-                            <span>التعريف (عربي)</span>
-                        </div>
-                        <div class="wod-def-text wod-def-arb-text" dir="rtl"></div>
-                    </div>
-                </div>
-
-                <!-- Example Section - Bilingual -->
-                <div class="wod-examples-preview">
-                    <div class="wod-example-preview hidden">
-                        <div class="preview-label">
-                            <span class="preview-icon">💡</span>
-                            <span>Exempel (Svenska)</span>
-                        </div>
-                        <div class="wod-example-text wod-ex-swe"></div>
-                    </div>
-                    <div class="wod-example-arb-preview hidden">
-                        <div class="preview-label">
-                            <span class="preview-icon">✨</span>
-                            <span>مثال (عربي)</span>
-                        </div>
-                        <div class="wod-example-text wod-ex-arb" dir="rtl"></div>
+        <!-- Quiz Container (Inline) - تحت تحدي اليوم -->
+        <div class="container container-quiz-inline">
+            <div id="quizInlineContainer" class="game-container hidden">
+                <div class="quiz-header-compact">
+                    <h2>Snabbtest</h2>
+                    <div class="quiz-header-right">
+                        <select id="quizDifficultySelect" class="difficulty-select-compact" aria-label="Svårighetsgrad">
+                            <option value="easy">Lätt / سهل</option>
+                            <option value="medium" selected>Medel / متوسط</option>
+                            <option value="hard">Svårt / صعب</option>
+                        </select>
+                        <div class="quiz-score-inline" id="quizScore">0</div>
+                        <button id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polygon
+                                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                                </polygon>
+                            </svg>
+                        </button>
+                        <button id="closeQuiz" class="close-btn">&times;</button>
                     </div>
                 </div>
+                <div class="quiz-body">
+                    <div class="question-card">
+                        <h3 id="quizQuestion">...</h3>
+                        <p id="quizExample" class="quiz-example"></p>
+                    </div>
+                    <div id="quizOptions" class="quiz-options"></div>
+                    <div id="quizFeedback" class="quiz-feedback"></div>
+                    <button id="nextQuestion" class="action-btn primary next-btn-styled">Nästa ➡️</button>
 
-                <!-- Idiom Section - Bilingual -->
-                <div class="wod-idioms-preview">
-                    <div class="wod-idiom-preview hidden">
-                        <div class="preview-label">
-                            <span class="preview-icon">💬</span>
-                            <span>Uttryck / تعبير</span>
-                        </div>
-                        <div class="wod-idiom-swe"></div>
-                        <div class="wod-idiom-arb" dir="rtl"></div>
+                    <div id="quizEndScreen" class="quiz-end-screen hidden">
+                        <div class="end-icon">🎉</div>
+                        <h3 class="end-title">Testet avslutat!</h3>
+                        <div class="end-score"><span class="end-score-value" id="endScoreValue">0</span><span
+                                class="end-score-total">/ 10</span></div>
+                        <p class="end-message" id="endMessage">Bra jobbat!</p>
+                        <button id="restartQuiz" class="action-btn primary">Spela igen</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Results will appear here -->
-        <div id="emptyState" class="placeholder-message">
-            Börja skriva för att söka / ابدأ الكتابة للبحث
-        </div>
-    </main>
-    </div>
+        <main id="resultsArea">
+            <!-- Word of the Day -->
+            <div id="wordOfTheDay" class="word-of-day-card hidden">
+                <div class="wod-header">
+                    <div class="wod-title-col">
+                        <span>📅 Dagens Ord</span>
+                        <button id="wodTTSBtn" class="wod-action-btn wod-tts-btn"
+                            aria-label="Lyssna / استمع">🔊</button>
+                    </div>
+                    <div class="wod-header-actions">
+                        <span class="wod-type-badge"></span>
+
+                        <button id="wodDetailsBtn" class="wod-action-btn" aria-label="Se detaljer / التفاصيل">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <polyline points="9 21 3 21 3 15"></polyline>
+                                <line x1="21" y1="3" x2="14" y2="10"></line>
+                                <line x1="3" y1="21" x2="10" y2="14"></line>
+                            </svg>
+                        </button>
+                        <button id="wodLoopBtn" class="wod-action-btn" aria-label="Ny mening / جملة جديدة">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" />
+                            </svg>
+                        </button>
+                        <button id="wodFavBtn" class="wod-action-btn" aria-label="Spara / حفظ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="wod-content">
+                    <div class="wod-main-words">
+                        <div class="wod-swe" title="اضغط للاستماع / Klicka för att lyssna"></div>
+                        <div class="wod-arb"></div>
+                    </div>
+
+                    <!-- Forms Preview Section -->
+                    <div class="wod-forms-preview hidden">
+                        <div class="preview-label">
+                            <span class="preview-icon">𔕤</span>
+                            <span>Böjningar / تصريفات</span>
+                        </div>
+                        <div class="wod-forms-chips"></div>
+                    </div>
+
+                    <!-- Definition Section - Bilingual -->
+                    <div class="wod-definitions-preview">
+                        <div class="wod-def-preview hidden">
+                            <div class="preview-label">
+                                <span class="preview-icon">📖</span>
+                                <span>Definition (Svenska)</span>
+                            </div>
+                            <div class="wod-def-text wod-def-swe"></div>
+                        </div>
+                        <div class="wod-def-arb-preview hidden">
+                            <div class="preview-label">
+                                <span class="preview-icon">📘</span>
+                                <span>التعريف (عربي)</span>
+                            </div>
+                            <div class="wod-def-text wod-def-arb-text" dir="rtl"></div>
+                        </div>
+                    </div>
+
+                    <!-- Example Section - Bilingual -->
+                    <div class="wod-examples-preview">
+                        <div class="wod-example-preview hidden">
+                            <div class="preview-label">
+                                <span class="preview-icon">💡</span>
+                                <span>Exempel (Svenska)</span>
+                            </div>
+                            <div class="wod-example-text wod-ex-swe"></div>
+                        </div>
+                        <div class="wod-example-arb-preview hidden">
+                            <div class="preview-label">
+                                <span class="preview-icon">✨</span>
+                                <span>مثال (عربي)</span>
+                            </div>
+                            <div class="wod-example-text wod-ex-arb" dir="rtl"></div>
+                        </div>
+                    </div>
+
+                    <!-- Idiom Section - Bilingual -->
+                    <div class="wod-idioms-preview">
+                        <div class="wod-idiom-preview hidden">
+                            <div class="preview-label">
+                                <span class="preview-icon">💬</span>
+                                <span>Uttryck / تعبير</span>
+                            </div>
+                            <div class="wod-idiom-swe"></div>
+                            <div class="wod-idiom-arb" dir="rtl"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State / History -->
+            <div id="emptyState" class="placeholder-message">
+                Börja skriva för att söka / ابدأ الكتابة للبحث
+            </div>
+        </main>
+    </div><!-- End of #landingPageContent -->
+
+    <!-- Search Results Container (Initially Hidden) - Outside landing content -->
+    <div id="searchResults" class="results-grid"></div>
+
 
     <!-- PWA Install Prompt -->
     <div id="pwa-install-prompt" class="pwa-prompt hidden">

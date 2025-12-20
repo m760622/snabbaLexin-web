@@ -5223,6 +5223,29 @@ h1 {
     margin-top: 1rem;
 }
 
+/* Search Results Grid - Hidden by default */
+#searchResults {
+    display: none;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    margin-top: 1rem;
+}
+
+#searchResults.visible {
+    display: grid !important;
+}
+
+/* Landing Page Content - Visible by default */
+#landingPageContent {
+    display: block;
+}
+
+#landingPageContent.hidden {
+    display: none !important;
+}
+
+
+
 .card-link {
     text-decoration: none;
     color: inherit;
@@ -5495,8 +5518,8 @@ h1 {
 
 /* Color-coded Left Border Strips by Word Type */
 .card[data-type="verb"] {
-    border-left: 4px solid #3B82F6;
-    /* Blue for verbs */
+    border-left: 4px solid #8B5CF6;
+    /* Purple for verbs */
 }
 
 .card[data-type="noun"] {
@@ -5510,18 +5533,49 @@ h1 {
 }
 
 .card[data-type="adv"] {
-    border-left: 4px solid #8B5CF6;
-    /* Purple for adverbs */
+    border-left: 4px solid #EC4899;
+    /* Pink for adverbs */
 }
 
 .card[data-type="prep"] {
-    border-left: 4px solid #EC4899;
-    /* Pink for prepositions */
+    border-left: 4px solid #64748B;
+    /* Gray for prepositions (matches details) */
 }
 
 .card[data-type="conj"] {
+    border-left: 4px solid #14B8A6;
+    /* Teal for conjunctions */
+}
+
+.card[data-type="phrasal"],
+.card[data-type="phv"] {
     border-left: 4px solid #06B6D4;
-    /* Cyan for conjunctions */
+    /* Cyan for Phrasal Verbs */
+}
+
+.card[data-type="pronoun"] {
+    border-left: 4px solid #6366F1;
+    /* Indigo for Pronouns */
+}
+
+.card[data-type="legal"] {
+    border-left: 4px solid #B91C1C;
+    /* Red for Legal Terms */
+}
+
+.card[data-type="interj"] {
+    border-left: 4px solid #FDBA74;
+    /* Pale Orange for Interjections */
+}
+
+.card[data-type="num"] {
+    border-left: 4px solid #86EFAC;
+    /* Pale Green for Numbers */
+}
+
+.card[data-type="abbr"] {
+    border-left: 4px solid #C4B5FD;
+    /* Pale Lavender for Abbreviations */
 }
 
 .card[data-type="other"],
@@ -7647,17 +7701,27 @@ body.flashcard-active .revealed {
 /* Quiz Header Compact */
 .quiz-header-compact {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.75rem;
     padding: 1.5rem 1.25rem 1rem;
     /* Top and horizontal padding for safe area */
 }
 
+.quiz-header-compact h2 {
+    margin: 0;
+    text-align: center;
+    width: 100%;
+}
+
+
 .quiz-header-right {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
+    width: 100%;
 }
+
 
 .quiz-score-inline {
     background: rgba(255, 255, 255, 0.2);
@@ -9434,15 +9498,19 @@ body.dark-mode .onboarding-container {
 }
 
 /* ========================================
-   بطاقة التحدي اليومي - Daily Challenge
+   بطاقة التحدي اليومي - Daily Challenge (Compact)
    ======================================== */
 .daily-challenge-card {
-    margin: 0 1rem 1rem;
-    padding: 1rem;
+    margin: 0 1rem 0.75rem;
+    padding: 0.6rem 1rem;
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
     border-radius: 1rem;
-    border: 2px solid #fbbf24;
-    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+    border: 1px solid #fbbf24;
+    box-shadow: 0 2px 10px rgba(251, 191, 36, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
 }
 
 [data-theme="dark"] .daily-challenge-card {
@@ -9453,13 +9521,12 @@ body.dark-mode .onboarding-container {
 .challenge-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: 0.4rem;
+    flex-shrink: 0;
 }
 
 .challenge-icon {
-    font-size: 1.5rem;
-    animation: bounce 2s infinite;
+    font-size: 1.2rem;
 }
 
 @keyframes bounce {
@@ -9475,7 +9542,7 @@ body.dark-mode .onboarding-container {
 }
 
 .challenge-title {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: #92400e;
 }
@@ -9485,9 +9552,12 @@ body.dark-mode .onboarding-container {
 }
 
 .challenge-text {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #78350f;
-    margin: 0 0 0.75rem 0;
+    margin: 0;
+    flex: 1;
+    display: none;
+    /* Hide text in compact mode */
 }
 
 [data-theme="dark"] .challenge-text {
@@ -9496,12 +9566,13 @@ body.dark-mode .onboarding-container {
 
 .challenge-progress {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .challenge-progress span {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #92400e;
 }
@@ -9511,14 +9582,14 @@ body.dark-mode .onboarding-container {
 }
 
 .challenge-claim-btn {
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 0.75rem;
     background: linear-gradient(135deg, #22c55e, #16a34a);
     color: white;
     border: none;
     border-radius: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 700;
     cursor: pointer;
-    animation: pulse 1s infinite;
     transition: transform 0.2s;
 }
 

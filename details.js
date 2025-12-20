@@ -101,6 +101,68 @@ function getGrammarBadgeText(type, forms, word) {
     return type ? type.replace('.', '') : '';
 }
 
+// ========================================
+// Visual Fingerprint Generator
+// Returns a consistent dark navy gradient (clean design)
+// ========================================
+function generateWordPattern(word) {
+    // Return consistent dark navy gradient for all words
+    return 'linear-gradient(145deg, #1e2a47 0%, #1a2540 50%, #16203a 100%)';
+}
+
+// ========================================
+// Word Type Color Class Generator
+// Returns a CSS class based on word type for colored border
+// ========================================
+function getWordTypeColorClass(type) {
+    if (!type) return 'type-default';
+
+    const typeLower = type.toLowerCase();
+
+    // Nouns (Substantiv) - Blue
+    if (typeLower.includes('subst')) return 'type-noun';
+
+    // Phrasal Verbs - Cyan (Same as Medical)
+    // Phrasal Verbs - Cyan (Same as Medical)
+    if (typeLower.includes('verbmn') || (typeLower.includes('verb') && typeof currentItem !== 'undefined' && currentItem && currentItem.Swe && currentItem.Swe.includes(' '))) return 'type-phrasal';
+
+    // Verbs - Purple
+    if (typeLower.includes('verb') && !typeLower.includes('adverb')) return 'type-verb';
+
+    // Adjectives - Yellow
+    if (typeLower.includes('adj') && !typeLower.includes('adverb')) return 'type-adjective';
+
+    // Adverbs - Orange
+    if (typeLower.includes('adverb') || typeLower === 'adv') return 'type-adverb';
+
+    // Legal/Juridik - Dark Red
+    if (typeLower.includes('jurid') || typeLower.includes('juridik')) return 'type-legal';
+
+    // Medical - Teal
+    if (typeLower.includes('medic') || typeLower.includes('läkar')) return 'type-medical';
+
+    // Prepositions - Gray
+    if (typeLower.includes('prep')) return 'type-preposition';
+
+    // Pronouns - Cyan
+    if (typeLower.includes('pron')) return 'type-pronoun';
+
+    // Conjunctions - Pink
+    if (typeLower.includes('konj')) return 'type-conjunction';
+
+    // Interjections - Pale Orange
+    if (typeLower.includes('interj')) return 'type-interjection';
+
+    // Numbers - Pale Green
+    if (typeLower.includes('räkn')) return 'type-number';
+
+    // Abbreviations - Pale Lavender
+    if (typeLower.includes('förk')) return 'type-abbreviation';
+
+    // Default
+    return 'type-default';
+}
+
 
 // ========================================
 // Text-to-Speech for Swedish Pronunciation
@@ -281,6 +343,740 @@ function getLabeledForms(formsArray, wordType) {
 }
 
 // ========================================
+// Personal Notes Manager
+// ========================================
+const NotesManager = {
+    STORAGE_KEY: 'lexin_user_notes',
+
+    getNotes() {
+        try {
+            return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+        } catch (e) { return {}; }
+    },
+
+    getNote(wordId) {
+        const notes = this.getNotes();
+        return notes[wordId] || '';
+    },
+
+    saveNote(wordId, text) {
+        const notes = this.getNotes();
+        if (text && text.trim()) {
+            notes[wordId] = text.trim();
+            showToast('Anteckning sparad / تم حفظ الملاحظة');
+        } else {
+            delete notes[wordId];
+            showToast('Anteckning borttagen / تم حذف الملاحظة');
+        }
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(notes));
+    }
+};
+
+
+// ========================================
+// Smart Linking - Make words clickable
+// ========================================
+function linkifyText(text) {
+    if (!text) return '';
+    // Split by spaces but preserve punctuation
+    // Simple regex to find words > 3 chars that are likely Swedish words
+    // We avoid replacing HTML tags if any (though usually text is plain)
+
+    return text.split(' ').map(word => {
+        // Clean word of punctuation for checking
+        const cleanWord = word.replace(/[.,!?;:()"']/g, '');
+        if (cleanWord.length > 3 && /^[a-zA-ZåäöÅÄÖ]+$/.test(cleanWord)) {
+            // Check if word exists in dictionary (optional for performance, but better UX)
+            // For now, we link blindly or we could do a quick Bloom filter check if we had one.
+            // Let's link blindly for exploration, user will see 404/search if not found, 
+            // or we could check dictionaryData if it's not too heavy.
+            // checking dictionaryData might be slow if 100k entries.
+            // Let's just make it a link.
+            return `<a href="index.html?q=${cleanWord}" class="smart-link">${word}</a>`;
+        }
+        return word;
+    }).join(' ');
+}
+
+// ========================================
+// Smart Practice Mode - Multiple Choice Quiz
+// Questions are based on word type for better learning
+// ========================================
+
+let currentQuizSession = null;
+
+function startPracticeMode(wordId) {
+    if (window.quizManager) {
+        // Find item first (logic preserved)
+        let item = dictionaryData.find(entry => entry[COL_ID] === wordId);
+        if (!item) {
+            const customWords = JSON.parse(localStorage.getItem('customWords') || '[]');
+            item = customWords.find(entry => entry[COL_ID] === wordId);
+        }
+        if (item) {
+            window.quizManager.startPracticeMode(item);
+        }
+    } else {
+        console.error("QuizManager not loaded");
+        showToast("Ett fel uppstod. Ladda om sidan. / حدث خطأ، قم بتحديث الصفحة");
+    }
+}
+
+function renderQuizQuestion(question) {
+    const progress = `${currentQuizSession.currentIndex + 1}/${currentQuizSession.total}`;
+
+    let interactionHtml = '';
+
+    if (question.inputType === 'text') {
+        // Text Input for Typing Challenge
+        interactionHtml = `
+            <div style="display: flex; flex-direction: column; gap: 0.5rem; align-items: center;">
+                <input type="text" id="quizTextInput" placeholder="${question.placeholder || 'Skriv här...'}" autocomplete="off"
+                       style="width: 100%; padding: 1rem; font-size: 1.2rem; border: 2px solid #e2e8f0; border-radius: 12px; text-align: center; outline: none; transition: border-color 0.2s;"
+                       onfocus="this.style.borderColor='#3b82f6'" onblur="this.style.borderColor='#e2e8f0'"
+                       onkeypress="if(event.key === 'Enter') checkTextInputAnswer('${escapeHtml(question.correctAnswer)}')" />
+                
+                <button onclick="checkTextInputAnswer('${escapeHtml(question.correctAnswer)}')" 
+                        style="width: 100%; padding: 1rem; background: var(--primary, #3b82f6); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);">
+                    Svara / إجابة
+                </button>
+            </div>
+        `;
+    } else {
+        // Multiple Choice Buttons - Clean Grid Style
+        interactionHtml = `
+            <div class="quiz-options-grid">
+                ${question.options.map((opt, idx) => `
+                    <button class="quiz-option-clean" onclick="checkSmartQuizAnswer(${idx}, ${question.correctIndex}, '${escapeHtml(question.correctAnswer)}')"
+                            onmouseover="this.style.transform='translateY(-2px)'"
+                            onmouseout="this.style.transform='translateY(0)'">
+                        ${opt}
+                    </button>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    const modalHtml = `
+        <div id="practiceModal" class="modal-overlay" style="display: flex; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);">
+            <div class="modal-content" style="background: var(--surface, #fff); padding: 1.5rem; border-radius: 20px; width: 90%; max-width: 400px; text-align: center; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden;">
+                <!-- Decorative Elements -->
+                <div style="position: absolute; top: -50px; left: -50px; width: 100px; height: 100px; background: rgba(59, 130, 246, 0.05); border-radius: 50%;"></div>
+                <div style="position: absolute; bottom: -30px; right: -30px; width: 80px; height: 80px; background: rgba(236, 72, 153, 0.05); border-radius: 50%;"></div>
+
+                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Fråga ${progress}</div>
+                <button onclick="document.getElementById('practiceModal').remove()" style="position: absolute; top: 0.75rem; right: 0.75rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary); z-index: 10;">&times;</button>
+                
+                <div style="font-size: 2.5rem; margin-bottom: 0.5rem; animation: floatIcon 3s ease-in-out infinite;">${question.icon}</div>
+                <h3 style="margin: 0 0 0.5rem 0; font-size: 1rem; color: var(--text-secondary); font-weight: 500;">${question.category}</h3>
+                <h2 style="margin: 0 0 1rem 0; font-size: 1.3rem; font-weight: 700; color: var(--text-primary); direction: ltr;">${question.questionText}</h2>
+                
+                ${question.word ? `<div style="font-size: ${question.word.length > 25 ? '1.2rem' : '1.8rem'}; font-weight: 800; margin-bottom: 1.5rem; color: var(--primary, #3b82f6); line-height: 1.4; text-shadow: 0 2px 4px rgba(59,130,246,0.1);">${question.word}</div>` : ''}
+                
+                ${question.scrambled ? `<div style="margin-bottom: 1.5rem; font-size: 1.4rem; color: var(--text-primary); letter-spacing: 4px; font-family: monospace; background: #f8fafc; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 700; border: 2px dashed #cbd5e1; display: inline-block;">${question.scrambled}</div>` : ''}
+
+                <div id="quizOptions" style="margin-top: 1rem;">
+                    ${interactionHtml}
+                </div>
+                
+                <div id="quizFeedback" style="margin-top: 1rem; min-height: 24px;"></div>
+            </div>
+        </div>
+        <style>
+            @keyframes floatIcon { 0% { transform: translateY(0px); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0px); } }
+            .quiz-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; width: 100%; }
+            .quiz-option-clean {
+                background: rgba(99, 102, 241, 0.05);
+                border: 2px solid rgba(99, 102, 241, 0.2);
+                border-radius: 12px;
+                padding: 1rem;
+                font-size: 1rem;
+                color: var(--text-primary, #1e293b);
+                cursor: pointer;
+                transition: all 0.2s;
+                font-weight: 600;
+                min-height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                word-break: break-word;
+            }
+            .quiz-option-clean:hover {
+                background: rgba(99, 102, 241, 0.15);
+                border-color: rgba(99, 102, 241, 0.5);
+                box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+            }
+        </style>
+    `;
+
+    // Remove existing
+    const existing = document.getElementById('practiceModal');
+    if (existing) existing.remove();
+
+    // Append new
+    const div = document.createElement('div');
+    div.innerHTML = modalHtml;
+    document.body.appendChild(div.firstElementChild);
+
+    if (question.inputType === 'text') {
+        setTimeout(() => {
+            const el = document.getElementById('quizTextInput');
+            if (el) el.focus();
+        }, 300);
+    }
+
+    // Play Audio logic 
+    if (question.playAudio && question.wordForAudio) {
+        setTimeout(() => speakWord(question.wordForAudio), 500);
+    }
+}
+
+function checkTextInputAnswer(correctAnswer) {
+    const input = document.getElementById('quizTextInput');
+    const feedback = document.getElementById('quizFeedback');
+    const answer = input.value.trim().toLowerCase();
+    const correct = correctAnswer.toLowerCase();
+
+    input.disabled = true;
+
+    if (answer === correct) {
+        input.style.borderColor = '#22c55e';
+        input.style.background = '#f0fdf4';
+        feedback.innerHTML = '<span style="color: #22c55e; font-weight: bold; font-size: 1.1rem;">✅ Rätt! / صحيح!</span>';
+        if (typeof SoundManager !== 'undefined') SoundManager.play('success');
+        currentQuizSession.score++;
+        setTimeout(() => nextQuestion(), 1500);
+    } else {
+        input.style.borderColor = '#ef4444';
+        input.style.background = '#fef2f2';
+        feedback.innerHTML = `<span style="color: #ef4444; font-weight: bold;">❌ Fel! / خطأ! <br> Rätt svar: <span style="color: #22c55e">${correctAnswer}</span></span>`;
+        if (typeof SoundManager !== 'undefined') SoundManager.play('error');
+        setTimeout(() => nextQuestion(), 3000);
+    }
+}
+
+function nextQuestion() {
+    currentQuizSession.currentIndex++;
+    if (currentQuizSession.currentIndex < currentQuizSession.questions.length) {
+        renderQuizQuestion(currentQuizSession.questions[currentQuizSession.currentIndex]);
+    } else {
+        showQuizSummary();
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function generateSmartQuestion(item) {
+    const swe = item[COL_SWE] || '';
+    const arb = item[COL_ARB] || '';
+    const type = (item[COL_TYPE] || '').toLowerCase();
+    const forms = item[COL_FORMS] || '';
+    const gender = item[COL_GENDER] || '';
+
+    const questionTypes = [];
+
+    // Always available: Reverse Translation (Arabic → Swedish)
+    if (arb && swe) {
+        questionTypes.push({
+            type: 'reverseTranslation',
+            weight: 1
+        });
+    }
+
+    // Nouns: En/Ett question
+    if (type.includes('subst') && (gender || forms)) {
+        questionTypes.push({
+            type: 'enEtt',
+            weight: 2  // Higher weight for grammatical questions
+        });
+    }
+
+    // Verbs: Conjugation question
+    if (type.includes('verb') && forms) {
+        questionTypes.push({
+            type: 'verbConjugation',
+            weight: 2
+        });
+    }
+
+    // Word type question
+    if (type) {
+        questionTypes.push({
+            type: 'wordType',
+            weight: 1
+        });
+    }
+
+    if (questionTypes.length === 0) return null;
+
+    // Weighted random selection
+    const totalWeight = questionTypes.reduce((sum, q) => sum + q.weight, 0);
+    let random = Math.random() * totalWeight;
+    let selectedType = questionTypes[0].type;
+
+    for (const q of questionTypes) {
+        random -= q.weight;
+        if (random <= 0) {
+            selectedType = q.type;
+            break;
+        }
+    }
+
+    // Generate question based on type
+    switch (selectedType) {
+        case 'reverseTranslation':
+            return generateReverseTranslationQuestion(item);
+        case 'enEtt':
+            return generateEnEttQuestion(item);
+        case 'verbConjugation':
+            return generateVerbConjugationQuestion(item);
+        case 'wordType':
+            return generateWordTypeQuestion(item);
+        default:
+            return generateReverseTranslationQuestion(item);
+    }
+}
+
+function generateReverseTranslationQuestion(item) {
+    const swe = item[COL_SWE];
+    const arb = item[COL_ARB];
+
+    // Get similar words for wrong answers
+    const wrongAnswers = getRandomWords(3, swe);
+    const options = shuffleArray([swe, ...wrongAnswers]);
+    const correctIndex = options.indexOf(swe);
+
+    return {
+        icon: '🔤',
+        category: 'ترجمة عكسية / Omvänd översättning',
+        questionText: 'Vad betyder detta ord på svenska?',
+        word: arb,
+        options: options,
+        correctIndex: correctIndex,
+        correctAnswer: swe,
+        playAudio: false
+    };
+}
+
+function generateEnEttQuestion(item) {
+    const swe = item[COL_SWE];
+    const gender = item[COL_GENDER] || '';
+    const forms = item[COL_FORMS] || '';
+
+    // Detect gender from forms if not provided
+    let correctGender = '';
+    if (gender) {
+        correctGender = gender.toLowerCase().includes('en') ? 'En' : 'Ett';
+    } else if (forms) {
+        const formParts = forms.split(',').map(f => f.trim());
+        if (formParts.length >= 2) {
+            const definiteSingular = formParts[1].toLowerCase();
+            if (definiteSingular.endsWith('en') || definiteSingular.endsWith('an')) {
+                correctGender = 'En';
+            } else if (definiteSingular.endsWith('et')) {
+                correctGender = 'Ett';
+            }
+        }
+    }
+
+    if (!correctGender) return generateReverseTranslationQuestion(item);
+
+    const options = ['En', 'Ett'];
+    const correctIndex = options.indexOf(correctGender);
+
+    return {
+        icon: '📝',
+        category: 'جنس الاسم / Substantivets genus',
+        questionText: 'En eller Ett?',
+        word: swe,
+        options: options,
+        correctIndex: correctIndex,
+        correctAnswer: correctGender,
+        playAudio: true
+    };
+}
+
+function generateVerbConjugationQuestion(item) {
+    const swe = item[COL_SWE];
+    const forms = item[COL_FORMS] || '';
+
+    if (!forms) return generateReverseTranslationQuestion(item);
+
+    const formParts = forms.split(',').map(f => f.trim()).filter(f => f);
+    if (formParts.length < 2) return generateReverseTranslationQuestion(item);
+
+    // Ask about preteritum (past tense)
+    const presens = formParts[0];
+    const preteritum = formParts[1];
+
+    // Generate wrong answers by modifying the correct one
+    const wrongAnswers = [
+        preteritum.replace(/de$/, 'te').replace(/ade$/, 'de'),
+        preteritum + 's',
+        preteritum.slice(0, -1) + 'a'
+    ].filter(w => w !== preteritum);
+
+    const options = shuffleArray([preteritum, ...wrongAnswers.slice(0, 3)]);
+    const correctIndex = options.indexOf(preteritum);
+
+    return {
+        icon: '⏳',
+        category: 'تصريف الفعل / Verbböjning',
+        questionText: 'Vad är preteritum (dåtid) av detta verb?',
+        word: swe,
+        options: options,
+        correctIndex: correctIndex,
+        correctAnswer: preteritum,
+        playAudio: true
+    };
+}
+
+function generateWordTypeQuestion(item) {
+    const swe = item[COL_SWE];
+    const rawType = item[COL_TYPE] || '';
+
+    // Map to display names
+    const typeMap = {
+        'substantiv': 'Substantiv (اسم)',
+        'verb': 'Verb (فعل)',
+        'adjektiv': 'Adjektiv (صفة)',
+        'adverb': 'Adverb (حال)',
+        'preposition': 'Preposition (حرف جر)',
+        'pronomen': 'Pronomen (ضمير)',
+        'konjunktion': 'Konjunktion (حرف عطف)'
+    };
+
+    const typeLower = rawType.toLowerCase().replace('.', '');
+    let correctType = 'Substantiv (اسم)';
+
+    for (const [key, value] of Object.entries(typeMap)) {
+        if (typeLower.includes(key)) {
+            correctType = value;
+            break;
+        }
+    }
+
+    const allTypes = Object.values(typeMap);
+    const wrongTypes = allTypes.filter(t => t !== correctType);
+    const options = shuffleArray([correctType, ...shuffleArray(wrongTypes).slice(0, 3)]);
+    const correctIndex = options.indexOf(correctType);
+
+    return {
+        icon: '📚',
+        category: 'نوع الكلمة / Ordklass',
+        questionText: 'Vad för typ av ord är detta?',
+        word: swe,
+        options: options,
+        correctIndex: correctIndex,
+        correctAnswer: correctType,
+        playAudio: true
+    };
+}
+
+function getRandomWords(count, exclude) {
+    const words = dictionaryData
+        .map(d => d[COL_SWE])
+        .filter(w => w && w !== exclude);
+
+    const shuffled = shuffleArray(words);
+    return shuffled.slice(0, count);
+}
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function checkSmartQuizAnswer(selectedIndex, correctIndex, correctAnswer) {
+    const buttons = document.querySelectorAll('#quizOptions button');
+    const feedback = document.getElementById('quizFeedback');
+
+    // Disable all buttons
+    buttons.forEach(btn => {
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.7';
+    });
+
+    const isCorrect = selectedIndex === correctIndex;
+
+    if (isCorrect) {
+        // Correct!
+        buttons[selectedIndex].style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+        buttons[selectedIndex].style.color = 'white';
+        buttons[selectedIndex].style.borderColor = '#22c55e';
+        buttons[selectedIndex].style.transform = 'scale(1.02)';
+        buttons[selectedIndex].style.opacity = '1';
+
+        feedback.innerHTML = '<span style="color: #22c55e; font-weight: bold; font-size: 1.1rem;">✅ Rätt! / صحيح!</span>';
+
+        if (typeof SoundManager !== 'undefined') SoundManager.play('success');
+        currentQuizSession.score++;
+
+    } else {
+        // Wrong
+        buttons[selectedIndex].style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        buttons[selectedIndex].style.color = 'white';
+        buttons[selectedIndex].style.borderColor = '#ef4444';
+        buttons[selectedIndex].style.opacity = '1';
+
+        // Highlight correct answer
+        buttons[correctIndex].style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+        buttons[correctIndex].style.color = 'white';
+        buttons[correctIndex].style.borderColor = '#22c55e';
+        buttons[correctIndex].style.opacity = '1';
+
+        feedback.innerHTML = `<span style="color: #ef4444; font-weight: bold;">❌ Fel! / خطأ! <br> Rätt svar: ${correctAnswer}</span>`;
+
+        if (typeof SoundManager !== 'undefined') SoundManager.play('error');
+    }
+
+    // Sequence Logic
+    setTimeout(() => {
+        currentQuizSession.currentIndex++;
+        if (currentQuizSession.currentIndex < currentQuizSession.questions.length) {
+            renderQuizQuestion(currentQuizSession.questions[currentQuizSession.currentIndex]);
+        } else {
+            showQuizSummary();
+        }
+    }, isCorrect ? 1500 : 3000);
+}
+
+function showQuizSummary() {
+    const modal = document.getElementById('practiceModal');
+    if (!modal) return;
+
+    const content = modal.querySelector('.modal-content');
+    const percent = Math.round((currentQuizSession.score / currentQuizSession.total) * 100);
+
+    let msg = 'Bra jobbat!';
+    let icon = '🎉';
+    if (percent === 100) { msg = 'Fantastiskt! Du är en mästare! 🏆'; icon = '🌟'; }
+    else if (percent >= 50) { msg = 'Bra försök! Fortsätt öva.'; }
+    else { msg = 'Fortsätt kämpa!'; icon = '💪'; }
+
+    content.innerHTML = `
+        <button onclick="document.getElementById('practiceModal').remove()" style="position: absolute; top: 0.75rem; right: 0.75rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-secondary);">&times;</button>
+        <div style="font-size: 3rem; margin-bottom: 1rem;">${icon}</div>
+        <h2 style="margin-bottom: 0.5rem; color: var(--text-primary);">Test Slutfört!</h2>
+        <div style="font-size: 2rem; font-weight: bold; color: var(--primary); margin-bottom: 1rem;">
+            ${currentQuizSession.score} / ${currentQuizSession.total}
+        </div>
+        <div style="font-size: 1rem; background: var(--background); padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; margin-bottom: 1.5rem;">
+            ${percent}% Rätt
+        </div>
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-weight: 500;">${msg}</p>
+        <button onclick="document.getElementById('practiceModal').remove()" class="quiz-option-btn" style="width: 100%; padding: 1rem; border-radius: 12px; background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            Stäng / إغلاق
+        </button>
+    `;
+
+    if (percent === 100 && typeof SoundManager !== 'undefined') SoundManager.play('levelUp');
+}
+
+// ========================================
+// Mastery Questions Generators
+// ========================================
+function generateMasteryQuestions(item) {
+    const questions = [];
+
+    // 1. Listening (Lyssna)
+    const listeningQ = generateListeningQuestion(item);
+    if (listeningQ) questions.push(listeningQ);
+
+    // 2. Grammar Challenge (Grammatik)
+    const type = (item[COL_TYPE] || '').toLowerCase();
+    let grammarQ = null;
+
+    if (type.includes('verb') && item[COL_FORMS]) {
+        grammarQ = generateVerbConjugationQuestion(item);
+    } else if (type.includes('subst') && !type.includes('namn')) {
+        grammarQ = generateEnEttQuestion(item);
+    }
+
+    if (grammarQ) {
+        questions.push(grammarQ);
+    } else {
+        const meaningQ = generateReverseTranslationQuestion(item);
+        if (meaningQ) questions.push(meaningQ);
+    }
+
+    // 3. Context Challenge (Kontext)
+    const contextQ = generateContextQuestion(item);
+    if (contextQ) questions.push(contextQ);
+
+    // 4. Typing / Spelling Challenge (Hardest Level)
+    const typingQ = generateTypingQuestion(item);
+    if (typingQ) questions.push(typingQ);
+
+    return questions;
+}
+
+function generateListeningQuestion(item) {
+    const swe = item[COL_SWE];
+    if (!swe) return null;
+
+    const wrongAnswers = getRandomWords(2, swe);
+    const options = shuffleArray([swe, ...wrongAnswers]);
+    const correctIndex = options.indexOf(swe);
+
+    return {
+        type: 'listening',
+        icon: '👂',
+        category: 'Lyssna / استمع',
+        questionText: 'Vilket ord hörde du? / ما الكلمة التي سمعتها؟',
+        word: '🔊 Lyssna',
+        options: options,
+        correctIndex: correctIndex,
+        correctAnswer: swe,
+        playAudio: true,
+        wordForAudio: swe
+    };
+}
+
+function generateContextQuestion(item) {
+    const swe = item[COL_SWE];
+    const example = item[COL_EX_SWE];
+    if (!example) return null;
+
+    const formsStr = (item[COL_FORMS] || swe).toLowerCase();
+    const formsList = formsStr.split(',').map(f => f.trim());
+    if (!formsList.includes(swe.toLowerCase())) formsList.push(swe.toLowerCase());
+
+    const words = example.split(' ');
+    let foundWordOriginal = null;
+    let foundClean = null;
+
+    for (const w of words) {
+        const cleanW = w.replace(/[.,!?;:"]/g, '').toLowerCase();
+        if (formsList.includes(cleanW)) {
+            foundWordOriginal = w;
+            foundClean = cleanW;
+            break;
+        }
+    }
+
+    if (!foundWordOriginal) return null;
+
+    const blankedSentence = example.replace(foundWordOriginal, '_______');
+    const correctOption = foundWordOriginal.replace(/[.,!?;:"]/g, '');
+
+    let wrong = formsList.filter(f => f !== foundClean);
+
+    // 1. Add Real Lookalikes (Advanced Difficulty)
+    const lookalikes = findLookalikeWords(swe, 3);
+    wrong = [...wrong, ...lookalikes];
+
+    // 2. Add Typos/Fakes if still needed
+    if (wrong.length < 3) {
+        const smartFakes = generateSmartDistractors(correctOption);
+        const base = swe.toLowerCase();
+        const suffixes = ['er', 'ar', 'en', 'et', 'na', 's', 'de', 't'];
+        const fakes = suffixes.map(s => base + s).filter(f => f !== foundClean && !formsList.includes(f));
+        wrong = [...wrong, ...smartFakes, ...fakes];
+    }
+
+    wrong = [...new Set(wrong)];
+    wrong = shuffleArray(wrong).slice(0, 3);
+
+    const options = shuffleArray([correctOption, ...wrong]);
+    const correctIndex = options.indexOf(correctOption);
+
+    return {
+        type: 'context',
+        icon: '✍️',
+        category: 'Kontext & Grammatik / السياق والقواعد',
+        questionText: 'Fyll i luckan med rätt form / اختر الشكل الصحيح',
+        word: blankedSentence,
+        options: options,
+        correctIndex: correctIndex,
+        correctAnswer: correctOption,
+        playAudio: false
+    };
+}
+
+
+
+// ========================================
+// Render Conjugation Table
+// ========================================
+function renderConjugationTable(forms, type) {
+    if (!forms || forms.length === 0) return '';
+
+    const parsedForms = getLabeledForms(forms.split(',').map(f => f.trim()).filter(f => f), type);
+    const isVerb = type.toLowerCase().includes('verb');
+    const isNoun = type.toLowerCase().includes('subst') || type.toLowerCase().includes('noun');
+
+    if (!isVerb && !isNoun) {
+        // Fallback for other types (Adjectives etc) -> Chips
+        return `
+            <div class="forms-chips-container">
+                ${parsedForms.map(f => `
+                    <div class="form-chip">
+                        <span class="form-word">${f.word}</span>
+                        ${f.label ? `<span class="form-label">${f.label}</span>` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Grid Layout for Verbs and Nouns
+    let headers = [];
+    let items = [];
+
+    if (isVerb) {
+        // Standard Swedish Verb order: Imperativ? (not in data), Indefinite? 
+        // Data usually: Presens, Preteritum, Supinum, Infinitiv
+        // Let's try to map the parsed forms to specific slots if possible, otherwise list them
+
+        // We want 4 columns if possible: Infinitiv, Presens, Preteritum, Supinum
+        // The parser returns standard labels.
+
+        // Let's rely on the parser's labels to sort them into a nice grid
+        // Order: Infinitiv -> Presens -> Preteritum -> Supinum
+        const order = ['Infinitiv', 'Presens', 'Preteritum', 'Supinum'];
+
+        // Sort items based on order
+        items = parsedForms.sort((a, b) => {
+            const labelA = a.label ? a.label.split('/')[0].trim() : '';
+            const labelB = b.label ? b.label.split('/')[0].trim() : '';
+            return order.indexOf(labelA) - order.indexOf(labelB);
+        });
+
+    } else if (isNoun) {
+        // Noun Table: Singular (Obest/Best), Plural (Obest/Best)
+        // Order: Obestämd, Bestämd, Plural obestämd, Plural bestämd
+        items = parsedForms;
+    }
+
+    return `
+        <div class="conjugation-table-container">
+            <div class="conjugation-grid ${isVerb ? 'verb-grid' : 'noun-grid'}">
+                ${items.map((item, index) => `
+                    <div class="conjugation-cell">
+                        <div class="cell-label">${item.label ? item.label.split('/')[0] : '&nbsp;'}</div>
+                        <div class="cell-value" onclick="speakWord('${item.word}')">
+                            ${item.word}
+                            <svg class="cell-audio-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </div>
+                        <div class="cell-label-ar">${item.label ? (item.label.split('/')[1] || '') : ''}</div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+
+// ========================================
 // Detect Noun Gender (En/Ett) from Forms
 // DISABLED: Now using pre-populated COL_GENDER column
 // Kept for future use if needed
@@ -288,22 +1084,22 @@ function getLabeledForms(formsArray, wordType) {
 /*
 function detectNounGender(forms) {
     if (!forms || forms.trim() === '') return null;
-
+ 
     // Split and clean forms
     const formsArray = forms.split(',').map(f => f.trim()).filter(f => f);
     if (formsArray.length < 2) return null;
-
+ 
     const baseWord = formsArray[0].toLowerCase();
-
+ 
     // Scan all forms to find the definite singular
     // We look for forms that start with the base word and end in specific suffixes
     for (const form of formsArray) {
         const lower = form.toLowerCase();
-
+ 
         // Skip the base word itself and any compound words that are just longer variations at the start
         // We want a form that is baseWord + suffix
         if (lower === baseWord) continue;
-
+ 
         // Check for Ett-word patterns (strongest signals first)
         // 1. Ends in 'et' (huset, kärlet) - most common ett-signal
         if (lower.endsWith('et') && !lower.endsWith('het')) {
@@ -318,19 +1114,19 @@ function detectNounGender(forms) {
                 return 'ett';
             }
         }
-
+ 
         // 2. Ends in 't' (bordet -> bordet?, no, bord -> bordet). 
         // Some words end in vowel + t (äpple -> äpplet)
         if (lower.endsWith('t') && lower.length === baseWord.length + 1) {
             return 'ett';
         }
     }
-
+ 
     // If no 'ett' pattern found, scan for 'en' patterns
     for (const form of formsArray) {
         const lower = form.toLowerCase();
         if (lower === baseWord) continue;
-
+ 
         // En-word patterns
         if (lower.endsWith('en') || lower.endsWith('an') || lower.endsWith('n')) {
             // Check if it's likely definite form
@@ -339,10 +1135,10 @@ function detectNounGender(forms) {
             }
         }
     }
-
+ 
     // Fallback: Check specific forms by index if scanning failed (standard clean data)
     // But since we had "Kärl, ..., kärlet", the scan above should catch it.
-
+ 
     // Default to en if uncertain but we have forms? 
     // Better to return null if we really can't tell, but 'en' is safe 75% bet.
     return 'en';
@@ -761,9 +1557,13 @@ function renderDetails(item) {
         };
     }
 
-    // Hero Section - Show original type (Substantiv, Verb, etc.)
+    // Generate unique visual fingerprint
+    const heroBackground = generateWordPattern(swe);
+    const typeColorClass = getWordTypeColorClass(type);
+
+    // Hero Section - Show original type (Substantiv, Verb, etc.) with dynamic background
     const heroHtml = `
-        <div class="details-hero">
+        <div class="details-hero ${typeColorClass}" style="background: ${heroBackground};">
             <div class="details-hero-content">
                 <div class="word-display-main">
                     <div class="word-with-audio">
@@ -781,6 +1581,25 @@ function renderDetails(item) {
     `;
 
 
+    // Personal Notes Section
+    const userNote = NotesManager.getNote(item[COL_ID]);
+    const notesHtml = `
+        <div class="details-section notes-section">
+            <h2 class="section-title">
+                <span class="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </span>
+                Mina anteckningar / ملاحظاتي
+            </h2>
+            <div class="notes-container">
+                <textarea id="wordNoteInput" class="notes-input" placeholder="Skriv en anteckning här... / اكتب ملاحظة هنا...">${userNote}</textarea>
+                <button id="saveNoteBtn" class="notes-save-btn" onclick="saveCurrentNote('${item[COL_ID]}')">
+                    Spara / حفظ
+                </button>
+            </div>
+        </div>
+    `;
+
     // Definitions Section
     let definitionsHtml = '';
     if (effectiveSweDef || arbDef) {
@@ -792,7 +1611,7 @@ function renderDetails(item) {
                 </h2>
                 <div class="def-content">
                     <div class="def-item">
-                        ${effectiveSweDef ? `<div class="def-swe-detail">${effectiveSweDef}</div>` : ''}
+                        ${effectiveSweDef ? `<div class="def-swe-detail">${linkifyText(effectiveSweDef)}</div>` : ''}
                         ${arbDef ? `<div class="def-arb-detail">${arbDef}</div>` : ''}
                     </div>
                 </div>
@@ -801,33 +1620,21 @@ function renderDetails(item) {
     }
 
 
-    // Forms Section with Smart Labels
+    // Forms Section
     let formsHtml = '';
     if (forms) {
-        const formsArray = forms.split(',').map(f => f.trim()).filter(f => f);
-        if (formsArray.length > 0) {
-            const labeledForms = getLabeledForms(formsArray, type);
-            const formsChips = labeledForms.map(form => {
-                if (form.label) {
-                    return `<div class="form-chip-labeled">
-                        <span class="form-chip-label">${form.label}</span>
-                        <span class="form-chip">${form.word}</span>
-                    </div>`;
-                }
-                return `<span class="form-chip">${form.word}</span>`;
-            }).join('');
-            formsHtml = `
-                <div class="details-section">
-                    <h2 class="section-title">
-                        <span class="section-icon">${getSVGIcon('text')}</span>
-                        Böjningar / تصريفات
-                    </h2>
-                    <div class="forms-grid">
-                        ${formsChips}
-                    </div>
-                </div>
-            `;
-        }
+        // Use new Table Renderer
+        const tableHtml = renderConjugationTable(forms, type);
+
+        formsHtml = `
+            <div class="details-section">
+                <h2 class="section-title">
+                    <span class="section-icon">${getSVGIcon('text')}</span>
+                    Böjningar / التصريفات
+                </h2>
+                ${tableHtml}
+            </div>
+        `;
     }
 
     // Examples Section
@@ -966,11 +1773,18 @@ function renderDetails(item) {
         ${heroHtml}
         ${definitionsHtml}
         ${formsHtml}
+        ${notesHtml}
         ${examplesHtml}
         ${idiomsHtml}
         ${relatedWordsHtml}
         ${quizHtml}
         ${dataQualityHtml}
+        
+        <!-- Practice FAB -->
+        <button id="practiceFab" class="practice-fab" onclick="startPracticeMode('${item[COL_ID]}')" aria-label="Öva / تدرب">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            <span class="fab-label">Öva</span>
+        </button>
     `;
 
     detailsArea.innerHTML = html;
@@ -1197,3 +2011,157 @@ function checkMiniQuiz(button, isCorrect) {
 
 init();
 
+
+function generateTypingQuestion(item) {
+    const swe = item[COL_SWE];
+    const arb = item[COL_ARB];
+    if (!swe || swe.length < 3) return null;
+
+    // Scramble letters for hint
+    const scrambled = shuffleArray(swe.split('')).join('  ');
+
+    return {
+        type: 'typing',
+        inputType: 'text',
+        icon: '⌨️',
+        category: 'Stavning / الكتابة',
+        questionText: 'Skriv ordet på svenska / اكتب الكلمة بالسويدية',
+        word: arb,
+        correctAnswer: swe,
+        placeholder: `Ordet har ${swe.length} bokstäver`,
+        scrambled: scrambled,
+        playAudio: false
+    };
+}
+
+function generateSmartDistractors(word) {
+    const typos = [];
+    if (word.length < 3) return typos;
+    const chars = word.split('');
+    const len = chars.length;
+
+    // 1. Swap adjacent letters (common typo)
+    if (len > 2) {
+        const c = [...chars];
+        // Try to find a good swap (not first letter if possible)
+        let idx = Math.floor(Math.random() * (len - 1));
+        if (idx === 0) idx = 1; // Keep first letter correct to fool user
+        [c[idx], c[idx + 1]] = [c[idx + 1], c[idx]];
+        typos.push(c.join(''));
+    }
+
+    // 2. Double letter confusion (very common in Swedish)
+    const doubles = word.match(/(.)\1/);
+    if (doubles) {
+        // Remove one (mellan -> melan)
+        typos.push(word.replace(doubles[0], doubles[1]));
+    } else {
+        // Add double (spela -> spella) if consonant
+        const candidates = [];
+        for (let i = 1; i < len - 1; i++) {
+            if (/[bdfglmnprst]/.test(chars[i])) candidates.push(i);
+        }
+        if (candidates.length > 0) {
+            const idx = candidates[Math.floor(Math.random() * candidates.length)];
+            const c = [...chars];
+            c.splice(idx, 0, c[idx]);
+            typos.push(c.join(''));
+        }
+    }
+
+    // 3. Vowel confusion (phonetic)
+    const vowels = { 'e': 'ä', 'ä': 'e', 'o': 'å', 'å': 'o', 'ö': 'o', 'i': 'e', 'ck': 'k', 'k': 'ck' };
+
+    // Try to replace a random vowel or ck
+    for (let k = 0; k < 3; k++) { // Try multiple times
+        const i = Math.floor(Math.random() * len);
+        const char = word[i].toLowerCase();
+        if (vowels[char]) {
+            typos.push(word.substring(0, i) + vowels[char] + word.substring(i + 1));
+        } else if (char === 'c' && word[i + 1] === 'k') { // ck
+            typos.push(word.substring(0, i) + 'k' + word.substring(i + 2)); // ck -> k
+        }
+    }
+
+    return [...new Set(typos)];
+}
+
+/* ========================================
+   Advanced Distractors - Levenshtein 
+   ======================================== */
+function findLookalikeWords(targetWord, count = 3) {
+    if (typeof dictionaryData === 'undefined') return [];
+
+    const target = targetWord.toLowerCase();
+    const targetLen = target.length;
+    const candidates = [];
+    const startChar = target[0];
+
+    // Optimization: Only scan words starting with same letter
+    // and similar length (+/- 2)
+
+    // We assume dictionaryData is present
+    for (const item of dictionaryData) {
+        const w = (item[COL_SWE] || '').toLowerCase();
+        if (!w || w === target || w.length < 2) continue;
+        if (w[0] !== startChar) continue;
+        if (Math.abs(w.length - targetLen) > 2) continue;
+
+        candidates.push({ w: item[COL_SWE], score: 0 }); // Store original case
+
+        // Limit candidates to avoid heavy Levenshtein?
+        if (candidates.length > 500) break;
+    }
+
+    // Score
+    candidates.forEach(c => {
+        c.score = levenshteinDistance(target, c.w.toLowerCase());
+    });
+
+    // Sort
+    candidates.sort((a, b) => a.score - b.score);
+
+    // Take Top N unique
+    const result = [];
+    const seen = new Set();
+    for (const c of candidates) {
+        if (seen.has(c.w.toLowerCase())) continue;
+        seen.add(c.w.toLowerCase());
+        result.push(c.w);
+        if (result.length >= count) break;
+    }
+    return result;
+}
+
+function levenshteinDistance(a, b) {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+
+    const matrix = [];
+
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) == a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1, // substitution
+                    Math.min(
+                        matrix[i][j - 1] + 1, // insertion
+                        matrix[i - 1][j] + 1  // deletion
+                    )
+                );
+            }
+        }
+    }
+
+    return matrix[b.length][a.length];
+}

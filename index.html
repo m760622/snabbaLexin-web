@@ -625,7 +625,7 @@
             <span class="progress-count"><span id="dailyProgressCount">0</span> / 10</span>
         </div>
         <div class="progress-track">
-            <div class="progress-fill" id="dailyProgressFill" style="width: 0%"></div>
+            <div class="progress-fill" id="dailyProgressFill"></div>
         </div>
     </div>
 
@@ -648,6 +648,11 @@
             <div class="quiz-header-compact">
                 <h2>Snabbtest</h2>
                 <div class="quiz-header-right">
+                    <select id="quizDifficultySelect" class="difficulty-select-compact" aria-label="Svårighetsgrad">
+                        <option value="easy">Lätt / سهل</option>
+                        <option value="medium" selected>Medel / متوسط</option>
+                        <option value="hard">Svårt / صعب</option>
+                    </select>
                     <div class="quiz-score-inline" id="quizScore">0</div>
                     <button id="quizFavBtn" class="quiz-fav-btn-header" aria-label="Spara / حفظ">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"

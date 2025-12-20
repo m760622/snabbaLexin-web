@@ -2337,6 +2337,24 @@ function startQuiz() {
         // Filter to only favorites
         const favIds = JSON.parse(localStorage.getItem('favorites') || '[]');
         sourceData = dictionaryData.filter(word => favIds.includes(String(word[COL_ID])));
+    } else {
+        // Filter by difficulty
+        const difficultySelect = document.getElementById('quizDifficultySelect');
+        const difficulty = difficultySelect ? difficultySelect.value : 'medium';
+
+        let filteredData = sourceData;
+        if (difficulty === 'easy') {
+            filteredData = sourceData.filter(w => w[COL_SWE] && w[COL_SWE].length <= 5);
+        } else if (difficulty === 'medium') {
+            filteredData = sourceData.filter(w => w[COL_SWE] && w[COL_SWE].length > 5 && w[COL_SWE].length <= 9);
+        } else if (difficulty === 'hard') {
+            filteredData = sourceData.filter(w => w[COL_SWE] && w[COL_SWE].length > 9);
+        }
+
+        // Use filtered data if we have enough words, otherwise fallback to mixed
+        if (filteredData.length >= 10) {
+            sourceData = filteredData;
+        }
     }
 
     const numQuestions = Math.min(10, sourceData.length); // Max 10 questions or less if source is small
@@ -2347,6 +2365,20 @@ function startQuiz() {
 
     loadQuestion();
 }
+
+// Event Listener for Difficulty Change
+document.addEventListener('DOMContentLoaded', () => {
+    const diffSelect = document.getElementById('quizDifficultySelect');
+    if (diffSelect) {
+        diffSelect.addEventListener('change', () => {
+            // Only restart if quiz is visible/active
+            const quizContainer = document.getElementById('quizInlineContainer');
+            if (quizContainer && !quizContainer.classList.contains('hidden')) {
+                startQuiz();
+            }
+        });
+    }
+});
 
 let comboCount = 0;
 
@@ -2508,6 +2540,12 @@ function checkAnswer(selectedOptionText, btn) {
     if (selectedOptionText === correctAnswer) {
         // Correct
         btn.classList.add('correct', 'correct-shake'); // Add shake animation
+
+        // Play success sound
+        if (typeof SoundManager !== 'undefined') {
+            SoundManager.play('success');
+        }
+
         quizScore++;
         comboCount++;
 
@@ -2518,6 +2556,7 @@ function checkAnswer(selectedOptionText, btn) {
 
             if (comboCount >= 10) {
                 quizContainer.classList.add('streak-10');
+                if (typeof SoundManager !== 'undefined') SoundManager.play('levelUp'); // Extra sound for streak
                 createParticles(window.innerWidth / 2, window.innerHeight / 2); // Massive explosion
             } else if (comboCount >= 5) {
                 quizContainer.classList.add('streak-5');
@@ -2548,6 +2587,12 @@ function checkAnswer(selectedOptionText, btn) {
     } else {
         // Wrong
         btn.classList.add('wrong');
+
+        // Play error sound
+        if (typeof SoundManager !== 'undefined') {
+            SoundManager.play('error');
+        }
+
         comboCount = 0; // Reset combo
         const quizContainer = document.getElementById('quizInlineContainer');
         if (quizContainer) {

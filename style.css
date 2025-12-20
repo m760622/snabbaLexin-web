@@ -9583,3 +9583,88 @@ body.dark-mode .onboarding-container {
         transform: rotate(360deg) scale(1);
     }
 }
+
+/* Difficulty Select in Quiz Header */
+.difficulty-select-compact {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 12px;
+    padding: 0.4rem 2rem 0.4rem 0.8rem;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1em;
+    outline: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s;
+    max-width: 130px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.difficulty-select-compact:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Page Transitions & Animations */
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+body>.container,
+main,
+.game-container,
+.modal-content {
+    animation: pageFadeIn 0.4s ease-out forwards;
+}
+
+.modal.hidden {
+    display: none;
+    opacity: 0;
+}
+
+.modal:not(.hidden) {
+    animation: fadeInModal 0.3s ease-out forwards;
+    display: flex;
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Smooth transitions for theme changes */
+body,
+.card,
+.container,
+header,
+footer,
+.modal-content {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.difficulty-select-compact option {
+    background: #1e293b;
+    color: white;
+}

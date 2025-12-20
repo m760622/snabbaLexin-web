@@ -233,13 +233,20 @@ const ThemeManager = {
     init() {
         // Load saved theme or default to dark
         const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
 
-        // Add dark-mode class to body for legacy CSS support if needed
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
+        // Handle auto mode
+        if (savedTheme === 'auto') {
+            this.applyAutoTheme(false);
+            // Set up interval to check time every 5 minutes
+            setInterval(() => this.applyAutoTheme(false), 5 * 60 * 1000);
         } else {
-            document.body.classList.remove('dark-mode');
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            // Add dark-mode class to body for legacy CSS support if needed
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
         }
 
         // Load color theme
@@ -254,6 +261,52 @@ const ThemeManager = {
                 this.setColorTheme(e.target.value, true);
             });
         }
+    },
+
+    // Check if it's night time (6 PM to 7 AM)
+    isNightTime() {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7;
+    },
+
+    // Apply theme based on time of day
+    applyAutoTheme(showMessage = true) {
+        const isDark = this.isNightTime();
+        const theme = isDark ? 'dark' : 'light';
+
+        document.documentElement.setAttribute('data-theme', theme);
+
+        if (isDark) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+
+        if (showMessage) {
+            showToast(isDark ? 'Automatiskt mörkt läge 🌙' : 'Automatiskt ljust läge ☀️');
+        }
+
+        return theme;
+    },
+
+    // Set theme mode: 'light', 'dark', or 'auto'
+    setThemeMode(mode) {
+        localStorage.setItem('theme', mode);
+
+        if (mode === 'auto') {
+            this.applyAutoTheme(true);
+        } else {
+            document.documentElement.setAttribute('data-theme', mode);
+            if (mode === 'dark') {
+                document.body.classList.add('dark-mode');
+                showToast('Mörkt läge aktiverat / الوضع الليلي 🌙');
+            } else {
+                document.body.classList.remove('dark-mode');
+                showToast('Ljust läge aktiverat / الوضع النهاري ☀️');
+            }
+        }
+
+        return mode;
     },
 
     toggle() {
@@ -272,6 +325,11 @@ const ThemeManager = {
         }
 
         return newTheme;
+    },
+
+    // Get current theme mode setting
+    getThemeMode() {
+        return localStorage.getItem('theme') || 'dark';
     },
 
     // Color Theme Management
@@ -872,11 +930,18 @@ Lär dig svenska med SnabbaLexin! 🇸🇪🇸🇦`;
             this.saveData(data);
             newAchievements.forEach(a => {
                 this.dispatchProgressEvent('achievement', a);
-                // Show toast for new achievement
-                showToast(`🎉 ${a.icon} ${a.name} / ${a.nameAr}`);
+                // Show rich achievement toast
+                showAchievementToast(a.name, a.nameAr, a.icon);
+
                 // Haptic feedback
                 if (typeof HapticManager !== 'undefined') {
-                    HapticManager.trigger('success');
+                    HapticManager.trigger('success'); // Double tap
+                    setTimeout(() => HapticManager.trigger('success'), 300); // Another one for celebration
+                }
+
+                // Sound effect
+                if (typeof SoundManager !== 'undefined') {
+                    SoundManager.play('levelUp');
                 }
             });
         }
@@ -2490,6 +2555,103 @@ window.speakArabic = speakArabic;
 console.log('🔊 TTS System loaded globally. Use: speakSwedish("hej") or TTSManager.test()');
 
 // ========================================
+// Sound Manager - Synthetic UI Sounds (Web Audio API)
+// ========================================
+const SoundManager = {
+    audioCtx: null,
+    enabled: true,
+
+    init() {
+        if (!window.AudioContext && !window.webkitAudioContext) return false;
+        try {
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            return true;
+        } catch (e) {
+            console.error('Web Audio API error:', e);
+            return false;
+        }
+    },
+
+    // Play a synthetic sound
+    play(type) {
+        if (!this.enabled) return;
+        if (!this.audioCtx) {
+            if (!this.init()) return;
+        }
+
+        // Resuming context if suspended (browser policy)
+        if (this.audioCtx.state === 'suspended') {
+            this.audioCtx.resume();
+        }
+
+        const ctx = this.audioCtx;
+        const oscillator = ctx.createOscillator();
+        const gainNode = ctx.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        switch (type) {
+            case 'success':
+                // Happy ascending chord (C major ish)
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523.25, now); // C5
+                oscillator.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+                oscillator.frequency.exponentialRampToValueAtTime(783.99, now + 0.2); // G5
+
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+
+                oscillator.start(now);
+                oscillator.stop(now + 0.4);
+                break;
+
+            case 'error':
+                // Low dissonant thud
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(150, now);
+                oscillator.frequency.linearRampToValueAtTime(50, now + 0.3);
+
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+
+                oscillator.start(now);
+                oscillator.stop(now + 0.3);
+                break;
+
+            case 'click':
+                // Short tick
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(800, now);
+
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+                oscillator.start(now);
+                oscillator.stop(now + 0.05);
+                break;
+
+            case 'levelUp':
+                // Magical ascending run
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, now); // A4
+                oscillator.frequency.linearRampToValueAtTime(880, now + 0.2); // A5
+                oscillator.frequency.linearRampToValueAtTime(1760, now + 0.5); // A6
+
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.linearRampToValueAtTime(0.2, now + 0.3);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+
+                oscillator.start(now);
+                oscillator.stop(now + 0.8);
+                break;
+        }
+    }
+};
+
+// ========================================
 // Haptic Feedback Manager
 // ========================================
 const HapticManager = {
@@ -2865,91 +3027,7 @@ const LongPressTTS = {
     }
 };
 
-// ========================================
-// Sound Manager
-// ========================================
-const SoundManager = {
-    sounds: {
-        flip: new Audio('assets/sounds/flip.mp3'), // Placeholder paths, will need files or base64
-        success: new Audio('assets/sounds/success.mp3'),
-        error: new Audio('assets/sounds/error.mp3'),
-        click: new Audio('assets/sounds/click.mp3')
-    },
 
-    // Base64 fallbacks for essential sounds (short "pop" and "ding")
-    // Using very short data URIs to ensure functionality without external files
-    base64Sounds: {
-        flip: 'data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU...', // Placeholder
-        // Actually, let's use the Web Audio API for synthesized sounds to avoid file dependency
-    },
-
-    ctx: null,
-
-    init() {
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            if (AudioContext) {
-                this.ctx = new AudioContext();
-            }
-        } catch (e) {
-            console.warn('Web Audio API not supported');
-        }
-    },
-
-    play(type) {
-        if (!this.ctx) this.init();
-        if (!this.ctx) return;
-
-        // Resume context if suspended (browser autoplay policy)
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
-        }
-
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-
-        const now = this.ctx.currentTime;
-
-        if (type === 'flip') {
-            // Whoosh sound (filtered noise or sliding tone)
-            // Simulating with simple sine slide
-            osc.frequency.setValueAtTime(150, now);
-            osc.frequency.exponentialRampToValueAtTime(600, now + 0.1);
-            gain.gain.setValueAtTime(0.05, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-            osc.start(now);
-            osc.stop(now + 0.1);
-        } else if (type === 'success') {
-            // Ding!
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(800, now);
-            osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-            gain.gain.setValueAtTime(0.1, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-            osc.start(now);
-            osc.stop(now + 0.5);
-        } else if (type === 'error') {
-            // Bonnet/Buzzer
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(150, now);
-            osc.frequency.linearRampToValueAtTime(100, now + 0.2);
-            gain.gain.setValueAtTime(0.1, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-            osc.start(now);
-            osc.stop(now + 0.3);
-        } else if (type === 'click') {
-            // Click
-            osc.frequency.setValueAtTime(400, now);
-            gain.gain.setValueAtTime(0.05, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-            osc.start(now);
-            osc.stop(now + 0.05);
-        }
-    }
-};
 
 // Auto-initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -2974,3 +3052,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize long press to speak
     LongPressTTS.init();
 });
+
+/**
+ * Show a rich achievement toast notification
+ * @param {string} title - Achievement name (Swedish)
+ * @param {string} titleAr - Achievement name (Arabic)
+ * @param {string} icon - Achievement icon
+ */
+function showAchievementToast(title, titleAr, icon = '🏆') {
+    // Create element
+    const toast = document.createElement('div');
+    toast.className = 'achievement-toast';
+    toast.innerHTML = `
+        <div class="achievement-icon">${icon}</div>
+        <div class="achievement-details">
+            <div class="achievement-title">Achievement Unlocked!</div>
+            <div class="achievement-name">${title}</div>
+            <div class="achievement-name-ar">${titleAr}</div>
+        </div>
+    `;
+
+    document.body.appendChild(toast);
+
+    // Play animation
+    requestAnimationFrame(() => {
+        toast.classList.add('show');
+    });
+
+    // Remove after 4 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                document.body.removeChild(toast);
+            }
+        }, 500); // Wait for transition
+    }, 4000);
+}
